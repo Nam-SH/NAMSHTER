@@ -3,10 +3,10 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _281a5876 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
-const _7f59545b = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
-const _0a9d2b3c = () => interopDefault(import('..\\pages\\user\\nam.vue' /* webpackChunkName: "pages_user_nam" */))
-const _6989e45f = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
+const _1c7966a2 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
+const _6d147502 = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
+const _0dd9f535 = () => interopDefault(import('..\\pages\\user\\nam.vue' /* webpackChunkName: "pages_user_nam" */))
+const _2f2492d8 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 // TODO: remove in Nuxt 3
 const emptyFn = () => {}
@@ -26,19 +26,19 @@ export const routerOptions = {
 
   routes: [{
     path: "/profile",
-    component: _281a5876,
+    component: _1c7966a2,
     name: "profile"
   }, {
     path: "/signup",
-    component: _7f59545b,
+    component: _6d147502,
     name: "signup"
   }, {
     path: "/user/nam",
-    component: _0a9d2b3c,
+    component: _0dd9f535,
     name: "user-nam"
   }, {
     path: "/",
-    component: _6989e45f,
+    component: _2f2492d8,
     name: "index"
   }],
 
