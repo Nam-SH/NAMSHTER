@@ -38,6 +38,7 @@
   import FollowList from '~/components/FollowList'
 
   export default {
+    // layout: 'admin',
     components: {
       FollowList,
     }
@@ -54,7 +55,3 @@
     
   }
 </script>
-
-<style scoped>
-
-</style>
