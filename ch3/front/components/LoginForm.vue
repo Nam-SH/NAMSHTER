@@ -60,14 +60,6 @@
       }
     },
     methods: {
-      // onSubmitForm() {
-      //   if (this.$refs.form.validate()) {
-      //     console.log(this.valid)
-      //     alert("로그인 시도!")
-      //   } else {
-      //     alert("폼이 유효하지 않습니다.")
-      //   }
-      // },
       onSubmitForm() {
         if (this.$refs.form.validate()) {
           this.$store.dispatch('users/logIn', {
@@ -86,7 +78,9 @@
         }
       },
       onLogOut() {
-        this.$store.dispatch('users/logOut');
+        this.$store.dispatch('users/logOut')
+        this.email = '';
+        this.password = '';
       }
     },
     computed: {
