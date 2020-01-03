@@ -1,10 +1,10 @@
 <template>
-<v-container>
+  <div>
     <v-card style="margin-bottom: 20px">
       <v-card-text>
         <div>
-          <h3> nam </h3>
-          <div>안녕하세요. 게시글입니다.</div>
+          <h3> {{ post.User.nickname }}</h3>
+          <div>{{ post.content }} </div>
         </div>
       </v-card-text>
       <v-card-actions>
@@ -14,18 +14,75 @@
         <v-btn text color="orange">
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
-        <v-btn text color="orange">
+
+        <v-btn text color="orange" @click="onToggleComment">
           <v-icon>mdi-comment-outline</v-icon>
         </v-btn>
-        <v-btn text color="orange">
-          <v-icon>mdi-dots-horizontal</v-icon>
-        </v-btn>
+
+        <v-menu offset-y open-on-hover >
+          <template v-slot:activator="{ on }" >
+            <v-btn text color="orange" v-on="on" >
+              <v-icon>mdi-dots-horizontal</v-icon>
+            </v-btn>
+          </template>
+          <div style="background: white" >
+            <v-btn cark color="orange" @click="onEditPost" >수정</v-btn>
+            <v-btn cark color="red" @click="onRemovePost" >삭제</v-btn>
+          </div>
+        </v-menu>
+
       </v-card-actions>
     </v-card>
-  </v-container>
+
+    <template v-if="commentOpened">
+      <comment-form :post-id="post.id" />
+      <v-list>
+        <v-list-item v-for="c in post.Comments" :key="c.id">
+          <v-list-item-avatar color="yellow">
+            <span>{{ c.User.nickname[0] }}</span>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ c.User.nickname }}</v-list-item-title>
+            <v-list-item-subtitle>{{ c.content }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </template>
+  </div>
 </template>
 
 <script>
+
+  import CommentForm from '@/components/CommentForm.vue';
+  
   export default {
+    components: {
+      CommentForm
+    },
+    props: {
+      post: {
+        type: Object,
+        required: true
+      }
+    },
+    data() {
+      return {
+        commentOpened: false
+      }
+    },
+    methods: {
+      onRemovePost() {
+        this.$store.dispatch('posts/remove', {
+          id: this.post.id
+        })
+      },
+      onEditPost() {
+        alert('아직 구현 안함')
+      },
+
+      onToggleComment() {
+        this.commentOpened = !this.commentOpened
+      }
+    },
   }
 </script>
