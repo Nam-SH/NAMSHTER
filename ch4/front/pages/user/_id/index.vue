@@ -8,7 +8,7 @@
 
 <script>
   import PostCard from '~/components/PostCard';
-
+  
   export default {
     components: {
       PostCard,
@@ -20,7 +20,6 @@
       mainPosts() {
         return this.$store.state.posts.mainPosts;
       },
-      
       hasMorePost() {
         return this.$store.state.posts.hasMorePost;
       }

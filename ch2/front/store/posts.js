@@ -6,7 +6,7 @@ export const state = () => ({
 export const mutations = {
   // bye(state) {
   //   state.name = 'goodbye posts';
-  // }
+  // },
   addMainPost(state, payload) {
     state.mainPosts.unshift(payload)
   },

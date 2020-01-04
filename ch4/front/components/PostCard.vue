@@ -1,8 +1,6 @@
 <template>
   <div>
     <v-card style="margin-bottom: 20px">
-
-      <!-- 4. 닉네임 검색 추가 -->
       <v-card-title>
         <h3>
           <nuxt-link :to="/user/ + post.id">
@@ -13,13 +11,6 @@
 
       <v-card-text>
         <div>
-          <!-- 3. 기존 닉네임칸 -->
-          <!-- <h3> {{ post.User.nickname }}</h3> -->
-
-          <!-- 1. 기존 내용칸 -->
-          <!-- <div>{{ post.content }} </div> -->
-
-          <!-- 2. 내용 칸 수정 -->
           <nuxt-link :to="/post/ + post.id">
             {{ post.content }}
           </nuxt-link>

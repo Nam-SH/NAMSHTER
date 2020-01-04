@@ -7,10 +7,6 @@
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
-          <!-- 1. 기존 검색필드 제거 -->
-          <!-- <v-text-field label="검색" hide-details prepend-icon="mdi-magnify" :style="{ display: 'flex', alignItems: 'center' }" /> -->
-          
-          <!-- 2. 폼으로 변경 -->
           <v-form @submit.prevent="onSearchHashtag">
             <div :style="{ display: 'flex', height: '100%', alignItems: 'center' }">
               <v-text-field 

@@ -18,6 +18,9 @@
       </v-toolbar>
     </nav>
 
+    <v-btn style="width: 100%">클릭 전: posts</v-btn>
+    <v-btn @click="bye" style="width: 100%">클릭 후: {{ name }}</v-btn>
+
     <v-row no-gutters>
       <v-col cols="12" md="4">
         <login-form />
@@ -39,10 +42,10 @@
     computed: {
       name() {
         return this.$store.state.posts.name;
-      }
+      },
     },
     methods: {
-      onChangeName() {
+      bye() {
         this.$store.commit('posts/bye')
       }
     },

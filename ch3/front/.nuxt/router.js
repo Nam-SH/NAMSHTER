@@ -5,7 +5,9 @@ import scrollBehavior from './router.scrollBehavior.js'
 
 const _59354926 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
 const _4092d2f8 = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
+const _bb6cb430 = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
 const _1e8ea6e4 = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
+const _7a13440f = () => interopDefault(import('..\\pages\\user\\_id\\index.vue' /* webpackChunkName: "pages_user__id_index" */))
 const _32d73916 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 // TODO: remove in Nuxt 3
@@ -33,9 +35,17 @@ export const routerOptions = {
     component: _4092d2f8,
     name: "signup"
   }, {
+    path: "/hashtag/:id?",
+    component: _bb6cb430,
+    name: "hashtag-id"
+  }, {
     path: "/post/:id?",
     component: _1e8ea6e4,
     name: "post-id"
+  }, {
+    path: "/user/:id?",
+    component: _7a13440f,
+    name: "user-id"
   }, {
     path: "/",
     component: _32d73916,

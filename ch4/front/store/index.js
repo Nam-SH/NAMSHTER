@@ -2,8 +2,8 @@ export const state = () => ({
   hello: 'vuex',
 })
 
-export const mutations = {
+export const mutations = () => ({
   bye(state) {
     state.hello = 'goodbye';
   }
-}
+})
