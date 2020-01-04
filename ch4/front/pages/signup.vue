@@ -105,7 +105,6 @@
     },
     watch: {
       me(value, oldValue) {
-        console.log(value, oldValue)
         if (value) {
           this.$router.push({
             path: '/'
@@ -120,6 +119,7 @@
           this.$store.dispatch('users/signUp', {
             email: this.email,
             nickname: this.nickname,
+            password: this.password
           })
         }
       },

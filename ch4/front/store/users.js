@@ -1,31 +1,7 @@
 export const state = () => ({
   me: null,
-  followerList: [
-    // {
-    // id: 1,
-    // nickname: '1번'
-    // }, {
-    // id: 2,
-    // nickname: '2번'
-    // }, {
-    // id: 3,
-    // nickname: '3번'
-    // }
-  ],
-  
-  followingList: [
-    // {
-    // id: 4,
-    // nickname: '4번'
-    // }, {
-    // id: 5,
-    // nickname: '5번'
-    // }, {
-    // id: 6,
-    // nickname: '6번'
-    // }
-  ],
-
+  followerList: [],  
+  followingList: [],
   hasMoreFollowing: true,
   hasMoreFollower: true,
 });
@@ -35,6 +11,7 @@ const totalFollowers = 6;
 const limit = 3;
 
 export const mutations = {
+
   setMe(state, payload) {
     state.me = payload;
   },
@@ -80,16 +57,23 @@ export const mutations = {
 }
 
 export const actions = {
-  // signUp(context, payload) {
+
   signUp({ commit }, payload) {
-    // 서버에 회원가입 요청을 보내는 부분
-    commit('setMe', payload)
+    console.log(this.$axios)
+    console.log('이것은 payload', payload)
+    this.$axios.post('http://localhost:3085/user', {
+      email: payload.email,
+      nickname: payload.nickname,
+      password: payload.password,
+    });
+    commit('setMe', payload);
   },
+  
   logIn({ commit }, payload) {
-    commit('setMe', payload)
+    commit('setMe', payload);
   },
   logOut({ commit }) {
-    commit('setMe', null)
+    commit('setMe', null);
   },
 
   changeNickname({ commit }, payload) {
