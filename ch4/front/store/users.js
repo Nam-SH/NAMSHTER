@@ -63,36 +63,44 @@ export const actions = {
       email: payload.email,
       nickname: payload.nickname,
       password: payload.password,
-    }).then((data)=> {
-      console.log(data);
-      commit('setMe', data)
-    }).catch((err) => {
+    })
+    .then((res)=> {
+      // console.log(res);
+      commit('setMe', res.data)
+    })
+    .catch((err) => {
       console.log(err);
     })
   },
-  
   logIn({ commit }, payload) {
     this.$axios.post('http://localhost:3085/user/login', {
       email: payload.email,
       password: payload.password
     },{
       withCredentials: true
-    }).then((data) => {
-      commit('setMe', data);
-    }).catch((err) => {
+    })
+    .then((res) => {
+      commit('setMe', res.data);
+    })
+    .catch((err) => {
       console.log(err)
     })
   },
-
   logOut({ commit }) {
-    commit('setMe', null);
+    this.$axios.post('http://localhost:3085/user/logout', {}, {
+      withCredentials: true,
+    })
+    .then((res) => {
+      commit('setMe', null);
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   },
 
   changeNickname({ commit }, payload) {
     commit('changeNickname', payload)
   },
-
-
   addFollowing({ commit }, payload) {
     commit('addFollowing', payload)
   },
@@ -116,5 +124,4 @@ export const actions = {
       commit('loadFollowings');
     }
   }
-
 }

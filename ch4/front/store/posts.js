@@ -1,8 +1,8 @@
 export const state = () => ({
   // name: 'posts',
   mainPosts: [],
-
-  hasMorePost: true
+  hasMorePost: true,
+  imagePaths: [],
 });
 
 const totalPosts = 51;
@@ -42,10 +42,17 @@ export const mutations = {
       content: 'ㅎㅇ',
       Comments: [],
       Images: [],
-      Video: [],
     }));
     state.mainPosts = state.mainPosts.concat(fakePosts)
     state.hasMorePost = diff > limit
+  },
+
+  concatImagePaths(state, payload) {
+    state.imagePaths = state.imagePaths.concat(payload)
+  },
+
+  removeImagePath(state, payload) {
+    state.imagePaths.splice(payload, 1)
   }
 };
 
@@ -71,5 +78,21 @@ export const actions = {
     if (state.hasMorePost) {
       commit('loadPosts');
     }
+  },
+
+  // 이미지 업로드
+  uploadImages({ commit }, payload) {
+    console.log('각ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ')
+    this.$axios.post('http://localhost:3085/post/images', payload, {
+      withCredentials: true,
+    })
+      .then((res) => {
+        console.log('난ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ')
+        commit('concatImagePaths', res.data);
+      })
+      .catch((err) => {
+        console.log('닫ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ')
+        console.error(err)
+      })
   }
 }

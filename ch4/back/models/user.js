@@ -3,25 +3,25 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING(40), // 40자 이내
       allowNull: false, // 필수
-      unique: true,
+      unique: true, // 중복금지
     },
     nickname: {
-      type: DataTypes.STRING(20), // 20자 이내
-      allowNull: false // 필수
+      type: DataTypes.STRING(20),
+      allowNull: false,
     },
     password: {
-      type: DataTypes.STRING(50), // 50자 이내
-      allowNull: false // 필수
-    }, 
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
   }, {
     charset: 'utf8',
-    collate: 'utf8_general_ci', // 한글 저장됨
-
+    collate: 'utf8_general_ci', // 한글 저장돼요
   });
 
   User.associate = (db) => {
-
+    db.User.hasMany(db.Post)
+    db.User.hasMany(db.Comment)
   };
-
+  
   return User;
-}
+};
