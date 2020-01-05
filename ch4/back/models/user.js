@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     email: {
       type: DataTypes.STRING(40), // 40자 이내
-      allowNull: false // 필수
+      allowNull: false, // 필수
+      unique: true,
     },
     nickname: {
       type: DataTypes.STRING(20), // 20자 이내

@@ -59,19 +59,31 @@ export const mutations = {
 export const actions = {
 
   signUp({ commit }, payload) {
-    console.log(this.$axios)
-    console.log('이것은 payload', payload)
     this.$axios.post('http://localhost:3085/user', {
       email: payload.email,
       nickname: payload.nickname,
       password: payload.password,
-    });
-    commit('setMe', payload);
+    }).then((data)=> {
+      console.log(data);
+      commit('setMe', data)
+    }).catch((err) => {
+      console.log(err);
+    })
   },
   
   logIn({ commit }, payload) {
-    commit('setMe', payload);
+    this.$axios.post('http://localhost:3085/user/login', {
+      email: payload.email,
+      password: payload.password
+    },{
+      withCredentials: true
+    }).then((data) => {
+      commit('setMe', data);
+    }).catch((err) => {
+      console.log(err)
+    })
   },
+
   logOut({ commit }) {
     commit('setMe', null);
   },
@@ -93,7 +105,6 @@ export const actions = {
   removeFollower({ commit }, payload) {
     commit('removeFollower', payload)
   },
-
 
   loadFollowers({ commit, state }) {
     if (state.hasMoreFollower) {
