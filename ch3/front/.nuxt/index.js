@@ -12,8 +12,8 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_plugin_195b41f5 from 'nuxt_plugin_plugin_195b41f5' // Source: .\\vuetify\\plugin.js (mode: 'all')
-import nuxt_plugin_axios_70f1f902 from 'nuxt_plugin_axios_70f1f902' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_plugin_592b83d6 from 'nuxt_plugin_plugin_592b83d6' // Source: .\\vuetify\\plugin.js (mode: 'all')
+import nuxt_plugin_axios_831e4e3c from 'nuxt_plugin_axios_831e4e3c' // Source: .\\axios.js (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -170,12 +170,12 @@ async function createApp (ssrContext) {
 
   // Plugin execution
 
-  if (typeof nuxt_plugin_plugin_195b41f5 === 'function') {
-    await nuxt_plugin_plugin_195b41f5(app.context, inject)
+  if (typeof nuxt_plugin_plugin_592b83d6 === 'function') {
+    await nuxt_plugin_plugin_592b83d6(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_axios_70f1f902 === 'function') {
-    await nuxt_plugin_axios_70f1f902(app.context, inject)
+  if (typeof nuxt_plugin_axios_831e4e3c === 'function') {
+    await nuxt_plugin_axios_831e4e3c(app.context, inject)
   }
 
   // If server-side, wait for async component to be resolved first
