@@ -40,10 +40,9 @@ app.use(session({
     secure: false
   }
 }));
+
 app.use(passport.initialize())
 app.use(passport.session())
-
-
 
 // 메인페이지를 가져오는 것
 app.get('/', (req, res) => {
@@ -51,17 +50,16 @@ app.get('/', (req, res) => {
   // res.send('(수정)여기는 남승현');
 })
 
-
 app.use('/user', userRouter)
 app.use('/post', postRouter)
 
 
-// // 회원가입(signUp)
+// 회원가입(signUp)
 // app.post('/user', async (req, res, next) => {
 //   try {
 //     const hash = await bcrypt.hash(req.body.password, 12)
 
-//     // 닉네임을 겹치지 않게 만든다.
+//     // 이메일을 겹치지 않게 만든다.
 //     const exUser = await db.User.findOne({
 //       where: {
 //         email: req.body.email,

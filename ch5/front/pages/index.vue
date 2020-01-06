@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    {{ mainPosts }}
     <post-form v-if="me" />
     <div>
       <post-card v-for="post in mainPosts" :key="post.id" :post="post" />
@@ -17,10 +18,6 @@
       PostForm
     },
     
-    fetch({ store }) {
-      store.dispatch('posts/loadPosts');
-    },
-
     computed: {
       me() {
         return this.$store.state.users.me;
@@ -33,6 +30,9 @@
       hasMorePost() {
         return this.$store.state.posts.hasMorePost;
       },
+    },
+    fetch({ store }) {
+      store.dispatch('posts/loadPosts');
     },
     
     mounted() {
