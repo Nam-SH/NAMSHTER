@@ -26,11 +26,13 @@
         return this.$store.state.users.me;
       },
       mainPosts() {
-        return this.$store.state.posts.mainPosts;
+        const mainPosts = this.$store.state.posts.mainPosts;
+        console.log('mainPosts', mainPosts)
+        return mainPosts
       },
       hasMorePost() {
         return this.$store.state.posts.hasMorePost;
-      }
+      },
     },
     
     mounted() {
