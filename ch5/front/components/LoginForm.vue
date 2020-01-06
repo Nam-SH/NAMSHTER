@@ -56,7 +56,7 @@
         passwordRules: [
         v => !!v || 'Password is required',
         v => (v && v.length >= 10) || '비밀번호는 최소 10자 입니다.',
-        ],
+        ]
       }
     },
     methods: {

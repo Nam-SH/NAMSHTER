@@ -12,10 +12,10 @@ const morgan = require('morgan');
 
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
-
+const postsRouter = require('./routes/posts')
 // db 강제로 덮어씌우기
-// db.sequelize.sync({ force: true });
-db.sequelize.sync();
+db.sequelize.sync({ force: true });
+// db.sequelize.sync();
 passportConfig();
 
 app.use(morgan('dev'))
@@ -40,9 +40,9 @@ app.use(session({
     secure: false
   }
 }));
+
 app.use(passport.initialize())
 app.use(passport.session())
-
 
 
 // 메인페이지를 가져오는 것
@@ -54,6 +54,7 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRouter)
 app.use('/post', postRouter)
+app.use('/posts', postsRouter)
 
 
 // // 회원가입(signUp)

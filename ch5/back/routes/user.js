@@ -8,6 +8,13 @@ const db = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
 
 
+// 사용자정보 가져오기
+router.get('/', isLoggedIn, async (req, res, next) => {
+  const user = req.user
+  res.json(user)
+})
+
+
 // 회원가입(signUp)
 router.post('/', isNotLoggedIn, async (req, res, next) => {
   try {

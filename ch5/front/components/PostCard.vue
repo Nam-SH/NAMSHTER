@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-card style="margin-bottom: 20px">
+      <!-- 이미지 캐로제 추가 -->
+      <post-images :images="post.Images || []" />
+      
       <v-card-title>
         <h3>
           <nuxt-link :to="/user/ + post.id">
@@ -25,6 +28,7 @@
           <v-icon>mdi-heart-outline</v-icon>
         </v-btn>
 
+        <!-- 댓글 -->
         <v-btn text color="orange" @click="onToggleComment">
           <v-icon>mdi-comment-outline</v-icon>
         </v-btn>
@@ -43,6 +47,7 @@
       </v-card-actions>
     </v-card>
 
+    <!-- 댓글 창 클릭시 -->
     <template v-if="commentOpened">
       <comment-form :post-id="post.id" />
       <v-list>
@@ -57,16 +62,20 @@
         </v-list-item>
       </v-list>
     </template>
+
   </div>
 </template>
 
 <script>
 
   import CommentForm from '@/components/CommentForm.vue';
-  
+  import PostImages from '@/components/PostImages.vue';
+
+
   export default {
     components: {
-      CommentForm
+      CommentForm,
+      PostImages,
     },
     props: {
       post: {
@@ -82,7 +91,7 @@
     methods: {
       onRemovePost() {
         this.$store.dispatch('posts/remove', {
-          id: this.post.id
+          postId: this.post.id
         })
       },
       onEditPost() {
@@ -90,6 +99,9 @@
       },
 
       onToggleComment() {
+        if (!this.commentOpened) {
+          this.$store.dispatch('posts/loadComments', { postId: this.post.id })
+        };
         this.commentOpened = !this.commentOpened
       }
     },

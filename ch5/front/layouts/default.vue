@@ -59,8 +59,6 @@
         this.hashtag = ''
       }
     },
-
-    
   }
 </script>
 
@@ -68,6 +66,5 @@
   a {
     display: inline-block;
     text-decoration: none;
-    color: red;
   }
 </style>

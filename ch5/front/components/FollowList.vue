@@ -8,9 +8,9 @@
         <v-list-item-content>
           <v-list-item-title>{{ user.nickname }}</v-list-item-title>
         </v-list-item-content>
-        <v-list-item-acion>
+        <v-list-item-action>
           <v-icon @click="remove(user.id)">mdi-minus-circle-outline</v-icon>
-        </v-list-item-acion>
+        </v-list-item-action>
       </v-list-item>
     </v-col>
   </v-list>

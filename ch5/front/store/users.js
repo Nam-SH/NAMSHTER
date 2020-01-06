@@ -58,6 +58,17 @@ export const mutations = {
 
 export const actions = {
 
+  // 사용자정보 가져오기
+  loadUser({ commit }) {
+    this.$axios.get('http://localhost:3085/user', { withCredentials: true } )
+    .then((res) => {
+      commit('setMe', res.data)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  },
+
   signUp({ commit }, payload) {
     this.$axios.post('http://localhost:3085/user', {
       email: payload.email,

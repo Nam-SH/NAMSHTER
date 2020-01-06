@@ -63,11 +63,11 @@
         if (this.$refs.form.validate()) {
           this.$store.dispatch('posts/add', {
             content: this.content,
+            // Comments: [],
             // User: {
             //   nickname: this.me.nickname,
             //   email: this.me.email,
             // },
-            // Comments: [],
             // createdAt: Date.now(),
           })
           .then(() => {
@@ -83,7 +83,6 @@
         this.$refs.imageInput.click()
       },
       onChangeImages(e) {
-        // console.log(e.target.files);
         const imageFormData = new FormData();
         [].forEach.call(e.target.files, (f) => {
           imageFormData.append('image', f);

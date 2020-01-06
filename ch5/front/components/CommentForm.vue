@@ -49,13 +49,13 @@
       onSubmitForm() {
         if (this.$refs.form.validate()) {
           this.$store.dispatch('posts/addComment', {
-            id: Date.now(),
             postId: this.postId,
             content: this.content,
-            User: {
-              nickname: this.me.nickname,
-              email: this.me.email
-            }
+            // id: Date.now(),
+            // User: {
+            //   nickname: this.me.nickname,
+            //   email: this.me.email
+            // }
           })
           .then(() => {
             this.content = '';
