@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    {{ mainPosts }}
     <post-form v-if="me" />
     <div>
       <post-card v-for="post in mainPosts" :key="post.id" :post="post" />
@@ -23,9 +22,7 @@
         return this.$store.state.users.me;
       },
       mainPosts() {
-        const mainPosts = this.$store.state.posts.mainPosts;
-        console.log('mainPosts', mainPosts)
-        return mainPosts
+        return this.$store.state.posts.mainPosts;
       },
       hasMorePost() {
         return this.$store.state.posts.hasMorePost;
