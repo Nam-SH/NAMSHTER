@@ -13,6 +13,7 @@ const morgan = require('morgan');
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts')
+
 // db 강제로 덮어씌우기
 // db.sequelize.sync({ force: true });
 db.sequelize.sync();
@@ -20,7 +21,7 @@ passportConfig();
 
 app.use(morgan('dev'))
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3080',
   credentials: true,
 }));
 

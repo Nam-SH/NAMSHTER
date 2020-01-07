@@ -9,22 +9,22 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
 
 
 // 사용자정보 가져오기
-// router.get('/', isLoggedIn, async (req, res, next) => {
-//   const user = req.user
-//   res.json(user)
-// })
+router.get('/', isLoggedIn, async (req, res, next) => {
+  const user = req.user;
+  res.json(user);
+})
 
 
 // 회원가입(signUp)
 router.post('/', isNotLoggedIn, async (req, res, next) => {
   try {
-    const hash = await bcrypt.hash(req.body.password, 12)
+    const hash = await bcrypt.hash(req.body.password, 12);
     // 닉네임을 겹치지 않게 만든다.
     const exUser = await db.User.findOne({
       where: {
         email: req.body.email,
-      }
-    })
+      },
+    });
     if (exUser) { // 이미 회원가입이 되어있으면
       // return res.status(403).send('이미 회원가입이 되어있어요')
       return res.status(403).json({
@@ -41,7 +41,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
     // 회원가입 후 바로 로그인하기
     passport.authenticate('local', (err, user, info) => {
       if (err) {
-        console.error(err)
+        console.error('back/user/signUp 의 err:::', err)
         return next(err);
       } 
       if (info) {
@@ -49,13 +49,12 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
       }
       return req.login(user, async (err) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           return next(err)
         }
         return res.json(user)
       });
     })(req, res, next);
-
   } catch (err) {
     console.error(err);
     return next(err);

@@ -6,6 +6,7 @@ const db = require('../models');
 // 게시물들 가져오기, (/posts)
 router.get('/', async (req, res, next) => {
   try {
+    console.log('글을 가져오는 back/posts입니다.')
     const posts = await db.Post.findAll({
        include: [
          {
@@ -21,9 +22,9 @@ router.get('/', async (req, res, next) => {
     res.json(posts)
   }
   catch (err) {
-    console.error(err)
-    return next(err)
+    console.error('back/posts의 err:::', err)
+    next(err)
   }
 })
 
-module.exports = router
+module.exports = router;

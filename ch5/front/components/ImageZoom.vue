@@ -7,11 +7,11 @@
     <div id="carousel-wrapper">
       <v-carousel>
         <v-carousel-item
-          v-for="image in images"
-          :key="image.src"
+          v-for="img in images"
+          :key="img.src"
         >
           <v-sheet>
-            <v-img :src="`http://localhost:3085/${image.src}`" max-height="500" contain />
+            <v-img max-height="500" contain :src="`http://localhost:3085/${img.src}`" />
           </v-sheet>
         </v-carousel-item>
       </v-carousel>
@@ -29,7 +29,7 @@
       closeModal: {
         type: Function,
         required: true,
-      }
+      },
     }
   }
 </script>

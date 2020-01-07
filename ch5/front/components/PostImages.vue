@@ -1,6 +1,5 @@
 <template>
   <div v-if="images.length === 0"></div>
-  
   <div v-else-if="images.length === 1">
     <v-img 
       :src="`http://localhost:3085/${images[0].src}`" 
@@ -10,7 +9,6 @@
     />
     <image-zoom v-if="imageZoomed" :close-modal="closeModal" :images="images" />
   </div>
-
   <div v-else-if="images.length === 2" style="display: flex">
     <v-img 
       :src="`http://localhost:3085/${images[0].src}`" 
@@ -35,9 +33,13 @@
       contain 
       aspect-ratio="2"
       style="flex: 1"
+      @click="zoomImages"
     />
     <div style="flex: 1; align-items: center; justify-content: center; display: flex" @click="zoomImages">
-      <v-icon>mdi-dots-horizontal</v-icon>
+      <div style="text-align: center">
+        <v-icon>mdi-dots-horizontal</v-icon>
+        <div>더 보기</div>
+      </div>
     </div>
     <image-zoom v-if="imageZoomed" :close-modal="closeModal" :images="images" />
   </div>
@@ -69,5 +71,5 @@
         this.imageZoomed = true;
       }
     },
-  }
+  };
 </script>

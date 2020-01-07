@@ -159,6 +159,103 @@ router.get('/:id/comments', async (req, res, next) => {
     console.error(err)
     next(err)
   }
-})
+});
+
+// 리트윗
+router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
+  try {
+
+    // 글이 없으면 리트윗 안 됨
+    const post = await db.Post.findOne({
+      where: { id: req.params.id, },
+      include: [{
+        model: db.Post,
+        as: 'Retweet'
+      }]
+    })
+    if (!post) {
+      return res.status(404).send('글이 없는데요;;')
+    }
+
+    // 글의 유저아이이가 내 id와 같으면 리트윗 하면 안 됨
+    if (req.user.id === post.UserId || (post.Retweet && post.Retweet.UserId === req.user.id)) {
+      return res.status(403).send('자신의 글을 리트윗할 수 없습니다.');
+    }
+
+    // 리트윗 된 글이 내 글이면 리트윗하면 안 됨
+    const retweetTargetId = post.RetweetId || post.id;
+    const exPost = await db.Post.findOne({
+      where: {
+        UserId: req.user.id,
+        RetweetId: retweetTargetId,
+      }
+    })
+    if (exPost) {
+      return res.status(403).send('이미 리트윗했습니다요')
+    }
+    // 검사 끝~~
+
+    const retweet = await db.Post.create({
+      UserId: req.user.id,
+      RetweetId: retweetTargetId,
+      content: 'retweet이욤~'
+    })
+    const retweetWithPrevPost = await db.Post.findOne({
+      where: { id: retweet.id },
+      include: [{
+        model: db.User,
+        attributes: ['id', 'nickname']
+      }, {
+        model:db.Post,
+        as: 'Retweet',
+        include: [{
+          model: db.User,
+          attributes: ['id', 'nickname'],
+        }, {
+          model: db.Image,
+        }]
+      }]
+    })
+    res.json(retweetWithPrevPost);
+  }
+  catch (err) {
+    console.log(err)
+    next(err)
+  }
+});
+
+// 좋아요
+router.post('/:id/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id, }, })
+    if (!post) {
+      return res.status(404).send('글이 없는데요;;');
+    }
+    // 글이 있으면
+    await post.addLiker(req.user.id);
+    res.json({ userId: req.user.id });
+  }
+  catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
+// 좋아요 취소
+router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id, }, })
+    if (!post) {
+      return res.status(404).send('글이 없는데요;;');
+    }
+    // 글이 있으면
+    await post.removeLiker(req.user.id);
+    res.json({ userId: req.user.id });
+  }
+  catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
 
 module.exports = router

@@ -1,20 +1,18 @@
 module.exports = {
   head: {
-      title: '공통',
+      title: 'NAM-SH',
   },
-  
   modules: [
     '@nuxtjs/axios',
   ],
-
   buildModules: [
     '@nuxtjs/vuetify',
   ],
-
-  plugins: [
-    
-  ],
-
+  plugins: [],
   vuetify: {},
-
+  axios: {
+    browserBaseURL: 'http://localhost:3085',
+    baseURL: 'http://localhost:3085',
+    https: false
+  },
 }
