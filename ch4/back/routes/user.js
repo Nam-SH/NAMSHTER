@@ -25,7 +25,6 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
         message: '이미 회원가입이 되어있어요'
       })
     }
-
     await db.User.create({
       email: req.body.email,
       password: hash,
@@ -36,19 +35,19 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
       if (err) {
         console.error(err)
         return next(err);
-      } 
+      }; 
       if (info) {
         return res.status(401).send(info.reason)
-      }
+      };
       return req.login(user, async (err) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           return next(err)
         }
+        console.log('회원가입 후 로그인 시도!')
         return res.json(user)
       });
     })(req, res, next);
-
   } catch (err) {
     console.error(err);
     return next(err);

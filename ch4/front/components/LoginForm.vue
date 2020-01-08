@@ -54,8 +54,8 @@
           v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
         ],
         passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 10) || '비밀번호는 최소 10자 입니다.',
+          v => !!v || 'Password is required',
+          v => (v && v.length >= 10) || '비밀번호는 최소 10자 입니다.',
         ],
       }
     },
@@ -68,11 +68,11 @@
           })
           .then(() => {
             this.$router.push({
-            path: '/',
-          });
+              path: '/',
+            });
           })
           .catch((err) => {
-            console.log(err)
+            console.error(err)
             alert('회원가입 실패!!')
           })
         }
@@ -81,7 +81,7 @@
         this.$store.dispatch('users/logOut')
         this.email = '';
         this.password = '';
-      }
+      },
     },
     computed: {
       me() {

@@ -65,25 +65,25 @@ export const actions = {
       password: payload.password,
     })
     .then((res)=> {
-      // console.log(res);
+      console.log('회원가입 axios 보내고 무슨 데이터를 받음?', res.data);
       commit('setMe', res.data)
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     })
   },
   logIn({ commit }, payload) {
     this.$axios.post('http://localhost:3085/user/login', {
       email: payload.email,
       password: payload.password
-    },{
+    }, {
       withCredentials: true
     })
     .then((res) => {
       commit('setMe', res.data);
     })
     .catch((err) => {
-      console.log(err)
+      console.error(err)
     })
   },
   logOut({ commit }) {
@@ -94,7 +94,7 @@ export const actions = {
       commit('setMe', null);
     })
     .catch((err) => {
-      console.log(err)
+      console.error(err)
     })
   },
 

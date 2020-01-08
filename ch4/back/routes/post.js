@@ -37,7 +37,7 @@ router.post('/images', upload.array('image'), (req, res) => {
 });
 
 
-
+// 글 작성하기
 router.post('/', isLoggedIn, async (req, res, next) => {
   try {
     // req.body.content
@@ -62,7 +62,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       include: [{
         model: db.User,
         attributes: ['id', 'nickname'],
-        // 요청을 받으면 프론트에 User: { id:!, nickname: "남승현" } 형식이 추가된다.
+        // 요청을 받으면 프론트에 User: { id: 1, nickname: "남승현" } 형식이 추가된다.
       }]
     });
     return res.json(fullPost)
