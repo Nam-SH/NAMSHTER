@@ -11,7 +11,7 @@ module.exports = () => {
     passwordField: 'password', // req.body.password
     }, async (email, password, done) => {
     try {
-      // 검사부분
+      // 검사부분 (사용자 인증을 수행)
       const exUser = await db.User.findOne({ where: { email } });
       if (!exUser) {
         return done(null, false, { reason: '존재하지 않는 사용자입니다.' });

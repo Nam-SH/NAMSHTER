@@ -41,7 +41,7 @@ app.use(session({
   }
 }));
 
-app.use(passport.initialize())
+app.use(passport.initialize())  // passport 초기화
 app.use(passport.session())
 
 // 메인페이지를 가져오는 것
