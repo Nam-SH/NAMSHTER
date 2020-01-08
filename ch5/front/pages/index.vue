@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <!-- {{ mainPosts }} -->
     <post-form v-if="me" />
     <div>
       <post-card v-for="post in mainPosts" :key="post.id" :post="post" />

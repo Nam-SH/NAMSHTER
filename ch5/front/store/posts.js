@@ -4,7 +4,7 @@ export const state = () => ({
   imagePaths: [],
 });
 
-const totalPosts = 51;
+// const totalPosts = 51;
 const limit = 10;
 
 export const mutations = {
@@ -29,7 +29,7 @@ export const mutations = {
   },
 
   loadPosts(state, payload) {
-    const diff = totalPosts - state.mainPosts.length;
+    // const diff = totalPosts - state.mainPosts.length;
     // const fakePosts = Array(diff > limit ? limit : diff).fill().map(v => ({
     //   id: Math.random().toString(),
     //   User: {
@@ -41,9 +41,9 @@ export const mutations = {
     //   Images: [],
     // }));
     // state.mainPosts = state.mainPosts.concat(fakePosts)
-
+    // state.hasMorePost =  state.mainPosts.length === limit;
     state.mainPosts = state.mainPosts.concat(payload)
-    state.hasMorePost =  state.mainPosts.length === limit;
+    state.hasMorePost =  payload.length === limit;
   },
 
   // 댓글 요청하기
@@ -59,6 +59,23 @@ export const mutations = {
 
   removeImagePath(state, payload) {
     state.imagePaths.splice(payload, 1)
+  },
+
+  // 좋아요
+  likePost(state, payload) {
+    // payload에는 userId, postID가 들어있다.
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId)
+    return state.mainPosts[targetIndex].Likers.push({
+      id: payload.userId,
+    })
+  },
+
+  // 싫어요
+  unlikePost(state, payload) {
+    // payload에는 userId, postID가 들어있다.
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId)
+    const targetUserIndex = state.mainPosts[targetIndex].Likers.findIndex(v => v.id === payload.userId)
+    return state.mainPosts[targetIndex].Likers.splice(targetUserIndex, 1);
   }
 };
 
@@ -119,7 +136,7 @@ export const actions = {
   // 게시물 요청하기
   loadPosts({ commit, state }) {
     if (state.hasMorePost) {
-      this.$axios.get('/posts')
+      this.$axios.get(`/posts?offset=${state.mainPosts.length}$limit=10`)
       .then((res) => {
         commit('loadPosts', res.data);
       })
@@ -152,4 +169,54 @@ export const actions = {
       console.error(err)
     })
   },
+
+  // 좋아요
+  likePost({ commit }, payload) {
+    this.$axios.post(`/post/${payload.postId}/like`, {}, {
+      withCredentials: true
+    })
+    .then((res) => {
+      // res.data에는 userId가 들어있다.
+      commit('likePost', {
+        userId: res.data.userId,
+        postId: payload.postId,
+      })
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  },
+
+  // 싫어요
+  unlikePost({ commit }, payload) {
+    this.$axios.delete(`/post/${payload.postId}/unlike`, {
+      withCredentials: true
+    })
+    .then((res) => {
+      commit('unlikePost', {
+        userId: res.data.userId,
+        postId: payload.postId,
+      })
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  },
+
+  // 리트윗
+  retweet({ commit }, payload) {
+    this.$axios.post(`/post/${payload.postId}/retweet`, {}, {
+      withCredentials: true
+    })
+    .then((res) => {
+      // res.data에는 리트윗한 나의 User id, nickname
+      // 원본글의 Id와, 글 작성자의 User id, nickname, 글의 image 주소가 들어있다.
+      commit('addMainPost', res.data)
+    })
+    .catch((err) => {
+      console.error(err)
+      // 작성한 에러메시지
+      alert(err.response.data)
+    })
+  }
 }

@@ -74,12 +74,16 @@ router.post('/', isLoggedIn, async (req, res, next) => {
         attributes: ['id', 'nickname'],
         }, {
           model: db.Image,
+        }, {
+          model: db.User,
+          as: "Likers",
+          attributes: ['id'],
         }]
     });
     return res.json(fullPost)
   }
   catch(err) {
-    console.log(err);
+    console.error(err);
     next(err);
   }
 });
@@ -115,7 +119,7 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
     }
     const newComment = await db.Comment.create({
       // postId, UserId는 associate의 관계 정의로 인해 자동으로 추가되어 있다.
-      postId: post.id,
+      PostId: post.id,
       UserId: req.user.id,
       content: req.body.content
     });
@@ -139,7 +143,6 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
 })
 
 // 댓글조회
-
 router.get('/:id/comments', async (req, res, next) => {
   try {
     const post = await db.Post.findOne({ where: { id: req.params.id } })
@@ -147,13 +150,14 @@ router.get('/:id/comments', async (req, res, next) => {
       return res.status(404).send('없는 포스트 인데여ㅋㅋㅋ')
     }
     const comments = await db.Comment.findAll({ 
-      where: { id: req.params.id },
+      where: { postId: req.params.id },
       include: [{
         model: db.User,
         attributes: ['id', 'nickname']
       }],
       order: [['createdAt', 'ASC']]
     });
+    return res.json(comments);
   }
   catch (err) {
     console.error(err)
@@ -161,7 +165,7 @@ router.get('/:id/comments', async (req, res, next) => {
   }
 });
 
-// 리트윗
+// 리트윗 하기
 router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
   try {
 
@@ -213,13 +217,17 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
           attributes: ['id', 'nickname'],
         }, {
           model: db.Image,
+        }, {
+          model: db.User,
+          as: 'Likers',
+          attributes: ['id']
         }]
       }]
     })
     res.json(retweetWithPrevPost);
   }
   catch (err) {
-    console.log(err)
+    console.error(err)
     next(err)
   }
 });
@@ -236,13 +244,13 @@ router.post('/:id/like', isLoggedIn, async (req, res, next) => {
     res.json({ userId: req.user.id });
   }
   catch (err) {
-    console.log(err);
+    console.error(err);
     next(err);
   }
 });
 
 // 좋아요 취소
-router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
+router.delete('/:id/unlike', isLoggedIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({ where: { id: req.params.id, }, })
     if (!post) {
@@ -253,9 +261,10 @@ router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
     res.json({ userId: req.user.id });
   }
   catch (err) {
-    console.log(err);
+    console.error(err);
     next(err);
   }
 });
+
 
 module.exports = router

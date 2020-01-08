@@ -111,7 +111,6 @@ export const actions = {
       console.log(err)
     })
   },
-
   changeNickname({ commit }, payload) {
     commit('changeNickname', payload)
   },
