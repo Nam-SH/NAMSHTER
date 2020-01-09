@@ -3,17 +3,15 @@
     <post-images :images="post.Images || []" />
     <v-card-title>
         <h3>
-          <nuxt-link :to="/user/ + post.id">
-            {{ post.User.nickname }}
-          </nuxt-link> 
+          <nuxt-link :to="/user/ + post.id"> {{ post.User.nickname }} </nuxt-link> 
+          <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
+          <v-btn v-if="canUnFollow" @click="onUnFloow">언팔로우</v-btn>
         </h3>
       </v-card-title>
 
       <v-card-text>
         <div>
-          <nuxt-link :to="/post/ + post.id">
-            {{ post.content }}
-          </nuxt-link>
+          {{ post.content }}
         </div>
       </v-card-text>
   </div>
@@ -29,6 +27,30 @@ import PostImages from '@/components/PostImages.vue';
     props: {
       post: {
         type: Object,
+      }
+    },
+    computed: {
+      me() {
+        return this.$store.state.users.me
+      },
+      canFollow() {
+        return this.me && this.post.User.id !== this.me.id && !this.me.Followings.find(v => v.id === this.post.User.id)
+      },
+      canUnFollow() {
+        return this.me && this.post.User.id !== this.me.id && this.me.Followings.find(v => v.id === this.post.User.id)
+      }
+    },
+
+    methods: {
+      onFollow() {
+        this.$store.dispatch('users/follow', {
+          userId: this.post.User.id,
+        })
+      },
+      onUnFollow() {
+        this.$store.dispatch('users/unfollow', {
+          userId: this.post.User.id,
+        })
       }
     },
   }

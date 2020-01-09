@@ -32,26 +32,26 @@ const upload = multer({
 
 // 이미지업로드 (/post/images)
 // 2. isLoggedIn 사용한 후 모양
-router.post('/images', upload.array('image'), (req, res) => {
+router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   // console.log(req.files);
   res.json(req.files.map(v => v.filename));
 });
 
 
 // 글 작성(/post)
-router.post('/', isLoggedIn, async (req, res, next) => {
+router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   try {
-    const hashtags = req.body.content.match(/#[^\s#] + /g);
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
     const newPost = await db.Post.create({
       content: req.body.content,
       UserId: req.user.id,
-    })
+    });
     if (hashtags) {
       const result = await Promise.all(hashtags.map(tag => db.Hashtag.findOrCreate({
         where: { name: tag.slice(1).toLowerCase() },
       })));
       // 1. 쿼리가 복잡하지 않은 경우
-      await newPost.addHastags(result.map(r => r[0]));
+      await newPost.addHashtags(result.map(r => r[0]));
       // 2. 만일 쿼리가 복잡하면??
       // db.sequelize.query('SQL문 직접 입력')
     }
@@ -59,30 +59,28 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       // 여러개 경우
       if (Array.isArray(req.body.image)) {
         await Promise.all(req.body.image.map((image) => {
-          return db.Image.create({ src: image, PostId: newPost.id })
+          return db.Image.create({ src: image, PostId: newPost.id });
         }));
       } else { // 하나인 경우
-        await db.Image.create({ src: req.body.image, PostId: newPost.id })
+        await db.Image.create({ src: req.body.image, PostId: newPost.id });
       };
     }
     const fullPost = await db.Post.findOne({
       where: { id: newPost.id },
-      include: [
-        {
+      include: [{
         // 요청을 받으면 프론트에 User: { id:!, nickname: "남승현" } 형식이 추가된다.
         model: db.User,
         attributes: ['id', 'nickname'],
-        }, {
-          model: db.Image,
-        }, {
-          model: db.User,
-          as: "Likers",
-          attributes: ['id'],
-        }]
+      }, {
+        model: db.Image,
+      }, {
+        model: db.User,
+        as: 'Likers',
+        attributes: ['id'],
+      }],
     });
-    return res.json(fullPost)
-  }
-  catch(err) {
+    return res.json(fullPost);
+  } catch (err) {
     console.error(err);
     next(err);
   }
@@ -111,17 +109,17 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
 
 
 // 댓글작성
-router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
+router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /post/:id/comment
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id } })
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
     if (!post) {
-      return res.status(400).send('포스트가 존재하지 않습니다.');
+      return res.status(404).send('포스트가 존재하지 않습니다.');
     }
     const newComment = await db.Comment.create({
       // postId, UserId는 associate의 관계 정의로 인해 자동으로 추가되어 있다.
       PostId: post.id,
       UserId: req.user.id,
-      content: req.body.content
+      content: req.body.content,
     });
 
     // 프론트로 보낼 정보를 만든다.
@@ -145,23 +143,24 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
 // 댓글조회
 router.get('/:id/comments', async (req, res, next) => {
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id } })
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
     if (!post) {
-      return res.status(404).send('없는 포스트 인데여ㅋㅋㅋ')
+      return res.status(404).send('포스트가 존재하지 않습니다.');
     }
-    const comments = await db.Comment.findAll({ 
-      where: { postId: req.params.id },
+    const comments = await db.Comment.findAll({
+      where: {
+        PostId: req.params.id,
+      },
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname']
+        attributes: ['id', 'nickname'],
       }],
-      order: [['createdAt', 'ASC']]
+      order: [['createdAt', 'ASC']],
     });
-    return res.json(comments);
-  }
-  catch (err) {
-    console.error(err)
-    next(err)
+    res.json(comments);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 });
 

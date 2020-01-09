@@ -142,7 +142,7 @@
           postId: this.post.id,
         })
       },
-
+      
       // 리트윗
       onRetweet() {
         if (!this.me) {

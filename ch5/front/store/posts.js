@@ -133,10 +133,11 @@ export const actions = {
   //     commit('loadPosts');
   //   }
   // },
+
   // 게시물 요청하기
-  loadPosts({ commit, state }) {
+  loadPosts({ commit, state }, payload) {
     if (state.hasMorePost) {
-      this.$axios.get(`/posts?offset=${state.mainPosts.length}$limit=10`)
+      this.$axios.get(`/posts?offset=${state.mainPosts.length}&limit=10`)
       .then((res) => {
         commit('loadPosts', res.data);
       })
