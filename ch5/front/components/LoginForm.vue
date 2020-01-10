@@ -34,6 +34,11 @@
       <v-container>
         {{ me.nickname }} 로그인이 되었습니다.
         <v-btn @click="onLogOut">로그아웃</v-btn>
+        <v-row>
+          <v-col col="4">{{ me.Followings.length }}명을 팔로잉...</v-col>
+          <v-col col="4">{{ me.Followers.length }}명이 나를 팔로워...</v-col>
+          <v-col col="4">{{ me.Posts.length }}개의 글을 작성함...</v-col>
+        </v-row>
       </v-container>
     </v-card>
   </v-container>

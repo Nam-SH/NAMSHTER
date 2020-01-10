@@ -6,8 +6,8 @@ export const state = () => ({
   hasMoreFollower: true,
 });
 
-const totalFollowings = 8;
-const totalFollowers = 6;
+// const totalFollowings = 8;
+// const totalFollowers = 6;
 const limit = 3;
 
 export const mutations = {
@@ -26,50 +26,73 @@ export const mutations = {
   // addFollowing(state, payload) {
   //   state.followingList.push(payload)
   // },
-  // removeFollower(state, payload) {
-  //   const targetIndex = state.followerList.findIndex(v => v.id === payload.userId)
-  //   state.followerList.splice(targetIndex, 1)
-  // },
-  // removeFollowing(state, payload) {
-  //   const targetIndex = state.followingList.findIndex(v => v.id === payload.userId)
-  //   state.followingList.splice(targetIndex, 1)
-  // },
+  removeFollower(state, payload) {
+    let targetIndex = state.me.Followers.findIndex(v => v.id === payload.userId)
+    state.me.Followers.splice(targetIndex, 1)
+    targetIndex = state.followerList.findIndex(v => v.id === payload.userId)
+    state.followerList.splice(targetIndex, 1)
+  },
+  removeFollowing(state, payload) {
+    let targetIndex = state.me.Followings.findIndex(v => v.id === payload.userId)
+    state.me.Followings.splice(targetIndex, 1)
+    targetIndex = state.followingList.findIndex(v => v.id === payload.userId)
+    state.followingList.splice(targetIndex, 1)
+  },
+
   follower(state, payload) {
     state.me.Followers.push({id: payload.userId})
   },
-
   following(state, payload) {
     state.me.Followings.push({id: payload.userId})
   },
 
   unfollower(state, payload) {
     const targetIndex = state.me.Followers.findIndex(v => v.id === payload.userId)
-    state.Followers.splice(targetIndex, 1)
+    state.followerList.splice(targetIndex, 1)
   },
-
   unfollowing(state, payload) {
     const targetIndex = state.me.Followings.findIndex(v => v.id === payload.userId)
-    state.me.Followings.splice(targetIndex, 1)
+    state.followingList.splice(targetIndex, 1)
   },
-  
-  loadFollowers(state) {
-    const diff = totalFollowers - state.followerList.length
-    const fakeUsers = Array(diff > limit ? limit : diff).fill().map( v=> ({
-      id: Math.random().toString(),
-      nickname: Math.floor(Math.random() * 1000).toString(),
-    }))
-    state.followerList = state.followerList.concat(fakeUsers);
-    state.hasMoreFollower = diff > limit;
+ 
+  // 팔로잉, 팔로워 더미 버전
+  // loadFollowers(state) {
+  //   const diff = totalFollowers - state.followerList.length
+  //   const fakeUsers = Array(diff > limit ? limit : diff).fill().map( v=> ({
+  //     id: Math.random().toString(),
+  //     nickname: Math.floor(Math.random() * 1000).toString(),
+  //   }))
+  //   state.followerList = state.followerList.concat(fakeUsers);
+  //   state.hasMoreFollower = diff > limit;
+  // },
+  // loadFollowings(state) {
+  //   const diff = totalFollowings - state.followingList.length
+  //   const fakeUsers = Array(diff > limit ? limit : diff).fill().map(v=> ({
+  //     id: Math.random().toString(),
+  //     nickname: Math.floor(Math.random() * 1000).toString(),
+  //   }))
+  //   state.followingList = state.followingList.concat(fakeUsers);
+  //   state.hasMoreFollowing = diff > limit;
+  // },
+
+  // 팔로잉 팔로워
+  loadFollowers(state, payload) {
+    if (payload.offset === 0) {
+      state.followers = payload.data;
+    }
+    else {
+      state.followerList = state.followerList.concat(payload.data);
+    }
+    state.hasMoreFollower = payload.data.length === limit;
   },
-  
-  loadFollowings(state) {
-    const diff = totalFollowings - state.followingList.length
-    const fakeUsers = Array(diff > limit ? limit : diff).fill().map(v=> ({
-      id: Math.random().toString(),
-      nickname: Math.floor(Math.random() * 1000).toString(),
-    }))
-    state.followingList = state.followingList.concat(fakeUsers);
-    state.hasMoreFollowing = diff > limit;
+  loadFollowings(state, payload) {
+    if (payload.offset === 0) {
+      state.followingList = payload.data;
+    }
+    else {
+      state.followingList = state.followingList.concat(payload.data);
+    }
+    state.hasMoreFollowing = payload.data.length === limit;
   },
 }
 
@@ -79,12 +102,12 @@ export const actions = {
   async loadUser({ commit }) {
     try {
       const res = await this.$axios.get('/user', { 
-        withCredentials: true 
+        withCredentials: true,
       });
       commit('setMe', res.data)
     }
     catch (err) {
-      console.error('loadUser:::', err);
+      console.error('loadUser :::', err);
     }
   },
 
@@ -100,7 +123,7 @@ export const actions = {
       commit('setMe', res.data)
     })
     .catch((err) => {
-      console.error('signUp:::', err);
+      console.error('signUp :::', err);
     });
   },
 
@@ -115,7 +138,7 @@ export const actions = {
       commit('setMe', res.data);
     })
     .catch((err) => {
-      console.error('logIn:::', err)
+      console.error('logIn :::', err)
     })
   },
 
@@ -127,11 +150,20 @@ export const actions = {
       commit('setMe', null);
     })
     .catch((err) => {
-      console.error('logOut:::', err)
+      console.error('logOut :::', err)
     })
   },
+
   changeNickname({ commit }, payload) {
-    commit('changeNickname', payload)
+    this.$axios.patch('/user/nickname', { nickname: payload.nickname }, {
+      withCredentials: true,
+    })
+    .then((res) => {
+      commit('changeNickname', res.data)
+    })
+    .catch((err) => {
+      console.error('changeNickname :::', err)
+    })
   },
   // addFollowing({ commit }, payload) {
   //   commit('addFollowing', payload)
@@ -139,46 +171,143 @@ export const actions = {
   // addFollower({ commit }, payload) {
   //   commit('addFollower', payload)
   // },
-  // removeFollowing({ commit }, payload) {
-  //   commit('removeFollowing', payload)
-  // },
-  // removeFollower({ commit }, payload) {
-  //   commit('removeFollower', payload)
-  // },
 
-  // 팔로잉, 팔로워
+  // 프로필에서 전체 팔로우 팔로잉에서 제거
+  removeFollowing({ commit, dispatch }, payload) {
+    dispatch('unfollow', payload)
+  },
+  removeFollower({ commit, dispatch }, payload) {
+    dispatch('unfollower', payload)
+  },
+
+  // 팔로워, 언팔로워
   follow({ commit }, payload) {
-    this.$axios.post(`/user/${payload.userId}/follow`, {}, {
+    return this.$axios.post(`/user/${payload.userId}/follow`, {}, {
       withCredentials: true
     })
     .then((res) => {
-      commit('following', {userId: payload.userId})
+      commit('following', { userId: payload.userId })
     })
     .catch((err) => {
-      console.error(err);
+      console.error('follow :::', err);
     })
   },
   unfollow({ commit }, payload) {
-    this.$axios.delete(`/user/${payload.userId}/follow`, {
+    return this.$axios.delete(`/user/${payload.userId}/follow`, {
       withCredentials: true
     })
     .then((res) => {
-      commit('unfollowing', {userId: payload.userId})
+      commit('unfollowing', { userId: payload.userId })
     })
     .catch((err) => {
-      console.error(err);
+      console.error('unfollow :::', err);
+    })
+  },
+
+  // 언팔로워
+  unfollower({ commit }, payload) {
+    return this.$axios.delete(`/user/${payload.userId}/follower`, {
+      withCredentials: true
+    })
+    .then((res) => {
+      commit('unfollower', { userId: payload.userId })
+    })
+    .catch((err) => {
+      console.error('unfollower :::', err);
     })
   },
   
+  
+  // 팔로잉, 팔로워 더미데이터 버전
+  // loadFollowers({ commit, state }) {
+  //   if (state.hasMoreFollower) {
+  //     commit('loadFollowers');
+  //   }
+  // },
+  // loadFollowings({ commit, state }) {
+  //   if (state.hasMoreFollowing) {
+  //     commit('loadFollowings');
+  //   }
+  // },
 
-  loadFollowers({ commit, state }) {
-    if (state.hasMoreFollower) {
-      commit('loadFollowers');
+  // 팔로잉, 팔로워 (초기 화면 수정 전)
+  // loadFollowers({ commit, state }, payload) {
+  //   if (state.hasMoreFollower) {
+  //     const offset = state.followerList.length;
+  //     return this.$axios.get(`/user/${state.me.id}/followers?limit=3&offset=${offset}`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       commit('loadFollowers', {
+  //         data: res.data,
+  //         offset,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error('loadFollowers :::', err)
+  //     });
+  //   }
+  // },
+  // loadFollowings({ commit, state }, payload) {
+  //   if (state.hasMoreFollowing) {
+  //     const offset = state.followerList.length;
+  //     return this.$axios.get(`/user/${state.me.id}/followings?limit=3&offset=${offset}`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       commit('loadFollowings', {
+  //         data: res.data,
+  //         offset,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error('loadFollowers :::', err)
+  //     });
+  //   }
+  // },
+
+  // 팔로잉, 팔로워 (초기 화면 수정 후)
+  loadFollowers({ commit, state }, payload) {
+    if (!(payload && payload.offset === 0) && !state.hasMoreFollower) {
+      return;
     }
-  },
-  loadFollowings({ commit, state }) {
-    if (state.hasMoreFollowing) {
-      commit('loadFollowings');
+    let offset = state.followerList.length;
+    if (payload && payload.offset === 0) {
+      offset = 0;
     }
+    return this.$axios.get(`/user/${state.me.id}/followers?limit=3&offset=${offset}`, {
+      withCredentials: true,
+      })
+      .then((res) => {
+        commit('loadFollowers', {
+          data: res.data,
+          offset,
+        });
+      })
+      .catch((err) => {
+        console.error('loadFollowers :::', err)
+      });
   },
+  
+  loadFollowings({ commit, state }, payload) {
+    if (!(payload && payload.offset === 0) && !state.hasMoreFollowing) {
+      return;
+    }
+    let offset = state.followingList.length;
+    if (payload && payload.offset === 0) {
+      offset = 0;
+    }
+    return this.$axios.get(`/user/${state.me.id}/followings?limit=3&offset=${offset}`, {
+      withCredentials: true,
+      })
+      .then((res) => {
+        commit('loadFollowings', {
+          data: res.data,
+          offset,
+        });
+      })
+      .catch((err) => {
+        console.error('loadFollowers :::', err)
+      });
+    },  
 }

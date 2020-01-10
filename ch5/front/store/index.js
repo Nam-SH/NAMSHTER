@@ -1,9 +1,11 @@
-export const state = () => ({});
+export const state = () => ({
+
+});
 
 export const mutations = {};
 
 export const actions = {
-  nuxtServerInit({ dispatch }, { req }) {
+  nuxtServerInit({ commit, dispatch, state }, { req }) {
     return dispatch('users/loadUser');
   },
 };

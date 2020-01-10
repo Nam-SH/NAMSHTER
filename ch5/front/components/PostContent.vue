@@ -5,7 +5,7 @@
         <h3>
           <nuxt-link :to="/user/ + post.id"> {{ post.User.nickname }} </nuxt-link> 
           <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
-          <v-btn v-if="canUnFollow" @click="onUnFloow">언팔로우</v-btn>
+          <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
         </h3>
       </v-card-title>
 

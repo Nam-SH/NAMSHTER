@@ -27,7 +27,7 @@ export const mutations = {
     const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
-
+  
   loadPosts(state, payload) {
     // const diff = totalPosts - state.mainPosts.length;
     // const fakePosts = Array(diff > limit ? limit : diff).fill().map(v => ({

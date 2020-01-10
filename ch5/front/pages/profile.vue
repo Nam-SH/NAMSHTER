@@ -65,12 +65,10 @@
         return this.$store.state.users.hasMoreFollower;
       }
     },
-
     fetch({ store }) {
-      store.dispatch('users/loadFollowers');
-      store.dispatch('users/loadFollowings');
+      store.dispatch('users/loadFollowers', { offset: 0 });
+      return store.dispatch('users/loadFollowings', { offset: 0 });
     },
-
     methods: {
       onChangeNickname() {
         this.$store.dispatch('users/changeNickname', {
@@ -79,20 +77,22 @@
         .then(() => {
           this.nickname = ''
         })
+        .catch((err) => {
+          console.error('onChangeNickname :::', err)
+        })
       },
-      removeFollower(id) {
-        this.$store.dispatch('users/removeFollower', { id })
+      removeFollower(userId) {
+        this.$store.dispatch('users/removeFollower', { userId })
       },
-      removeFollowing(id) {
-        this.$store.dispatch('users/removeFollowing', { id })
+      removeFollowing(userId) {
+        this.$store.dispatch('users/removeFollowing', { userId })
       },
-
       loadFollowers() {
         this.$store.dispatch('users/loadFollowers')
       },
       loadFollowings() {
         this.$store.dispatch('users/loadFollowings')
-      }
+      },
     },
     head() {
       return {
