@@ -92,7 +92,6 @@
         v => !!v || '비밀번호 확인은 필수입니다.',
         v => v === this.password || '비밀번호가 일치하지 않습니다.'
         ],
-
         value1: true,
         value2: true,
       }

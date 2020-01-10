@@ -16,7 +16,10 @@
       PostCard,
       PostForm
     },
-    
+    fetch ({ store }) {
+      return store.dispatch('posts/loadPosts');
+    },
+
     computed: {
       me() {
         return this.$store.state.users.me;
@@ -27,10 +30,6 @@
       hasMorePost() {
         return this.$store.state.posts.hasMorePost;
       },
-    },
-    
-    fetch({ store }) {
-      return store.dispatch('posts/loadPosts');
     },
     
     mounted() {

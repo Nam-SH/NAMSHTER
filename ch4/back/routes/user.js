@@ -30,6 +30,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
       password: hash,
       nickname: req.body.nickname
     });
+      
     // 회원가입 후 바로 로그인하기
     passport.authenticate('local', (err, user, info) => {
       if (err) {
@@ -41,7 +42,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
       };
       return req.login(user, async (err) => {
         if (err) {
-          console.error(err);
+          console.error('/post :::', err);
           return next(err)
         }
         console.log('회원가입 후 로그인 시도!')
@@ -50,7 +51,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
     })(req, res, next);
   } catch (err) {
     console.error(err);
-    return next(err);
+    return next('/post + 2:::', err);
   }
 })
 
@@ -66,7 +67,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
     }
     return req.login(user, async (err) => {
       if (err) {
-        console.error(err);
+        console.error('/login :::', err);
         return next(err)
       }
       return res.json(user)

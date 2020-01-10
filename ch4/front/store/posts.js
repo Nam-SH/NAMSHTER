@@ -68,7 +68,7 @@ export const actions = {
       commit('addMainPost', res.data)
     })
     .catch((err) => {
-      console.error(err)
+      console.error('add:::', err)
     })
   },
 
@@ -91,15 +91,15 @@ export const actions = {
   },
 
   // 이미지 업로드
-  uploadImages({ commit }, payload) {
+  uploadImages({ commit }, payload ) {
     this.$axios.post('http://localhost:3085/post/images', payload, {
       withCredentials: true,
     })
-      .then((res) => {
-        commit('concatImagePaths', res.data);
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    .then((res) => {
+      commit('concatImagePaths', res.data);
+    })
+    .catch((err) => {
+      console.error('uploadImages:::', err)
+    })
   }
 }

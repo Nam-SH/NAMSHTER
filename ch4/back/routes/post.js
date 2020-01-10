@@ -29,10 +29,9 @@ const upload = multer({
 //  if (req.isAuthenticated()) {
 //   }
 // });
-
 // 2. isLoggedIn 사용한 후 모양
 router.post('/images', upload.array('image'), (req, res) => {
-  // console.log(req.files);
+  // console.log('/images :::', req.files);
   res.json(req.files.map(v => v.filename));
 });
 
@@ -42,7 +41,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   try {
     // req.body.content
     // req.body.imagePaths
-    console.log(req.body)
+    // console.log(req.body)
     const hashtags = req.body.content.match(/#[^\s#] + /g);
     const newPost = await db.Post.create({
       content: req.body.content,
@@ -68,7 +67,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     return res.json(fullPost)
   }
   catch(err) {
-    console.log(err);
+    console.error('/post :::', err);
     next(err);
   }
 });

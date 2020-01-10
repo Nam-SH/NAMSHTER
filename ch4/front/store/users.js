@@ -69,7 +69,7 @@ export const actions = {
       commit('setMe', res.data)
     })
     .catch((err) => {
-      console.error(err);
+      console.error('signUp:::', err);
     })
   },
   logIn({ commit }, payload) {
@@ -83,7 +83,7 @@ export const actions = {
       commit('setMe', res.data);
     })
     .catch((err) => {
-      console.error(err)
+      console.error('logIn:::', err)
     })
   },
   logOut({ commit }) {
@@ -94,7 +94,7 @@ export const actions = {
       commit('setMe', null);
     })
     .catch((err) => {
-      console.error(err)
+      console.error('logOut:::', err)
     })
   },
 

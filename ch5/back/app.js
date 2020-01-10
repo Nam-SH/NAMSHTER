@@ -15,7 +15,7 @@ const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts')
 
 // db 강제로 덮어씌우기
-// db.sequelize.sync({ force: true });
+// db.sequelize.sync({force: true})
 db.sequelize.sync();
 passportConfig();
 

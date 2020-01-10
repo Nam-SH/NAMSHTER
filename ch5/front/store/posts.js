@@ -94,7 +94,7 @@ export const actions = {
       commit('addMainPost', res.data)
     })
     .catch((err) => {
-      console.error(err)
+      console.error('add:::', err)
     })
   },
 
@@ -107,9 +107,10 @@ export const actions = {
       commit('removeMainPost', res.data)
     })
     .catch((err) => {
-      console.log(err)
+      console.error('remove:::', err)
     })
   },
+
   edit({ commit }, payload) {
     commit('editMainPost', payload)
   },
@@ -123,16 +124,9 @@ export const actions = {
       commit('addComment', payload)
     })
     .catch((err) => {
-      console.error(err)
+      console.error('addComment:::', err)
     })
   },
-
-  // 게시물 요청하기
-  // loadPosts({ commit, state }) {
-  //   if (state.hasMorePost) {
-  //     commit('loadPosts');
-  //   }
-  // },
 
   // 게시물 요청하기
   loadPosts({ commit, state }, payload) {
@@ -142,7 +136,7 @@ export const actions = {
         commit('loadPosts', res.data);
       })
       .catch((err) => {
-        console.log(err)
+        console.error('loadPosts:::', err)
       })
     }
   },
@@ -154,7 +148,7 @@ export const actions = {
       commit('loadComments', res.data)
     })
     .catch((err) => {
-      console.error(err)
+      console.error('loadComments:::', err)
     });
   },
 
@@ -167,7 +161,7 @@ export const actions = {
       commit('concatImagePaths', res.data);
     })
     .catch((err) => {
-      console.error(err)
+      console.error('uploadImages:::', err)
     })
   },
 
@@ -184,7 +178,7 @@ export const actions = {
       })
     })
     .catch((err) => {
-      console.error(err)
+      console.error('likePost:::', err)
     })
   },
 
@@ -200,7 +194,7 @@ export const actions = {
       })
     })
     .catch((err) => {
-      console.error(err)
+      console.error('unlikePost:::', err)
     })
   },
 
@@ -215,7 +209,7 @@ export const actions = {
       commit('addMainPost', res.data)
     })
     .catch((err) => {
-      console.error(err)
+      console.error('retweet:::', err)
       // 작성한 에러메시지
       alert(err.response.data)
     })

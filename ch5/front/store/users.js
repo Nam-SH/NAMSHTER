@@ -37,13 +37,16 @@ export const mutations = {
   follower(state, payload) {
     state.me.Followers.push({id: payload.userId})
   },
+
   following(state, payload) {
     state.me.Followings.push({id: payload.userId})
   },
+
   unfollower(state, payload) {
     const targetIndex = state.me.Followers.findIndex(v => v.id === payload.userId)
     state.Followers.splice(targetIndex, 1)
   },
+
   unfollowing(state, payload) {
     const targetIndex = state.me.Followings.findIndex(v => v.id === payload.userId)
     state.me.Followings.splice(targetIndex, 1)
@@ -58,6 +61,7 @@ export const mutations = {
     state.followerList = state.followerList.concat(fakeUsers);
     state.hasMoreFollower = diff > limit;
   },
+  
   loadFollowings(state) {
     const diff = totalFollowings - state.followingList.length
     const fakeUsers = Array(diff > limit ? limit : diff).fill().map(v=> ({
@@ -80,7 +84,7 @@ export const actions = {
       commit('setMe', res.data)
     }
     catch (err) {
-      console.error(err);
+      console.error('loadUser:::', err);
     }
   },
 
@@ -93,13 +97,13 @@ export const actions = {
       withCredentials: true,
     })
     .then((res)=> {
-      // console.log(res);
       commit('setMe', res.data)
     })
     .catch((err) => {
-      console.log(err);
+      console.error('signUp:::', err);
     });
   },
+
   logIn({ commit }, payload) {
     this.$axios.post('/user/login', {
       email: payload.email,
@@ -111,9 +115,10 @@ export const actions = {
       commit('setMe', res.data);
     })
     .catch((err) => {
-      console.log(err)
+      console.error('logIn:::', err)
     })
   },
+
   logOut({ commit }) {
     this.$axios.post('/user/logout', {}, {
       withCredentials: true,
@@ -122,7 +127,7 @@ export const actions = {
       commit('setMe', null);
     })
     .catch((err) => {
-      console.log(err)
+      console.error('logOut:::', err)
     })
   },
   changeNickname({ commit }, payload) {
