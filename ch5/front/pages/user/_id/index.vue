@@ -1,5 +1,15 @@
 <template>
   <v-container>
+    <v-card style="margin-bottom: 20px">
+      <v-container>
+        {{ other.nickname }}님은 누굴까요
+        <v-row>
+          <!-- <v-col cols="4"> {{ other.Followings.length }}명을 팔로잉... </v-col>
+          <v-col cols="4"> {{ other.Followers.length }}명이 나를 팔로워... </v-col>
+          <v-col cols="4"> {{ other.Posts.length }}개의 글을 작성함... </v-col> -->
+        </v-row>
+      </v-container>
+    </v-card>
     <div>
       <post-card v-for="p in mainPosts" :key="p.id" :post="p" />
     </div>
@@ -13,20 +23,24 @@
     components: {
       PostCard,
     },
+
     computed: {
-      me() {
-        return this.$store.state.users.me;
+      other() {
+        return this.$store.state.users.other;
       },
       mainPosts() {
         return this.$store.state.posts.mainPosts;
       },
-      hasMorePost() {
-        return this.$store.state.posts.hasMorePost;
-      }
     },
 
-    fetch({ store }) {
-      store.dispatch('posts/loadPosts');
+    fetch({ store, params }) {
+      store.dispatch('users/loadOther', {
+        userId: params.id,
+      });
+      return store.dispatch('posts/loadUserPosts', {
+        userId: params.id,
+        reset: true,
+      })
     },
     mounted() {
       window.addEventListener('scroll', this.onScroll)
@@ -41,7 +55,8 @@
             this.$store.dispatch('posts/loadPosts');
           }
         }
-      }
+      },
+
     },
   }
 </script>

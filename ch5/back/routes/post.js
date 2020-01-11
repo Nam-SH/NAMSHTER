@@ -106,8 +106,6 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
   }
 })
 
-
-
 // 댓글작성
 router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /post/:id/comment
   try {

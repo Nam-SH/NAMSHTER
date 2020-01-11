@@ -14,6 +14,34 @@ router.get('/', isLoggedIn, async (req, res, next) => {
   res.json(user);
 });
 
+// 다른 사용자정보 가져오기
+router.get('/:id', isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: { id: parseInt(req.params.id, 10) },
+      attributes: ['id', 'nickname'],
+      include: [
+        {
+        model: db.Post,
+        attributes: ['id'],
+      }, {
+        model: db.User,
+        as: 'Followings',
+        attributes: ['id'],
+      }, {
+        model: db.User,
+        as: 'Followers',
+        attributes: ['id'],
+      }],
+    });
+    res.json(user)
+  }
+  catch (err) {
+    console.error('/:id :::', err)
+    next(err)
+  }
+});
+
 
 // 회원가입(signUp)
 router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
@@ -201,7 +229,6 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
 // 팔로잉 전체 목록 불러오기
 router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
   try {
-    console.log('req.user.id :::::::::::::::::', req.user.id)
     const user = await db.User.findOne({
       where: {
         id: req.user.id,
@@ -220,5 +247,46 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
   }
 })
 
+router.get('/:id/posts', isLoggedIn, async (req, res, next) => {
+  try {
+    let where = {
+      UserId: parseInt(req.params.id, 10),
+    };
+    // lastId가 있는 경우
+    if (parseInt(req.query.lastId, 10)) {
+      where[db.Sequelize.Op.lt] = parseInt(req.query.lastId, 10);
+    };
+    const posts = await db.Post.findAll({
+      where,
+      include: [
+        {
+          model: db.User,
+          attributes: ['id', 'nickname']
+        }, {
+          model: db.Image,
+        }, {
+          model: db.User,
+          as: 'Likers',
+          attributes: ['id']
+        }, {
+          model: db.Post,
+          as: "Retweet",
+          include: [
+            {
+              model: db.User,
+              attributes: ['id', 'nickname']
+            }
+          ]
+        }],
+      order: [['createdAt', 'DESC']],
+      limit: parseInt(req.query.limit, 10) || 10,
+    });
+    res.json(posts)
+  }
+  catch (err) {
+    console.error(err)
+    next(err)
+  }
+})
 
 module.exports = router;

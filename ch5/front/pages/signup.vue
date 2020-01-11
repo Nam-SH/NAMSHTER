@@ -111,7 +111,6 @@
         }
       }
     },
-
     methods: {
       onSubmitForm() {
         if (this.$refs.form.validate()) {

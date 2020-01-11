@@ -1,3 +1,6 @@
+import Vue from 'vue';
+import throttle from 'lodash.throttle'
+
 export const state = () => ({
   mainPosts: [],
   hasMorePost: true,
@@ -5,7 +8,7 @@ export const state = () => ({
 });
 
 // const totalPosts = 51;
-const limit = 10;
+// const limit = 10;
 
 export const mutations = {
   addMainPost(state, payload) {
@@ -42,14 +45,18 @@ export const mutations = {
     // }));
     // state.mainPosts = state.mainPosts.concat(fakePosts)
     // state.hasMorePost =  state.mainPosts.length === limit;
-    state.mainPosts = state.mainPosts.concat(payload)
-    state.hasMorePost =  payload.length === limit;
+    if (payload.reset) {
+      state.mainPosts = payload.data  
+    }
+    else {
+      state.mainPosts = state.mainPosts.concat(payload.data)
+    }
+    state.hasMorePost =  payload.data.length === 10;
   },
 
   // 댓글 요청하기
   loadComments(state, payload) {
     const targetId = state.mainPosts.findIndex(v => v.id === payload.postId)
-    console.log(mainPosts[targetId])
     state.mainPosts[targetId].Comments.unshift(payload.payload)
   },
 
@@ -129,17 +136,85 @@ export const actions = {
   },
 
   // 게시물 요청하기
-  loadPosts({ commit, state }, payload) {
-    if (state.hasMorePost) {
-      this.$axios.get(`/posts?offset=${state.mainPosts.length}&limit=10`)
-      .then((res) => {
-        commit('loadPosts', res.data);
-      })
-      .catch((err) => {
-        console.error('loadPosts:::', err)
-      })
+  // async loadPosts({ commit, state }, payload) {
+  //   if (state.hasMorePost) {
+  //     try {
+  //       const res = await this.$axios.get(`/posts?offset=${state.mainPosts.length}&limit=10`)
+  //       commit('loadPosts', res.data);
+  //     }
+  //     catch {
+  //       console.error('loadPosts :::', loadPosts)
+  //     }
+  //   }
+  // },
+
+  // lastId 방식의 인피니티 스크롤링
+  // async loadPosts({ commit, state }, payload) {
+  //     try {
+  //       if (state.hasMorePost) {
+  //         const lastPost = state.mainPosts[state.mainPosts.length - 1]
+  //         const res = await this.$axios.get(`/posts?lastId=${lastPost && lastPost.id}&limit=10`)
+  //         commit('loadPosts', res.data);
+  //       }
+  //     }
+  //     catch {
+  //       console.error('loadPosts :::', loadPosts)
+  //     }
+  // },
+
+  // 쓰로틀링 설정
+  loadPosts: throttle( async function({ commit, state }, payload) {
+    try {
+      if (payload && payload.reset) {
+        const res = await this.$axios.get(`/posts?&limit=10`)
+        console.log('loadPosts', res)
+        commit('loadPosts', {
+          data: res.data,
+          reset: true,
+        });
+        return;
+      }
+      if (state.hasMorePost) {
+        const lastPost = state.mainPosts[state.mainPosts.length - 1]
+        const res = await this.$axios.get(`/posts?lastId=${lastPost && lastPost.id}&limit=10`)
+        commit('loadPosts', {
+          data: res.data,
+          reset: false
+        });
+        return;
+      }
     }
-  },
+    catch (err) {
+      console.error('loadPosts :::', err)
+    }
+  }, 3000),
+
+  // 다른 사람 글 가져오기
+  loadUserPosts: throttle( async function({ commit, state }, payload) {
+    try {
+      if (payload && payload.reset) {
+        const res = await this.$axios.get(`/user/${payload.userId}/posts?limit=10`)
+        commit('loadPosts', {
+          data: res.data,
+          reset: true,
+        });
+        return;
+      }
+      if (state.hasMorePost) {
+        const lastPost = state.mainPosts[state.mainPosts.length - 1]
+        const res = await this.$axios.get(`/user/${payload.userId}/posts?lastId=${lastPost && lastPost.id}&limit=10`)
+        commit('loadPosts', {
+          data: res.data,
+          reset: false,
+        });
+        return;
+      }
+    }
+    catch (err) {
+      console.error('loadUserPosts :::', err)
+    }
+  }, 3000),
+
 
   // 댓글 요청하기
   loadComments({ commit}, payload ) {
@@ -148,7 +223,7 @@ export const actions = {
       commit('loadComments', res.data)
     })
     .catch((err) => {
-      console.error('loadComments:::', err)
+      console.error('loadComments :::', err)
     });
   },
 
