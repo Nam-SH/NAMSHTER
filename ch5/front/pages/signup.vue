@@ -119,6 +119,13 @@
             nickname: this.nickname,
             password: this.password
           })
+          .then(() => {
+            this.$router.push({ path: '/' });
+          })
+          .catch((err) => {
+            console.log('onSubmitForm :::', err)
+            alert('회원가입에 실패했네여;;')
+          })
         }
       },
     },

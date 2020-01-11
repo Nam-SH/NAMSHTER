@@ -6,6 +6,7 @@ module.exports = () => {
   passport.serializeUser((user, done) => {
     return done(null, user.id);
   });
+
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await db.User.findOne({
@@ -25,9 +26,10 @@ module.exports = () => {
         }],
       });
       return done(null, user); // req.user, req.isAuthenticated() === true,
-    } catch (err) {
+    } 
+    catch (err) {
       console.error(err);
-      return done(err);
+      return done('deserializeUser :::', err);
     }
   });
   local();

@@ -1,7 +1,7 @@
 const express = require('express');
+const multer = require('multer');
 const { isLoggedIn } = require('./middlewares')
 const router = express.Router();
-const multer = require('multer');
 const db = require('../models');
 
 // 시간
@@ -37,6 +37,7 @@ router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   res.json(req.files.map(v => v.filename));
 });
 
+// 글 상세보기()
 
 // 글 작성(/post)
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
@@ -80,8 +81,9 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
       }],
     });
     return res.json(fullPost);
-  } catch (err) {
-    console.error(err);
+  } 
+  catch (err) {
+    console.error('/post :::', err);
     next(err);
   }
 });
@@ -102,7 +104,7 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
   }
   catch (err) {
     console.error(err)
-    next(err)
+    next('delete(/:id) :::', err)
   }
 })
 
@@ -133,7 +135,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
     return res.json(comment);
   }
   catch (err) {
-    console.error(err)
+    console.error('POST/:id/comment :::', err)
     next(err)
   }
 })
@@ -157,7 +159,7 @@ router.get('/:id/comments', async (req, res, next) => {
     });
     res.json(comments);
   } catch (err) {
-    console.error(err);
+    console.error('GET /:id/comment :::', err);
     next(err);
   }
 });
@@ -177,7 +179,6 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
     if (!post) {
       return res.status(404).send('글이 없는데요;;')
     }
-
     // 글의 유저아이이가 내 id와 같으면 리트윗 하면 안 됨
     if (req.user.id === post.UserId || (post.Retweet && post.Retweet.UserId === req.user.id)) {
       return res.status(403).send('자신의 글을 리트윗할 수 없습니다.');
@@ -199,7 +200,7 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
     const retweet = await db.Post.create({
       UserId: req.user.id,
       RetweetId: retweetTargetId,
-      content: 'retweet이욤~'
+      content: 'retweet이욤~',
     })
     const retweetWithPrevPost = await db.Post.findOne({
       where: { id: retweet.id },
@@ -224,7 +225,7 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
     res.json(retweetWithPrevPost);
   }
   catch (err) {
-    console.error(err)
+    console.error('/:id/retweet :::', err)
     next(err)
   }
 });
@@ -241,13 +242,13 @@ router.post('/:id/like', isLoggedIn, async (req, res, next) => {
     res.json({ userId: req.user.id });
   }
   catch (err) {
-    console.error(err);
+    console.error('POST /:id/like :::', err);
     next(err);
   }
 });
 
 // 좋아요 취소
-router.delete('/:id/unlike', isLoggedIn, async (req, res, next) => {
+router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({ where: { id: req.params.id, }, })
     if (!post) {
@@ -258,7 +259,7 @@ router.delete('/:id/unlike', isLoggedIn, async (req, res, next) => {
     res.json({ userId: req.user.id });
   }
   catch (err) {
-    console.error(err);
+    console.error('DELETE /:id/like :::', err);
     next(err);
   }
 });

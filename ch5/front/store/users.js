@@ -6,7 +6,7 @@ export const state = () => ({
   hasMoreFollower: true,
 
   // 남의 정보
-  other: []
+  other: null,
 });
 
 // const totalFollowings = 8;
@@ -33,14 +33,12 @@ export const mutations = {
   // addFollowing(state, payload) {
   //   state.followingList.push(payload)
   // },
-  follower(state, payload) {
-    state.me.Followers.push({id: payload.userId})
-  },
+
   removeFollower(state, payload) {
     let targetIndex = state.me.Followers.findIndex(v => v.id === payload.userId)
-    state.me.Followers.splice(targetIndex, 1)
-    targetIndex = state.followerList.findIndex(v => v.id === payload.userId)
-    state.followerList.splice(targetIndex, 1)
+    state.me.Followers.splice(targetIndex, 1);
+    targetIndex = state.followerList.findIndex(v => v.id === payload.userId);
+    state.followerList.splice(targetIndex, 1);
   },
   following(state, payload) {
     state.me.Followings.push({id: payload.userId})
@@ -75,7 +73,7 @@ export const mutations = {
   // 팔로잉 팔로워
   loadFollowers(state, payload) {
     if (payload.offset === 0) {
-      state.followers = payload.data;
+      state.followerList = payload.data;
     }
     else {
       state.followerList = state.followerList.concat(payload.data);
@@ -105,6 +103,19 @@ export const actions = {
     }
     catch (err) {
       console.error('loadUser :::', err);
+    }
+  },
+
+  // 다른 사용자 정보 불러오기
+  async loadOther({ commit }, payload) {
+    try {
+      const res = await this.$axios.get(`/user/${payload.userId}`, {
+        withCredentials: true
+      });
+      commit('setOther', res.data)
+    }
+    catch (err) {
+      console.error('loadOther :::', err)
     }
   },
 
@@ -169,14 +180,6 @@ export const actions = {
   //   commit('addFollower', payload)
   // },
 
-  // 프로필에서 전체 팔로우 팔로잉에서 제거
-  removeFollowing({ commit, dispatch }, payload) {
-    dispatch('removeFollowing', payload)
-  },
-  removeFollower({ commit, dispatch }, payload) {
-    dispatch('removefollower', payload)
-  },
-
   // 팔로워, 언팔로워
   follow({ commit }, payload) {
     return this.$axios.post(`/user/${payload.userId}/follow`, {}, {
@@ -202,17 +205,22 @@ export const actions = {
   },
 
   // 언팔로워
-  unfollower({ commit }, payload) {
+  removeFollower({ commit }, payload) {
     return this.$axios.delete(`/user/${payload.userId}/follower`, {
       withCredentials: true
     })
     .then((res) => {
-      commit('removefollower', { userId: payload.userId })
+      commit('removefollower', { userId: payload.userId });
     })
     .catch((err) => {
       console.error('unfollower :::', err);
     })
   },
+
+  // 프로필에서 전체 팔로우 팔로잉에서 제거
+  // removeFollowing({ commit, dispatch }, payload) {
+  //   dispatch('removeFollowing', payload)
+  // },
   
   
   // 팔로잉, 팔로워 더미데이터 버전
@@ -307,16 +315,4 @@ export const actions = {
         console.error('loadFollowers :::', err)
       });
     },  
-
-
-  // 다른 사용자 정보 불러오기
-  async loadOther({ commit }, payload) {
-    const res = await this.$axios.get(`/user/${payload.userId}`, {withCredentials: true})
-    try {
-      commit('setOther', res.data)
-    }
-    catch (err) {
-      console.error('loadOther :::', err)
-    }
-  },
 }

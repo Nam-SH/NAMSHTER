@@ -11,18 +11,22 @@
 
       <v-card-text>
         <div>
+
           <template v-for="(node, i) in nodes">
-              <nuxt-link v-if="node.startsWith('#')" :key="i" :to="`/hastag/${node.slice(1)}`">{{ node }}</nuxt-link>
-              <template v-else>{{ node }}</template>
+            <nuxt-link v-if="node.startsWith('#')" :key="i" :to="`/hashtag/${node.slice(1)}`" style="color: deepskyblue" >
+              {{node}}
+            </nuxt-link>
+            <template v-else>{{node}}</template>
           </template>
-          <!-- <div> {{ post.content }} </div> -->
+          
         </div>
+          <!-- <div> {{ post.content }} </div> -->
       </v-card-text>
   </div>
 </template>
 
 <script>
-import PostImages from '@/components/PostImages.vue';
+  import PostImages from '@/components/PostImages.vue';
 
   export default {
     components: {
@@ -35,30 +39,29 @@ import PostImages from '@/components/PostImages.vue';
     },
     computed: {
       nodes() {
-        return this.post.content.split(/(#[^\s#]+)/)
+        return this.post.content.split(/(#[^\s#]+)/);
       },
       me() {
-        return this.$store.state.users.me
+        return this.$store.state.users.me;
       },
       canFollow() {
-        return this.me && this.post.User.id !== this.me.id && !this.me.Followings.find(v => v.id === this.post.User.id)
+        return this.me && this.post.User.id !== this.me.id && !this.me.Followings.find(v => v.id === this.post.User.id);
       },
       canUnFollow() {
-        return this.me && this.post.User.id !== this.me.id && this.me.Followings.find(v => v.id === this.post.User.id)
-      }
+        return this.me && this.post.User.id !== this.me.id && this.me.Followings.find(v => v.id === this.post.User.id);
+      },
     },
-
     methods: {
       onFollow() {
         this.$store.dispatch('users/follow', {
           userId: this.post.User.id,
-        })
+        });
       },
       onUnFollow() {
         this.$store.dispatch('users/unfollow', {
           userId: this.post.User.id,
-        })
-      }
+        });
+      },
     },
   }
 </script>

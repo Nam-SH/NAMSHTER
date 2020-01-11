@@ -5,13 +5,13 @@
       <!-- <post-images :images="post.Images || []" /> -->
       
       <!-- 리트윗 아아디가 있는 경우, 아닌경우 -->
-      <div v-if="post.RetweetId">
+      <div v-if="post.RetweetId && post.Retweet">
         <v-subheader>{{ post.User.nickname }}님이 리트윗했다. </v-subheader>
         <v-card style="margin: 0 20px">
-          <post-content :post="post.Retweet"></post-content>
+          <post-content :post="post.Retweet" />
         </v-card>
       </div>
-      <post-content v-else :post="post"></post-content>
+      <post-content v-else :post="post" />
       
       <!-- 리트윗을 위해 삭제 -->
       <!-- <v-card-title>
@@ -74,12 +74,11 @@
         </v-list-item>
       </v-list>
     </template>
-
   </div>
 </template>
 
-<script>
 
+<script>
   import CommentForm from '@/components/CommentForm.vue';
   // import PostImages from '@/components/PostImages.vue';
   import PostContent from '@/components/PostContent.vue';
@@ -148,10 +147,10 @@
         if (!this.me) {
           return alert('로그인이 필요합니다.')
         }
-        return this.$store.dispatch('posts/retweet', {
+        this.$store.dispatch('posts/retweet', {
           postId: this.post.id,
         })
-      }
+      },
     },
   }
 </script>

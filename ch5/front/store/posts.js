@@ -56,8 +56,10 @@ export const mutations = {
 
   // 댓글 요청하기
   loadComments(state, payload) {
-    const targetId = state.mainPosts.findIndex(v => v.id === payload.postId)
-    state.mainPosts[targetId].Comments.unshift(payload.payload)
+    const targetindex = state.mainPosts.findIndex(v => v.id === payload.postId)
+    // 아래와 같이 하면 안됨...
+    // state.mainPosts[targetId].Comments.unshift(payload.payload)
+    Vue.set(state.mainPosts[targetindex], 'Comments', payload.data);
   },
 
   concatImagePaths(state, payload) {
@@ -72,7 +74,7 @@ export const mutations = {
   likePost(state, payload) {
     // payload에는 userId, postID가 들어있다.
     const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId)
-    return state.mainPosts[targetIndex].Likers.push({
+    state.mainPosts[targetIndex].Likers.push({
       id: payload.userId,
     })
   },
@@ -85,6 +87,7 @@ export const mutations = {
     return state.mainPosts[targetIndex].Likers.splice(targetUserIndex, 1);
   }
 };
+
 
 export const actions = {
 
@@ -125,10 +128,11 @@ export const actions = {
   addComment({ commit }, payload ) {
     this.$axios.post(`/post/${payload.postId}/comment`, {
       content: payload.content
-    }, { withCredentials: true 
+    }, { 
+      withCredentials: true 
     })
     .then((res) => {
-      commit('addComment', payload)
+      commit('addComment', res.data)
     })
     .catch((err) => {
       console.error('addComment:::', err)
@@ -167,7 +171,6 @@ export const actions = {
     try {
       if (payload && payload.reset) {
         const res = await this.$axios.get(`/posts?&limit=10`)
-        console.log('loadPosts', res)
         commit('loadPosts', {
           data: res.data,
           reset: true,
@@ -175,7 +178,7 @@ export const actions = {
         return;
       }
       if (state.hasMorePost) {
-        const lastPost = state.mainPosts[state.mainPosts.length - 1]
+        const lastPost = state.mainPosts[state.mainPosts.length - 1];
         const res = await this.$axios.get(`/posts?lastId=${lastPost && lastPost.id}&limit=10`)
         commit('loadPosts', {
           data: res.data,
@@ -215,12 +218,41 @@ export const actions = {
     }
   }, 3000),
 
+  // 해시태그 가져오기
+  loadHashtagPosts: throttle( async function({ commit, state }, payload) {
+    try {
+      if (payload && payload.reset) {
+        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?limit=10`)
+        commit('loadPosts', {
+          data: res.data,
+          reset: true,
+        });
+        return;
+      }
+      if (state.hasMorePost) {
+        const lastPost = state.mainPosts[state.mainPosts.length - 1]
+        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?lastId=${lastPost && lastPost.id}&limit=10`)
+        commit('loadPosts', {
+          data: res.data,
+          reset: false,
+        });
+        return;
+      }
+    }
+    catch (err) {
+      console.error('loadHashtagPosts :::', err)
+    }
+  }, 3000),
+
 
   // 댓글 요청하기
   loadComments({ commit}, payload ) {
     this.$axios.get(`/post/${payload.postId}/comments`)
     .then((res) => {
-      commit('loadComments', res.data)
+      commit('loadComments', res.data, {
+        postId: payload.postId,
+        data: res.data,
+      })
     })
     .catch((err) => {
       console.error('loadComments :::', err)
@@ -259,7 +291,7 @@ export const actions = {
 
   // 싫어요
   unlikePost({ commit }, payload) {
-    this.$axios.delete(`/post/${payload.postId}/unlike`, {
+    this.$axios.delete(`/post/${payload.postId}/like`, {
       withCredentials: true
     })
     .then((res) => {

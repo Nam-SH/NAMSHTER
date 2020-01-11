@@ -12,7 +12,8 @@ const morgan = require('morgan');
 
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
-const postsRouter = require('./routes/posts')
+const postsRouter = require('./routes/posts');
+const hashtagRouter = require('./routes/hashtag');
 
 // db 강제로 덮어씌우기
 // db.sequelize.sync({force: true})
@@ -25,7 +26,7 @@ app.use(cors({
   credentials: true,
 }));
 
-// 정적파일 사용
+// 정적파일 사용 => 서버에서 정확한 위치를 보이지 않이 위해, 단순히 / 로 요청을 받게 한다.
 app.use('/', express.static('uploads'));
 
 app.use(express.json());
@@ -38,13 +39,12 @@ app.use(session({
   secret: 'cookiesecret',
   cookie: {
     httpOnly: true,
-    secure: false
+    secure: false,
   }
 }));
 
 app.use(passport.initialize())
 app.use(passport.session())
-
 
 // 메인페이지를 가져오는 것
 app.get('/', (req, res) => {
@@ -52,10 +52,10 @@ app.get('/', (req, res) => {
   // res.send('(수정)여기는 남승현');
 })
 
-
 app.use('/user', userRouter)
 app.use('/post', postRouter)
 app.use('/posts', postsRouter)
+app.use('/hashtag', hashtagRouter)
 
 
 // // 회원가입(signUp)

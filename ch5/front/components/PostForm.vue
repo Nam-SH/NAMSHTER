@@ -7,11 +7,11 @@
         outlined
         auto-grow
         clearable
-        label="무슨 일이 있었나요?"
+        label="무슨 일 있었음?ㅋㅋ"
         :hide-details="hideDetails"
         :success-messages="successMessages"
         :success="success"
-        :rules="[v => !!v.trim() || '내용을 입력하세요']"
+        :rules="[v => !!v.trim() || '입력 안 함?']"
         @input="onChangeTextarea"
         />
         <!-- :rules="[v => !!v.trim || '내용을 입력하세요']" -->
@@ -22,9 +22,9 @@
         <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
         <div>
           <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
-            <img :src="`http://localhost:3085/${p}`" :alt="p" style="width: 200px">
+            <img :src="`http://localhost:3085/${p}`" :alt="이미지파일" style="width: 200px">
             <div>
-              <button type="button" @click="onRemoveImage(i)">제거</button>
+              <button type="button" @click="onRemoveImage(i)">사살</button>
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@
             this.content = '';
             this.hideDetails = false;
             this.success = true;
-            this.successMessages = '게시글 등록 성공!';
+            this.successMessages = '게시글 등록~~!';
           })
         }
       },
@@ -90,7 +90,6 @@
         });
         this.$store.dispatch('posts/uploadImages', imageFormData);
       },
-
       onRemoveImage(index) {
         this.$store.commit('posts/removeImagePath', index);
       }

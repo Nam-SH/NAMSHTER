@@ -56,11 +56,11 @@
 
         emailRules: [
           v => !!v || 'E-mail is required',
-          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+          v => /.+@.+\..+/.test(v) || '이메일이 아닌 거 같은데여;;',
         ],
         passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 10) || '비밀번호는 최소 10자 입니다.',
+        v => (v && v.length >= 10) || '비밀번호는 최소 10자에여;;',
         ]
       }
     },
@@ -72,9 +72,7 @@
             password: this.password
           })
           .then(() => {
-            this.$router.push({
-            path: '/',
-          });
+            this.$router.push({ path: '/', });
           })
           .catch((err) => {
             console.log(err)

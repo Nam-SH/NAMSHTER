@@ -15,7 +15,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 });
 
 // 다른 사용자정보 가져오기
-router.get('/:id', isLoggedIn, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: { id: parseInt(req.params.id, 10) },
@@ -23,6 +23,7 @@ router.get('/:id', isLoggedIn, async (req, res, next) => {
       include: [
         {
         model: db.Post,
+        as: 'Posts',
         attributes: ['id'],
       }, {
         model: db.User,
@@ -34,11 +35,11 @@ router.get('/:id', isLoggedIn, async (req, res, next) => {
         attributes: ['id'],
       }],
     });
-    res.json(user)
+    res.json(user);
   }
   catch (err) {
-    console.error('/:id :::', err)
-    next(err)
+    console.error('GET /:id :::', err);
+    next(err);
   }
 });
 
@@ -65,15 +66,15 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
     }); // HTTP STATUS CODE
     passport.authenticate('local', (err, user, info) => {
       if (err) {
-        console.error(err);
+        console.error('POST-1 / :::', err);
         return next(err);
       }
       if (info) {
         return res.status(401).send(info.reason);
       }
-      return req.login(user, async (err) => { // 세션에다 사용자 정보 저장 (어떻게? serializeUser)
+      return req.login(user, async (err) => { // 세션에 사용자 정보 저장은 serializeUser
         if (err) {
-          console.error(err);
+          console.error('POST-2 / :::', err);
           return next(err);
         }
         const fullUser = await db.User.findOne({
@@ -95,8 +96,9 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
         return res.json(fullUser);
       });
     })(req, res, next);
-  } catch (err) {
-    console.error('/signup :::', err);
+  } 
+  catch (err) {
+    console.error('POST-3 / :::', err);
     return next(err);
   }
 });
@@ -105,7 +107,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
 router.post('/login', isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
-      console.error(err);
+      console.error('POST-1 /login :::', err);
       return next(err);
     }
     if (info) {
@@ -113,7 +115,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
     }
     return req.login(user, async (err) => { // 세션에다 사용자 정보 저장 (어떻게? serializeUser)
       if (err) {
-        console.error('/login :::', err);
+        console.error('POST-2 /login :::', err);
         return next(err);
       }
       const fullUser = await db.User.findOne({
@@ -139,17 +141,21 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
 
 // 로그아웃
 router.post('/logout', isLoggedIn, async (req, res) => {
-  req.logout();
-  req.session.destroy();
-  return res.status(200).send('로그아웃 되었습니다.')
+  try {
+    req.logout();
+    req.session.destroy();
+    return res.status(200).send('로그아웃 되었습니다.')
+  }
+  catch (err) {
+    console.error('/logout :::', err)
+    next(err)
+  }
 })
 
 router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
-      where: {
-        id: req.user.id,
-      }
+      where: { id: req.user.id, }
     });
     await me.addFollowing(req.params.id);
     res.send(req.params.id)
@@ -179,7 +185,7 @@ router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
     const me = await db.User.findOne({
       where: { id: req.user.id },
     });
-    await user.removeFollower(req.params.id);
+    await me.removeFollower(req.params.id);
     res.send(req.params.id)
   }
   catch (err) {
@@ -193,9 +199,7 @@ router.patch('/nickname', isLoggedIn, async (req, res, next) => {
     await db.User.update({
       nickname: req.body.nickname,
     }, {
-      where: {
-        id: req.user.id,
-      }
+      where: { id: req.user.id, }
     });
     res.send(req.body.nickname);
   }
@@ -247,6 +251,7 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
   }
 })
 
+// 다른 사용자가 작성한 글 불러오기
 router.get('/:id/posts', isLoggedIn, async (req, res, next) => {
   try {
     let where = {
@@ -266,6 +271,7 @@ router.get('/:id/posts', isLoggedIn, async (req, res, next) => {
           model: db.Image,
         }, {
           model: db.User,
+          through: 'Like',
           as: 'Likers',
           attributes: ['id']
         }, {
@@ -278,13 +284,12 @@ router.get('/:id/posts', isLoggedIn, async (req, res, next) => {
             }
           ]
         }],
-      order: [['createdAt', 'DESC']],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts)
   }
   catch (err) {
-    console.error(err)
+    console.error('GET /:id/posts :::', err)
     next(err)
   }
 })

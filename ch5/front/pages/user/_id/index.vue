@@ -4,14 +4,14 @@
       <v-container>
         {{ other.nickname }}님은 누굴까요
         <v-row>
-          <!-- <v-col cols="4"> {{ other.Followings.length }}명을 팔로잉... </v-col>
+          <v-col cols="4"> {{ other.Followings.length }}명을 팔로잉... </v-col>
           <v-col cols="4"> {{ other.Followers.length }}명이 나를 팔로워... </v-col>
-          <v-col cols="4"> {{ other.Posts.length }}개의 글을 작성함... </v-col> -->
+          <v-col cols="4"> {{ other.Posts.length }}개의 글을 작성함... </v-col>
         </v-row>
       </v-container>
     </v-card>
     <div>
-      <post-card v-for="p in mainPosts" :key="p.id" :post="p" />
+      <post-card v-for="post in mainPosts" :key="post.id" :post="post" />
     </div>
   </v-container>
 </template>
@@ -34,14 +34,17 @@
     },
 
     fetch({ store, params }) {
-      store.dispatch('users/loadOther', {
-        userId: params.id,
-      });
-      return store.dispatch('posts/loadUserPosts', {
-        userId: params.id,
-        reset: true,
-      })
+      return Promise.all([
+        store.dispatch('users/loadOther', {
+          userId: params.id,
+        }),
+        store.dispatch('posts/loadUserPosts', {
+          userId: params.id,
+          reset: true,
+        }),
+      ])
     },
+
     mounted() {
       window.addEventListener('scroll', this.onScroll)
     },

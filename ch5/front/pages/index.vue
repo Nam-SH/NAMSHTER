@@ -16,6 +16,7 @@
       PostCard,
       PostForm
     },
+    
     fetch ({ store }) {
       return store.dispatch('posts/loadPosts', {
         reset: true
