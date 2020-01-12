@@ -48,7 +48,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       UserId: req.user.id,
     })
     if (hashtags) {
-      const result = await promise.all(hashtags.map(tag => db.Hashtag.findOrCreate({
+      const result = await Promise.all(hashtags.map(tag => db.Hashtag.findOrCreate({
         where: { name: tag.slice(1).toLowerCase() },
       })));
       // 1. 쿼리가 복잡하지 않은 경우
