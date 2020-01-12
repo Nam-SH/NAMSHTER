@@ -24,7 +24,7 @@ export const mutations = {
   },
 
   changeNickname(state, payload) {
-    state.me.nickname = payload.nickname
+    state.me.nickname = payload
   },
 
   // addFollower(state, payload) {

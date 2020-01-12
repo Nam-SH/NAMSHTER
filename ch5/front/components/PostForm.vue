@@ -28,7 +28,6 @@
             </div>
           </div>
         </div>
-
       </v-form>
     </v-container>
   </v-card>
@@ -41,11 +40,9 @@
     data() {
       return {
         valid: false, 
-
         hideDetails: true,
         successMessages: '',
         success: false,
-        
         content: ''
       }
     },
@@ -61,15 +58,7 @@
       },
       onSubmitForm() {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('posts/add', {
-            content: this.content,
-            // Comments: [],
-            // User: {
-            //   nickname: this.me.nickname,
-            //   email: this.me.email,
-            // },
-            // createdAt: Date.now(),
-          })
+          this.$store.dispatch('posts/add', { content: this.content, })
           .then(() => {
             this.content = '';
             this.hideDetails = false;
@@ -78,7 +67,6 @@
           })
         }
       },
-
       onClickImageUpload() {
         this.$refs.imageInput.click()
       },
@@ -90,6 +78,7 @@
         });
         this.$store.dispatch('posts/uploadImages', imageFormData);
       },
+
       onRemoveImage(index) {
         this.$store.commit('posts/removeImagePath', index);
       }

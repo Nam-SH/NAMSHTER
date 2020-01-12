@@ -31,7 +31,6 @@
 
   <v-container v-else>
     <v-card>
-      {{ me }}
       <v-container>
         {{ me.nickname }} 로그인이 되었습니다.
         <v-btn @click="onLogOut">로그아웃</v-btn>

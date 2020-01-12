@@ -7,6 +7,7 @@ const db = require('../models');
 // 시간
 const path = require('path')
 
+// 1번 방법
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, done) {
@@ -24,16 +25,33 @@ const upload = multer({
   limit: { fileSize: 1000 * 1024 * 1024 },
 });
 
-// 1. 기존 첫 모양
-// router.post('/image', (req, res) => {
-//  if (req.isAuthenticated()) {
+// 2번 방법
+// const storage = multer.diskStorage({
+//   destination(req, file, callback) {
+//     // 실패시 null, 성공시 uploads에 저장
+//     done(null, 'uploads');
+//   },
+//   filename(req, file, callback) {
+//     // ext: 확장자 이름을 뽑아온다.
+//     const ext = path.extname(file.originalname);
+//     const basename = path.basename(file.originalname, ext);
+//     // 남승현.jpg  ==> basename: 남승현, ext: .jpg
+//     callback(null, basename + Date.now() + ext);
+//   },
+// })
+// const upload = multer({
+//   storage,
+//   limits: {
+//     files: 10,
+//     fileSize: 1024 * 1024 * 1024,
 //   }
-// });
+// })
 
 // 이미지업로드 (/post/images)
-// 2. isLoggedIn 사용한 후 모양
-router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
-  // console.log(req.files);
+// 1. isLoggedIn 사용한 후 모양
+router.post('/images', isLoggedIn, upload.array('image'), (req, res) => {
+  console.log(req.files);
+  
   res.json(req.files.map(v => v.filename));
 });
 

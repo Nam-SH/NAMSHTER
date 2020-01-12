@@ -9,11 +9,10 @@ export const state = () => ({
   other: null,
 });
 
+
 export const mutations = {
 
-  setMe(state, payload) {
-    console.log('payload :::', payload.nickname);
-    
+  setMe(state, payload) {   
     state.me = payload;
   },
   // 다른 사용자 정보
@@ -23,8 +22,6 @@ export const mutations = {
 
   changeNickname(state, payload) {
     state.me.nickname = payload;
-
-    console.log(state.me.nickname);
   },
 
   following(state, payload) {
