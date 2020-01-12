@@ -1,6 +1,7 @@
 <template>
   <v-card style="margin-bottom: 20px;" >
     <v-container>
+      
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-textarea 
         v-model="content"
@@ -8,13 +9,23 @@
         auto-grow
         clearable
         label="무슨 일 있었음?ㅋㅋ"
+        :error="error"
         :hide-details="hideDetails"
         :success-messages="successMessages"
         :success="success"
-        :rules="[v => !!v.trim() || '입력 안 함?']"
         @input="onChangeTextarea"
         />
-        <!-- :rules="[v => !!v.trim || '내용을 입력하세요']" -->
+        <v-alert
+          v-if="alert"
+          v-model="alert"
+          border="left"
+          close-text="Close Alert"
+          color="deep-purple accent-4"
+          dark
+          dismissible
+        >
+        </v-alert>
+
         <v-btn type="submit" color="blue" absolute right>제출</v-btn>
         
         <!-- 이미지데이터 추가 -->
@@ -28,7 +39,6 @@
             </div>
           </div>
         </div>
-
       </v-form>
     </v-container>
   </v-card>
@@ -40,13 +50,13 @@
   export default {
     data() {
       return {
-        valid: false, 
-
+        valid: false,
         hideDetails: true,
         successMessages: '',
         success: false,
-        
-        content: ''
+        content: '',
+        error: false,
+        alert: false
       }
     },
     computed: {
@@ -54,26 +64,31 @@
       ...mapState('posts', ['imagePaths'])
     },
     methods: {
-      onChangeTextarea() {
+      onChangeTextarea(value) {
+        if (!value) {
+          this.error = true;
+        }
+        else {
+          this.error = false;
+        }
         this.hideDetails = true;
         this.success = false;
         this.successMessages = '';
       },
       onSubmitForm() {
+        if (!this.content) {
+          alert('게시글 입력해여죠;;');
+          return
+        }
         if (this.$refs.form.validate()) {
           this.$store.dispatch('posts/add', {
             content: this.content,
-            // Comments: [],
-            // User: {
-            //   nickname: this.me.nickname,
-            //   email: this.me.email,
-            // },
-            // createdAt: Date.now(),
           })
           .then(() => {
             this.content = '';
             this.hideDetails = false;
             this.success = true;
+            this.error = false
             this.successMessages = '게시글 등록~~!';
           })
         }

@@ -24,14 +24,7 @@ const upload = multer({
   limit: { fileSize: 1000 * 1024 * 1024 },
 });
 
-// 1. 기존 첫 모양
-// router.post('/image', (req, res) => {
-//  if (req.isAuthenticated()) {
-//   }
-// });
-
 // 이미지업로드 (/post/images)
-// 2. isLoggedIn 사용한 후 모양
 router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   // console.log(req.files);
   res.json(req.files.map(v => v.filename));
@@ -51,18 +44,14 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
       const result = await Promise.all(hashtags.map(tag => db.Hashtag.findOrCreate({
         where: { name: tag.slice(1).toLowerCase() },
       })));
-      // 1. 쿼리가 복잡하지 않은 경우
       await newPost.addHashtags(result.map(r => r[0]));
-      // 2. 만일 쿼리가 복잡하면??
-      // db.sequelize.query('SQL문 직접 입력')
     }
     if (req.body.image) {
-      // 여러개 경우
       if (Array.isArray(req.body.image)) {
         await Promise.all(req.body.image.map((image) => {
           return db.Image.create({ src: image, PostId: newPost.id });
         }));
-      } else { // 하나인 경우
+      } else {
         await db.Image.create({ src: req.body.image, PostId: newPost.id });
       };
     }
@@ -78,12 +67,15 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
         model: db.User,
         as: 'Likers',
         attributes: ['id'],
+      }, {
+        model: db.Comment,
+        attributes: ['id']
       }],
     });
     return res.json(fullPost);
   } 
   catch (err) {
-    console.error('/post :::', err);
+    console.error('POST / :::', err);
     next(err);
   }
 });

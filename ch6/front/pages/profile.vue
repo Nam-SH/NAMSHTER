@@ -19,7 +19,7 @@
         <v-container>
           <v-subheader>팔로잉</v-subheader>
           <follow-list :users="followingList" :remove="removeFollowing" />
-          <v-btn @click="loadFollowings" v-if="hasMoreFollowing" color="blue" style="width: 100%">더보기</v-btn>
+          <v-btn @click="loadFollowings" v-if="hasMoreFollowing" color="blue" style="width: 100%">더 보기</v-btn>
           <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
         </v-container>
       </v-card>
@@ -27,7 +27,7 @@
         <v-container>
           <v-subheader>팔로워</v-subheader>
           <follow-list :users="followerList" :remove="removeFollower" />
-          <v-btn @click="loadFollowers" v-if="hasMoreFollower" color="blue" style="width: 100%">더보기</v-btn>
+          <v-btn @click="loadFollowers" v-if="hasMoreFollower" color="blue" style="width: 100%">더 보기</v-btn>
           <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
         </v-container>
       </v-card>
@@ -68,9 +68,8 @@
     
     fetch({ store }) {
       return Promise.all([
-        console.log('profile, fetch 들어가요~~'),
-        store.dispatch('users/loadFollowers', { offset: 0 }),
-        store.dispatch('users/loadFollowings', { offset: 0 })
+        store.dispatch('users/loadFollowings', { reset: true }),
+        store.dispatch('users/loadFollowers', { reset: true }),
       ])
     },
 
@@ -79,24 +78,18 @@
         this.$store.dispatch('users/changeNickname', {
           nickname: this.nickname
         })
-        .then(() => {
-          this.nickname = ''
-        })
-        .catch((err) => {
-          console.error('onChangeNickname :::', err)
-        })
       },
       removeFollower(userId) {
-        this.$store.dispatch('users/removeFollower', { userId })
+        this.$store.dispatch('users/unfollower', { userId })
       },
       removeFollowing(userId) {
         this.$store.dispatch('users/unfollow', { userId })
       },
       loadFollowers() {
-        this.$store.dispatch('users/loadFollowers')
+        this.$store.dispatch('users/loadFollowers', { reset: false })
       },
       loadFollowings() {
-        this.$store.dispatch('users/loadFollowings')
+        this.$store.dispatch('users/loadFollowings', { offset: 0 })
       },
     },
     head() {

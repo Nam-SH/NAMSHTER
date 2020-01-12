@@ -33,6 +33,9 @@ router.get('/:id', async (req, res, next) => {
         model: db.User,
         as: 'Followers',
         attributes: ['id'],
+      }, {
+        model: db.Comment,
+        attributes: ['id']
       }],
     });
     res.json(user);
@@ -91,6 +94,9 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
             model: db.User,
             as: 'Followers',
             attributes: ['id'],
+          }, {
+            model: db.Comment,
+            attributes: ['id']
           }],
         });
         return res.json(fullUser);
@@ -131,6 +137,9 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         }, {
           model: db.User,
           as: 'Followers',
+          attributes: ['id'],
+        }, {
+          model: db.Comment,
           attributes: ['id'],
         }],
       });
@@ -199,31 +208,36 @@ router.patch('/nickname', isLoggedIn, async (req, res, next) => {
     await db.User.update({
       nickname: req.body.nickname,
     }, {
-      where: { id: req.user.id, }
+      where: { id: req.user.id },
     });
     res.send(req.body.nickname);
-  }
-  catch (err) {
-    console.error('/nickname :::', err)
-    next(err)
+  } catch (e) {
+    console.error('/nickname :::', err);
+    next(e);
   }
 });
 
 // 팔로워 전체 목록 불러오기
 router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
   try {
-    const user = await db.User.findOne({
-      where: {
-        id: req.user.id,
-      }
+    const me = await db.User.findOne({
+      where: { 
+        id: req.user.id 
+      },
     });
-    console.log('back에서 user 찍어요`~', user)
-    const followers = await user.getFollowers({
+    let where = {};
+    if (parseInt(req.query.lastId, 10)) {
+      where = {
+        id: {
+          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
+        }
+      }
+    }
+    const followers = await me.getFollowers({
+      where,
       attributes: ['id', 'nickname'],
       limit: parseInt(req.query.limit, 10) || 3,
-      offset: parseInt(req.query.offset, 10) || 0,
     })
-    console.log('back에서 followers 찍어요`~', followers)
     res.json(followers)
   }
   catch (err) {
@@ -235,15 +249,23 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
 // 팔로잉 전체 목록 불러오기
 router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
   try {
-    const user = await db.User.findOne({
-      where: {
-        id: req.user.id,
-      }
+    const me = await db.User.findOne({
+      where: { 
+        id: req.user.id 
+      },
     });
-    const followings = await user.getFollowings({
+    let where = {};
+    if (parseInt(req.query.lastId, 10)) {
+      where = {
+        id: {
+          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
+        }
+      }
+    }
+    const followings = await me.getFollowings({
+      where,
       attributes: ['id', 'nickname'],
       limit: parseInt(req.query.limit, 10) || 3,
-      offset: parseInt(req.query.offset, 10) || 0,
     })
     res.json(followings)
   }
