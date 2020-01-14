@@ -78,7 +78,6 @@
         });
         this.$store.dispatch('posts/uploadImages', imageFormData);
       },
-
       onRemoveImage(index) {
         this.$store.commit('posts/removeImagePath', index);
       }

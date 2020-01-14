@@ -55,9 +55,9 @@ router.post('/images', isLoggedIn, upload.array('image'), (req, res) => {
   res.json(req.files.map(v => v.filename));
 });
 
-// 글 상세보기()
+// 1. 글 상세보기(GET '/)
 
-// 글 작성(/post)
+// 2. 글 작성(/post)
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   try {
     const hashtags = req.body.content.match(/#[^\s#]+/g);
@@ -80,7 +80,8 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
         await Promise.all(req.body.image.map((image) => {
           return db.Image.create({ src: image, PostId: newPost.id });
         }));
-      } else { // 하나인 경우
+      } 
+      else { // 하나인 경우
         await db.Image.create({ src: req.body.image, PostId: newPost.id });
       };
     }
@@ -106,12 +107,12 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   }
 });
 
-// 글 삭제
+// 3. 글 삭제
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({ where: { id: req.params.id } })
     if (!post) {
-      return res.status(400).send('포스트가 존재하지 않습니다.');
+      return res.status(404).send('포스트가 존재하지 않습니다.');
     }
     await db.Post.destroy({
       where: {
@@ -126,9 +127,11 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
   }
 })
 
+
 // 댓글작성
 router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /post/:id/comment
   try {
+    
     const post = await db.Post.findOne({ where: { id: req.params.id } });
     if (!post) {
       return res.status(404).send('포스트가 존재하지 않습니다.');
@@ -139,7 +142,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
       UserId: req.user.id,
       content: req.body.content,
     });
-
+    
     // 프론트로 보낼 정보를 만든다.
     const comment = await db.Comment.findOne({
       where: {
@@ -150,6 +153,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
         attributes: ['id', 'nickname']
       }]
     });
+    
     return res.json(comment);
   }
   catch (err) {
@@ -173,7 +177,7 @@ router.get('/:id/comments', async (req, res, next) => {
         model: db.User,
         attributes: ['id', 'nickname'],
       }],
-      order: [['createdAt', 'ASC']],
+      order: [['createdAt', 'ASC'], ['updatedAt', 'ASC'],],
     });
     res.json(comments);
   } catch (err) {

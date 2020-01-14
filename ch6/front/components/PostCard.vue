@@ -42,12 +42,14 @@
     <template v-if="commentOpened">
       <comment-form :post-id="post.id" style="margin-bottom: 30px" />
       <v-list style="margin-bottom: 20px">
+        {{ avg_total }}
         <div> {{ post.Comments.length }}개의 댓글이 있어요 </div>
         <hr>
         <v-list-item v-for="c in post.Comments" :key="c.id">
           <v-list-item-avatar color="yellow">
             <span>{{ c.User.nickname[0] }}</span>
           </v-list-item-avatar>
+          <v-rating :value="c.score" readonly dense small></v-rating>
           <v-list-item-content>
             <v-list-item-title>{{ c.User.nickname }}</v-list-item-title>
             <v-list-item-subtitle>{{ c.content }}</v-list-item-subtitle>
@@ -62,7 +64,7 @@
 <script>
   import CommentForm from '@/components/CommentForm.vue';
   import PostContent from '@/components/PostContent.vue';
-
+  
   export default {
     components: {
       CommentForm,
@@ -76,7 +78,8 @@
     },
     data() {
       return {
-        commentOpened: false
+        commentOpened: false,
+        avg_total: 0,
       }
     },
     computed: {
@@ -88,7 +91,7 @@
       },
       heartIcon() {
         return this.liked ? "mdi-heart" : "mdi-heart-outline";
-      }
+      },
     },
     methods: {
       onRemovePost() {
@@ -99,11 +102,17 @@
       onEditPost() {
         alert('아직 구현 안함')
       },
-      onToggleComment() {
-        if (!this.commentOpened) {
-          this.$store.dispatch('posts/loadComments', { postId: this.post.id })
-        };
-        this.commentOpened = !this.commentOpened
+
+      async onToggleComment() {
+        try {
+          if (!this.commentOpened) {
+            await this.$store.dispatch('posts/loadComments', { postId: this.post.id })
+          }
+          this.commentOpened = !this.commentOpened
+        }
+        catch (err) {
+          console.error('onToggleComment :::', err)
+        }
       },
 
       // 좋아요
@@ -130,6 +139,19 @@
           postId: this.post.id,
         })
       },
+
+      
+      avg() {
+        // let res = 0;
+        //   for (let comment in this.post.Comments) {
+        //     for (let s in comment) {
+        //       res += s.score;
+        //     }
+        //   }
+        // console.log(this.post.Comments.score);
+        
+        // return this.avg_total = res / this.post.Comments.length
+      }
     },
   }
 </script>

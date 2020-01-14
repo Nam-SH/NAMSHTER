@@ -4,13 +4,14 @@
       <!-- 이미지 캐로제 추가 -->
       <!-- <post-images :images="post.Images || []" /> -->
       
-      <!-- 리트윗 아아디가 있는 경우, 아닌경우 -->
+      <!-- 리트윗 아아디가 있는 경우 -->
       <div v-if="post.RetweetId && post.Retweet">
         <v-subheader>{{ post.User.nickname }}님이 리트윗했다. </v-subheader>
         <v-card style="margin: 0 20px">
           <post-content :post="post.Retweet" />
         </v-card>
       </div>
+      <!-- 없는 경우 -->
       <post-content v-else :post="post" />
       
       <!-- 리트윗을 위해 삭제 -->

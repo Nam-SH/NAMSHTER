@@ -107,7 +107,8 @@ export const actions = {
 
   addComment({ commit }, payload ) {
     return this.$axios.post(`/post/${payload.postId}/comment`, {
-      content: payload.content
+      content: payload.content,
+      score: payload.score,
     }, { 
       withCredentials: true 
     })

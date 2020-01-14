@@ -50,13 +50,7 @@
               v-model="terms2"
               :rules="[v => !!v || 'You must agree to continue!']"
             />
-            <v-btn
-              :disabled="!valid"
-              color="blue"
-              class="mr-4"
-            >유효성 검증
-            </v-btn>
-            <v-btn colot="green" type="submit">가입완료</v-btn>
+            <v-btn color="blue" type="submit" :disabled="!valid">가입완료</v-btn>
           </v-form>
         </v-container>
       </v-card>

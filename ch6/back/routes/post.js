@@ -112,8 +112,8 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
       PostId: post.id,
       UserId: req.user.id,
       content: req.body.content,
+      score: req.body.score,
     });
-
     // 프론트로 보낼 정보를 만든다.
     const comment = await db.Comment.findOne({
       where: {
@@ -188,7 +188,6 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
       return res.status(403).send('이미 리트윗했습니다요')
     }
     // 검사 끝~~
-
     const retweet = await db.Post.create({
       UserId: req.user.id,
       RetweetId: retweetTargetId,

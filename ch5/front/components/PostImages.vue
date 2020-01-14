@@ -66,6 +66,7 @@
     methods: {
       closeModal() {
         this.imageZoomed = false;
+        
       },
       zoomImages() {
         this.imageZoomed = true;

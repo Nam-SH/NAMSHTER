@@ -126,6 +126,8 @@ export const actions = {
   },
 
   addComment({ commit }, payload ) {
+    console.log('ㅎㅇ');
+    
     this.$axios.post(`/post/${payload.postId}/comment`, {
       content: payload.content
     }, { 

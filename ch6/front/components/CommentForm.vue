@@ -1,6 +1,7 @@
 <template>
     <v-container>
       <v-form ref="form" v-model="valid" style="position: relative" @submit.prevent="onSubmitForm">
+        <v-rating v-model="score" hover></v-rating>
         <v-text-field 
           v-model="content"
           filled
@@ -35,7 +36,8 @@
         hideDetails: true,
         success: false,
         successMessages: '',
-        content: ''
+        content: '',
+        score: 0,
       }
     },
     methods: {
@@ -47,13 +49,23 @@
         } 
       },
       onSubmitForm() {
+        if (!this.score) {
+          alert('스코어 입력해야죠;;')
+          return;
+        }
+        if (!this.content.trim()) {
+          alert('내용 입력해야죠;;')
+          return;
+        }
         if (this.$refs.form.validate()) {
           this.$store.dispatch('posts/addComment', {
             postId: this.postId,
             content: this.content,
+            score: this.score,
           })
           .then(() => {
             this.content = '';
+            this.score = 0;
             this.success = true;
             this.successMessages = '댓글이 작성되었어요.'
             this.hideDetails = false;
