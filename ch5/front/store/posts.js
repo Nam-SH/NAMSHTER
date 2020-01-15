@@ -125,9 +125,7 @@ export const actions = {
     commit('editMainPost', payload)
   },
 
-  addComment({ commit }, payload ) {
-    console.log('ㅎㅇ');
-    
+  addComment({ commit }, payload ) { 
     this.$axios.post(`/post/${payload.postId}/comment`, {
       content: payload.content
     }, { 
@@ -148,8 +146,8 @@ export const actions = {
   //       const res = await this.$axios.get(`/posts?offset=${state.mainPosts.length}&limit=10`)
   //       commit('loadPosts', res.data);
   //     }
-  //     catch {
-  //       console.error('loadPosts :::', loadPosts)
+  //     catch (err) {
+  //       console.error('loadPosts :::', err)
   //     }
   //   }
   // },
@@ -163,8 +161,8 @@ export const actions = {
   //         commit('loadPosts', res.data);
   //       }
   //     }
-  //     catch {
-  //       console.error('loadPosts :::', loadPosts)
+  //     catch (err) {
+  //       console.error('loadPosts :::', err)
   //     }
   // },
 

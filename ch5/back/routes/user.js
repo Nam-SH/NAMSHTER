@@ -217,13 +217,11 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
         id: req.user.id,
       }
     });
-    console.log('back에서 user 찍어요`~', user)
     const followers = await user.getFollowers({
       attributes: ['id', 'nickname'],
       limit: parseInt(req.query.limit, 10) || 3,
       offset: parseInt(req.query.offset, 10) || 0,
     })
-    console.log('back에서 followers 찍어요`~', followers)
     res.json(followers)
   }
   catch (err) {

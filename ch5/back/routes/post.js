@@ -222,7 +222,7 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
     const retweet = await db.Post.create({
       UserId: req.user.id,
       RetweetId: retweetTargetId,
-      content: 'retweet이욤~',
+      content: '리트윗한 글만 보여줄꺼임~~',
     })
     const retweetWithPrevPost = await db.Post.findOne({
       where: { id: retweet.id },
