@@ -173,12 +173,6 @@ export const actions = {
       console.error('changeNickname :::', err)
     })
   },
-  // addFollowing({ commit }, payload) {
-  //   commit('addFollowing', payload)
-  // },
-  // addFollower({ commit }, payload) {
-  //   commit('addFollower', payload)
-  // },
 
   // 팔로워, 언팔로워
   follow({ commit }, payload) {
