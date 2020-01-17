@@ -56,6 +56,17 @@ app.use('/post', postRouter)
 app.use('/posts', postsRouter)
 app.use('/hashtag', hashtagRouter)
 
+
+router.get("/kakao", passport.authenticate("kakao-login"));
+
+router.get("/kakao/callback",
+  passport.authenticate("kakao-login", {
+    successRedirect: "/",
+    failureRedirect: "/api/auth/fail"
+  })
+);
+
+
 app.listen(3085, () => {
   console.log(`백엔드 서버 ${3085}번 프로에서 작동중...`)
   console.log()

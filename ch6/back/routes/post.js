@@ -24,6 +24,8 @@ const upload = multer({
   limit: { fileSize: 1000 * 1024 * 1024 },
 });
 
+
+
 // 이미지업로드 (/post/images)
 router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   // console.log(req.files);
