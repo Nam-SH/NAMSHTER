@@ -40,13 +40,14 @@ export const mutations = {
     targetIndex = state.followerList.findIndex(v => v.id === payload.userId);
     state.followerList.splice(targetIndex, 1);
   },
+  
   following(state, payload) {
-    state.me.Followings.push({id: payload.userId})
+    state.me.Followings.push({id: payload.otherId})
   },
   removeFollowing(state, payload) {
-    let targetIndex = state.me.Followings.findIndex(v => v.id === payload.userId)
+    let targetIndex = state.me.Followings.findIndex(v => v.id === payload.otherId)
     state.me.Followings.splice(targetIndex, 1)
-    targetIndex = state.followingList.findIndex(v => v.id === payload.userId)
+    targetIndex = state.followingList.findIndex(v => v.id === payload.otherId)
     state.followingList.splice(targetIndex, 1)
   },
  
@@ -176,22 +177,23 @@ export const actions = {
 
   // 팔로워, 언팔로워
   follow({ commit }, payload) {
-    return this.$axios.post(`/user/${payload.userId}/follow`, {}, {
+    return this.$axios.post(`/user/${payload.otherId}/follow`, {}, {
       withCredentials: true
     })
     .then((res) => {
-      commit('following', { userId: payload.userId })
+      commit('following', { otherId: payload.otherId })
     })
     .catch((err) => {
       console.error('follow :::', err);
     })
   },
+  
   unfollow({ commit }, payload) {
-    return this.$axios.delete(`/user/${payload.userId}/follow`, {
+    return this.$axios.delete(`/user/${payload.otherId}/follow`, {
       withCredentials: true
     })
     .then((res) => {
-      commit('removeFollowing', { userId: payload.userId })
+      commit('removeFollowing', { otherId: payload.otherId })
     })
     .catch((err) => {
       console.error('unfollow :::', err);

@@ -6,7 +6,7 @@
       
       <!-- 리트윗 아아디가 있는 경우 -->
       <div v-if="post.RetweetId && post.Retweet">
-        <v-subheader>{{ post.User.nickname }}님이 리트윗했다. </v-subheader>
+        <v-subheader>{{ post.User.nickname }}님이 리트윗했다.</v-subheader>
         <v-card style="margin: 0 20px">
           <post-content :post="post.Retweet" />
         </v-card>
@@ -116,7 +116,7 @@
       onRemovePost() {
         this.$store.dispatch('posts/remove', {
           postId: this.post.id
-        })
+        });
       },
       onEditPost() {
         alert('아직 구현 안함')
@@ -132,12 +132,12 @@
       onClickHeart () {
         if (!this.me) {
           return alert('로그인이 필요합니다.')
-        }
+        };
         if (this.liked) {
           return this.$store.dispatch('posts/unlikePost', {
             postId: this.post.id,
           })
-        }
+        };
         return this.$store.dispatch('posts/likePost', {
           postId: this.post.id,
         })
@@ -147,11 +147,12 @@
       onRetweet() {
         if (!this.me) {
           return alert('로그인이 필요합니다.')
-        }
+        };
         this.$store.dispatch('posts/retweet', {
           postId: this.post.id,
-        })
+        });
       },
+
     },
   }
 </script>

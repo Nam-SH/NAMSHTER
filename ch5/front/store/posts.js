@@ -27,7 +27,7 @@ export const mutations = {
   },
 
   addComment(state, payload) {
-    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.PostId);
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
   
@@ -170,7 +170,7 @@ export const actions = {
   loadPosts: throttle( async function({ commit, state }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/posts?&limit=10`)
+        const res = await this.$axios.get('/posts?limit=10')
         commit('loadPosts', {
           data: res.data,
           reset: true,
@@ -205,6 +205,7 @@ export const actions = {
         });
         return;
       }
+      
       if (state.hasMorePost) {
         const lastPost = state.mainPosts[state.mainPosts.length - 1]
         const res = await this.$axios.get(`/user/${payload.userId}/posts?lastId=${lastPost && lastPost.id}&limit=10`)
@@ -322,5 +323,6 @@ export const actions = {
       // 작성한 에러메시지
       alert(err.response.data)
     })
-  }
+  },
+  
 }

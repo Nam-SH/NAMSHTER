@@ -153,7 +153,7 @@ router.post('/logout', isLoggedIn, async (req, res) => {
 })
 
 router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
-  try {
+  try {    
     const me = await db.User.findOne({
       where: { id: req.user.id, }
     });

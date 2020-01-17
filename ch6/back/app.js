@@ -15,6 +15,8 @@ const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const hashtagRouter = require('./routes/hashtag');
 
+const kakkoRouter = require('./routes/kakao-login');
+
 // db 강제로 덮어씌우기
 // db.sequelize.sync({force: true})
 db.sequelize.sync();
@@ -56,15 +58,10 @@ app.use('/post', postRouter)
 app.use('/posts', postsRouter)
 app.use('/hashtag', hashtagRouter)
 
+app.use('/kakko', kakkoRouter)
 
-router.get("/kakao", passport.authenticate("kakao-login"));
 
-router.get("/kakao/callback",
-  passport.authenticate("kakao-login", {
-    successRedirect: "/",
-    failureRedirect: "/api/auth/fail"
-  })
-);
+
 
 
 app.listen(3085, () => {

@@ -3,22 +3,22 @@
     <post-images :images="post.Images || []" />
     <v-card-title>
         <h3>
-          <nuxt-link :to="/user/ + post.User.id"> {{ post.User.nickname }} </nuxt-link> 
+          <nuxt-link :to="/user/ + post.User.id"> {{ post.User.nickname }} </nuxt-link>  
           <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
           <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
         </h3>
-      </v-card-title>
-
-      <v-card-text>
-        <div>
-          <template v-for="(node, i) in nodes">
-            <nuxt-link v-if="node.startsWith('#')" :key="i" :to="`/hashtag/${node.slice(1)}`" style="color: deepskyblue" >
-              {{node}}
-            </nuxt-link>
-            <template v-else>{{ node }}</template>
-          </template>
-        </div>
-      </v-card-text>
+    </v-card-title>
+    <v-card-text>
+      <!-- <div>
+        <template v-for="(node, i) in nodes">
+          <nuxt-link v-if="node.startsWith('#')" :key="i" :to="`/hashtag/${node.slice(1)}`" style="color: deepskyblue" >
+            {{node}}
+          </nuxt-link>
+          <template v-else>{{ node }}</template>
+        </template>
+      </div> -->
+      <div>{{ post.content }}</div>
+    </v-card-text>
   </div>
 </template>
 
@@ -51,12 +51,12 @@
     methods: {
       onFollow() {
         this.$store.dispatch('users/follow', {
-          userId: this.post.User.id,
+          otherId: this.post.User.id,
         });
       },
       onUnFollow() {
         this.$store.dispatch('users/unfollow', {
-          userId: this.post.User.id,
+          otherId: this.post.User.id,
         });
       },
     },
