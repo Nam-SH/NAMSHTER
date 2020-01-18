@@ -59,7 +59,13 @@ app.use('/hashtag', hashtagRouter)
 
 
 app.listen(3085, () => {
-  console.log(`백엔드 서버 ${3085}번 프로에서 작동중...`)
-  console.log()
-  console.log(`http://localhost:${3085}/`)
+  console.log('|------------------------------------------------------------------------------|');
+  console.log('|                                                                              |');
+  console.log(`|                      백엔드 서버 ${3085}번 프로에서 작동중...                   |`);
+  console.log('|                                                                              |');
+  console.log('|                                                                              |');
+  console.log(`|                           http://localhost:${3085}/                             |`);
+  console.log('|                                                                              |');
+  console.log('|------------------------------------------------------------------------------|');
+  
 })
