@@ -4,17 +4,22 @@
       <v-card style="margin-bottom: 20px">
         <v-container>
           <v-subheader>내 프로필</v-subheader>    
-          <v-form v-model="valid" @submit.prevent="onChangeNickname">
+          <v-form @submit.prevent="onSubmitForm">
             <v-text-field 
-              label="닉네임" 
+              label="닉네임 변경하고 싶죠?" 
               required 
               v-model="nickname"
-              :rules="nicknameRules"
+              :error="error"
+              :hide-details="hideDetails"
+              :success-messages="successMessages"
+              :success="success"
+              @input="onChangeTextarea"
             />
             <v-btn dark color="blue" type="submit">수정</v-btn>
           </v-form>
         </v-container>
       </v-card>
+      
       <v-card>
         <v-container>
           <v-subheader>팔로잉</v-subheader>
@@ -44,14 +49,17 @@
     },
     data() {
       return {
-        valid: false,
         nickname: '',
-        nicknameRules: [
-          v => !!v || '닉네임을 입력하시옵소서'
-        ]
+        error: false,
+        hideDetails: true,
+        successMessages: '',
+        success: false,
       }
     },
     computed: {
+      me() {
+        return this.$store.state.users.me;
+      },
       followerList() {
         return this.$store.state.users.followerList;
       },
@@ -72,13 +80,44 @@
         store.dispatch('users/loadFollowers', { reset: true }),
       ])
     },
-
+    watch: {
+      me(value, oldValue) {        
+        if (!value) {
+          this.$router.push({
+            path: '/'
+          })
+        }
+      }
+    },
     methods: {
-      onChangeNickname() {
+      onChangeTextarea(value) {
+        if (!value.trim()) {
+          this.error = true;
+        }
+        else {
+          this.error = false;
+        }
+        this.hideDetails = true;
+        this.success = false;
+        this.successMessages = '';
+      },
+      onSubmitForm() {
+        if (!this.nickname.trim()) {
+          alert('변경하려면 닉네임을 입력해야죠;;')
+          return
+        }
         this.$store.dispatch('users/changeNickname', {
           nickname: this.nickname
         })
+        .then(() => {
+          this.nickname = '';
+          this.hideDetails = false;
+          this.success = true;
+          this.error = false
+          this.successMessages = '게시글 등록을 성공했습니다요';
+        })
       },
+      
       removeFollower(userId) {
         this.$store.dispatch('users/unfollower', { userId })
       },

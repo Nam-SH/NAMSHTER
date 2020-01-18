@@ -2,7 +2,7 @@
   <v-card style="margin-bottom: 20px;" >
     <v-container>
       
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
+      <v-form ref="form" @submit.prevent="onSubmitForm">
         <v-textarea 
         v-model="content"
         outlined
@@ -26,8 +26,7 @@
         >
         </v-alert>
 
-        <v-btn type="submit" color="blue" absolute right>제출</v-btn>
-        
+        <v-btn type="submit" color="blue" absolute right>제출</v-btn>       
         <!-- 이미지데이터 추가 -->
         <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" >
         <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
@@ -50,7 +49,6 @@
   export default {
     data() {
       return {
-        valid: false,
         hideDetails: true,
         successMessages: '',
         success: false,
@@ -65,7 +63,7 @@
     },
     methods: {
       onChangeTextarea(value) {
-        if (!value) {
+        if (!value.trim()) {
           this.error = true;
         }
         else {
@@ -76,24 +74,22 @@
         this.successMessages = '';
       },
       onSubmitForm() {
-        if (!this.content) {
+        if (!this.content.trim()) {
           alert('게시글 입력해여죠;;');
           return
         }
-        if (this.$refs.form.validate()) {
-          this.$store.dispatch('posts/add', {
-            content: this.content,
-          })
-          .then(() => {
-            this.content = '';
-            this.hideDetails = false;
-            this.success = true;
-            this.error = false
-            this.successMessages = '게시글 등록~~!';
-          })
-        }
+        const addpost = this.$store.dispatch('posts/add', { content: this.content, })
+        const adduser = this.$store.dispatch('users/loadUser')
+        Promise.all([addpost, adduser])
+        .then(() => {
+          this.$store.dispatch('users/loadUser')
+          this.content = '';
+          this.hideDetails = false;
+          this.success = true;
+          this.error = false
+          this.successMessages = '게시글 등록을 성공했습니다요';
+        })
       },
-
       onClickImageUpload() {
         this.$refs.imageInput.click()
       },

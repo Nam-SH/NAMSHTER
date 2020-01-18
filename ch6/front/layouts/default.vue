@@ -48,7 +48,7 @@
     },
     data() {
       return {
-        hashtag: ''
+        hashtag: '',
       }
     },
     methods: {
@@ -57,7 +57,7 @@
           path: `/hashtag/${encodeURIComponent(this.hashtag)}`,
         }),
         this.hashtag = ''
-      }
+      },
     },
   }
 </script>

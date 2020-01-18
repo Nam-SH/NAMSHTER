@@ -61,13 +61,7 @@
         <input type="password" name="password" placeholder="password">
         <button type="submit">submit</button>
     </form>
-
-    <a href="/api/auth/kakao">
-        <div class="kakaoLogin">
-            카카오 계정으로 로그인
-        </div>
-    </a>
-
+    
   </div>
 </template>
 

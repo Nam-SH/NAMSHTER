@@ -2,8 +2,9 @@
   <v-container>
     <v-card style="margin-bottom: 20px">
       <v-container>
-        {{ other.nickname }}님은 누굴까요
+        {{ other.nickname }}님은 누굴까요?
         <v-row>
+          <v-col cols="4">{{ other.Liked.length }}개의 글을 좋아함... </v-col>
           <v-col cols="4"> {{ other.Followings.length }}명을 팔로잉... </v-col>
           <v-col cols="4"> {{ other.Followers.length }}명이 나를 팔로워... </v-col>
           <v-col cols="4"> {{ other.Posts.length }}개의 글을 작성함... </v-col>
@@ -31,6 +32,9 @@
       mainPosts() {
         return this.$store.state.posts.mainPosts;
       },
+      hasMorePost() {
+        return this.$store.state.posts.hasMorePost;
+      }
     },
 
     fetch({ store, params }) {
@@ -44,7 +48,6 @@
         }),
       ])
     },
-
     mounted() {
       window.addEventListener('scroll', this.onScroll)
     },
@@ -55,11 +58,13 @@
       onScroll() {
         if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
           if (this.hasMorePost) {
-            this.$store.dispatch('posts/loadPosts');
+            this.$store.dispatch('posts/loadUserPosts', {
+              userId: this.other.id,
+              reset: false
+            });
           }
         }
       },
-
     },
   }
 </script>

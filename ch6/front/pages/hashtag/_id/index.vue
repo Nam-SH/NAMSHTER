@@ -17,6 +17,9 @@
       mainPosts() {
         return this.$store.state.posts.mainPosts;
       },
+      hasMorePost () {
+        return this.$store.state.posts.hasMorePost;
+      },
     },
     fetch({ store, params }) {
       return store.dispatch('posts/loadHashtagPosts', {
@@ -31,10 +34,15 @@
       window.removeEventListener('scroll', this.onScroll)
     },
     methods: {
-      onScroll() {
+      onScroll() {        
         if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
           if (this.hasMorePost) {
-            this.$store.dispatch('posts/loadPosts');
+            const link = document.location.href; 
+            const tag = link.split('hashtag/')[1]
+            this.$store.dispatch('posts/loadHashtagPosts', {
+              hashtag: tag,
+              reset: false,
+            });
           }
         }
       },

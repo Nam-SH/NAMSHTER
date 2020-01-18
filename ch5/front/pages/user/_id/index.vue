@@ -23,7 +23,6 @@
     components: {
       PostCard,
     },
-
     computed: {
       other() {
         return this.$store.state.users.other;
@@ -35,7 +34,6 @@
         return this.$store.state.posts.hasMorePost;
       }
     },
-
     fetch({ store, params }) {
       return Promise.all([
         store.dispatch('users/loadOther', {
@@ -48,7 +46,6 @@
         }),
       ])
     },
-
     mounted() {
       window.addEventListener('scroll', this.onScroll)
     },
@@ -66,7 +63,6 @@
           }
         }
       },
-
     },
   }
 </script>

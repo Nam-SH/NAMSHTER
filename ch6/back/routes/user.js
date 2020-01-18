@@ -26,6 +26,11 @@ router.get('/:id', async (req, res, next) => {
         as: 'Posts',
         attributes: ['id'],
       }, {
+        // 이 유저가 좋아한다고(Liked) 한 글을 포함시켜라
+        model: db.Post,
+        as: 'Liked',
+        attributes: ['id'],
+      }, {
         model: db.User,
         as: 'Followings',
         attributes: ['id'],
@@ -161,6 +166,7 @@ router.post('/logout', isLoggedIn, async (req, res) => {
   }
 })
 
+// 팔로우
 router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -175,6 +181,7 @@ router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
   }
 })
 
+// 언팔로우
 router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -189,6 +196,7 @@ router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 언팔로워
 router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -203,6 +211,7 @@ router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 닉네임 변경
 router.patch('/nickname', isLoggedIn, async (req, res, next) => {
   try {
     await db.User.update({
@@ -246,7 +255,7 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// 팔로잉 전체 목록 불러오기
+// 팔로우 전체 목록 불러오기
 router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -275,47 +284,50 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// 다른 사용자가 작성한 글 불러오기
-router.get('/:id/posts', isLoggedIn, async (req, res, next) => {
+// 특정 사용자가 작성한 글 불러오기
+router.get('/:id/posts', async (req, res, next) => {
   try {
     let where = {
       UserId: parseInt(req.params.id, 10),
     };
-    // lastId가 있는 경우
     if (parseInt(req.query.lastId, 10)) {
-      where[db.Sequelize.Op.lt] = parseInt(req.query.lastId, 10);
+      where = {
+        id: {
+          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10), // less than
+        },
+      };
     };
     const posts = await db.Post.findAll({
       where,
-      include: [
-        {
+      include: [{
+        model: db.User,
+        attributes: ['id', 'nickname'],
+      }, {
+        model: db.Image,
+      }, {
           model: db.User,
-          attributes: ['id', 'nickname']
-        }, {
-          model: db.Image,
-        }, {
-          model: db.User,
-          through: 'Like',
           as: 'Likers',
           attributes: ['id']
         }, {
-          model: db.Post,
-          as: "Retweet",
-          include: [
-            {
-              model: db.User,
-              attributes: ['id', 'nickname']
-            }
-          ]
-        }],
+        model: db.Post,
+        as: "Retweet",
+        include: [{
+            model: db.User,
+            attributes: ['id', 'nickname']
+          }, {
+            model: db.Image
+          }
+        ]
+      }],
+      order: [['createdAt', 'DESC']],
       limit: parseInt(req.query.limit, 10) || 10,
     });
-    res.json(posts)
-  }
+    res.json(posts);
+  } 
   catch (err) {
     console.error('GET /:id/posts :::', err)
-    next(err)
+    next(err);
   }
-})
+});
 
 module.exports = router;

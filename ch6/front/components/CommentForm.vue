@@ -1,7 +1,7 @@
 <template>
     <v-container>
       <v-form ref="form" v-model="valid" style="position: relative" @submit.prevent="onSubmitForm">
-        <v-rating v-model="score" hover></v-rating>
+        <v-rating v-model="score" hover></v-rating> 
         <v-text-field 
           v-model="content"
           filled

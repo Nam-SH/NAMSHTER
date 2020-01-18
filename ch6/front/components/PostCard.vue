@@ -20,7 +20,7 @@
         </v-btn>
 
         <!-- 댓글 -->
-        <v-btn text color="orange" @click="onToggleComment">
+        <v-btn text color="orange" @click="onComment(); onToggle();">
           <v-icon>mdi-comment-outline</v-icon>
         </v-btn>
 
@@ -42,8 +42,8 @@
     <template v-if="commentOpened">
       <comment-form :post-id="post.id" style="margin-bottom: 30px" />
       <v-list style="margin-bottom: 20px">
-        {{ avg_total }}
-        <div> {{ post.Comments.length }}개의 댓글이 있어요 </div>
+        <div> 댓글 수: {{ post.Comments.length }}개 </div>
+        <div> 평점 평균: {{ avgTotal }}점 </div>
         <hr>
         <v-list-item v-for="c in post.Comments" :key="c.id">
           <v-list-item-avatar color="yellow">
@@ -79,7 +79,8 @@
     data() {
       return {
         commentOpened: false,
-        avg_total: 0,
+        avgTotal: 0,
+        commentList: this.post.Comments,
       }
     },
     computed: {
@@ -102,19 +103,27 @@
       onEditPost() {
         alert('아직 구현 안함')
       },
-
-      async onToggleComment() {
-        try {
-          if (!this.commentOpened) {
-            await this.$store.dispatch('posts/loadComments', { postId: this.post.id })
+      avg() {
+        if (this.commentList) {
+          let val = 0
+          for(let i in this.commentList) {
+            val += this.commentList[i].score
           }
-          this.commentOpened = !this.commentOpened
-        }
-        catch (err) {
-          console.error('onToggleComment :::', err)
-        }
+          this.avgTotal = val/this.commentList.length
+          }
       },
 
+      onToggle() {
+        this.commentOpened = !this.commentOpened
+      },
+
+      onComment() {
+        if (!this.commentOpened) {
+          const res = this.$store.dispatch('posts/loadComments', { postId: this.post.id })
+          Promise.all([res, this.avg()])
+        }
+      
+      },
       // 좋아요
       onClickHeart () {
         if (!this.me) {
@@ -129,7 +138,6 @@
           postId: this.post.id,
         })
       },
-      
       // 리트윗
       onRetweet() {
         if (!this.me) {
@@ -139,19 +147,6 @@
           postId: this.post.id,
         })
       },
-
-      
-      avg() {
-        // let res = 0;
-        //   for (let comment in this.post.Comments) {
-        //     for (let s in comment) {
-        //       res += s.score;
-        //     }
-        //   }
-        // console.log(this.post.Comments.score);
-        
-        // return this.avg_total = res / this.post.Comments.length
-      }
     },
   }
 </script>
