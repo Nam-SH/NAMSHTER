@@ -16,13 +16,11 @@
       PostCard,
       PostForm
     },
-    
     fetch ({ store }) {
       return store.dispatch('posts/loadPosts', {
         reset: true
       });
     },
-
     computed: {
       me() {
         return this.$store.state.users.me;

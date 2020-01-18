@@ -18,7 +18,7 @@
       <v-card>
         <v-container>
           <v-subheader>팔로잉</v-subheader>
-          <follow-list :users="followingList" :remove="removeFollowing" />
+          <follow-list :others="followingList" :remove="unfollow" />
           <v-btn @click="loadFollowings" v-if="hasMoreFollowing" color="blue" style="width: 100%">더보기</v-btn>
           <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
         </v-container>
@@ -26,7 +26,7 @@
       <v-card>
         <v-container>
           <v-subheader>팔로워</v-subheader>
-          <follow-list :users="followerList" :remove="removeFollower" />
+          <follow-list :others="followerList" :remove="unfollower" />
           <v-btn @click="loadFollowers" v-if="hasMoreFollower" color="blue" style="width: 100%">더보기</v-btn>
           <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
         </v-container>
@@ -51,6 +51,7 @@
         ]
       }
     },
+
     computed: {
       followerList() {
         return this.$store.state.users.followerList;
@@ -86,11 +87,12 @@
           console.error('onChangeNickname :::', err)
         })
       },
-      removeFollower(userId) {
-        this.$store.dispatch('users/removeFollower', { userId })
+      
+      unfollower(otherId) {
+        this.$store.dispatch('users/unfollower', { otherId })
       },
-      removeFollowing(userId) {
-        this.$store.dispatch('users/unfollow', { userId })
+      unfollow(otherId) {
+        this.$store.dispatch('users/unfollow', { otherId })
       },
       loadFollowers() {
         this.$store.dispatch('users/loadFollowers')

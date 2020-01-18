@@ -31,6 +31,9 @@
       mainPosts() {
         return this.$store.state.posts.mainPosts;
       },
+      hasMorePost() {
+        return this.$store.state.posts.hasMorePost;
+      }
     },
 
     fetch({ store, params }) {
@@ -38,6 +41,7 @@
         store.dispatch('users/loadOther', {
           userId: params.id,
         }),
+        
         store.dispatch('posts/loadUserPosts', {
           userId: params.id,
           reset: true,
@@ -55,7 +59,10 @@
       onScroll() {
         if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
           if (this.hasMorePost) {
-            this.$store.dispatch('posts/loadPosts');
+            this.$store.dispatch('posts/loadUserPosts', {
+              userId: this.other.id,
+              reset: false
+            });
           }
         }
       },

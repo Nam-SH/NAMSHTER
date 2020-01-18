@@ -9,15 +9,15 @@
         </h3>
     </v-card-title>
     <v-card-text>
-      <!-- <div>
+      <div>
         <template v-for="(node, i) in nodes">
           <nuxt-link v-if="node.startsWith('#')" :key="i" :to="`/hashtag/${node.slice(1)}`" style="color: deepskyblue" >
             {{node}}
           </nuxt-link>
           <template v-else>{{ node }}</template>
         </template>
-      </div> -->
-      <div>{{ post.content }}</div>
+      </div>
+      <!-- <div>{{ post.content }}</div> -->
     </v-card-text>
   </div>
 </template>

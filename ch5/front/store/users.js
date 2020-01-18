@@ -34,17 +34,18 @@ export const mutations = {
   //   state.followingList.push(payload)
   // },
 
-  removeFollower(state, payload) {
-    let targetIndex = state.me.Followers.findIndex(v => v.id === payload.userId)
+  unfollower(state, payload) {
+    let targetIndex = state.me.Followers.findIndex(v => v.id === payload.otherId)
     state.me.Followers.splice(targetIndex, 1);
-    targetIndex = state.followerList.findIndex(v => v.id === payload.userId);
+    targetIndex = state.followerList.findIndex(v => v.id === payload.otherId);
     state.followerList.splice(targetIndex, 1);
   },
   
   following(state, payload) {
     state.me.Followings.push({id: payload.otherId})
   },
-  removeFollowing(state, payload) {
+
+  unfollow(state, payload) {
     let targetIndex = state.me.Followings.findIndex(v => v.id === payload.otherId)
     state.me.Followings.splice(targetIndex, 1)
     targetIndex = state.followingList.findIndex(v => v.id === payload.otherId)
@@ -94,7 +95,7 @@ export const mutations = {
 
 export const actions = {
 
-  // 사용자정보 가져오기
+  // 나의 사용자정보 가져오기
   async loadUser({ commit }) {
     try {
       const res = await this.$axios.get('/user', { 
@@ -109,17 +110,17 @@ export const actions = {
 
   // 다른 사용자 정보 불러오기
   async loadOther({ commit }, payload) {
-    try {
+    try {      
       const res = await this.$axios.get(`/user/${payload.userId}`, {
         withCredentials: true
-      });
+      });     
       commit('setOther', res.data)
     }
     catch (err) {
       console.error('loadOther :::', err)
     }
   },
-
+  
   signUp({ commit }, payload) {
     this.$axios.post('/user', {
       email: payload.email,
@@ -193,7 +194,7 @@ export const actions = {
       withCredentials: true
     })
     .then((res) => {
-      commit('removeFollowing', { otherId: payload.otherId })
+      commit('unfollow', { otherId: payload.otherId })
     })
     .catch((err) => {
       console.error('unfollow :::', err);
@@ -201,12 +202,12 @@ export const actions = {
   },
 
   // 언팔로워
-  removeFollower({ commit }, payload) {
-    return this.$axios.delete(`/user/${payload.userId}/follower`, {
+  unfollower({ commit }, payload) {
+    return this.$axios.delete(`/user/${payload.otherId}/follower`, {
       withCredentials: true
     })
     .then((res) => {
-      commit('removefollower', { userId: payload.userId });
+      commit('unfollower', { otherId: payload.otherId });
     })
     .catch((err) => {
       console.error('unfollower :::', err);
@@ -301,14 +302,14 @@ export const actions = {
     return this.$axios.get(`/user/${state.me.id}/followings?limit=3&offset=${offset}`, {
       withCredentials: true,
       })
-      .then((res) => {
-        commit('loadFollowings', {
-          data: res.data,
-          offset,
-        });
-      })
-      .catch((err) => {
-        console.error('loadFollowers :::', err)
+    .then((res) => {
+      commit('loadFollowings', {
+        data: res.data,
+        offset,
       });
-    },  
+    })
+    .catch((err) => {
+      console.error('loadFollowers :::', err)
+    });
+  },  
 }

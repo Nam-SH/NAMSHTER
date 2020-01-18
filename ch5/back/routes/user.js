@@ -14,16 +14,15 @@ router.get('/', isLoggedIn, async (req, res, next) => {
   res.json(user);
 });
 
-// 다른 사용자정보 가져오기
+// 특정 사용자정보 가져오기
 router.get('/:id', async (req, res, next) => {
   try {
-    const user = await db.User.findOne({
+    const other = await db.User.findOne({
       where: { id: parseInt(req.params.id, 10) },
       attributes: ['id', 'nickname'],
       include: [
         {
         model: db.Post,
-        as: 'Posts',
         attributes: ['id'],
       }, {
         model: db.User,
@@ -35,7 +34,7 @@ router.get('/:id', async (req, res, next) => {
         attributes: ['id'],
       }],
     });
-    res.json(user);
+    res.json(other);
   }
   catch (err) {
     console.error('GET /:id :::', err);
@@ -152,6 +151,7 @@ router.post('/logout', isLoggedIn, async (req, res) => {
   }
 })
 
+// 팔로우
 router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
   try {    
     const me = await db.User.findOne({
@@ -166,6 +166,7 @@ router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
   }
 })
 
+// 언팔로우
 router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -180,6 +181,7 @@ router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 언팔로워
 router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -194,8 +196,11 @@ router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 닉네임 수정
 router.patch('/nickname', isLoggedIn, async (req, res, next) => {
   try {
+    console.log(req);
+    
     await db.User.update({
       nickname: req.body.nickname,
     }, {
@@ -221,12 +226,12 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
       attributes: ['id', 'nickname'],
       limit: parseInt(req.query.limit, 10) || 3,
       offset: parseInt(req.query.offset, 10) || 0,
-    })
-    res.json(followers)
+    });
+    res.json(followers);
   }
   catch (err) {
-    console.error('/:id/followers :::', err)
-    next(err)
+    console.error('/:id/followers :::', err);
+    next(err);
   }
 })
 
@@ -242,56 +247,60 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
       attributes: ['id', 'nickname'],
       limit: parseInt(req.query.limit, 10) || 3,
       offset: parseInt(req.query.offset, 10) || 0,
-    })
-    res.json(followings)
+    });
+    res.json(followings);
   }
   catch (err) {
-    console.error('/:id/followings :::', err)
-    next(err)
+    console.error('/:id/followings :::', err);
+    next(err);
   }
 })
 
-// 다른 사용자가 작성한 글 불러오기
-router.get('/:id/posts', isLoggedIn, async (req, res, next) => {
+// 사용자가 작성한 글 불러오기
+router.get('/:id/posts', async (req, res, next) => {
   try {
     let where = {
       UserId: parseInt(req.params.id, 10),
     };
-    // lastId가 있는 경우
     if (parseInt(req.query.lastId, 10)) {
-      where[db.Sequelize.Op.lt] = parseInt(req.query.lastId, 10);
-    };
+      where = {
+        id: {
+          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10), // less than
+        },
+      };
+    }
     const posts = await db.Post.findAll({
       where,
-      include: [
-        {
-          model: db.User,
-          attributes: ['id', 'nickname']
-        }, {
-          model: db.Image,
-        }, {
-          model: db.User,
-          through: 'Like',
-          as: 'Likers',
-          attributes: ['id']
-        }, {
-          model: db.Post,
-          as: "Retweet",
-          include: [
-            {
-              model: db.User,
-              attributes: ['id', 'nickname']
-            }
-          ]
-        }],
+      include: [{
+        model: db.User,
+        attributes: ['id', 'nickname'],
+      }, {
+        model: db.Image,
+      }, {
+        model: db.User,
+        as: 'Likers',
+        attributes: ['id'],
+      },{
+        model: db.Post,
+        as: "Retweet",
+        include: [{
+            model: db.User,
+            attributes: ['id', 'nickname']
+          }, {
+            model: db.Image
+          }
+        ]
+      }],
+      order: [['createdAt', 'DESC']],
       limit: parseInt(req.query.limit, 10) || 10,
     });
-    res.json(posts)
-  }
+    res.json(posts);
+  } 
   catch (err) {
     console.error('GET /:id/posts :::', err)
-    next(err)
+    next(err);
   }
-})
+});
+
 
 module.exports = router;

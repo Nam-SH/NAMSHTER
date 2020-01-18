@@ -45,6 +45,7 @@ export const mutations = {
     // }));
     // state.mainPosts = state.mainPosts.concat(fakePosts)
     // state.hasMorePost =  state.mainPosts.length === limit;
+    
     if (payload.reset) {
       state.mainPosts = payload.data  
     }
@@ -192,10 +193,10 @@ export const actions = {
     }
   }, 3000),
 
-  // 다른 사람 글 가져오기
+  // 특정 사람이 글 가져오기
   loadUserPosts: throttle( async function({ commit, state }, payload) {
     try {
-      if (payload && payload.reset) {
+      if (payload && payload.reset) {        
         const res = await this.$axios.get(`/user/${payload.userId}/posts?limit=10`, {
           withCredentials: true
         })
@@ -205,10 +206,11 @@ export const actions = {
         });
         return;
       }
-      
       if (state.hasMorePost) {
         const lastPost = state.mainPosts[state.mainPosts.length - 1]
-        const res = await this.$axios.get(`/user/${payload.userId}/posts?lastId=${lastPost && lastPost.id}&limit=10`)
+        const res = await this.$axios.get(`/user/${payload.userId}/posts?lastId=${lastPost && lastPost.id}&limit=10`, {
+          withCredentials: true
+        })
         commit('loadPosts', {
           data: res.data,
           reset: false,
@@ -222,10 +224,10 @@ export const actions = {
   }, 3000),
 
   // 해시태그 가져오기
-  loadHashtagPosts: throttle( async function({ commit, state }, payload) {
+  loadHashtagPosts: throttle(async function({ commit, state }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?limit=10`)
+        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?limit=10`);
         commit('loadPosts', {
           data: res.data,
           reset: true,
@@ -233,19 +235,17 @@ export const actions = {
         return;
       }
       if (state.hasMorePost) {
-        const lastPost = state.mainPosts[state.mainPosts.length - 1]
-        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?lastId=${lastPost && lastPost.id}&limit=10`)
+        const lastPost = state.mainPosts[state.mainPosts.length - 1];
+        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?lastId=${lastPost && lastPost.id}&limit=10`);
         commit('loadPosts', {
           data: res.data,
-          reset: false,
         });
         return;
       }
+    } catch (err) {
+      console.error(err);
     }
-    catch (err) {
-      console.error('loadHashtagPosts :::', err)
-    }
-  }, 3000),
+  }, 2000),
 
 
   // 댓글 요청하기
