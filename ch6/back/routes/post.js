@@ -24,15 +24,56 @@ const upload = multer({
   limit: { fileSize: 1000 * 1024 * 1024 },
 });
 
-
-
 // 이미지업로드 (/post/images)
 router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   // console.log(req.files);
   res.json(req.files.map(v => v.filename));
 });
 
-// 글 상세보기()
+// 글 상세보기(/post/:id) - 글하나만 가져오기
+router.get('/:id', async (req, res, next) => {
+  try {   
+    const fullpost = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [
+        {
+          // 작성자 정보
+          model: db.User,
+          attributes: ['id', 'nickname']
+        },
+        {
+          model: db.Image,
+        },
+        {
+          model: db.User,
+          as: 'Likers',
+          attributes: ['id']
+        },
+        {
+          model: db.Comment,
+          attributes: ['id']
+        },
+        {
+          model: db.Post,
+          as: 'Retweet',
+          include: [{
+            model: db.User,
+            attributes: ['id', 'nickname']
+          },{
+            model: db.Image
+          }]
+        }
+      ]
+    })    
+    return res.json(fullpost);
+  }
+  catch (err) {
+    console.error('GET /:id :::', err);
+    next(err);
+  }
+})
 
 // 글 작성(/post)
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /post

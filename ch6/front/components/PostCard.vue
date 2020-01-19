@@ -39,8 +39,9 @@
     </v-card>
 
     <!-- 댓글 창 클릭시 -->
-    <template v-if="commentOpened">
+    <template v-if="commentOpened" >
       <comment-form :post-id="post.id" style="margin-bottom: 30px" />
+
       <v-list style="margin-bottom: 20px">
         <div> 댓글 수: {{ post.Comments.length }}개 </div>
         <div> 평점 평균: {{ avgTotal }}점 </div>
@@ -57,6 +58,7 @@
         </v-list-item>
       </v-list>
     </template>
+
   </div>
 </template>
 
@@ -80,7 +82,7 @@
       return {
         commentOpened: false,
         avgTotal: 0,
-        commentList: null,
+        commentList: this.post.Comments,
       }
     },
     computed: {
@@ -103,22 +105,9 @@
       onEditPost() {
         alert('아직 구현 안함')
       },
-      avg() {
-        if (this.commentList && this.commentList.length) {
-          let val = 0          
-          for(let i in this.commentList) {
-            val += this.commentList[i].score
-          }
-          this.avgTotal = val
-          }
-      },
       async onComment() {
         if (!this.commentOpened) {         
           await this.$store.dispatch('posts/loadComments', { postId: this.post.id })
-          .then(() => {
-            this.commentList = this.post.Comments
-          })
-          await this.avg()
         };
         this.commentOpened = !this.commentOpened
       },

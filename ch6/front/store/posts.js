@@ -29,6 +29,13 @@ export const mutations = {
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
   
+  
+  // 글 하나 불러오기
+  loadPost(state, payload) {
+    state.mainPosts = [payload]
+  },
+
+  // 글 전체 불러오기
   loadPosts(state, payload) {
     if (payload.reset) {
       state.mainPosts = payload.data  
@@ -38,6 +45,8 @@ export const mutations = {
     }
     state.hasMorePost =  payload.data.length === 10;
   },
+
+  
 
   // 댓글 요청하기
   loadComments(state, payload) {
@@ -119,7 +128,19 @@ export const actions = {
       console.error('addComment:::', err)
     })
   },
-  // 쓰로틀링 설정
+
+  // 글 한개 불러오기
+  async loadPost({ commit }, payload) {
+    try {      
+      const res = await this.$axios.get(`/post/${payload}`)      
+      commit('loadPost', res.data)
+    }
+    catch (err) {
+      console.error('loadPost :::', err)
+    }
+  },
+
+  // 전체 글 불러오기 - 쓰로틀링 설정
   loadPosts: throttle( async function({ commit, state }, payload) {
     try {
       if (payload && payload.reset) {
@@ -199,7 +220,7 @@ export const actions = {
     }
   }, 3000),
 
-
+  
   // 댓글 요청하기
   loadComments({ commit}, payload ) {
     return this.$axios.get(`/post/${payload.postId}/comments`)

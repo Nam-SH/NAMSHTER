@@ -8,7 +8,6 @@
           <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
         </h3>
       </v-card-title>
-
       <v-card-text>
         <div> 
           <template v-for="(node, i) in nodes">
@@ -18,6 +17,7 @@
             <template v-else>{{ node }}</template>
           </template>
         </div>
+        <div> {{ $moment(post.createdAt).fromNow() }} </div>
       </v-card-text>
   </div>
 </template>

@@ -16,7 +16,7 @@ import _6f6c098b from '..\\layouts\\default.vue'
 const layouts = { "_default": _6f6c098b }
 
 export default {
-  head: {"title":"NAM-SH","meta":[],"link":[{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"}],"style":[],"script":[]},
+  head: {"title":"NodeBird","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover"},{"http-equiv":"X-UA-Compatible","content":"IE=edge"},{"hid":"desc","name":"description","content":"Namshter"},{"hid":"ogtitle","name":"og:title","content":"Namshter"},{"hid":"ogdesc","name":"og:description","content":"nam의 Namshter"},{"hid":"ogtype","property":"og:type","content":"website"},{"hid":"ogimage","property":"og:image","content":"https:\u002F\u002Fvue.nodebird.com\u002Fvue-nodebird.png"},{"hid":"ogurl","property":"og:url","content":"https:\u002F\u002Fvue.nodebird.com"}],"link":[{"rel":"shortcut icon","href":"\u002Fdonut.png"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"}],"style":[],"script":[]},
 
   render (h, props) {
     const loadingEl = h('NuxtLoading', { ref: 'loading' })
