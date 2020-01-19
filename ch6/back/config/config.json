@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "q1w2e3r41234",
-    "database": "vue-nodebird",
+    "database": "my_vuenodebird",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

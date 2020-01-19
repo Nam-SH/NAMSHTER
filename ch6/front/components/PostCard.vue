@@ -20,7 +20,7 @@
         </v-btn>
 
         <!-- 댓글 -->
-        <v-btn text color="orange" @click="onComment(); onToggle();">
+        <v-btn text color="orange" @click="onComment">
           <v-icon>mdi-comment-outline</v-icon>
         </v-btn>
 
@@ -80,7 +80,7 @@
       return {
         commentOpened: false,
         avgTotal: 0,
-        commentList: this.post.Comments,
+        commentList: null,
       }
     },
     computed: {
@@ -104,25 +104,23 @@
         alert('아직 구현 안함')
       },
       avg() {
-        if (this.commentList) {
-          let val = 0
+        if (this.commentList && this.commentList.length) {
+          let val = 0          
           for(let i in this.commentList) {
             val += this.commentList[i].score
           }
-          this.avgTotal = val/this.commentList.length
+          this.avgTotal = val
           }
       },
-
-      onToggle() {
+      async onComment() {
+        if (!this.commentOpened) {         
+          await this.$store.dispatch('posts/loadComments', { postId: this.post.id })
+          .then(() => {
+            this.commentList = this.post.Comments
+          })
+          await this.avg()
+        };
         this.commentOpened = !this.commentOpened
-      },
-
-      onComment() {
-        if (!this.commentOpened) {
-          const res = this.$store.dispatch('posts/loadComments', { postId: this.post.id })
-          Promise.all([res, this.avg()])
-        }
-      
       },
       // 좋아요
       onClickHeart () {

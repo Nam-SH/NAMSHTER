@@ -41,15 +41,9 @@
             <v-checkbox 
               label="남승현 말을 잘 들을 것을 약속합니다." 
               required 
-              v-model="terms1"
+              v-model="terms"
               :rules="[v => !!v || 'You must agree to continue!']"
-            />
-            <v-checkbox 
-              label="남승현 말을 정말로 잘 들을 것을 약속합니다." 
-              required 
-              v-model="terms2"
-              :rules="[v => !!v || 'You must agree to continue!']"
-            />
+            />=
             <v-btn color="blue" type="submit" :disabled="!valid">가입완료</v-btn>
           </v-form>
         </v-container>
@@ -74,8 +68,7 @@
         password: '',
         passwordCheck: '',
         nickname: '',
-        terms1: false,
-        terms2: false,
+        terms: false,
 
         emailRules: [
         v => !!v || '이메일은 필수입니다.',
