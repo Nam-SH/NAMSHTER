@@ -43,7 +43,7 @@
               required 
               v-model="terms"
               :rules="[v => !!v || 'You must agree to continue!']"
-            />=
+            />
             <v-btn color="blue" type="submit" :disabled="!valid">가입완료</v-btn>
           </v-form>
         </v-container>

@@ -586,4 +586,6 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 
+namshter.pem
+
 # End of https://www.gitignore.io/api/django,pycharm,visualstudio,visualstudiocode,jupyternotebooks
