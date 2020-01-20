@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
-    "start": "PORT=80 NODE_ENV=production node server",
+    "start": "cross-env PORT=80 NODE_ENV=production node server",
     "lint": "eslint **/*"
   },
   "author": "",
@@ -16,6 +16,8 @@
     "@nuxtjs/moment": "^1.5.0",
     "@nuxtjs/vuetify": "^1.10.1",
     "axios": "^0.19.1",
+    "cross-env": "^6.0.3",
+    "express": "^4.17.1",
     "lodash.throttle": "^4.1.1",
     "nuxt": "^2.11.0",
     "vue": "^2.6.11",
