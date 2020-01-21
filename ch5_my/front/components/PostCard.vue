@@ -4,10 +4,12 @@
       <div v-if="post.RetweetId && post.Retweet">
         <v-subheader>{{ post.User.nickname }}님이 리트윗했다. </v-subheader>
         <v-card style="margin: 0 20px">
-          <post-content :post="post.Retweet" />
+          <post-content :post="post.Retweet" :isEditting="isEditting" />
         </v-card>
       </div>
-      <post-content v-else :post="post" />
+      <post-content v-else :post="post" :isEditting="isEditting" @onEditPost="onEditPost" />
+      
+      <v-btn v-if="fromIndex" text color="primary" nuxt-link :to="`/post/${post.id}`">상세보기</v-btn>
 
       <v-card-actions>
         <v-btn text color="orange" @click="onRetweet">
@@ -73,7 +75,11 @@
     props: {
       post: {
         type: Object,
-        required: true
+        required: true,
+      },
+      fromIndex: {
+        type: Boolean,
+        required: true,
       }
     },
     data() {
@@ -81,6 +87,8 @@
         commentOpened: false,
         avgTotal: 0,
         commentList: null,
+
+        isEditting: false,
       }
     },
     computed: {
@@ -101,7 +109,8 @@
         })
       },
       onEditPost() {
-        alert('아직 구현 안함')
+        this.isEditting = !this.isEditting
+        // alert('아직 구현 안함')
       },
       avg() {
         if (this.commentList && this.commentList.length) {

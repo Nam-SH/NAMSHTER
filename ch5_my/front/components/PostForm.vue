@@ -73,14 +73,12 @@
         this.success = false;
         this.successMessages = '';
       },
-      onSubmitForm() {
+      async onSubmitForm() {
         if (!this.content.trim()) {
           alert('게시글 입력해여죠;;');
           return
         }
-        const addpost = this.$store.dispatch('posts/add', { content: this.content, })
-        const adduser = this.$store.dispatch('users/loadUser')
-        Promise.all([addpost, adduser])
+        await this.$store.dispatch('posts/add', { content: this.content, })
         .then(() => {
           this.$store.dispatch('users/loadUser')
           this.content = '';

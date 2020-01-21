@@ -220,9 +220,9 @@ router.patch('/nickname', isLoggedIn, async (req, res, next) => {
       where: { id: req.user.id },
     });
     res.send(req.body.nickname);
-  } catch (e) {
-    console.error('/nickname :::', err);
-    next(e);
+  } catch (err) {
+    console.error('PATCH /nickname :::', err);
+    next(err);
   }
 });
 
@@ -250,7 +250,7 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
     res.json(followers)
   }
   catch (err) {
-    console.error('/:id/followers :::', err)
+    console.error('GET /:id/followers :::', err)
     next(err)
   }
 })
@@ -279,7 +279,7 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
     res.json(followings)
   }
   catch (err) {
-    console.error('/:id/followings :::', err)
+    console.error('GET /:id/followings :::', err)
     next(err)
   }
 })

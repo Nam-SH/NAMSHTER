@@ -17,14 +17,12 @@ const upload = multer({
       // ext: 확장자 이름을 뽑아온다.
       const ext = path.extname(file.originalname);
       const basename = path.basename(file.originalname, ext);
-      // 남승현.jpg  ==> basename: 남승현, ext: .jpg
+      // 남승현.jpg ==> basename: 남승현, ext: .jpg
       done(null, basename + Date.now() + ext);
     },
   }),
   limit: { fileSize: 1000 * 1024 * 1024 },
 });
-
-
 
 // 이미지업로드 (/post/images)
 router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
@@ -32,10 +30,53 @@ router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   res.json(req.files.map(v => v.filename));
 });
 
-// 글 상세보기()
+// 글 상세보기(/post/:id) - 글하나만 가져오기
+router.get('/:id', async (req, res, next) => {
+  try {   
+    const fullpost = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [
+        {
+          // 작성자 정보
+          model: db.User,
+          attributes: ['id', 'nickname']
+        },
+        {
+          model: db.Image,
+        },
+        {
+          model: db.User,
+          as: 'Likers',
+          attributes: ['id']
+        },
+        {
+          model: db.Comment,
+          attributes: ['id']
+        },
+        {
+          model: db.Post,
+          as: 'Retweet',
+          include: [{
+            model: db.User,
+            attributes: ['id', 'nickname']
+          },{
+            model: db.Image
+          }]
+        }
+      ]
+    })    
+    return res.json(fullpost);
+  }
+  catch (err) {
+    console.error('GET /:id :::', err);
+    next(err);
+  }
+})
 
-// 글 작성(/post)
-router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
+// 글 작성(POST /post)
+router.post('/', isLoggedIn, async (req, res, next) => {
   try {
     const hashtags = req.body.content.match(/#[^\s#]+/g);
     const newPost = await db.Post.create({
@@ -82,6 +123,26 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   }
 });
 
+// 글 수정
+router.patch('/:id', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id } })
+    if (!post) {
+      return res.status(400).send('포스트가 존재하지 않습니다.');
+    }
+    await db.Post.update({
+      content: req.body.content,
+    }, {
+      where: { id: req.params.id }
+    });
+    res.json(req.body.content);
+  }
+  catch (err) {
+    console.error('PATCH /:id', err);
+    next(err)
+  }
+})
+
 // 글 삭제
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
   try {
@@ -98,7 +159,7 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
   }
   catch (err) {
     console.error(err)
-    next('delete(/:id) :::', err)
+    next('DELETE /:id :::', err)
   }
 })
 
@@ -129,7 +190,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
     return res.json(comment);
   }
   catch (err) {
-    console.error('POST/:id/comment :::', err)
+    console.error('POST /:id/comment :::', err)
     next(err)
   }
 })

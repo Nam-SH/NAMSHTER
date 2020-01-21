@@ -1,9 +1,11 @@
 <template>
   <v-container v-if="post">
-      <post-card :post="post" />
+     <post-card :post="post[0]" :fromIndex="false" />
   </v-container>
   <div v-else>
-    글이 없는데욬ㅋㅋ;;
+    <v-container>
+      글이 없는데요;;
+    </v-container>
   </div>
 </template>
 
@@ -14,10 +16,29 @@
     components: {
       PostCard,
     },
+    fetch({ store, params}) {
+      return store.dispatch('posts/loadPost', params.id)
+    },
     computed: {
       post() {
-        return this.$store.state.posts.mainPosts.find(v => v.id === parseInt(this.$route.params.id, 10))
+        return this.$store.state.posts.mainPosts;
       }
     },
+    head() {
+      return {
+        title: `${this.post[0].User.nickname}님의 게시글`,
+        meta: [{
+          hid: 'desc', name: 'description', content: this.post[0].content,
+        }, {
+          hid: 'ogtitle', property: 'og:title', content: `${this.post[0].User.nickname}님의 게시글`,
+        }, {
+          hid: 'ogdesc', property: 'og:description', content: this.post[0].content,
+        }, {
+          hid: 'ogimage', property: 'og:image', content: this.post[0].Images[0] ? this.post[0].Images[0].src : 'https://vue.nodebird.com/vue-nodebird.png',
+        }, {
+          hid: 'ogurl', property: 'og:url', content: `http://localhost:3085/${this.post[0].id}`,
+        }],
+      };
+    }
   }
 </script>

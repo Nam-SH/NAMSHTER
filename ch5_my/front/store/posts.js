@@ -14,14 +14,13 @@ export const mutations = {
   },
 
   removeMainPost(state, payload) {
-    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload);
     state.mainPosts.splice(targetIndex, 1);
   },
 
   editMainPost(state, payload) {
-    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.id);
-    const newContent = payload.content
-    state.mainPosts.splice(targetIndex, 1, newContent);
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);    
+    state.mainPosts[targetIndex].content = payload.content
   },
 
   addComment(state, payload) {
@@ -29,6 +28,12 @@ export const mutations = {
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
   
+  // 글 하나 불러오기
+  loadPost(state, payload) {
+    state.mainPosts = [payload]
+  },
+
+  // 글 전체 불러오기
   loadPosts(state, payload) {
     if (payload.reset) {
       state.mainPosts = payload.data  
@@ -84,7 +89,7 @@ export const actions = {
       commit('addMainPost', res.data)
     })
     .catch((err) => {
-      console.error('add:::', err)
+      console.error('add :::', err)
     })
   },
 
@@ -94,15 +99,25 @@ export const actions = {
       withCredentials: true
     })
     .then((res) => {
-      commit('removeMainPost', res.data)
+      commit('removeMainPost', payload.postId)
     })
     .catch((err) => {
-      console.error('remove:::', err)
+      console.error('remove :::', err)
     })
   },
 
   edit({ commit }, payload) {
-    commit('editMainPost', payload)
+    return this.$axios.patch(`/post/${payload.postId}`, 
+      { content: payload.content }, 
+      { withCredentials: true 
+    })
+    .then((res) => {
+      commit('editMainPost', { postId: payload.postId, content: res.data})
+    })
+    .catch((err) => {
+      console.error('edit :::', err);
+      
+    })
   },
 
   addComment({ commit }, payload ) {
@@ -116,9 +131,21 @@ export const actions = {
       commit('addComment', res.data)
     })
     .catch((err) => {
-      console.error('addComment:::', err)
+      console.error('addComment :::', err)
     })
   },
+
+  // 글 한개 불러오기
+  async loadPost({ commit }, payload) {
+    try {      
+      const res = await this.$axios.get(`/post/${payload}`)      
+      commit('loadPost', res.data)
+    }
+    catch (err) {
+      console.error('loadPost :::', err)
+    }
+  },
+
   // 쓰로틀링 설정
   loadPosts: throttle( async function({ commit, state }, payload) {
     try {
