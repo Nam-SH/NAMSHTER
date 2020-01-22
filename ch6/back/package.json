@@ -2,12 +2,12 @@
   "name": "back",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "cross-env PORT=80 NODE_ENV=production start app.js"
   },
-  "author": "",
+  "author": "NAH-SH",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
