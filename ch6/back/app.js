@@ -85,7 +85,7 @@ app.listen(prod? process.env.PORT : 3085, () => {
   console.log('\u001b[36m', '     |                                                                 |');
   console.log('\u001b[35m', `     |              백엔드 서버 ${prod? process.env.PORT : 3085}번 프로에서 작동중...              |`);
   console.log('\u001b[36m', '     |                                                                 |');
-  console.log('\u001b[31m', `     |    ${prod? process.env.PORT : "http://localhost:3085"}          |`);
+  console.log('\u001b[31m', `     |        ${prod? process.env.PORT : "http://localhost:3085"}       |`);
   console.log('\u001b[36m', '     |                                                                 |');
   console.log('\u001b[36m', '     ╰----------------------------------------------------------------╯');
   console.log('\u001b[0m');
