@@ -43,7 +43,7 @@ router.get('/:tag', async (req, res, next) => {
     res.json(posts);
   } 
   catch (err) {
-    console.error('/:tag :::', err)
+    console.error('GET /:tag :::', err)
     next(err);
   }
 });

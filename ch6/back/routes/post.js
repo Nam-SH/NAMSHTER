@@ -17,7 +17,7 @@ const upload = multer({
       // ext: 확장자 이름을 뽑아온다.
       const ext = path.extname(file.originalname);
       const basename = path.basename(file.originalname, ext);
-      // 남승현.jpg  ==> basename: 남승현, ext: .jpg
+      // 남승현.jpg ==> basename: 남승현, ext: .jpg
       done(null, basename + Date.now() + ext);
     },
   }),
@@ -75,8 +75,8 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-// 글 작성(/post)
-router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
+// 글 작성(POST /post)
+router.post('/', isLoggedIn, async (req, res, next) => {
   try {
     const hashtags = req.body.content.match(/#[^\s#]+/g);
     const newPost = await db.Post.create({
@@ -123,6 +123,26 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   }
 });
 
+// 글 수정
+router.patch('/:id', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id } })
+    if (!post) {
+      return res.status(400).send('포스트가 존재하지 않습니다.');
+    }
+    await db.Post.update({
+      content: req.body.content,
+    }, {
+      where: { id: req.params.id }
+    });
+    res.json(req.body.content);
+  }
+  catch (err) {
+    console.error('PATCH /:id', err);
+    next(err)
+  }
+})
+
 // 글 삭제
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
   try {
@@ -139,7 +159,7 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
   }
   catch (err) {
     console.error(err)
-    next('delete(/:id) :::', err)
+    next('DELETE /:id :::', err)
   }
 })
 
@@ -170,7 +190,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
     return res.json(comment);
   }
   catch (err) {
-    console.error('POST/:id/comment :::', err)
+    console.error('POST /:id/comment :::', err)
     next(err)
   }
 })
