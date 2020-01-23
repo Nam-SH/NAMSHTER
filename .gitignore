@@ -4,6 +4,8 @@
 
 .env
 
+namshter.pem
+
 ### Django ###
 *.log
 *.pot
