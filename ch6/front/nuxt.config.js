@@ -17,15 +17,14 @@ module.exports = {
     }, {
       hid: 'ogtype', property: 'og:type', content: 'website',
     }, {
-      hid: 'ogimage', property: 'og:image', content: 'https://vue.nodebird.com/vue-nodebird.png',
+      hid: 'ogimage', property: 'og:image', content: 'https://namshter.com/vue-nodebird.png',
     }, {
-      hid: 'ogurl', property: 'og:url', content: 'https://vue.nodebird.com',
+      hid: 'ogurl', property: 'og:url', content: 'https://namshter.com',
     }],
     link: [{ rel: 'shortcut icon', href: '/donut.png' }],
   },
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/moment',
   ],
   buildModules: [
     '@nuxtjs/vuetify',
@@ -36,7 +35,6 @@ module.exports = {
   },
   build: {
     analyze: false,
-    extractCSS: true,
     extend(config, { isServer, isClient, isDev }) {
       // console.log('webpack :::', config, isServer, isClient);
       if (isServer && !isDev) {
