@@ -29,6 +29,7 @@ module.exports = {
   ],
   buildModules: [
     '@nuxtjs/vuetify',
+    '@nuxtjs/moment',
   ],
   moment: {
     locales: ['ko'],
@@ -46,8 +47,8 @@ module.exports = {
   plugins: [],
   vuetify: {},
   axios: {
-    browserBaseURL: 'http://localhost:3085',
-    baseURL: 'http://localhost:3085',
+    browserBaseURL: process.env.NODE_ENV === 'production' ? 'https://api.namshter.com/api' : 'http://localhost:3085',
+    baseURL: process.env.NODE_ENV === 'production' ? 'https://api.namshter.com/api' : 'http://localhost:3085',
     https: false
   },
   server: {

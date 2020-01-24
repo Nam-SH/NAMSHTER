@@ -2,7 +2,7 @@ const { Nuxt, Builder } = require('nuxt')
 
 const app = require('express')()
 const isProd = (process.env.NODE_ENV === 'production')
-const port = process.env.PORT || 3085
+const port = process.env.PORT || 3081
 
 // We instantiate Nuxt.js with the options
 const config = require('./nuxt.config.js')
@@ -22,6 +22,6 @@ if (config.dev) {
 
 function listen () {
   // Listen the server
-  app.listen(port, '0.0.0.0')
+  app.listen(port)
   console.log('Server listening on `localhost:' + port + '`.')
 }
