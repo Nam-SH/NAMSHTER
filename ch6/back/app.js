@@ -48,8 +48,6 @@ else {
   }));
 }
 
-
-
 // 정적파일 사용 => 서버에서 정확한 위치를 보이지 않이 위해, 단순히 / 로 요청을 받게 한다.
 app.use('/', express.static('uploads'));
 
@@ -64,7 +62,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: false,
-    domain: prod && '.manshter.com'
+    domain: prod && '.namshter.com'
   }
 }));
 
