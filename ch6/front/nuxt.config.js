@@ -45,11 +45,11 @@ module.exports = {
   plugins: [],
   vuetify: {},
   axios: {
-    browserBaseURL: process.env.NODE_ENV === 'http://api.namshter/api.com',
-    baseURL: process.env.NODE_ENV === 'http://api.namshter/api.com',
+    browserBaseURL: process.env.NODE_ENV === 'production' ? 'http://api.namshter.com' : 'http://localhost:3085',
+    baseURL: process.env.NODE_ENV === 'production' ? 'http://api.namshter.com' : 'http://localhost:3085',
     https: false
   },
   server: {
-    port: process.env.PORT,
+    port: process.env.PORT || 3081,
   },
 }

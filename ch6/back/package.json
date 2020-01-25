@@ -10,6 +10,7 @@
   "author": "NAM-SH",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.610.0",
     "bcrypt": "^3.0.6",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
