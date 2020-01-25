@@ -45,8 +45,8 @@ module.exports = {
   plugins: [],
   vuetify: {},
   axios: {
-    browserBaseURL: process.env.NODE_ENV === 'http://api.namshter.com',
-    baseURL: process.env.NODE_ENV === 'http://api.namshter.com',
+    browserBaseURL: process.env.NODE_ENV === 'http://api.namshter/api.com',
+    baseURL: process.env.NODE_ENV === 'http://api.namshter/api.com',
     https: false
   },
   server: {
