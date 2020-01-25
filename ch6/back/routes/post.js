@@ -11,43 +11,49 @@ const db = require('../models');
 // 시간
 const path = require('path')
 
-AWS.config.update({
-  region: 'us-east-2',
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
-})
 
-
-const upload = multer({
-  // storage: multer.diskStorage({
-  //   destination(req, file, done) {
-  //     // 실패시 null, 성공시 uploads에 저장
-  //     done(null, 'uploads');
-  //   },
-  //   filename(req, file, done) {
-  //     // ext: 확장자 이름을 뽑아온다.
-  //     const ext = path.extname(file.originalname);
-  //     const basename = path.basename(file.originalname, ext);
-  //     // 남승현.jpg ==> basename: 남승현, ext: .jpg
-  //     done(null, basename + Date.now() + ext);
-  //   },
-  // }),
-  storage: multerS3({
-    s3: new AWS.S3(),
-    bucket: 'namshter',
-    key(req, file, cb) {
-      cb(null, `original/${Date.new()}${path.basename(file.originalname)}`)
-    }
-  }),
-  limit: { fileSize: 1000 * 1024 * 1024 },
-});
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, done) {
+//       // 실패시 null, 성공시 uploads에 저장
+//       done(null, 'uploads');
+//     },
+//     filename(req, file, done) {
+//       // ext: 확장자 이름을 뽑아온다.
+//       const ext = path.extname(file.originalname);
+//       const basename = path.basename(file.originalname, ext);
+//       // 남승현.jpg ==> basename: 남승현, ext: .jpg
+//       done(null, basename + Date.now() + ext);
+//     },
+//   }),
+//   limit: { fileSize: 1000 * 1024 * 1024 },
+// });
 
 // 이미지업로드 (/post/images)
 // router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
 //   // console.log(req.files);
 //   res.json(req.files.map(v => v.filename));
 // });
-router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
+
+// 배포용
+AWS.config.update({
+  region: 'us-east-2',
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+})
+
+const upload = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: 'namshter',
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}${path.basename(file.originalname)}`)
+    }
+  }),
+  limit: { fileSize: 1000 * 1024 * 1024 },
+});
+
+router.post('/images', isLoggedIn, upload.array('image'), (req, res) => {
   // console.log(req.files);
   res.json(req.files.map(v => v.location));
 });
