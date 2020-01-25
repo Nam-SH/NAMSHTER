@@ -4,8 +4,8 @@ const cors = require('cors');
 const db = require('./models');
 const app = express();
 
-const hpp = require('hpp')
-const helmet = require('helmet')
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 const session = require('express-session');
 const passport = require('passport');
@@ -18,7 +18,7 @@ const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const hashtagRouter = require('./routes/hashtag');
 
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
 
 // 배포용인지 확인
 const prod = process.env.NODE_ENV === 'production';
@@ -28,7 +28,7 @@ const prod = process.env.NODE_ENV === 'production';
 db.sequelize.sync();
 passportConfig();
 
-dotenv.config()
+dotenv.config();
 
 if (prod) {
   // 배포용
@@ -41,7 +41,7 @@ if (prod) {
   }));
 }
 else {
-  app.use(morgan('dev'))
+  app.use(morgan('dev'));
   app.use(cors({
     origin: 'http://localhost:3081',
     credentials: true,
