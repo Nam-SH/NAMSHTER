@@ -43,9 +43,13 @@ const upload = multer({
 });
 
 // 이미지업로드 (/post/images)
+// router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
+//   // console.log(req.files);
+//   res.json(req.files.map(v => v.filename));
+// });
 router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   // console.log(req.files);
-  res.json(req.files.map(v => v.filename));
+  res.json(req.files.map(v => v.location));
 });
 
 // 글 상세보기(/post/:id) - 글하나만 가져오기
