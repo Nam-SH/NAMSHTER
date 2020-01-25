@@ -3,16 +3,16 @@
     <v-container>
       <v-form ref="form" @submit.prevent="onSubmitForm">
         <v-textarea 
-        v-model="content"
-        outlined
-        auto-grow
-        clearable
-        label="무슨 일 있었음?ㅋㅋ"
-        :error="error"
-        :hide-details="hideDetails"
-        :success-messages="successMessages"
-        :success="success"
-        @input="onChangeTextarea"
+          v-model="content"
+          outlined
+          auto-grow
+          clearable
+          label="무슨 일 있었음?ㅋㅋ"
+          :error="error"
+          :hide-details="hideDetails"
+          :success-messages="successMessages"
+          :success="success"
+          @input="onChangeTextarea"
         />
         <v-alert
           v-if="alert"
@@ -80,7 +80,6 @@
         const adduser = this.$store.dispatch('users/loadUser')
         Promise.all([addpost, adduser])
         .then(() => {
-          this.$store.dispatch('users/loadUser')
           this.content = '';
           this.hideDetails = false;
           this.success = true;

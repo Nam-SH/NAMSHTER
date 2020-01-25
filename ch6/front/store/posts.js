@@ -264,7 +264,7 @@ export const actions = {
       console.error('likePost:::', err)
     })
   },
-
+  
   // 싫어요
   unlikePost({ commit }, payload) {
     return this.$axios.delete(`/post/${payload.postId}/like`, {

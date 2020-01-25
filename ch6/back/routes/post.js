@@ -39,7 +39,7 @@ const path = require('path')
 AWS.config.update({
   region: 'us-east-2',
   accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
 })
 
 const upload = multer({
@@ -48,9 +48,9 @@ const upload = multer({
     bucket: 'namshter',
     key(req, file, cb) {
       cb(null, `original/${Date.now()}${path.basename(file.originalname)}`)
-    }
+    },
   }),
-  limit: { fileSize: 1000 * 1024 * 1024 },
+  limit: { fileSize: 20 * 1024 * 1024 },
 });
 
 router.post('/images', isLoggedIn, upload.array('image'), (req, res) => {
