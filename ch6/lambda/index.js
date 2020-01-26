@@ -12,7 +12,7 @@ exports.handler = async (event, context, callback) => {
   const filename = Key.split('/')[Key.split('/').length - 1];
   const ext = Key.split('.')[Key.split('.').length - 1];
   
-  console.log(Key, filename, ext);
+  // console.log(Key, filename, ext);
 
   // sharp는 jpg를 사용한하고 jpeg를 사용하므로 확장자를 바꿔야 함
   const requiredFormat = ext === 'jpg' ? 'jpeg' : ext; 
@@ -23,6 +23,8 @@ exports.handler = async (event, context, callback) => {
       Bucket,
       Key,
     }).promise();
+    console.log('아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ아아아아아아');
+    
 
     // console.log('original', s3Object.Body.length);
     const resizedImage = await Sharp(s3Object.Body)
