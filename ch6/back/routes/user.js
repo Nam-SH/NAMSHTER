@@ -106,8 +106,8 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
         });
         return res.json(fullUser);
       });
-    })(req, res, next);
-  } 
+    }) (req, res, next);
+  }
   catch (err) {
     console.error('POST-3 / :::', err);
     return next(err);
