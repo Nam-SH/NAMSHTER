@@ -23,12 +23,11 @@ export const mutations = {
     const newContent = payload.content
     state.mainPosts.splice(targetIndex, 1, newContent);
   },
-
+  
   addComment(state, payload) {
     const targetIndex = state.mainPosts.findIndex(v => v.id === payload.PostId);
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
-  
   
   // 글 하나 불러오기
   loadPost(state, payload) {

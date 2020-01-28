@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --open",
     "build": "nuxt build",
     "prestart": "npm run build",
     "start": "cross-env PORT=80 NODE_ENV=production pm2 start server.js",
