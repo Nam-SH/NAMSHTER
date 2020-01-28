@@ -34,7 +34,7 @@ module.exports = {
     locales: ['ko'],
   },
   build: {
-    analyze: false,
+    analyze: true,
     extend(config, { isServer, isClient, isDev }) {
       // console.log('webpack :::', config, isServer, isClient);
       if (isServer && !isDev) {
