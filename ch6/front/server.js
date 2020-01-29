@@ -15,7 +15,7 @@ app.use(nuxt.render)
 // Build only in dev mode with hot-reloading
 if (config.dev) {
   new Builder(nuxt).build()
-    .then(listen)
+  .then(listen)
 } else {
   listen()
 }

@@ -7,13 +7,16 @@ import {
 } from './utils'
 
 import NuxtLoading from './components/nuxt-loading.vue'
+import NuxtBuildIndicator from './components/nuxt-build-indicator'
+
+import '..\\node_modules\\vuetify\\dist\\vuetify.css'
 
 import _6f6c098b from '..\\layouts\\default.vue'
 
 const layouts = { "_default": _6f6c098b }
 
 export default {
-  head: {"title":"NodeBird","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover"},{"http-equiv":"X-UA-Compatible","content":"IE=edge"},{"hid":"desc","name":"description","content":"Namshter"},{"hid":"ogtitle","name":"og:title","content":"Namshter"},{"hid":"ogdesc","name":"og:description","content":"nam의 Namshter"},{"hid":"ogtype","property":"og:type","content":"website"},{"hid":"ogimage","property":"og:image","content":"https:\u002F\u002Fnamshter.com\u002Fvue-nodebird.png"},{"hid":"ogurl","property":"og:url","content":"https:\u002F\u002Fnamshter.com"}],"link":[{"rel":"shortcut icon","href":"\u002Fdonut.png"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"}],"style":[],"script":[]},
+  head: {"title":"Namshter","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover"},{"http-equiv":"X-UA-Compatible","content":"IE=edge"},{"hid":"desc","name":"description","content":"Namshter"},{"hid":"ogtitle","name":"og:title","content":"Namshter"},{"hid":"ogdesc","name":"og:description","content":"nam의 Namshter"},{"hid":"ogtype","property":"og:type","content":"website"},{"hid":"ogimage","property":"og:image","content":"https:\u002F\u002Fimg.favpng.com\u002F22\u002F12\u002F5\u002Fdonuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg"},{"hid":"ogurl","property":"og:url","content":"https:\u002F\u002Fnamshter.com"}],"link":[{"rel":"shortcut icon","href":"\u002Fdonut.png"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"}],"style":[],"script":[]},
 
   render (h, props) {
     const loadingEl = h('NuxtLoading', { ref: 'loading' })
@@ -47,7 +50,7 @@ export default {
       }
     }, [
       loadingEl,
-
+      h(NuxtBuildIndicator),
       transitionEl
     ])
   },
@@ -157,6 +160,10 @@ export default {
     },
 
     setLayout (layout) {
+      if(layout && typeof layout !== 'string') {
+        throw new Error('[nuxt] Avoid using non-string value as layout property.')
+      }
+
       if (!layout || !layouts['_' + layout]) {
         layout = 'default'
       }

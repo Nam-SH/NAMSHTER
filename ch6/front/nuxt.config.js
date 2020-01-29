@@ -1,6 +1,6 @@
 module.exports = {
   head: {
-    title: 'NodeBird',
+    title: 'Namshter',
     meta: [{
       charset: 'utf-8',
     }, {
@@ -17,7 +17,7 @@ module.exports = {
     }, {
       hid: 'ogtype', property: 'og:type', content: 'website',
     }, {
-      hid: 'ogimage', property: 'og:image', content: 'https://namshter.com/vue-nodebird.png',
+      hid: 'ogimage', property: 'og:image', content: 'https://img.favpng.com/22/12/5/donuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg',
     }, {
       hid: 'ogurl', property: 'og:url', content: 'https://namshter.com',
     }],
@@ -34,7 +34,20 @@ module.exports = {
     locales: ['ko'],
   },
   build: {
-    analyze: true,
+    extractCSS: true,
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          styles: {
+            name: 'styles',
+            test: /\.(css|vue)$/,
+            chunks: 'all',
+            enforce: true
+          }
+        }
+      }
+    },
+    analyze: false,
     extend(config, { isServer, isClient, isDev }) {
       // console.log('webpack :::', config, isServer, isClient);
       if (isServer && !isDev) {
