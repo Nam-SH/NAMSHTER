@@ -14,7 +14,7 @@ exports.handler = async (event, context, callback) => {
   
   // console.log(Key, filename, ext);
 
-  // sharp는 jpg를 사용한하고 jpeg를 사용하므로 확장자를 바꿔야 함
+  // sharp는 jpg를 사용 안 하고 jpeg를 사용하므로 확장자를 바꿔야 함
   const requiredFormat = ext === 'jpg' ? 'jpeg' : ext; 
   
   try {
@@ -37,6 +37,7 @@ exports.handler = async (event, context, callback) => {
       Bucket,
       Key: `thumb/${filename}`,
     }).promise();
+    
     return callback(null, `thumb/${filename}`);
   } 
   catch (err) {

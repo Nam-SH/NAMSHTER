@@ -35,6 +35,7 @@ const path = require('path')
 //   res.json(req.files.map(v => v.filename));
 // });
 
+
 // 배포용
 AWS.config.update({
   region: 'us-east-2',
