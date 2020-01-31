@@ -12,9 +12,9 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_plugin_2b55200b from 'nuxt_plugin_plugin_2b55200b' // Source: .\\vuetify\\plugin.js (mode: 'all')
-import nuxt_plugin_axios_32006ba8 from 'nuxt_plugin_axios_32006ba8' // Source: .\\axios.js (mode: 'all')
-import nuxt_plugin_moment_07a50cec from 'nuxt_plugin_moment_07a50cec' // Source: .\\moment.js (mode: 'all')
+import nuxt_plugin_plugin_01232feb from 'nuxt_plugin_plugin_01232feb' // Source: .\\vuetify\\plugin.js (mode: 'all')
+import nuxt_plugin_axios_26865e4c from 'nuxt_plugin_axios_26865e4c' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_moment_8e1e0668 from 'nuxt_plugin_moment_8e1e0668' // Source: .\\moment.js (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -171,16 +171,16 @@ async function createApp (ssrContext) {
 
   // Plugin execution
 
-  if (typeof nuxt_plugin_plugin_2b55200b === 'function') {
-    await nuxt_plugin_plugin_2b55200b(app.context, inject)
+  if (typeof nuxt_plugin_plugin_01232feb === 'function') {
+    await nuxt_plugin_plugin_01232feb(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_axios_32006ba8 === 'function') {
-    await nuxt_plugin_axios_32006ba8(app.context, inject)
+  if (typeof nuxt_plugin_axios_26865e4c === 'function') {
+    await nuxt_plugin_axios_26865e4c(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_moment_07a50cec === 'function') {
-    await nuxt_plugin_moment_07a50cec(app.context, inject)
+  if (typeof nuxt_plugin_moment_8e1e0668 === 'function') {
+    await nuxt_plugin_moment_8e1e0668(app.context, inject)
   }
 
   // If server-side, wait for async component to be resolved first

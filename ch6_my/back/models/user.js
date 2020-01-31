@@ -13,15 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    provider: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-      defaultValue: 'local',
-    },
-    snsId: {
-      type: DataTypes.STRING(30),
-      allowNull: true,
-    },
   }, {
     charset: 'utf8',
     collate: 'utf8_general_ci', // 한글 저장돼요

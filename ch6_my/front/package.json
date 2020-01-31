@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --open",
     "build": "nuxt build",
     "prestart": "npm run build",
     "start": "cross-env PORT=80 NODE_ENV=production pm2 start server.js",
@@ -15,15 +15,15 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.9.3",
     "@nuxtjs/moment": "^1.5.0",
-    "@nuxtjs/vuetify": "^1.10.1",
-    "axios": "^0.19.1",
+    "@nuxtjs/vuetify": "^1.10.2",
+    "axios": "^0.19.2",
     "cross-env": "^6.0.3",
     "express": "^4.17.1",
     "lodash.throttle": "^4.1.1",
     "nuxt": "^2.11.0",
     "pm2": "^4.2.3",
     "vue": "^2.6.11",
-    "vuetify": "^2.2.4"
+    "vuetify": "^2.2.8"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

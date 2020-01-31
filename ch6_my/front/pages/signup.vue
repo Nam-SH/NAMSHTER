@@ -100,7 +100,7 @@
     },
     methods: {
       onSubmitForm() {
-        if (this.$refs.form.validate()) {
+        // if (this.$refs.form.validate()) {
           this.$store.dispatch('users/signUp', {
             email: this.email,
             nickname: this.nickname,
@@ -113,7 +113,7 @@
             console.log('onSubmitForm :::', err)
             alert('회원가입에 실패했네여;;')
           })
-        }
+        // }
       },
     },
     head() {

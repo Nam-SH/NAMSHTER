@@ -65,7 +65,6 @@ export const mutations = {
 }
 
 export const actions = {
-
   // 사용자정보 가져오기
   async loadUser({ commit }) {
     try {
@@ -76,7 +75,13 @@ export const actions = {
       return
     }
     catch (err) {
-      console.error('loadUser :::', err);
+      if (err.response.status === 401) {
+        console.log('로그인해줘요');
+      }
+      else {
+        console.log('loadUser :::', err.response.status);
+        console.log('loadUser :::', err.response.statusText);
+      }
     }
   },
 

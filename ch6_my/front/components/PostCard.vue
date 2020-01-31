@@ -7,7 +7,7 @@
           <post-content :post="post.Retweet" />
         </v-card>
       </div>
-      <post-content v-else :post="post" />
+      <post-content v-else :post="post" :isEditting="isEditting" @onEditPost="onEditPost" />
 
       <v-card-actions>
         <v-btn text color="orange" @click="onRetweet">
@@ -76,6 +76,10 @@
       post: {
         type: Object,
         required: true
+      },
+      fromIndex: {
+        type: Boolean,
+        required: true,
       }
     },
     data() {
@@ -83,6 +87,8 @@
         commentOpened: false,
         avgTotal: 0,
         commentList: this.post.Comments,
+
+        isEditting: false,
       }
     },
     computed: {
@@ -103,7 +109,7 @@
         })
       },
       onEditPost() {
-        alert('아직 구현 안함')
+        this.isEditting = !this.isEditting
       },
       async onComment() {
         if (!this.commentOpened) {         

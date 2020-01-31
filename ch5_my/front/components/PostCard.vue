@@ -110,7 +110,6 @@
       },
       onEditPost() {
         this.isEditting = !this.isEditting
-        // alert('아직 구현 안함')
       },
       avg() {
         if (this.commentList && this.commentList.length) {

@@ -1,5 +1,4 @@
 const passport = require('passport');
-
 const local = require('./local');
 const db = require('../models');;
 
@@ -29,7 +28,7 @@ module.exports = () => {
           attributes: ['id'],
         }],
       });
-      return done(null, user);
+      return done(null, user); // req.user, req.isAuthenticated() === true,
     } 
     catch (err) {
       console.error(err);

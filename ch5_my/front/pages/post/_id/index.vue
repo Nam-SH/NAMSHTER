@@ -26,7 +26,7 @@
     },
     head() {
       return {
-        title: `${this.post[0].User.nickname}님의 게시글`,
+        title: `${this.post.User.nickname}님의 게시글`,
         meta: [{
           hid: 'desc', name: 'description', content: this.post[0].content,
         }, {

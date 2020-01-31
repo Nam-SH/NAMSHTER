@@ -20,15 +20,13 @@ export const mutations = {
 
   editMainPost(state, payload) {
     const targetIndex = state.mainPosts.findIndex(v => v.id === payload.id);
-    const newContent = payload.content
-    state.mainPosts.splice(targetIndex, 1, newContent);
+    state.mainPosts[targetIndex].content = payload.content
   },
-
+  
   addComment(state, payload) {
     const targetIndex = state.mainPosts.findIndex(v => v.id === payload.PostId);
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
-  
   
   // 글 하나 불러오기
   loadPost(state, payload) {
@@ -45,8 +43,6 @@ export const mutations = {
     }
     state.hasMorePost =  payload.data.length === 10;
   },
-
-  
 
   // 댓글 요청하기
   loadComments(state, payload) {
@@ -111,7 +107,16 @@ export const actions = {
   },
 
   edit({ commit }, payload) {
-    commit('editMainPost', payload)
+    return this.$axios.patch(`/post/${payload.postId}`, 
+      { content: payload.content }, 
+      { withCredentials: true 
+    })
+    .then((res) => {
+      commit('editMainPost', { postId: payload.postId, content: res.data})
+    })
+    .catch((err) => {
+      console.error('edit :::', err);
+    })
   },
 
   addComment({ commit }, payload ) {
@@ -287,10 +292,13 @@ export const actions = {
       withCredentials: true
     })
     .then((res) => {
+      // res.data에는 리트윗한 나의 User id, nickname
+      // 원본글의 Id와, 글 작성자의 User id, nickname, 글의 image 주소가 들어있다.
       commit('addMainPost', res.data)
     })
     .catch((err) => {
       console.error('retweet:::', err)
+      // 작성한 에러메시지
       alert(err.response.data)
     })
   }

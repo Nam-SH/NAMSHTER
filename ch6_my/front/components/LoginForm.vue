@@ -1,7 +1,6 @@
 <template>
   <v-container v-if="!me">
     <v-card>
-      {{ me }}
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
           <v-text-field 
@@ -67,7 +66,6 @@
       }
     },
     methods: {
-
       onSubmitForm() {
         if (this.$refs.form.validate()) {
           this.$store.dispatch('users/logIn', {
@@ -78,7 +76,7 @@
             this.$router.push({ path: '/', });
           })
           .catch((err) => {
-            console.error(err)
+            console.log(err)
             alert('회원가입 실패!!')
           })
         }

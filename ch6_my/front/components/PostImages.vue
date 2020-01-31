@@ -1,6 +1,7 @@
 <template>
   <div v-if="images.length === 0"></div>
   <div v-else-if="images.length === 1">
+    <!-- :src="`http://localhost:3085/${images[0].src}`"  -->
     <v-img 
       :src="images[0].src.replace(/original\//, 'thumb/')" 
       contain 

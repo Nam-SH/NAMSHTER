@@ -11,28 +11,53 @@ const db = require('../models');
 // 시간
 const path = require('path')
 
-// 배포용
-AWS.config.update({
-  region: 'us-east-2',
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-})
 
 const upload = multer({
-  storage: multerS3({
-    s3: new AWS.S3(),
-    bucket: 'namshter',
-    key(req, file, cb) {
-      cb(null, `original/${Date.now()}${path.basename(file.originalname)}`)
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      // 실패시 null, 성공시 uploads에 저장
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      // ext: 확장자 이름을 뽑아온다.
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      // 남승현.jpg ==> basename: 남승현, ext: .jpg
+      done(null, basename + Date.now() + ext);
     },
   }),
-  limit: { fileSize: 20 * 1024 * 1024 },
+  limit: { fileSize: 1000 * 1024 * 1024 },
 });
 
-router.post('/images', isLoggedIn, upload.array('image'), (req, res) => {
+// 이미지업로드 (/post/images)
+router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
   // console.log(req.files);
-  res.json(req.files.map(v => v.location));
+  res.json(req.files.map(v => v.filename));
 });
+
+
+// 배포용
+// AWS.config.update({
+//   region: 'us-east-2',
+//   accessKeyId: process.env.S3_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+// });
+
+// const upload = multer({
+//   storage: multerS3({
+//     s3: new AWS.S3(),
+//     bucket: 'namshter',
+//     key(req, file, cb) {
+//       cb(null, `original/${Date.now()}${path.basename(file.originalname)}`)
+//     },
+//   }),
+//   limit: { fileSize: 20 * 1024 * 1024 },
+// });
+
+// router.post('/images', isLoggedIn, upload.array('image'), (req, res) => {
+//   // console.log(req.files);
+//   res.json(req.files.map(v => v.location));
+// });
 
 // 글 상세보기(/post/:id) - 글하나만 가져오기
 router.get('/:id', async (req, res, next) => {

@@ -29,9 +29,6 @@
 
     <v-row no-gutters>
       <v-col cols="12" md="4">
-        <v-row>
-          
-        </v-row>
         <login-form />
       </v-col>
       <v-col cols="12" md="8">

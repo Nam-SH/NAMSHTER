@@ -4,7 +4,7 @@
   </v-container>
   <div v-else>
     <v-container>
-      글이 없는데요
+      글이 없어욧!!
     </v-container>
   </div>
 </template>
