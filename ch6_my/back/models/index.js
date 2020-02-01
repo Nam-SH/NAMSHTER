@@ -11,6 +11,11 @@ db.Comment = require('./comment')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag')(sequelize, Sequelize);
 db.Image = require('./image')(sequelize, Sequelize);
 
+db.Group = require('./group')(sequelize, Sequelize);
+db.Groupcomment = require('./groupcomment')(sequelize, Sequelize);
+db.Groupimage = require('./groupimage')(sequelize, Sequelize);
+db.Grouppost = require('./grouppost')(sequelize, Sequelize);
+
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

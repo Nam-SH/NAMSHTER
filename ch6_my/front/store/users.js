@@ -75,13 +75,7 @@ export const actions = {
       return
     }
     catch (err) {
-      if (err.response.status === 401) {
-        console.log('로그인해줘요');
-      }
-      else {
-        console.log('loadUser :::', err.response.status);
-        console.log('loadUser :::', err.response.statusText);
-      }
+      
     }
   },
 

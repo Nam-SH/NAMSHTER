@@ -13,6 +13,7 @@ const passportConfig = require('./passport');
 const cookie = require('cookie-parser');
 const morgan = require('morgan');
 
+const loginRouter = require('./routes/login');
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
@@ -24,8 +25,8 @@ const dotenv = require('dotenv');
 const prod = process.env.NODE_ENV === 'production';
 
 // db 강제로 덮어씌우기
-// db.sequelize.sync({force: true})
-db.sequelize.sync();
+db.sequelize.sync({force: true})
+// db.sequelize.sync();
 passportConfig();
 
 dotenv.config();
@@ -74,6 +75,7 @@ app.get('/', (req, res) => {
   res.status(200).send('여기는 백엔드');
 })
 
+app.use('/login', loginRouter)
 app.use('/user', userRouter)
 app.use('/post', postRouter)
 app.use('/posts', postsRouter)

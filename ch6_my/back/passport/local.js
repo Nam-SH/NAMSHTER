@@ -20,6 +20,7 @@ module.exports = () => {
       } else {
         return done(null, false, { reason: '비밀번호가 틀립니다.' });
       }
+      
     }
     catch (err) {
       console.error('local.js :::', err);

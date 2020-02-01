@@ -27,7 +27,17 @@
         </v-container>
       </v-form>
     </v-card>
+    <div class="my-2">
+      <v-btn color="yellow accent-3" fab dark to="/login/auth/kakao">
+        <img
+        src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+      />
+      </v-btn>
+    </div>s
+
   </v-container>
+
+
   <v-container v-else>
     <v-card>
       <v-container>

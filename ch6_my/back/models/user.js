@@ -13,6 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    provider: {
+      type: DataTypes.STRING(20),
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     charset: 'utf8',
     collate: 'utf8_general_ci', // 한글 저장돼요
@@ -21,12 +28,17 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (db) => {
     db.User.hasMany(db.Post)
     db.User.hasMany(db.Comment)
+    
     db.User.belongsToMany(db.Post, 
       { through: 'Like', as: 'Liked' })
     db.User.belongsToMany(db.User, 
       { through: 'Follow', as: 'Followers', foreignKey: 'followingId' })
     db.User.belongsToMany(db.User, 
       { through: 'Follow', as: 'Followings',foreignKey: 'followerId' })
+    
+    db.User.belongsToMany(db.Group, { through: 'GroupUser' })
+    db.User.hasMany(db.Grouppost)
+    db.User.hasMany(db.Groupcomment)
   };
   
   return User;

@@ -1,5 +1,6 @@
 const passport = require('passport');
 const local = require('./local');
+const kakao = require('./kakao');
 const db = require('../models');;
 
 module.exports = () => {
@@ -32,8 +33,9 @@ module.exports = () => {
     } 
     catch (err) {
       console.error(err);
-      return done('deserializeUser :::', err);
+      return done(err);
     }
   });
   local();
+  kakao();
 };
