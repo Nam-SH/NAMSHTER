@@ -19,7 +19,7 @@ export const mutations = {
   },
 
   editMainPost(state, payload) {
-    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.id);
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);    
     state.mainPosts[targetIndex].content = payload.content
   },
   
@@ -43,6 +43,8 @@ export const mutations = {
     }
     state.hasMorePost =  payload.data.length === 10;
   },
+
+  
 
   // 댓글 요청하기
   loadComments(state, payload) {
@@ -116,6 +118,7 @@ export const actions = {
     })
     .catch((err) => {
       console.error('edit :::', err);
+      
     })
   },
 

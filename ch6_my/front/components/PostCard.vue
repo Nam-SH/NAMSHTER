@@ -4,10 +4,12 @@
       <div v-if="post.RetweetId && post.Retweet">
         <v-subheader>{{ post.User.nickname }}님이 리트윗했다. </v-subheader>
         <v-card style="margin: 0 20px">
-          <post-content :post="post.Retweet" />
+          <post-content :post="post.Retweet" :isEditting="isEditting" />
         </v-card>
       </div>
       <post-content v-else :post="post" :isEditting="isEditting" @onEditPost="onEditPost" />
+
+      <v-btn v-if="fromIndex" text color="primary" nuxt-link :to="`/post/${post.id}`">상세보기</v-btn>
 
       <v-card-actions>
         <v-btn text color="orange" @click="onRetweet">
@@ -40,9 +42,8 @@
 
     <!-- 댓글 창 클릭시 -->
     <template v-if="commentOpened" >
-      <comment-form :post-id="post.id" style="margin-bottom: 30px" />
-
-      <v-list style="margin-bottom: 20px">
+      <comment-form :post-id="post.id" style="margin-bottom: 30px" :change="AvgRank" />    
+      <v-list style="margin-bottom: 20px">        
         <div> 댓글 수: {{ post.Comments.length }}개 </div>
         <div> 평점 평균: {{ avgTotal }}점 </div>
         <hr>
@@ -58,7 +59,6 @@
         </v-list-item>
       </v-list>
     </template>
-
   </div>
 </template>
 
@@ -86,8 +86,7 @@
       return {
         commentOpened: false,
         avgTotal: 0,
-        commentList: this.post.Comments,
-
+        commentList: null,
         isEditting: false,
       }
     },
@@ -101,7 +100,11 @@
       heartIcon() {
         return this.liked ? "mdi-heart" : "mdi-heart-outline";
       },
+      AvgRank () {
+        return this.commentOpened ? this.onAvgRank(this.post.Comments) : pass
+      },
     },
+
     methods: {
       onRemovePost() {
         this.$store.dispatch('posts/remove', {
@@ -121,12 +124,12 @@
       onClickHeart () {
         if (!this.me) {
           return alert('로그인이 필요합니다.')
-        }
+        };
         if (this.liked) {
           return this.$store.dispatch('posts/unlikePost', {
             postId: this.post.id,
           })
-        }
+        };
         return this.$store.dispatch('posts/likePost', {
           postId: this.post.id,
         })
@@ -140,6 +143,14 @@
           postId: this.post.id,
         })
       },
+      onAvgRank(comments) {
+        if (!comments.length) return
+        let res = 0;
+        for (let one of comments) {
+          res += one.score;
+        }
+        return this.avgTotal = res/comments.length
+      }
     },
   }
 </script>

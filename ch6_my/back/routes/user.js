@@ -8,7 +8,6 @@ const db = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
 
 
-
 // 사용자정보 가져오기
 router.get('/', isLoggedIn, async (req, res, next) => {
   const user = req.user;
@@ -20,7 +19,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: { id: parseInt(req.params.id, 10) },
-      attributes: ['id', 'nickname'],
+      attributes: ['id', 'nickname', 'name', 'isAdmin'],
       include: [
         {
         model: db.Post,
@@ -71,6 +70,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
     await db.User.create({
       email: req.body.email,
       password: hash,
+      name: req.body.name,
       nickname: req.body.nickname,
     }); // HTTP STATUS CODE
     passport.authenticate('local', (err, user, info) => {
@@ -88,7 +88,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
         }
         const fullUser = await db.User.findOne({
           where: { id: user.id },
-          attributes: ['id', 'email', 'nickname'],
+          attributes: ['id', 'email', 'nickname', 'name', 'isAdmin'],
           include: [{
             model: db.Post,
             attributes: ['id'],
@@ -132,7 +132,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       }
       const fullUser = await db.User.findOne({
         where: { id: user.id },
-        attributes: ['id', 'email', 'nickname'],
+        attributes: ['id', 'email', 'nickname', 'name', 'isAdmin'],
         include: [{
           model: db.Post,
           attributes: ['id'],
@@ -302,7 +302,7 @@ router.get('/:id/posts', async (req, res, next) => {
       where,
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname', 'name', 'isAdmin'],
       }, {
         model: db.Image,
       }, {

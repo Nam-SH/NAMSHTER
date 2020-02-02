@@ -1,10 +1,10 @@
 <template>
-  <v-container v-if="mainPosts">
-     <post-card :post="mainPosts[0]" />
+  <v-container v-if="post">
+     <post-card :post="post" :fromIndex="false" />
   </v-container>
   <div v-else>
     <v-container>
-      글이 없어욧!!
+      글이 없는데요;;
     </v-container>
   </div>
 </template>
@@ -20,8 +20,8 @@
       return store.dispatch('posts/loadPost', params.id)
     },
     computed: {
-      mainPosts() {
-        return this.$store.state.posts.mainPosts;
+      post() {
+        return this.$store.state.posts.mainPosts[0];
       }
     },
     head() {

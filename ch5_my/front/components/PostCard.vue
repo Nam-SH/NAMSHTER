@@ -112,13 +112,7 @@
         this.isEditting = !this.isEditting
       },
       avg() {
-        if (this.commentList && this.commentList.length) {
-          let val = 0          
-          for(let i in this.commentList) {
-            val += this.commentList[i].score
-          }
-          this.avgTotal = val
-          }
+        
       },
       async onComment() {
         if (!this.commentOpened) {         

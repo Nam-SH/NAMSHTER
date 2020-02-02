@@ -8,7 +8,7 @@
           <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
         </h3>
       </v-card-title>
-      
+
       <v-card-text v-if="!isEditting">
         <div> 
           <template v-for="(node, i) in nodes">
@@ -55,6 +55,7 @@
     props: {
       post: {
         type: Object,
+        required: true,
       },
       isEditting: {
         type: Boolean,

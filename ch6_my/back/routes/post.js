@@ -70,7 +70,7 @@ router.get('/:id', async (req, res, next) => {
         {
           // 작성자 정보
           model: db.User,
-          attributes: ['id', 'nickname']
+          attributes: ['id', 'nickname', 'name', 'isAdmin']
         },
         {
           model: db.Image,
@@ -130,9 +130,9 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     const fullPost = await db.Post.findOne({
       where: { id: newPost.id },
       include: [{
-        // 요청을 받으면 프론트에 User: { id:!, nickname: "남승현" } 형식이 추가된다.
+        // 요청을 받으면 프론트에 User: { id: 1, nickname: "남승현" } 형식이 추가된다.
         model: db.User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname', 'name', 'isAdmin'],
       }, {
         model: db.Image,
       }, {
@@ -213,7 +213,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
       },
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname']
+        attributes: ['id', 'nickname', 'name', 'isAdmin']
       }]
     });
     return res.json(comment);
@@ -237,7 +237,7 @@ router.get('/:id/comments', async (req, res, next) => {
       },
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname', 'name', 'isAdmin'],
       }],
       order: [['createdAt', 'ASC']],
     });
@@ -289,13 +289,13 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
       where: { id: retweet.id },
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname']
+        attributes: ['id', 'nickname', 'name', 'isAdmin']
       }, {
         model:db.Post,
         as: 'Retweet',
         include: [{
           model: db.User,
-          attributes: ['id', 'nickname'],
+          attributes: ['id', 'nickname', 'name', 'isAdmin'],
         }, {
           model: db.Image,
         }, {

@@ -27,21 +27,12 @@
         </v-container>
       </v-form>
     </v-card>
-    <div class="my-2">
-      <v-btn color="yellow accent-3" fab dark to="/login/auth/kakao">
-        <img
-        src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
-      />
-      </v-btn>
-    </div>s
-
   </v-container>
-
-
   <v-container v-else>
     <v-card>
       <v-container>
-        {{ me.nickname }} 로그인이 되었습니다.
+        <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
+        {{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.
         <v-btn @click="onLogOut">로그아웃</v-btn>
         <v-row>
           <v-col col="4">{{ me.Followings.length }}명을 팔로잉...</v-col>

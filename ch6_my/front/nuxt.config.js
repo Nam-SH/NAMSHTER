@@ -21,6 +21,9 @@ module.exports = {
     }, {
       hid: 'ogurl', property: 'og:url', content: 'https://namshter.com',
     }],
+    script: [
+      { src: "https://kit.fontawesome.com/4ddf7507f2.js", crossorigin: "anonymous" }
+    ],
     link: [{ rel: 'shortcut icon', href: '/donut.png' }],
   },
   modules: [

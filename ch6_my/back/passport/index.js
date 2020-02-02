@@ -1,6 +1,5 @@
 const passport = require('passport');
 const local = require('./local');
-const kakao = require('./kakao');
 const db = require('../models');;
 
 module.exports = () => {
@@ -12,7 +11,7 @@ module.exports = () => {
     try {
       const user = await db.User.findOne({
         where: { id },
-        attributes: ['id', 'nickname'],
+        attributes: ['id', 'nickname', 'name', 'isAdmin'],
         include: [{
           model: db.Post,
           attributes: ['id'],
@@ -33,9 +32,8 @@ module.exports = () => {
     } 
     catch (err) {
       console.error(err);
-      return done(err);
+      return done('deserializeUser :::', err);
     }
   });
   local();
-  kakao();
 };
