@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     isAdmin: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
     }
   }, {
     charset: 'utf8',
@@ -30,13 +30,26 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (db) => {
     db.User.hasMany(db.Post)
     db.User.hasMany(db.Comment)
-    db.User.belongsToMany(db.Post, 
-      { through: 'Like', as: 'Liked' })
-    db.User.belongsToMany(db.User, 
-      { through: 'Follow', as: 'Followers', foreignKey: 'followingId' })
-    db.User.belongsToMany(db.User, 
-      { through: 'Follow', as: 'Followings',foreignKey: 'followerId' })
+    db.User.belongsToMany(db.Post, {
+      through: 'Like',
+      as: 'Liked'
+    })
+    db.User.belongsToMany(db.User, {
+      through: 'Follow',
+      as: 'Followers',
+      foreignKey: 'followingId'
+    })
+    db.User.belongsToMany(db.User, {
+      through: 'Follow',
+      as: 'Followings',
+      foreignKey: 'followerId'
+    })
+
+    db.User.hasMany(db.Group, {
+      as: "Master"
+    })
+    db.User.hasMany(db.Grouppost)
   };
-  
+
   return User;
 };

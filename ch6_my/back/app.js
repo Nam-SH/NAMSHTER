@@ -24,7 +24,9 @@ const dotenv = require('dotenv');
 const prod = process.env.NODE_ENV === 'production';
 
 // db 강제로 덮어씌우기
-// db.sequelize.sync({force: true})
+// db.sequelize.sync({
+//   force: true
+// })
 db.sequelize.sync();
 passportConfig();
 
@@ -39,8 +41,7 @@ if (prod) {
     origin: 'http://namshter.com',
     credentials: true,
   }));
-}
-else {
+} else {
   app.use(morgan('dev'));
   app.use(cors({
     origin: 'http://localhost:3081',
@@ -52,7 +53,9 @@ else {
 app.use('/', express.static('uploads'));
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 
 app.use(cookie(process.env.COOKIE_SECRET))
 app.use(session({
