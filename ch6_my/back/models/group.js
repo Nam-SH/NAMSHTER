@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       limit: {
         type: DataTypes.INTEGER,
         allowNull: false
+      },
+      staus: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       }
     }, {
       charset: "utf8",
