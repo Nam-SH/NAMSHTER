@@ -2,10 +2,10 @@
   <v-container>
     <v-layout style="display: flex">
       <v-container style="flex:1">
-        <my-groups :colors="colors1" :grouplist="before" />
+        <my-groups :grouplist="mygrouplist_before" />
       </v-container>
       <v-container style="flex:1">
-        <my-groups :colors="colors2" :grouplist="doing" />
+        <my-groups :grouplist="mygrouplist_doing" />
       </v-container>
     </v-layout>
     <br />
@@ -36,37 +36,44 @@ export default {
         { name: "before", icon: "mdi-heart" },
         { name: "doing...", icon: "mdi-book" },
         { name: "done", icon: "mdi-image" }
-      ],
-
-      // MyGroups 더미데이터
-      colors1: ["black", "yellow"],
-      colors2: ["pink", "blue", "indigo", "red"],
-      before: ["before 1", "before 2"],
-      doing: ["doing 1", "doing 2", "doing 3", "doing 4"]
+      ]
     };
   },
+  fetch({ store }) {
+    return Promise.all([
+      store.dispatch("groups/myGrouplistBefore"),
+      store.dispatch("groups/myGrouplistDoing")
+    ]);
+  },
   computed: {
+    me() {
+      return this.$store.state.users.me;
+    },
     grouplist() {
       // 나중에 if 0과 else만 있음요
-      if (this.navNum === 0) {
+      if (!this.navNum) {
         return this.$store.state.groups.allgrouplist;
       } else if (this.navNum === 1) {
-        return this.$store.state.groups.grouplist0;
+        return this.$store.state.groups.grouplist;
       } else if (this.navNum === 2) {
         return this.$store.state.groups.grouplist1;
       } else {
         return this.$store.state.groups.grouplist2;
       }
+    },
+    mygrouplist_before() {
+      return this.$store.state.groups.mygrouplist_before;
+    },
+    mygrouplist_doing() {
+      return this.$store.state.groups.mygrouplist_doing;
     }
   },
   methods: {
     onLoadGroup(navNum) {
-      console.log("bottomNav", navNum);
-      console.log("카테고리 찍었어염");
       if (navNum == 0) {
-        return this.$store.dispatch("groups/loadAllGroup");
+        return this.$store.dispatch("groups/loadAllGroups");
       } else {
-        this.$store.dispatch("groups/loadGroup", { statue: navNum - 1 });
+        this.$store.dispatch("groups/loadGroups", { statue: navNum - 1 });
       }
     }
   }

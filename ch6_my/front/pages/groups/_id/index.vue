@@ -5,11 +5,18 @@
 </template>
 
 <script>
-  export default {
-    
+export default {
+  fetch({ store, params }) {
+    store.dispatch("groups/oneGroupDetail", {
+      groupId: params.id
+    });
+  },
+  computed: {
+    name() {
+      return this.$store.state.groups.onegroup;
+    }
   }
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style scoped></style>
