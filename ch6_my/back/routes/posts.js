@@ -16,38 +16,37 @@ router.get('/', async (req, res, next) => {
     }
     const posts = await db.Post.findAll({
       where,
-      include: [
-        {
-          model: db.User,
-          attributes: ['id', 'nickname']
-        }, {
-          model: db.Image,
-        }, {
-          model: db.User,
-          as: 'Likers',
-          attributes: ['id']
-        }, {
-          model: db.Comment,
-          attributes: ['id']
-        }, {
-          model: db.Post,
-          as: "Retweet",
-          include: [
-            {
-              model: db.User,
-              attributes: ['id', 'nickname']
-            },
-            {
-              model: db.Image
-            }
-          ]
-        }],
-      order: [['createdAt', 'DESC']],
+      include: [{
+        model: db.User,
+        attributes: ['id', 'nickname']
+      }, {
+        model: db.Image,
+      }, {
+        model: db.User,
+        as: 'Likers',
+        attributes: ['id']
+      }, {
+        model: db.Comment,
+        attributes: ['id']
+      }, {
+        model: db.Post,
+        as: "Retweet",
+        include: [{
+            model: db.User,
+            attributes: ['id', 'nickname']
+          },
+          {
+            model: db.Image
+          }
+        ]
+      }],
+      order: [
+        ['createdAt', 'DESC']
+      ],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts);
-  }
-  catch (err) {
+  } catch (err) {
     console.error('GET /', err)
     next(err)
   }

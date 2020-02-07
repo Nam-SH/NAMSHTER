@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING(20),
-      allowNull: false,
     },
     nickname: {
       type: DataTypes.STRING(20),
@@ -20,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     isAdmin: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     }
   }, {
     charset: 'utf8',

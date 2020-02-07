@@ -10,7 +10,9 @@ module.exports = () => {
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await db.User.findOne({
-        where: { id },
+        where: {
+          id
+        },
         attributes: ['id', 'nickname', 'name', 'isAdmin'],
         include: [{
           model: db.Post,
@@ -29,8 +31,7 @@ module.exports = () => {
         }],
       });
       return done(null, user); // req.user, req.isAuthenticated() === true,
-    } 
-    catch (err) {
+    } catch (err) {
       console.error(err);
       return done('deserializeUser :::', err);
     }

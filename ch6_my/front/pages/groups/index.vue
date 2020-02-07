@@ -2,10 +2,10 @@
   <v-container>
     <v-layout style="display: flex">
       <v-container style="flex:1">
-        <my-groups :grouplist="mygrouplist_before" />
+        <my-groups :grouplist="grouplist_before" />
       </v-container>
       <v-container style="flex:1">
-        <my-groups :grouplist="mygrouplist_doing" />
+        <my-groups :grouplist="grouplist_doing" />
       </v-container>
     </v-layout>
     <br />
@@ -41,8 +41,13 @@ export default {
   },
   fetch({ store }) {
     return Promise.all([
-      store.dispatch("groups/myGrouplistBefore"),
-      store.dispatch("groups/myGrouplistDoing")
+      store.dispatch("groups/grouplistBefore", {
+        status: "0"
+      }),
+      store.dispatch("groups/grouplistDoing", {
+        status: "1"
+      }),
+      store.dispatch("groups/loadAllGroups")
     ]);
   },
   computed: {
@@ -53,30 +58,38 @@ export default {
       // 나중에 if 0과 else만 있음요
       if (!this.navNum) {
         return this.$store.state.groups.allgrouplist;
-      } else if (this.navNum === 1) {
-        return this.$store.state.groups.grouplist;
-      } else if (this.navNum === 2) {
-        return this.$store.state.groups.grouplist1;
       } else {
-        return this.$store.state.groups.grouplist2;
+        return this.$store.state.groups.grouplist;
       }
     },
-    mygrouplist_before() {
-      return this.$store.state.groups.mygrouplist_before;
+    grouplist_before() {
+      return this.$store.state.groups.grouplist_before;
     },
-    mygrouplist_doing() {
-      return this.$store.state.groups.mygrouplist_doing;
+    grouplist_doing() {
+      return this.$store.state.groups.grouplist_doing;
     }
   },
   methods: {
-    onLoadGroup(navNum) {
+    async onLoadGroup(navNum) {
       if (navNum == 0) {
-        return this.$store.dispatch("groups/loadAllGroups");
+        await this.$store.dispatch("groups/loadAllGroups");
+        return;
       } else {
-        this.$store.dispatch("groups/loadGroups", { statue: navNum - 1 });
+        await this.$store.dispatch("groups/loadGroups", { status: navNum - 1 });
+        return;
       }
     }
-  }
+  },
+  watch: {
+    me(value, oldValue) {
+      if (!value) {
+        this.$router.push({
+          path: "/"
+        });
+      }
+    }
+  },
+  middleware: "authenticated"
 };
 </script>
 

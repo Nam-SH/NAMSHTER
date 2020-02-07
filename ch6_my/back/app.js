@@ -18,6 +18,10 @@ const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const hashtagRouter = require('./routes/hashtag');
 
+const groupRouter = require('./routes/group');
+const groupsRouter = require('./routes/groups');
+
+
 const dotenv = require('dotenv');
 
 // 배포용인지 확인
@@ -81,6 +85,10 @@ app.use('/user', userRouter)
 app.use('/post', postRouter)
 app.use('/posts', postsRouter)
 app.use('/hashtag', hashtagRouter)
+app.use('/group', groupRouter)
+app.use('/groups', groupsRouter)
+
+
 
 app.listen(prod ? process.env.PORT : 3085, () => {
   console.log(`백엔드 서버 ${prod ? process.env.PORT : 3085}번 포트에서 작동 중...`);

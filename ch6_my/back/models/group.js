@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      staus: {
+      status: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       }
@@ -28,13 +28,10 @@ module.exports = (sequelize, DataTypes) => {
     db.Group.belongsToMany(db.User, {
       through: "Groupuser"
     });
-
     db.Group.belongsTo(db.User, {
       as: "Master"
     })
-
     db.Group.hasMany(db.Grouppost);
-
   };
 
   return Group;

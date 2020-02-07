@@ -19,15 +19,15 @@ export const mutations = {
   },
 
   editMainPost(state, payload) {
-    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);    
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
     state.mainPosts[targetIndex].content = payload.content
   },
-  
+
   addComment(state, payload) {
     const targetIndex = state.mainPosts.findIndex(v => v.id === payload.PostId);
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
-  
+
   // 글 하나 불러오기
   loadPost(state, payload) {
     state.mainPosts = [payload]
@@ -36,15 +36,14 @@ export const mutations = {
   // 글 전체 불러오기
   loadPosts(state, payload) {
     if (payload.reset) {
-      state.mainPosts = payload.data  
-    }
-    else {
+      state.mainPosts = payload.data
+    } else {
       state.mainPosts = state.mainPosts.concat(payload.data)
     }
-    state.hasMorePost =  payload.data.length === 10;
+    state.hasMorePost = payload.data.length === 10;
   },
 
-  
+
 
   // 댓글 요청하기
   loadComments(state, payload) {
@@ -80,76 +79,93 @@ export const mutations = {
 export const actions = {
 
   // 글 작성
-  add({ commit, state }, payload ) {
-    return this.$axios.post('/post', 
-      { content : payload.content, 
-        image : state.imagePaths },
-      { 
-        withCredentials: true 
-    })
-    .then((res) => {
-      commit('addMainPost', res.data)
-    })
-    .catch((err) => {
-      console.error('add:::', err)
-    })
+  add({
+    commit,
+    state
+  }, payload) {
+    return this.$axios.post('/post', {
+        content: payload.content,
+        image: state.imagePaths
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('addMainPost', res.data)
+      })
+      .catch((err) => {
+        console.error('add:::', err)
+      })
   },
 
   // 삭제 구현
-  remove({ commit }, payload) {
+  remove({
+    commit
+  }, payload) {
     return this.$axios.delete(`/post/${payload.postId}`, {
-      withCredentials: true
-    })
-    .then((res) => {
-      commit('removeMainPost', res.data)
-    })
-    .catch((err) => {
-      console.error('remove:::', err)
-    })
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('removeMainPost', res.data)
+      })
+      .catch((err) => {
+        console.error('remove:::', err)
+      })
   },
 
-  edit({ commit }, payload) {
-    return this.$axios.patch(`/post/${payload.postId}`, 
-      { content: payload.content }, 
-      { withCredentials: true 
-    })
-    .then((res) => {
-      commit('editMainPost', { postId: payload.postId, content: res.data})
-    })
-    .catch((err) => {
-      console.error('edit :::', err);
-      
-    })
+  edit({
+    commit
+  }, payload) {
+    return this.$axios.patch(`/post/${payload.postId}`, {
+        content: payload.content
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('editMainPost', {
+          postId: payload.postId,
+          content: res.data
+        })
+      })
+      .catch((err) => {
+        console.error('edit :::', err);
+
+      })
   },
 
-  addComment({ commit }, payload ) {
+  addComment({
+    commit
+  }, payload) {
     return this.$axios.post(`/post/${payload.postId}/comment`, {
-      content: payload.content,
-      score: payload.score,
-    }, { 
-      withCredentials: true 
-    })
-    .then((res) => {
-      commit('addComment', res.data)
-    })
-    .catch((err) => {
-      console.error('addComment:::', err)
-    })
+        content: payload.content,
+        score: payload.score,
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('addComment', res.data)
+      })
+      .catch((err) => {
+        console.error('addComment:::', err)
+      })
   },
 
   // 글 한개 불러오기
-  async loadPost({ commit }, payload) {
-    try {      
-      const res = await this.$axios.get(`/post/${payload}`)      
+  async loadPost({
+    commit
+  }, payload) {
+    try {
+      const res = await this.$axios.get(`/post/${payload}`)
       commit('loadPost', res.data)
-    }
-    catch (err) {
+    } catch (err) {
       console.error('loadPost :::', err)
     }
   },
 
   // 전체 글 불러오기 - 쓰로틀링 설정
-  loadPosts: throttle( async function({ commit, state }, payload) {
+  loadPosts: throttle(async function ({
+    commit,
+    state
+  }, payload) {
     try {
       if (payload && payload.reset) {
         const res = await this.$axios.get(`/posts?&limit=10`)
@@ -168,14 +184,16 @@ export const actions = {
         });
         return;
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error('loadPosts :::', err)
     }
   }, 3000),
 
-  // 다른 사람 글 가져오기
-  loadUserPosts: throttle( async function({ commit, state }, payload) {
+  // 유저 글 가져오기
+  loadUserPosts: throttle(async function ({
+    commit,
+    state
+  }, payload) {
     try {
       if (payload && payload.reset) {
         const res = await this.$axios.get(`/user/${payload.userId}/posts?limit=10`, {
@@ -196,14 +214,16 @@ export const actions = {
         });
         return;
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error('loadUserPosts :::', err)
     }
   }, 3000),
 
   // 해시태그 가져오기
-  loadHashtagPosts: throttle( async function({ commit, state }, payload) {
+  loadHashtagPosts: throttle(async function ({
+    commit,
+    state
+  }, payload) {
     try {
       if (payload && payload.reset) {
         const res = await this.$axios.get(`/hashtag/${payload.hashtag}?limit=10`)
@@ -222,87 +242,96 @@ export const actions = {
         });
         return;
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error('loadHashtagPosts :::', err)
     }
   }, 3000),
 
-  
+
   // 댓글 요청하기
-  loadComments({ commit}, payload ) {
+  loadComments({
+    commit
+  }, payload) {
     return this.$axios.get(`/post/${payload.postId}/comments`)
-    .then((res) => {
-      commit('loadComments', {
-        postId: payload.postId,
-        data: res.data,
+      .then((res) => {
+        commit('loadComments', {
+          postId: payload.postId,
+          data: res.data,
+        })
       })
-    })
-    .catch((err) => {
-      console.error('loadComments :::', err)
-    });
+      .catch((err) => {
+        console.error('loadComments :::', err)
+      });
   },
 
   // 이미지 업로드
-  uploadImages({ commit }, payload) {
+  uploadImages({
+    commit
+  }, payload) {
     return this.$axios.post('/post/images', payload, {
-      withCredentials: true,
-    })
-    .then((res) => {
-      commit('concatImagePaths', res.data);
-    })
-    .catch((err) => {
-      console.error('uploadImages:::', err)
-    })
+        withCredentials: true,
+      })
+      .then((res) => {
+        commit('concatImagePaths', res.data);
+      })
+      .catch((err) => {
+        console.error('uploadImages:::', err)
+      })
   },
 
   // 좋아요
-  likePost({ commit }, payload) {
+  likePost({
+    commit
+  }, payload) {
     return this.$axios.post(`/post/${payload.postId}/like`, {}, {
-      withCredentials: true
-    })
-    .then((res) => {
-      // res.data에는 userId가 들어있다.
-      commit('likePost', {
-        userId: res.data.userId,
-        postId: payload.postId,
+        withCredentials: true
       })
-    })
-    .catch((err) => {
-      console.error('likePost:::', err)
-    })
+      .then((res) => {
+        // res.data에는 userId가 들어있다.
+        commit('likePost', {
+          userId: res.data.userId,
+          postId: payload.postId,
+        })
+      })
+      .catch((err) => {
+        console.error('likePost:::', err)
+      })
   },
-  
+
   // 싫어요
-  unlikePost({ commit }, payload) {
+  unlikePost({
+    commit
+  }, payload) {
     return this.$axios.delete(`/post/${payload.postId}/like`, {
-      withCredentials: true
-    })
-    .then((res) => {
-      commit('unlikePost', {
-        userId: res.data.userId,
-        postId: payload.postId,
+        withCredentials: true
       })
-    })
-    .catch((err) => {
-      console.error('unlikePost:::', err)
-    })
+      .then((res) => {
+        commit('unlikePost', {
+          userId: res.data.userId,
+          postId: payload.postId,
+        })
+      })
+      .catch((err) => {
+        console.error('unlikePost:::', err)
+      })
   },
 
   // 리트윗
-  retweet({ commit }, payload) {
+  retweet({
+    commit
+  }, payload) {
     return this.$axios.post(`/post/${payload.postId}/retweet`, {}, {
-      withCredentials: true
-    })
-    .then((res) => {
-      // res.data에는 리트윗한 나의 User id, nickname
-      // 원본글의 Id와, 글 작성자의 User id, nickname, 글의 image 주소가 들어있다.
-      commit('addMainPost', res.data)
-    })
-    .catch((err) => {
-      console.error('retweet:::', err)
-      // 작성한 에러메시지
-      alert(err.response.data)
-    })
+        withCredentials: true
+      })
+      .then((res) => {
+        // res.data에는 리트윗한 나의 User id, nickname
+        // 원본글의 Id와, 글 작성자의 User id, nickname, 글의 image 주소가 들어있다.
+        commit('addMainPost', res.data)
+      })
+      .catch((err) => {
+        console.error('retweet:::', err)
+        // 작성한 에러메시지
+        alert(err.response.data)
+      })
   }
 }

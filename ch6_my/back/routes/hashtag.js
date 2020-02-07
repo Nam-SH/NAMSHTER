@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../models');
 
 // 해시태그 글 가져오기 (// GET /hashtag/:tag?lastId=10&limit=10)
-router.get('/:tag', async (req, res, next) => { 
+router.get('/:tag', async (req, res, next) => {
   try {
     let where = {};
     if (parseInt(req.query.lastId, 10)) {
@@ -17,7 +17,9 @@ router.get('/:tag', async (req, res, next) => {
       where,
       include: [{
         model: db.Hashtag,
-        where: { name: decodeURIComponent(req.params.tag) },
+        where: {
+          name: decodeURIComponent(req.params.tag)
+        },
       }, {
         model: db.User,
         attributes: ['id', 'nickname'],
@@ -37,12 +39,13 @@ router.get('/:tag', async (req, res, next) => {
           model: db.Image,
         }],
       }],
-      order: [['createdAt', 'DESC']],
+      order: [
+        ['createdAt', 'DESC']
+      ],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts);
-  } 
-  catch (err) {
+  } catch (err) {
     console.error('GET /:tag :::', err)
     next(err);
   }

@@ -4,7 +4,9 @@ const multer = require('multer');
 const AWS = require('aws-sdk');
 const multerS3 = require('multer-s3');
 
-const { isLoggedIn } = require('./middlewares')
+const {
+  isLoggedIn
+} = require('./middlewares')
 const router = express.Router();
 const db = require('../models');
 
@@ -26,11 +28,13 @@ const upload = multer({
       done(null, basename + Date.now() + ext);
     },
   }),
-  limit: { fileSize: 1000 * 1024 * 1024 },
+  limit: {
+    fileSize: 1000 * 1024 * 1024
+  },
 });
 
 // 이미지업로드 (/post/images)
-router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
+router.post('/images', isLoggedIn, upload.array('image'), (req, res) => {
   // console.log(req.files);
   res.json(req.files.map(v => v.filename));
 });
@@ -61,13 +65,12 @@ router.post('/images', isLoggedIn,upload.array('image'), (req, res) => {
 
 // 글 상세보기(/post/:id) - 글하나만 가져오기
 router.get('/:id', async (req, res, next) => {
-  try {   
+  try {
     const fullpost = await db.Post.findOne({
       where: {
         id: req.params.id
       },
-      include: [
-        {
+      include: [{
           // 작성자 정보
           model: db.User,
           attributes: ['id', 'nickname', 'name', 'isAdmin']
@@ -90,15 +93,14 @@ router.get('/:id', async (req, res, next) => {
           include: [{
             model: db.User,
             attributes: ['id', 'nickname']
-          },{
+          }, {
             model: db.Image
           }]
         }
       ]
-    })    
+    })
     return res.json(fullpost);
-  }
-  catch (err) {
+  } catch (err) {
     console.error('GET /:id :::', err);
     next(err);
   }
@@ -114,21 +116,31 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     });
     if (hashtags) {
       const result = await Promise.all(hashtags.map(tag => db.Hashtag.findOrCreate({
-        where: { name: tag.slice(1).toLowerCase() },
+        where: {
+          name: tag.slice(1).toLowerCase()
+        },
       })));
       await newPost.addHashtags(result.map(r => r[0]));
     }
     if (req.body.image) {
       if (Array.isArray(req.body.image)) {
         await Promise.all(req.body.image.map((image) => {
-          return db.Image.create({ src: image, PostId: newPost.id });
+          return db.Image.create({
+            src: image,
+            PostId: newPost.id
+          });
         }));
       } else {
-        await db.Image.create({ src: req.body.image, PostId: newPost.id });
+        await db.Image.create({
+          src: req.body.image,
+          PostId: newPost.id
+        });
       };
     }
     const fullPost = await db.Post.findOne({
-      where: { id: newPost.id },
+      where: {
+        id: newPost.id
+      },
       include: [{
         // 요청을 받으면 프론트에 User: { id: 1, nickname: "남승현" } 형식이 추가된다.
         model: db.User,
@@ -145,8 +157,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       }],
     });
     return res.json(fullPost);
-  } 
-  catch (err) {
+  } catch (err) {
     console.error('POST / :::', err);
     next(err);
   }
@@ -155,18 +166,23 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 // 글 수정
 router.patch('/:id', isLoggedIn, async (req, res, next) => {
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id } })
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
     if (!post) {
       return res.status(400).send('포스트가 존재하지 않습니다.');
     }
     await db.Post.update({
       content: req.body.content,
     }, {
-      where: { id: req.params.id }
+      where: {
+        id: req.params.id
+      }
     });
     res.json(req.body.content);
-  }
-  catch (err) {
+  } catch (err) {
     console.error('PATCH /:id', err);
     next(err)
   }
@@ -175,7 +191,11 @@ router.patch('/:id', isLoggedIn, async (req, res, next) => {
 // 글 삭제
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id } })
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
     if (!post) {
       return res.status(400).send('포스트가 존재하지 않습니다.');
     }
@@ -185,8 +205,7 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
       }
     });
     return res.send('삭제가 잘 됐어요...ㅎ')
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err)
     next('DELETE /:id :::', err)
   }
@@ -195,7 +214,11 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
 // 댓글작성
 router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /post/:id/comment
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
     if (!post) {
       return res.status(404).send('포스트가 존재하지 않습니다.');
     }
@@ -217,8 +240,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
       }]
     });
     return res.json(comment);
-  }
-  catch (err) {
+  } catch (err) {
     console.error('POST /:id/comment :::', err)
     next(err)
   }
@@ -227,7 +249,11 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
 // 댓글조회
 router.get('/:id/comments', async (req, res, next) => {
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id
+      }
+    });
     if (!post) {
       return res.status(404).send('포스트가 존재하지 않습니다.');
     }
@@ -239,7 +265,9 @@ router.get('/:id/comments', async (req, res, next) => {
         model: db.User,
         attributes: ['id', 'nickname', 'name', 'isAdmin'],
       }],
-      order: [['createdAt', 'ASC']],
+      order: [
+        ['createdAt', 'ASC']
+      ],
     });
     res.json(comments);
   } catch (err) {
@@ -254,7 +282,9 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
 
     // 글이 없으면 리트윗 안 됨
     const post = await db.Post.findOne({
-      where: { id: req.params.id, },
+      where: {
+        id: req.params.id,
+      },
       include: [{
         model: db.Post,
         as: 'Retweet'
@@ -286,12 +316,14 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
       content: 'retweet이욤~',
     })
     const retweetWithPrevPost = await db.Post.findOne({
-      where: { id: retweet.id },
+      where: {
+        id: retweet.id
+      },
       include: [{
         model: db.User,
         attributes: ['id', 'nickname', 'name', 'isAdmin']
       }, {
-        model:db.Post,
+        model: db.Post,
         as: 'Retweet',
         include: [{
           model: db.User,
@@ -306,8 +338,7 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
       }]
     })
     res.json(retweetWithPrevPost);
-  }
-  catch (err) {
+  } catch (err) {
     console.error('/:id/retweet :::', err)
     next(err)
   }
@@ -316,15 +347,20 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
 // 좋아요
 router.post('/:id/like', isLoggedIn, async (req, res, next) => {
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id, }, })
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
     if (!post) {
       return res.status(404).send('글이 없는데요;;');
     }
     // 글이 있으면
     await post.addLiker(req.user.id);
-    res.json({ userId: req.user.id });
-  }
-  catch (err) {
+    res.json({
+      userId: req.user.id
+    });
+  } catch (err) {
     console.error('POST /:id/like :::', err);
     next(err);
   }
@@ -333,15 +369,20 @@ router.post('/:id/like', isLoggedIn, async (req, res, next) => {
 // 좋아요 취소
 router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
   try {
-    const post = await db.Post.findOne({ where: { id: req.params.id, }, })
+    const post = await db.Post.findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
     if (!post) {
       return res.status(404).send('글이 없는데요;;');
     }
     // 글이 있으면
     await post.removeLiker(req.user.id);
-    res.json({ userId: req.user.id });
-  }
-  catch (err) {
+    res.json({
+      userId: req.user.id
+    });
+  } catch (err) {
     console.error('DELETE /:id/like :::', err);
     next(err);
   }

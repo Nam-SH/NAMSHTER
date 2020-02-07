@@ -1,7 +1,5 @@
 <template>
-  <div>
-    여기는 그룹에 관한 상세정보페이지입니다.
-  </div>
+  <div>여기는 그룹에 관한 상세정보페이지입니다.</div>
 </template>
 
 <script>
@@ -15,7 +13,8 @@ export default {
     name() {
       return this.$store.state.groups.onegroup;
     }
-  }
+  },
+  middleware: "authenticated"
 };
 </script>
 
