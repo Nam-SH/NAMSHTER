@@ -15,6 +15,13 @@ export const state = () => ({
 });
 
 export const mutations = {
+  groupAdd(state, payload) {
+    console.log('pa', payload);
+
+    state.allgrouplist.unshift(payload)
+    state.grouplist_before.unshift(payload)
+  },
+
   loadAllGroups(state, payload) {
     state.allgrouplist = payload
   },
@@ -27,21 +34,40 @@ export const mutations = {
   },
 
   grouplistBefore(state, payload) {
-    state.grouplist_before = payload
+    state.grouplist_before = state.grouplist_before.concat(payload)
   },
   grouplistDoing(state, payload) {
-    state.grouplist_doing = payload
+    state.grouplist_doing = state.grouplist_doing.concat(payload)
   },
 
   otherGrouplistBefore(state, payload) {
-    state.othergrouplist_before = payload
+    state.othergrouplist_before = state.othergrouplist_before.concat(payload)
   },
   otherGrouplistDoing(state, payload) {
-    state.othergrouplist_doing = payload
+    state.othergrouplist_doing = state.othergrouplist_doing.concat(payload)
   }
 };
 
 export const actions = {
+
+  groupAdd({
+    commit
+  }, payload) {
+    return this.$axios.post("/group", {
+        name: payload.name,
+        intro: payload.intro,
+        limit: payload.limit
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('groupAdd', res.data)
+      })
+      .catch((err) => {
+        console.error('groupAdd :::', err);
+      })
+  },
+
   loadAllGroups({
     commit
   }, payload) {
@@ -63,10 +89,10 @@ export const actions = {
         withCredentials: true
       })
       .then((res) => {
-        commit('loadGroup', res.data)
+        commit('loadGroups', res.data)
       })
       .catch((err) => {
-        console.error('loadGroup :::', err);
+        console.error('loadGroups :::', err);
       })
   },
 
@@ -119,10 +145,10 @@ export const actions = {
         withCredentials: true,
       })
       .then((res) => {
-        commit('myGrouplistBefore', res.data)
+        commit('otherGrouplistBefore', res.data)
       })
       .catch((err) => {
-        console.error('myGrouplistBefore :::', err);
+        console.error('otherGrouplistBefore :::', err);
       })
   },
 
@@ -133,10 +159,10 @@ export const actions = {
         withCredentials: true,
       })
       .then((res) => {
-        commit('myGrouplistDoing', res.data)
+        commit('otherGrouplistDoing', res.data)
       })
       .catch((err) => {
-        console.error('myGrouplistDoing :::', err);
+        console.error('otherGrouplistDoing :::', err);
       })
   }
 };

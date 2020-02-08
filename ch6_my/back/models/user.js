@@ -44,9 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'followerId'
     })
 
-    db.User.hasMany(db.Group, {
-      as: "Master"
-    })
+    db.User.belongsToMany(db.Group, {
+      through: "Groupuser"
+    });
+    db.User.hasMany(db.Group)
     db.User.hasMany(db.Grouppost)
   };
 

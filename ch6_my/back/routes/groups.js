@@ -20,17 +20,18 @@ router.get('/', async (req, res, next) => {
     const groups = await db.Group.findAll({
       where,
       include: [{
-        model: db.User,
-        through: 'Groupuser',
-        attributes: ['id']
-      }, {
-        model: db.User,
-        as: 'Master',
-        attributes: ['id']
-      }, {
-        model: db.Grouppost,
-        attributes: ['id']
-      }],
+          model: db.User,
+          attributes: ['id', 'nickname', 'name', 'email']
+        },
+        {
+          model: db.User,
+          through: 'Groupuser',
+          attributes: ['id']
+        }, {
+          model: db.Grouppost,
+          attributes: ['id']
+        }
+      ],
       order: [
         ['createdAt', 'DESC']
       ],
@@ -60,13 +61,12 @@ router.get('/:status', async (req, res, next) => {
       where,
       include: [{
         model: db.User,
-        through: 'Groupuser',
-        attributes: ['id']
+        attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        as: 'Master',
+        through: 'Groupuser',
         attributes: ['id']
-      }],
+      }, ],
       order: [
         ['createdAt', 'DESC']
       ],
@@ -92,16 +92,16 @@ router.get('/my/:status', isLoggedIn, async (req, res, next) => {
           [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
         }
       }
-    }
+    };
     const groups = await db.Group.findAll({
       where,
       include: [{
         model: db.User,
-        through: 'Groupuser',
-        attributes: ['id']
+        attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        as: 'Master',
+        through: 'Groupuser',
+        attributes: ['id']
       }],
       order: [
         ['createdAt', 'DESC']
@@ -134,11 +134,10 @@ router.get('/:userId/:status', isLoggedIn, async (req, res, next) => {
       where,
       include: [{
         model: db.User,
-        through: 'Groupuser',
-        attributes: ['id']
+        attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        as: 'Master',
+        through: 'Groupuser',
         attributes: ['id']
       }],
       order: [

@@ -1,5 +1,5 @@
 <template>
-  <div>여기는 그룹에 관한 상세정보페이지입니다.</div>
+  <v-card>{{ onegroup }}</v-card>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
     });
   },
   computed: {
-    name() {
+    onegroup() {
       return this.$store.state.groups.onegroup;
     }
   },

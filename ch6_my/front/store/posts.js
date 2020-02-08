@@ -9,6 +9,7 @@ export const state = () => ({
 
 export const mutations = {
   addMainPost(state, payload) {
+    console.log('pa', payload);
     state.mainPosts.unshift(payload);
     state.imagePaths = [];
   },

@@ -2,16 +2,15 @@
   <v-container>
     <v-card>
       <v-app-bar dark color="black">
-        <v-toolbar-title>My Group</v-toolbar-title>
+        <v-toolbar-title>All Group</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-card-actions>
-          <v-btn text to="/groups">Go Group</v-btn>
+          <v-btn v-if="!isingroups" text to="/groups">Go Group</v-btn>
+          <group-create v-else />
         </v-card-actions>
       </v-app-bar>
-
-      <v-container>
+      <v-container v-if="allgrouplist.length > 0">
         <v-row dense>
-          <!-- 보여주기 컴포넌트 만들기 -->
           <v-col v-for="group in allgrouplist" :key="group.id" cols="12">
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
@@ -28,24 +27,52 @@
           </v-col>
         </v-row>
       </v-container>
+      <v-container v-else>
+        <v-row dense>
+          <v-col cols="12">
+            <v-card dark>
+              <div class="d-flex flex-no-wrap justify-space-between">
+                <div>
+                  <v-card-title class="headline">그룹이 추가될 예정...</v-card-title>
+                  <v-card-subtitle>조금만 기다려주세요...ㅎ</v-card-subtitle>
+                </div>
+                <v-avatar class="ma-3" size="125" tile>
+                  <v-img></v-img>
+                </v-avatar>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-card>
   </v-container>
 </template>
 
 <script>
+import GroupCreate from "@/components/GroupCreate.vue";
+
 export default {
+  components: {
+    GroupCreate
+  },
   computed: {
+    me() {
+      return this.$store.state.users.me;
+    },
     allgrouplist() {
       return this.$store.state.groups.allgrouplist;
+    },
+    grouplist_doing() {
+      return this.$store.state.groups.grouplist_doing;
+    },
+    isingroups() {
+      return this.$route.name === "groups" ? true : false;
+    },
+    loadgrouplist_doing() {
+      if (this.isingroups) {
+        return this.$store.dispatch("groups/grouplistDoing", { status: 0 });
+      }
     }
-  },
-  fetch({ store }) {
-    store.dispatch("groups/loadAllGroups");
-  },
-  data() {
-    return {
-      hover: false
-    };
   }
 };
 </script>

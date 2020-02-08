@@ -3,7 +3,7 @@
     <nav>
       <v-toolbar dark color="blue">
         <v-toolbar-title>
-          <nuxt-link to="/" style="color: black">Main</nuxt-link>
+          <nuxt-link to="/" style="color: black">NAMSHTER</nuxt-link>
         </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
