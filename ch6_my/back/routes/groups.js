@@ -20,18 +20,13 @@ router.get('/', async (req, res, next) => {
     const groups = await db.Group.findAll({
       where,
       include: [{
-          model: db.User,
-          attributes: ['id', 'nickname', 'name', 'email']
-        },
-        {
-          model: db.User,
-          through: 'Groupuser',
-          attributes: ['id']
-        }, {
-          model: db.Grouppost,
-          attributes: ['id']
-        }
-      ],
+        model: db.User,
+        as: "Master",
+        attributes: ['id', 'nickname', 'name', 'email']
+      }, {
+        model: db.Grouppost,
+        attributes: ['id']
+      }],
       order: [
         ['createdAt', 'DESC']
       ],
@@ -61,10 +56,11 @@ router.get('/:status', async (req, res, next) => {
       where,
       include: [{
         model: db.User,
+        as: "Master",
         attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        through: 'Groupuser',
+        as: 'Groupmember',
         attributes: ['id']
       }, ],
       order: [
@@ -97,10 +93,11 @@ router.get('/my/:status', isLoggedIn, async (req, res, next) => {
       where,
       include: [{
         model: db.User,
+        as: "Master",
         attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        through: 'Groupuser',
+        as: 'Groupmember',
         attributes: ['id']
       }],
       order: [
@@ -134,10 +131,11 @@ router.get('/:userId/:status', isLoggedIn, async (req, res, next) => {
       where,
       include: [{
         model: db.User,
+        as: "Master",
         attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        through: 'Groupuser',
+        as: 'Groupmember',
         attributes: ['id']
       }],
       order: [

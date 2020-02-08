@@ -14,6 +14,9 @@ db.Image = require('./image')(sequelize, Sequelize);
 db.Group = require('./group')(sequelize, Sequelize);
 db.Grouppost = require('./grouppost')(sequelize, Sequelize);
 
+// db.Grouimage = require('./groupimage')(sequelize, Sequelize);
+// db.Groupcomment = require('./groupcomment')(sequelize, Sequelize);
+
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

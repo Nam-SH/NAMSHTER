@@ -2,15 +2,13 @@
   <v-container>
     <v-card class="d-flex align-content-space-between flex-wrap" color="black" dark height="350px">
       <v-card-title>
-        {{ group }}
-        <span class="title">그룹이름</span>
+        <span class="title">{{ group.name }}</span>
       </v-card-title>
-
-      <v-card-text>
-        그룹 소개 그룹 현재 인원 / 그룹 제한 "Turns out semicolon-less style is
-        easier and safer in TS because most gotcha edge cases are type invalid as
-        well."
-      </v-card-text>
+      {{ group }}
+      <!-- <v-card-text>그룹 소개 :: {{ group.intro }}</v-card-text>
+      <p>그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})</p>
+      <p>문의 메일 :: {{ group.Master.email }}</p>
+      <p>그룹 인원 {{ group.Groupmember }} / {{ group.limit }}</p>-->
 
       <v-card-actions>
         <v-list-item class="grow">

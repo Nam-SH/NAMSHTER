@@ -12,6 +12,7 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
+import nuxt_plugin_bootstrapvue_e59b9f0a from 'nuxt_plugin_bootstrapvue_e59b9f0a' // Source: .\\bootstrap-vue.js (mode: 'all')
 import nuxt_plugin_plugin_01232feb from 'nuxt_plugin_plugin_01232feb' // Source: .\\vuetify\\plugin.js (mode: 'all')
 import nuxt_plugin_axios_26865e4c from 'nuxt_plugin_axios_26865e4c' // Source: .\\axios.js (mode: 'all')
 import nuxt_plugin_moment_8e1e0668 from 'nuxt_plugin_moment_8e1e0668' // Source: .\\moment.js (mode: 'all')
@@ -170,6 +171,10 @@ async function createApp (ssrContext) {
   }
 
   // Plugin execution
+
+  if (typeof nuxt_plugin_bootstrapvue_e59b9f0a === 'function') {
+    await nuxt_plugin_bootstrapvue_e59b9f0a(app.context, inject)
+  }
 
   if (typeof nuxt_plugin_plugin_01232feb === 'function') {
     await nuxt_plugin_plugin_01232feb(app.context, inject)

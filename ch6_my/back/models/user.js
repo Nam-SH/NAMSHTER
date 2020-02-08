@@ -45,9 +45,9 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     db.User.belongsToMany(db.Group, {
-      through: "Groupuser"
+      through: "Groupuser",
+      as: 'Groupjoined'
     });
-    db.User.hasMany(db.Group)
     db.User.hasMany(db.Grouppost)
   };
 

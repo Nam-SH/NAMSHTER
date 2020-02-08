@@ -2,12 +2,12 @@ module.exports = (sequelize, DataTypes) => {
   const Group = sequelize.define(
     "Group", {
       name: {
-        type: DataTypes.STRING(40), // 40자 이내
-        allowNull: false, // 필수
-        unique: true // 중복금지
+        type: DataTypes.STRING(40),
+        allowNull: false,
+        unique: true
       },
       intro: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(300),
         allowNull: false
       },
       limit: {
@@ -19,16 +19,19 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
       }
     }, {
-      charset: "utf8",
-      collate: "utf8_general_ci" // 한글 저장돼요
+      charset: "utf8mb4",
+      collate: "utf8mb4_general_ci"
     }
   );
 
   Group.associate = db => {
     db.Group.belongsToMany(db.User, {
-      through: "Groupuser"
+      through: "Groupuser",
+      as: "Groupmember"
     });
-    db.Group.belongsTo(db.User);
+    db.Group.belongsTo(db.User, {
+      as: "Master"
+    });
     db.Group.hasMany(db.Grouppost);
   };
 

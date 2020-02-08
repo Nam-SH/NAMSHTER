@@ -15,11 +15,15 @@ router.get('/:groupId', isLoggedIn, async (req, res, next) => {
       },
       include: [{
         model: db.User,
+        as: "Master",
         attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        throught: "Groupuser",
-        attributes: ['id', 'nickname', 'name', 'email']
+        as: "Groupmember",
+        include: [{
+          model: db.User,
+          attributes: ['id', 'nickname']
+        }]
       }, {
         model: db.Grouppost,
         include: [{
@@ -42,25 +46,34 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       name: req.body.name,
       intro: req.body.intro,
       limit: req.body.limit,
-      UserId: 1,
+      MasterId: req.user.id,
     })
-    await newGroup.addUser(1)
+    await newGroup.addGroupmember(req.user.id)
 
     const fullGroup = await db.Group.findOne({
       where: {
         id: newGroup.id
       },
       include: [{
-        model: db.User,
-        throught: "Groupuser",
-        attributes: ['id', 'nickname', 'name', 'email']
-      }, {
-        model: db.Grouppost,
-        include: [{
           model: db.User,
+          as: "Master",
           attributes: ['id', 'nickname', 'name', 'email']
-        }]
-      }],
+        },
+        {
+          model: db.User,
+          as: "Groupmember",
+          include: [{
+            model: db.User,
+            attributes: ['id']
+          }]
+        }, {
+          model: db.Grouppost,
+          include: [{
+            model: db.User,
+            attributes: ['id', 'nickname', 'name', 'email']
+          }]
+        }
+      ],
     });
     return res.json(fullGroup);
   } catch (err) {

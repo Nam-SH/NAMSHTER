@@ -1,7 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Image = sequelize.define('Image', {
     src: {
-      // 주소를 저장한다.
       type: DataTypes.STRING(200),
       allowNull: false,
     }

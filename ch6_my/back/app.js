@@ -32,6 +32,7 @@ const prod = process.env.NODE_ENV === 'production';
 //   force: true
 // })
 db.sequelize.sync();
+
 passportConfig();
 
 dotenv.config();
