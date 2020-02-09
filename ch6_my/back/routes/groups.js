@@ -22,12 +22,12 @@ router.get("/", async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ["id", "nickname", "name", "email"]
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         },
         {
           model: db.User,
           as: "Groupmembers",
-          attributes: ["id", "name"]
+          attributes: ["id", "name", "nickname"]
         },
         {
           model: db.Grouppost,
@@ -64,12 +64,12 @@ router.get("/:status", async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ["id", "nickname", "name", "email"]
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         },
         {
           model: db.User,
           as: "Groupmember",
-          attributes: ["id"]
+          attributes: ["id", "name", "nickname"]
         }
       ],
       order: [
@@ -110,11 +110,11 @@ router.get("/my/:status", isLoggedIn, async (req, res, next) => {
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email']
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }, {
         model: db.User,
         as: "Groupmembers",
-        attributes: ['id']
+        attributes: ["id", "name", "nickname"]
       }],
       limit: parseInt(req.query.limit, 10) || 5,
     })
@@ -150,7 +150,7 @@ router.get("/:userId/:status", isLoggedIn, async (req, res, next) => {
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email']
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }, {
         model: db.User,
         as: "Groupmembers",

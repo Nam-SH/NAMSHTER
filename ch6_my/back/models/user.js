@@ -3,10 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING(40), // 40자 이내
       allowNull: false, // 필수
-      unique: true, // 중복금지
     },
     name: {
       type: DataTypes.STRING(20),
+      allowNull: false,
     },
     nickname: {
       type: DataTypes.STRING(20),
@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
     isAdmin: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+    },
+    snsId: {
+      type: DataTypes.TEXT,
+      defaultValue: null,
+    },
+    provider: {
+      type: DataTypes.TEXT,
+      defaultValue: null,
     }
   }, {
     charset: 'utf8',

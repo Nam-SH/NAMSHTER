@@ -3,7 +3,13 @@
     <v-card>
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
-          <v-text-field label="이메일" type="email" required v-model="email" :rules="emailRules" />
+          <v-text-field
+            label="이메일"
+            type="email"
+            required
+            v-model="email"
+            :rules="emailRules"
+          />
           <v-text-field
             label="비밀번호"
             type="password"
@@ -16,11 +22,30 @@
         </v-container>
       </v-form>
     </v-card>
+    <div class="text-align: center">
+      <div class="ma-2" style="position: relative; left: 10%;">
+        <a href="http://localhost:3085/user/naver">
+          <img src="../static/naver.png" alt="" style="width:80%;height:60px" />
+        </a>
+      </div>
+      <div class="ma-2" style="position: relative; left: 10%;">
+        <a href="http://localhost:3085/user/kakao">
+          <img src="../static/kakao.png" alt="" style="width:80%;height:60px" />
+        </a>
+      </div>
+      <div class="ma-2" style="position: relative; left: 10%;">
+        <a href="/">
+          <img src="../static/kakao.png" alt="" style="width:80%;height:60px" />
+        </a>
+      </div>
+    </div>
   </v-container>
   <v-container v-else>
     <v-card>
       <v-container>
         <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
+        <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
+        {{ me }}
         {{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.
         <v-btn @click="onLogOut">로그아웃</v-btn>
         <v-row>

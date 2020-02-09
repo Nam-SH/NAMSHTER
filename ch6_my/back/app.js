@@ -90,7 +90,6 @@ app.use('/group', groupRouter)
 app.use('/groups', groupsRouter)
 
 
-
 app.listen(prod ? process.env.PORT : 3085, () => {
   console.log(`백엔드 서버 ${prod ? process.env.PORT : 3085}번 포트에서 작동 중...`);
 })

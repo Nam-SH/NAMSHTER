@@ -11,6 +11,26 @@ const {
 } = require('./middlewares')
 
 
+router.get("/kakao", passport.authenticate("kakao"));
+
+router.get(
+  "/kakao/callback",
+  passport.authenticate("kakao", {
+    successRedirect: "http://localhost:3081/",
+    failureRedirect: "http://localhost:3081/"
+  })
+);
+
+router.get("/naver", passport.authenticate("naver"));
+
+router.get(
+  "/naver/callback",
+  passport.authenticate("naver", {
+    successRedirect: "http://localhost:3081/",
+    failureRedirect: "http://localhost:3081/"
+  })
+);
+
 // 사용자정보 가져오기
 router.get('/', isLoggedIn, async (req, res, next) => {
   const user = req.user;
@@ -24,7 +44,7 @@ router.get('/:id', async (req, res, next) => {
       where: {
         id: parseInt(req.params.id, 10)
       },
-      attributes: ['id', 'nickname', 'name', 'isAdmin'],
+      attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       include: [{
         model: db.Post,
         as: 'Posts',
@@ -93,7 +113,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
           where: {
             id: user.id
           },
-          attributes: ['id', 'email', 'nickname', 'name', 'isAdmin'],
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
           include: [{
             model: db.Post,
             attributes: ['id'],
@@ -138,7 +158,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         where: {
           id: user.id
         },
-        attributes: ['id', 'email', 'nickname', 'name', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         include: [{
           model: db.Post,
           attributes: ['id'],
@@ -292,8 +312,6 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
       ],
       limit: parseInt(req.query.limit, 10) || 3,
     })
-    console.log('aaaaaaaaaaaaaaaa', followings);
-
     res.json(followings)
   } catch (err) {
     console.error('GET /:id/followings :::', err)
@@ -318,7 +336,7 @@ router.get('/:id/posts', async (req, res, next) => {
       where,
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname', 'name', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }, {
         model: db.Image,
       }, {
@@ -330,7 +348,7 @@ router.get('/:id/posts', async (req, res, next) => {
         as: "Retweet",
         include: [{
           model: db.User,
-          attributes: ['id', 'nickname']
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         }, {
           model: db.Image
         }]

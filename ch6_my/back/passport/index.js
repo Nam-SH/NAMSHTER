@@ -1,5 +1,7 @@
 const passport = require('passport');
 const local = require('./local');
+const kakao = require('./kakao');
+const naver = require('./naver');
 const db = require('../models');;
 
 module.exports = () => {
@@ -13,7 +15,7 @@ module.exports = () => {
         where: {
           id
         },
-        attributes: ['id', 'nickname', 'name', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'isAdmin', 'snsId', 'provider'],
         include: [{
           model: db.Post,
           attributes: ['id'],
@@ -32,9 +34,11 @@ module.exports = () => {
       });
       return done(null, user); // req.user, req.isAuthenticated() === true,
     } catch (err) {
-      console.error(err);
-      return done('deserializeUser :::', err);
+      console.error('deserializeUser :::', err);
+      return done(err);
     }
   });
   local();
+  kakao();
+  naver();
 };

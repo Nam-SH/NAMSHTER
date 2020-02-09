@@ -73,7 +73,7 @@ router.get('/:id', async (req, res, next) => {
       include: [{
           // 작성자 정보
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'isAdmin']
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         },
         {
           model: db.Image,
@@ -144,7 +144,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       include: [{
         // 요청을 받으면 프론트에 User: { id: 1, nickname: "남승현" } 형식이 추가된다.
         model: db.User,
-        attributes: ['id', 'nickname', 'name', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }, {
         model: db.Image,
       }, {
@@ -236,7 +236,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { // POST /pos
       },
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname', 'name', 'isAdmin']
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }]
     });
     return res.json(comment);
@@ -263,7 +263,7 @@ router.get('/:id/comments', async (req, res, next) => {
       },
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname', 'name', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }],
       order: [
         ['createdAt', 'ASC']
@@ -321,13 +321,13 @@ router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
       },
       include: [{
         model: db.User,
-        attributes: ['id', 'nickname', 'name', 'isAdmin']
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }, {
         model: db.Post,
         as: 'Retweet',
         include: [{
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'isAdmin'],
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         }, {
           model: db.Image,
         }, {

@@ -16,16 +16,16 @@ router.get('/:groupId', isLoggedIn, async (req, res, next) => {
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email']
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }, {
         model: db.User,
         as: "Groupmembers",
-        attributes: ['id', 'nickname', 'name', 'email']
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
       }, {
         model: db.Grouppost,
         include: [{
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'email']
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         }]
       }],
     });
@@ -54,17 +54,17 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email']
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         },
         {
           model: db.User,
           as: "Groupmembers",
-          attributes: ['id']
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         }, {
           model: db.Grouppost,
           include: [{
             model: db.User,
-            attributes: ['id', 'nickname', 'name', 'email']
+            attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
           }]
         }
       ],
