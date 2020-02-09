@@ -7,9 +7,9 @@ module.exports = {
     let datas = [];
     for (let i = 1; i < 10; i++) {
       let temp = {
-        email: "dog" + i + "@dog.com",
-        name: "강아지" + i,
-        nickname: "dog" + i,
+        email: "tiger" + i + "@tiger.com",
+        name: "호랑이" + i,
+        nickname: "tiger" + i,
         password: hash,
         createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')

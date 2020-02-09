@@ -3,13 +3,7 @@
     <v-card>
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
-          <v-text-field
-            label="이메일"
-            type="email"
-            required
-            v-model="email"
-            :rules="emailRules"
-          />
+          <v-text-field label="이메일" type="email" required v-model="email" :rules="emailRules" />
           <v-text-field
             label="비밀번호"
             type="password"
@@ -23,19 +17,14 @@
       </v-form>
     </v-card>
     <div class="text-align: center">
-      <div class="ma-2" style="position: relative; left: 10%;">
+      <div class="ma-2" style="position: relative; left: 25%">
         <a href="http://localhost:3085/user/naver">
-          <img src="../static/naver.png" alt="" style="width:80%;height:60px" />
+          <img src="../static/naver.png" alt style="width:50%" />
         </a>
       </div>
-      <div class="ma-2" style="position: relative; left: 10%;">
+      <div class="ma-2" style="position: relative;left: 25%">
         <a href="http://localhost:3085/user/kakao">
-          <img src="../static/kakao.png" alt="" style="width:80%;height:60px" />
-        </a>
-      </div>
-      <div class="ma-2" style="position: relative; left: 10%;">
-        <a href="/">
-          <img src="../static/kakao.png" alt="" style="width:80%;height:60px" />
+          <img src="../static/kakao.png" alt style="width:50%" />
         </a>
       </div>
     </div>
@@ -44,9 +33,11 @@
     <v-card>
       <v-container>
         <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
-        <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
-        {{ me }}
-        {{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.
+        <v-avatar v-if="social" :color="socialColor" size="25">
+          <span class="black--text" style="font-size:20px">{{ socialName }}</span>
+        </v-avatar>
+        <span>{{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.</span>
+        <hr />
         <v-btn @click="onLogOut">로그아웃</v-btn>
         <v-row>
           <v-col col="4">{{ me.Followings.length }}명을 팔로잉...</v-col>
@@ -76,7 +67,9 @@ export default {
       passwordRules: [
         v => !!v || "Password is required",
         v => (v && v.length >= 10) || "비밀번호는 최소 10자에여;;"
-      ]
+      ],
+      socialName: "",
+      socialColor: ""
     };
   },
   methods: {
@@ -103,7 +96,16 @@ export default {
     }
   },
   computed: {
-    ...mapState("users", ["me"])
+    ...mapState("users", ["me"]),
+    social() {
+      if (this.me && this.me.snsId && this.me.provider) {
+        if (this.me.provider === "kakao") {
+          return (this.socialName = "K"), (this.socialColor = "yellow");
+        }
+        return (this.socialName = "N"), (this.socialColor = "green");
+      }
+      return false;
+    }
   }
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-container>
+      <!-- 내 닉네임 수정하기 -->
       <v-card style="margin-bottom: 20px">
         <v-container>
           <v-subheader>내 프로필</v-subheader>
@@ -20,6 +21,22 @@
         </v-container>
       </v-card>
 
+      <!-- 그래프 보여주기 -->
+      <v-container fluid>
+        <v-sparkline
+          :gradient="gradient"
+          line-width="2"
+          padding="8"
+          smooth="10"
+          :value="value"
+          :labels="labels"
+          auto-draw
+        ></v-sparkline>
+
+        <v-divider />
+      </v-container>
+
+      <!-- 3. 팔로잉, 팔로워 조회하기 -->
       <v-card>
         <v-container>
           <v-subheader>팔로잉</v-subheader>
@@ -58,8 +75,16 @@ export default {
       error: false,
       hideDetails: true,
       successMessages: "",
-      success: false
+      success: false,
+
+      gradient: ["blue", "red", "pink"],
+      // 내가 작성한 이번 주 작성한 글
+      value: [1, 4, 1, 8, 2, 9, 0],
+      labels: ["월", "화", "수", "목", "금", "토", "일"]
     };
+  },
+  created() {
+    this.nickname = this.me.nickname;
   },
   computed: {
     me() {

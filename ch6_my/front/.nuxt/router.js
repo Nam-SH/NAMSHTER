@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
+const _ac390248 = () => interopDefault(import('..\\pages\\graph.vue' /* webpackChunkName: "pages_graph" */))
 const _610a8c8c = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
 const _b4c20792 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
 const _227e970c = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
@@ -29,6 +30,10 @@ export const routerOptions = {
   scrollBehavior,
 
   routes: [{
+    path: "/graph",
+    component: _ac390248,
+    name: "graph"
+  }, {
     path: "/groups",
     component: _610a8c8c,
     name: "groups"
