@@ -66,7 +66,7 @@ export default {
       return this.$store.state.groups.grouplist_doing;
     },
     isingroups() {
-      return this.$route.name === "groups" ? true : false;
+      return this.$route.name === "index" ? false : true;
     },
     loadgrouplist_doing() {
       if (this.isingroups) {

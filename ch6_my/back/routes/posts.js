@@ -31,7 +31,8 @@ router.get('/', async (req, res, next) => {
       }, {
         model: db.Post,
         as: "Retweet",
-        include: [{
+        include: [
+          {
             model: db.User,
             attributes: ['id', 'nickname']
           },

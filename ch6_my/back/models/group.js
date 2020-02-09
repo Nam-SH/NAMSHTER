@@ -25,14 +25,18 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Group.associate = db => {
+    db.Group.belongsToMany(db.Subject, {
+      through: "Groupsubject"
+    })
     db.Group.belongsToMany(db.User, {
       through: "Groupuser",
-      as: "Groupmember"
+      as: "Groupmembers",
     });
     db.Group.belongsTo(db.User, {
       as: "Master"
     });
     db.Group.hasMany(db.Grouppost);
+
   };
 
   return Group;

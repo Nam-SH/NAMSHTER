@@ -25,7 +25,9 @@
           <template v-else>{{ node }}</template>
         </template>
       </div>
+      <br />
       <div>{{ $moment(post.createdAt).fromNow() }}</div>
+      <div v-if="post.createdAt !== post.updatedAt">(수정됨: {{ $moment(post.updatedAt).fromNow() }})</div>
     </v-card-text>
 
     <v-card-text v-else>

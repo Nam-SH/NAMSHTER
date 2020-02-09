@@ -15,8 +15,17 @@
           <v-btn text nuxt to="/profile" :style="{ display: 'flex', alignItems: 'center' }">
             <div>프로필</div>
           </v-btn>
-          <v-btn text nuxt to="/signup" :style="{ display: 'flex', alignItems: 'center' }">
+          <v-btn
+            v-if="!me"
+            text
+            nuxt
+            to="/signup"
+            :style="{ display: 'flex', alignItems: 'center' }"
+          >
             <div>회원가입</div>
+          </v-btn>
+          <v-btn v-else text nuxt to="/groups" :style="{ display: 'flex', alignItems: 'center' }">
+            <div>그룹</div>
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -47,6 +56,11 @@ export default {
     return {
       hashtag: ""
     };
+  },
+  computed: {
+    me() {
+      return this.$store.state.users.me;
+    }
   },
   methods: {
     onSearchHashtag() {

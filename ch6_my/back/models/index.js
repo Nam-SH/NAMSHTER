@@ -11,6 +11,9 @@ db.Comment = require('./comment')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag')(sequelize, Sequelize);
 db.Image = require('./image')(sequelize, Sequelize);
 
+
+db.Category = require('./category')(sequelize, Sequelize);
+db.Subject = require('./subject')(sequelize, Sequelize);
 db.Group = require('./group')(sequelize, Sequelize);
 db.Grouppost = require('./grouppost')(sequelize, Sequelize);
 

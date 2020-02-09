@@ -256,6 +256,9 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
     const followers = await me.getFollowers({
       where,
       attributes: ['id', 'nickname'],
+      order: [
+        ['createdAt', 'DESC']
+      ],
       limit: parseInt(req.query.limit, 10) || 3,
     })
     res.json(followers)
@@ -284,8 +287,13 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
     const followings = await me.getFollowings({
       where,
       attributes: ['id', 'nickname'],
+      order: [
+        ['createdAt', 'DESC']
+      ],
       limit: parseInt(req.query.limit, 10) || 3,
     })
+    console.log('aaaaaaaaaaaaaaaa', followings);
+
     res.json(followings)
   } catch (err) {
     console.error('GET /:id/followings :::', err)

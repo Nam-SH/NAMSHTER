@@ -269,6 +269,9 @@ export const actions = {
         const res = await this.$axios.get(`/user/${state.me.id}/followers?lastId=${lastFollowing && lastFollowing.id}&limit=3`, {
           withCredentials: true,
         })
+        console.log('아아아아', state.followingList);
+        console.log('아아아아', res.data);
+
         commit('loadFollowings', {
           data: res.data,
           reset: false,

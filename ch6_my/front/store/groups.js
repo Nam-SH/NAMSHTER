@@ -16,8 +16,6 @@ export const state = () => ({
 
 export const mutations = {
   groupAdd(state, payload) {
-    console.log('pa', payload);
-
     state.allgrouplist.unshift(payload)
     state.grouplist_before.unshift(payload)
   },

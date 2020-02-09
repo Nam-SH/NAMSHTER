@@ -29,10 +29,12 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (db) => {
     db.User.hasMany(db.Post)
     db.User.hasMany(db.Comment)
+
     db.User.belongsToMany(db.Post, {
       through: 'Like',
       as: 'Liked'
     })
+
     db.User.belongsToMany(db.User, {
       through: 'Follow',
       as: 'Followers',
@@ -43,13 +45,11 @@ module.exports = (sequelize, DataTypes) => {
       as: 'Followings',
       foreignKey: 'followerId'
     })
-
     db.User.belongsToMany(db.Group, {
       through: "Groupuser",
-      as: 'Groupjoined'
+      as: 'Groupjoined',
     });
     db.User.hasMany(db.Grouppost)
   };
-
   return User;
 };

@@ -29,8 +29,7 @@
             v-if="hasMoreFollowing"
             color="blue"
             style="width: 100%"
-            >더 보기</v-btn
-          >
+          >더 보기</v-btn>
           <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
         </v-container>
       </v-card>
@@ -38,13 +37,7 @@
         <v-container>
           <v-subheader>팔로워</v-subheader>
           <follow-list :users="followerList" :remove="removeFollower" />
-          <v-btn
-            @click="loadFollowers"
-            v-if="hasMoreFollower"
-            color="blue"
-            style="width: 100%"
-            >더 보기</v-btn
-          >
+          <v-btn @click="loadFollowers" v-if="hasMoreFollower" color="blue" style="width: 100%">더 보기</v-btn>
           <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
         </v-container>
       </v-card>

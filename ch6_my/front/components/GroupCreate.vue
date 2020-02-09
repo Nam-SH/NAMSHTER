@@ -40,7 +40,7 @@
                     <v-text-field v-model="groupName" label="그룹 이름" required></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <v-text-field label="그룹 방장" disabled></v-text-field>
+                    <v-text-field v-if="me" label="그룹 방장" readonly :placeholder="this.me.name "></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
@@ -109,9 +109,9 @@ export default {
             this.groupName = null;
             this.groupIntro = null;
             this.groupLimit = null;
-          })
-          .catch(err => {
-            console.error("onSubmitForm :::", err);
+            this.$router.push(
+              `/groups/${this.$store.state.groups.grouplist_before[0].id}`
+            );
           });
       }
     }

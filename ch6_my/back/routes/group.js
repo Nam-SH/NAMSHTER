@@ -19,11 +19,8 @@ router.get('/:groupId', isLoggedIn, async (req, res, next) => {
         attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.User,
-        as: "Groupmember",
-        include: [{
-          model: db.User,
-          attributes: ['id', 'nickname']
-        }]
+        as: "Groupmembers",
+        attributes: ['id', 'nickname', 'name', 'email']
       }, {
         model: db.Grouppost,
         include: [{
@@ -61,11 +58,8 @@ router.post('/', isLoggedIn, async (req, res, next) => {
         },
         {
           model: db.User,
-          as: "Groupmember",
-          include: [{
-            model: db.User,
-            attributes: ['id']
-          }]
+          as: "Groupmembers",
+          attributes: ['id']
         }, {
           model: db.Grouppost,
           include: [{
