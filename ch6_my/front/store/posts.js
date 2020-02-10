@@ -5,6 +5,7 @@ export const state = () => ({
   mainPosts: [],
   hasMorePost: true,
   imagePaths: [],
+  calcPost: [],
 });
 
 export const mutations = {
@@ -33,6 +34,35 @@ export const mutations = {
     state.mainPosts = [payload]
   },
 
+  thisWeekPost(state, payload) {
+    const currentDay = new Date();
+    const theYear = currentDay.getFullYear();
+    const theMonth = currentDay.getMonth();
+    const theDate = currentDay.getDate();
+    const theDayName = currentDay.getDay();
+    let resultDay = new Date(theYear, theMonth, theDate + (1 - theDayName));
+    let yyyy = resultDay.getFullYear();
+    let mm = Number(resultDay.getMonth()) + 1;
+    let dd = resultDay.getDate();
+    mm = String(mm).length === 1 ? "0" + mm : mm;
+    dd = String(dd).length === 1 ? "0" + dd : dd;
+    let monDay = yyyy + mm + dd
+
+    if (payload) {
+      let howManyPost = []
+      for (let val of payload) {
+        howManyPost.push(val.substr(0, 10).replace(/-/gi, ''))
+      }
+      let calcPost = [0, 0, 0, 0, 0, 0, 0]
+      for (let day of howManyPost) {
+        calcPost[parseInt(day, 10) - parseInt(monDay, 10)] += 1;
+      }
+      state.calcPost = calcPost
+      return
+    }
+    state.calcPost = []
+  },
+
   // 글 전체 불러오기
   loadPosts(state, payload) {
     if (payload.reset) {
@@ -42,8 +72,6 @@ export const mutations = {
     }
     state.hasMorePost = payload.data.length === 10;
   },
-
-
 
   // 댓글 요청하기
   loadComments(state, payload) {
@@ -159,6 +187,18 @@ export const actions = {
     } catch (err) {
       console.error('loadPost :::', err)
     }
+  },
+
+  async thisWeekPost({
+    commit
+  }, payload) {
+    await this.$axios.get('/posts/thisweek')
+      .then((res) => {
+        commit('thisWeekPost', res.data)
+      })
+      .catch((err) => {
+        console.error('thisWeekPost :::', err);
+      })
   },
 
   // 전체 글 불러오기 - 쓰로틀링 설정

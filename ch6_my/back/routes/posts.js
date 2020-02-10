@@ -31,8 +31,7 @@ router.get('/', async (req, res, next) => {
       }, {
         model: db.Post,
         as: "Retweet",
-        include: [
-          {
+        include: [{
             model: db.User,
             attributes: ['id', 'nickname']
           },
@@ -52,5 +51,38 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 });
+
+
+router.get('/thisweek', async (req, res, next) => {
+  try {
+    let where = {
+      UserId: req.user.id
+    };
+    // if (parseInt(req.query.lastId, 10)) {
+    //   where = {
+    //     id: {
+    //       [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
+    //     }
+    //   }
+    // }
+    const posts = await db.Post.findAll({
+      where,
+      attributes: ['createdAt'],
+      order: [
+        ['createdAt', 'DESC']
+      ],
+    });
+    let calcPosts = []
+    for (let i of posts) {
+      calcPosts.push(i.dataValues.createdAt)
+    }
+
+    res.json(calcPosts);
+  } catch (err) {
+    console.error('GET /', err)
+    next(err)
+  }
+});
+
 
 module.exports = router;

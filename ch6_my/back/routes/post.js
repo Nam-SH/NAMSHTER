@@ -71,7 +71,6 @@ router.get('/:id', async (req, res, next) => {
         id: req.params.id
       },
       include: [{
-          // 작성자 정보
           model: db.User,
           attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         },

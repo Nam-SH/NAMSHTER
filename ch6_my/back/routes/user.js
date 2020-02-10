@@ -257,6 +257,41 @@ router.patch('/nickname', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 이름 변경
+router.patch('/name', isLoggedIn, async (req, res, next) => {
+  try {
+    await db.User.update({
+      name: req.body.name,
+    }, {
+      where: {
+        id: req.user.id
+      },
+    });
+    res.send(req.body.name);
+  } catch (err) {
+    console.error('PATCH /name :::', err);
+    next(err);
+  }
+});
+
+// 비밀번호 변경
+router.patch('/password', isLoggedIn, async (req, res, next) => {
+  const hash = await bcrypt.hash(req.body.password, 12);
+  try {
+    await db.User.update({
+      password: hash,
+    }, {
+      where: {
+        id: req.user.id
+      },
+    });
+    res.send();
+  } catch (err) {
+    console.error('PATCH /nickname :::', err);
+    next(err);
+  }
+});
+
 // 팔로워 전체 목록 불러오기
 router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
   try {

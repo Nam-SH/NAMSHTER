@@ -23,6 +23,9 @@ export const mutations = {
   changeNickname(state, payload) {
     state.me.nickname = payload;
   },
+  changeName(state, payload) {
+    state.me.name = payload;
+  },
 
   following(state, payload) {
     state.me.Followings.push({
@@ -76,8 +79,7 @@ export const actions = {
       commit('setMe', res.data)
       return
     } catch (err) {
-      console.error(err);
-
+      // console.error(err);
       // if (err.response.status === 401) {
       //   console.log('로그인해줘요');
       // } else {
@@ -164,6 +166,38 @@ export const actions = {
       })
       .catch((err) => {
         console.error('changeNickname :::', err)
+      })
+  },
+
+  changeName({
+    commit
+  }, payload) {
+    return this.$axios.patch('/user/name', {
+        name: payload.name
+      }, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        commit('changeName', res.data)
+      })
+      .catch((err) => {
+        console.error('changename :::', err)
+      })
+  },
+
+  changePassword({
+    commit
+  }, payload) {
+    return this.$axios.patch('/user/password', {
+        password: payload.password
+      }, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // commit('changePassword', res.data)
+      })
+      .catch((err) => {
+        console.error('changePassword :::', err)
       })
   },
 

@@ -1,86 +1,58 @@
 <template>
-  <div>
-    <v-container>
-      <!-- 내 닉네임 수정하기 -->
-      <v-card style="margin-bottom: 20px">
-        <v-container>
-          <v-subheader>내 프로필</v-subheader>
-          <v-form @submit.prevent="onSubmitForm">
-            <v-text-field
-              label="닉네임 변경하고 싶죠?"
-              required
-              v-model="nickname"
-              :error="error"
-              :hide-details="hideDetails"
-              :success-messages="successMessages"
-              :success="success"
-              @input="onChangeTextarea"
-            />
-            <v-btn dark color="blue" type="submit">수정</v-btn>
-          </v-form>
-        </v-container>
-      </v-card>
+  <v-container>
+    <!-- 1. 내 정보 수정하기 -->
+    <my-infor />
 
-      <!-- 그래프 보여주기 -->
-      <v-container fluid>
-        <v-sparkline
-          :gradient="gradient"
-          line-width="2"
-          padding="8"
-          smooth="10"
-          :value="value"
-          :labels="labels"
-          auto-draw
-        ></v-sparkline>
+    <!-- 2. 그래프 보여주기 -->
+    <my-graph :calcPost="calcPost" />
 
-        <v-divider />
+    <!-- 3. 팔로잉, 팔로워 조회하기 -->
+    <v-card>
+      <v-container>
+        <v-subheader>팔로잉</v-subheader>
+        <follow-list :users="followingList" :remove="removeFollowing" />
+        <v-btn
+          @click="loadFollowings"
+          v-if="hasMoreFollowing"
+          color="blue"
+          style="width: 100%"
+          >더 보기</v-btn
+        >
+        <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
       </v-container>
-
-      <!-- 3. 팔로잉, 팔로워 조회하기 -->
-      <v-card>
-        <v-container>
-          <v-subheader>팔로잉</v-subheader>
-          <follow-list :users="followingList" :remove="removeFollowing" />
-          <v-btn
-            @click="loadFollowings"
-            v-if="hasMoreFollowing"
-            color="blue"
-            style="width: 100%"
-          >더 보기</v-btn>
-          <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
-        </v-container>
-      </v-card>
-      <v-card>
-        <v-container>
-          <v-subheader>팔로워</v-subheader>
-          <follow-list :users="followerList" :remove="removeFollower" />
-          <v-btn @click="loadFollowers" v-if="hasMoreFollower" color="blue" style="width: 100%">더 보기</v-btn>
-          <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
-        </v-container>
-      </v-card>
-    </v-container>
-  </div>
+    </v-card>
+    <v-card>
+      <v-container>
+        <v-subheader>팔로워</v-subheader>
+        <follow-list :users="followerList" :remove="removeFollower" />
+        <v-btn
+          @click="loadFollowers"
+          v-if="hasMoreFollower"
+          color="blue"
+          style="width: 100%"
+          >더 보기</v-btn
+        >
+        <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
+      </v-container>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
 import FollowList from "~/components/FollowList";
+import MyInfor from "@/components/MyInfor.vue";
+import MyGraph from "@/components/MyGraph.vue";
 
 export default {
   components: {
-    FollowList
+    FollowList,
+    MyInfor,
+    MyGraph
   },
   data() {
     return {
-      nickname: "",
-      error: false,
-      hideDetails: true,
-      successMessages: "",
-      success: false,
-
-      gradient: ["blue", "red", "pink"],
       // 내가 작성한 이번 주 작성한 글
-      value: [1, 4, 1, 8, 2, 9, 0],
-      labels: ["월", "화", "수", "목", "금", "토", "일"]
+      gradient: ["blue", "red", "pink"]
     };
   },
   created() {
@@ -101,13 +73,16 @@ export default {
     },
     hasMoreFollower() {
       return this.$store.state.users.hasMoreFollower;
+    },
+    calcPost() {
+      return this.$store.state.posts.calcPost;
     }
   },
-
   fetch({ store }) {
     return Promise.all([
       store.dispatch("users/loadFollowings", { reset: true }),
-      store.dispatch("users/loadFollowers", { reset: true })
+      store.dispatch("users/loadFollowers", { reset: true }),
+      store.dispatch("posts/thisWeekPost")
     ]);
   },
   watch: {
@@ -120,34 +95,6 @@ export default {
     }
   },
   methods: {
-    onChangeTextarea(value) {
-      if (!value.trim()) {
-        this.error = true;
-      } else {
-        this.error = false;
-      }
-      this.hideDetails = true;
-      this.success = false;
-      this.successMessages = "";
-    },
-    onSubmitForm() {
-      if (!this.nickname.trim()) {
-        alert("변경하려면 닉네임을 입력해야죠;;");
-        return;
-      }
-      this.$store
-        .dispatch("users/changeNickname", {
-          nickname: this.nickname
-        })
-        .then(() => {
-          this.nickname = "";
-          this.hideDetails = false;
-          this.success = true;
-          this.error = false;
-          this.successMessages = "게시글 등록을 성공했습니다요";
-        });
-    },
-
     removeFollower(userId) {
       this.$store.dispatch("users/unfollower", { userId });
     },
