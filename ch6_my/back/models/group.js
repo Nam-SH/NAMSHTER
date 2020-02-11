@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Group.associate = db => {
     db.Group.belongsToMany(db.Subject, {
-      through: "Groupsubject"
+      through: "Groupsubject",
+      as: "Groupsubjects"
     })
     db.Group.belongsToMany(db.User, {
       through: "Groupuser",

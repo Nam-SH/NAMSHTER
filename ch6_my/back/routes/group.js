@@ -20,12 +20,20 @@ router.get('/:groupId', isLoggedIn, async (req, res, next) => {
       }, {
         model: db.User,
         as: "Groupmembers",
-        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+        attributes: ['id', 'nickname', 'name', 'email'],
       }, {
         model: db.Grouppost,
         include: [{
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+          attributes: ['id', 'nickname', 'name', 'email'],
+        }]
+      }, {
+        model: db.Subject,
+        as: "Groupsubjects",
+        attributes: ['id', 'name'],
+        include: [{
+          model: db.Category,
+          attributes: ['id', 'name']
         }]
       }],
     });
@@ -45,7 +53,14 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       limit: req.body.limit,
       MasterId: req.user.id,
     })
+
+    const targetSubject = await db.Subject.findOne({
+      where: {
+        name: req.body.subjectName
+      }
+    })
     await newGroup.addGroupmember(req.user.id)
+    await newGroup.addGroupsubject(targetSubject.id)
 
     const fullGroup = await db.Group.findOne({
       where: {
@@ -54,24 +69,32 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+          attributes: ['id', 'nickname', 'name', 'email'],
         },
         {
           model: db.User,
           as: "Groupmembers",
-          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+          attributes: ['id', 'nickname', 'name', 'email'],
         }, {
           model: db.Grouppost,
           include: [{
             model: db.User,
-            attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+            attributes: ['id', 'nickname', 'name', 'email'],
+          }]
+        }, {
+          model: db.Subject,
+          as: "Groupsubjects",
+          attributes: ['id', 'name'],
+          include: [{
+            model: db.Category,
+            attributes: ['id', 'name']
           }]
         }
       ],
     });
     return res.json(fullGroup);
   } catch (err) {
-    console.error('GET /:id', err)
+    console.error('POST /:id', err)
     next(err)
   }
 });

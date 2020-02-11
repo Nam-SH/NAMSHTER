@@ -54,7 +54,8 @@ export const actions = {
     return this.$axios.post("/group", {
         name: payload.name,
         intro: payload.intro,
-        limit: payload.limit
+        limit: payload.limit,
+        subjectName: payload.subjectName,
       }, {
         withCredentials: true
       })

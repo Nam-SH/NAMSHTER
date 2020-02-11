@@ -101,7 +101,8 @@ export default {
           .dispatch("groups/groupAdd", {
             name: this.groupName,
             intro: this.groupIntro,
-            limit: this.groupLimit
+            limit: this.groupLimit,
+            subjectName: this.groupSubject
           })
           .then(() => {
             this.groupCategory = null;

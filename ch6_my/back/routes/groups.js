@@ -32,6 +32,11 @@ router.get("/", async (req, res, next) => {
         {
           model: db.Grouppost,
           attributes: ["id"]
+        }, {
+          model: db.Subject,
+          as: "Groupsubjects",
+          attributes: ['id', 'name'],
+
         }
       ],
       order: [
@@ -70,6 +75,18 @@ router.get("/:status", async (req, res, next) => {
           model: db.User,
           as: "Groupmember",
           attributes: ["id", "name", "nickname"]
+        }, {
+          model: db.Grouppost,
+          attributes: ["id"]
+        },
+        {
+          model: db.Subject,
+          as: "Groupsubjects",
+          attributes: ['id', 'name'],
+          include: [{
+            model: db.Category,
+            attributes: ['id', 'name']
+          }]
         }
       ],
       order: [

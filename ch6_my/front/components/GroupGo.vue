@@ -5,7 +5,7 @@
         <v-toolbar-title>All Group</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-card-actions>
-          <v-btn v-if="!isingroups" text to="/groups">Go Group</v-btn>
+          <v-btn v-if="isInIndex" text to="/groups">Go Group</v-btn>
           <group-create v-else />
         </v-card-actions>
       </v-app-bar>
@@ -15,6 +15,9 @@
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
+                  <span v-for="(val, key, idx) of group.Groupsubjects[0]" :key="idx">
+                    <v-card-title v-if="idx ===1" v-text="val" />
+                  </span>
                   <v-card-title class="headline" v-text="group.name" />
                   <v-card-subtitle v-text="group.intro" />
                 </div>
@@ -65,8 +68,8 @@ export default {
     grouplist_doing() {
       return this.$store.state.groups.grouplist_doing;
     },
-    isingroups() {
-      return this.$route.name === "index" ? false : true;
+    isInIndex() {
+      return this.$route.name === "index" ? true : false;
     },
     loadgrouplist_doing() {
       if (this.isingroups) {

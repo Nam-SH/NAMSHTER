@@ -1,32 +1,38 @@
 <template>
   <v-container>
     <v-card class="d-flex align-content-space-between flex-wrap" color="black" dark height="350px">
+      <p>{{ group.Groupsubjects[0] }}</p>
+      <hr style="color:white" />
       <v-card-title>
-        <span class="title">{{ group.name }}</span>
+        <p class="title">{{ group.name }}</p>
       </v-card-title>
-      {{ group }}
-      <!-- <v-card-text>그룹 소개 :: {{ group.intro }}</v-card-text>
-      <p>그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})</p>
-      <p>문의 메일 :: {{ group.Master.email }}</p>
-      <p>그룹 인원 {{ group.Groupmember }} / {{ group.limit }}</p>-->
-
+      <v-card-text>그룹 소개 :: {{ group.intro }}</v-card-text>
+      <v-container>
+        <ul>
+          <li>그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})</li>
+          <li>문의 메일 :: {{ group.Master.email }}</li>
+          <li>그룹 인원 {{ group.Groupmembers.length }} / {{ group.limit }}</li>
+        </ul>
+      </v-container>
       <v-card-actions>
         <v-list-item class="grow">
           <v-list-item-avatar color="grey darken-3">
-            <v-img
-              class="elevation-6"
-              src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-            />
+            <v-img class="elevation-6" :src="group.Master.imgsrc" />
           </v-list-item-avatar>
 
           <v-row align="center" justify="end">
-            <v-btn icon>
+            <v-btn text>
               <v-icon>mdi-heart</v-icon>
             </v-btn>
-            <v-btn icon>
+            <v-btn
+              text
+              :groupId="group.id"
+              :to="`/groups/${group.id}`"
+              style="text-decoration:none"
+            >
               <v-icon>mdi-plus</v-icon>
+              <strong>들어가기</strong>
             </v-btn>
-            <v-btn :groupId="group.id" :to="`/groups/${group.id}`">들어가기</v-btn>
           </v-row>
         </v-list-item>
       </v-card-actions>
