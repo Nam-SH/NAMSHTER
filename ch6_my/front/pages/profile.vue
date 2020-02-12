@@ -4,7 +4,24 @@
     <my-infor />
 
     <!-- 2. 그래프 보여주기 -->
-    <my-graph :calcPost="calcPost" />
+    <v-container>
+      <v-btn v-if="calcPost.length > 0" text color="green">내가 이번 주에 쓴 글 상태네요!</v-btn>
+      <v-btn v-else @click="howManyPost">나의 상태는?</v-btn>
+      <v-card>
+        <v-container>
+          <v-sparkline
+            line-width="2"
+            padding="8"
+            smooth="10"
+            :gradient="gradient"
+            :value=" calcPost.length > 0 ? calcPost : calcPostList"
+            :labels="labels"
+            auto-draw
+          />
+          <v-divider />
+        </v-container>
+      </v-card>
+    </v-container>
 
     <!-- 3. 팔로잉, 팔로워 조회하기 -->
     <v-card>
@@ -29,22 +46,19 @@
 <script>
 import FollowList from "~/components/FollowList";
 import MyInfor from "@/components/MyInfor.vue";
-import MyGraph from "@/components/MyGraph.vue";
 
 export default {
   components: {
     FollowList,
-    MyInfor,
-    MyGraph
+    MyInfor
   },
   data() {
     return {
       // 내가 작성한 이번 주 작성한 글
-      gradient: ["blue", "red", "pink"]
+      gradient: ["blue", "red", "pink"],
+      labels: ["월", "화", "수", "목", "금", "토", "일"],
+      calcPostList: [2, 6, 3, 1, 7, 4, 2]
     };
-  },
-  created() {
-    this.nickname = this.me.nickname;
   },
   computed: {
     me() {
@@ -69,8 +83,7 @@ export default {
   fetch({ store }) {
     return Promise.all([
       store.dispatch("users/loadFollowings", { reset: true }),
-      store.dispatch("users/loadFollowers", { reset: true }),
-      store.dispatch("posts/thisWeekPost")
+      store.dispatch("users/loadFollowers", { reset: true })
     ]);
   },
   watch: {
@@ -94,6 +107,9 @@ export default {
     },
     loadFollowings() {
       this.$store.dispatch("users/loadFollowings", { offset: 0 });
+    },
+    howManyPost() {
+      this.$store.dispatch("posts/thisWeekPost");
     }
   },
   head() {

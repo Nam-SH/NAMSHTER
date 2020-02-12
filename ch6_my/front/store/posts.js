@@ -182,17 +182,21 @@ export const actions = {
     commit
   }, payload) {
     try {
-      const res = await this.$axios.get(`/post/${payload}`)
+      const res = await this.$axios.get(`/post/${payload}`, {
+        withCredentials: true
+      })
       commit('loadPost', res.data)
     } catch (err) {
       console.error('loadPost :::', err)
     }
   },
 
-  async thisWeekPost({
+  thisWeekPost({
     commit
   }, payload) {
-    await this.$axios.get('/posts/thisweek')
+    return this.$axios.get('/posts/thisweek', {
+        withCredentials: true
+      })
       .then((res) => {
         commit('thisWeekPost', res.data)
       })
@@ -208,7 +212,9 @@ export const actions = {
   }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/posts?&limit=10`)
+        const res = await this.$axios.get(`/posts?&limit=10`, {
+          withCredentials: true
+        })
         commit('loadPosts', {
           data: res.data,
           reset: true,
@@ -217,7 +223,9 @@ export const actions = {
       }
       if (state.hasMorePost) {
         const lastPost = state.mainPosts[state.mainPosts.length - 1];
-        const res = await this.$axios.get(`/posts?lastId=${lastPost && lastPost.id}&limit=10`)
+        const res = await this.$axios.get(`/posts?lastId=${lastPost && lastPost.id}&limit=10`, {
+          withCredentials: true
+        })
         commit('loadPosts', {
           data: res.data,
           reset: false
@@ -247,7 +255,9 @@ export const actions = {
       }
       if (state.hasMorePost) {
         const lastPost = state.mainPosts[state.mainPosts.length - 1]
-        const res = await this.$axios.get(`/user/${payload.userId}/posts?lastId=${lastPost && lastPost.id}&limit=10`)
+        const res = await this.$axios.get(`/user/${payload.userId}/posts?lastId=${lastPost && lastPost.id}&limit=10`, {
+          withCredentials: true
+        })
         commit('loadPosts', {
           data: res.data,
           reset: false,
@@ -266,7 +276,9 @@ export const actions = {
   }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?limit=10`)
+        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?limit=10`, {
+          withCredentials: true
+        })
         commit('loadPosts', {
           data: res.data,
           reset: true,
@@ -275,7 +287,9 @@ export const actions = {
       }
       if (state.hasMorePost) {
         const lastPost = state.mainPosts[state.mainPosts.length - 1]
-        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?lastId=${lastPost && lastPost.id}&limit=10`)
+        const res = await this.$axios.get(`/hashtag/${payload.hashtag}?lastId=${lastPost && lastPost.id}&limit=10`, {
+          withCredentials: true
+        })
         commit('loadPosts', {
           data: res.data,
           reset: false,
@@ -292,7 +306,9 @@ export const actions = {
   loadComments({
     commit
   }, payload) {
-    return this.$axios.get(`/post/${payload.postId}/comments`)
+    return this.$axios.get(`/post/${payload.postId}/comments`, {
+        withCredentials: true
+      })
       .then((res) => {
         commit('loadComments', {
           postId: payload.postId,

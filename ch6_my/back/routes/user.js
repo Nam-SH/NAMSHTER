@@ -304,7 +304,7 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
     if (parseInt(req.query.lastId, 10)) {
       where = {
         id: {
-          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
+          [db.Sequelize.Op.gt]: parseInt(req.query.lastId, 10)
         }
       }
     }
@@ -340,11 +340,11 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
       }
     }
     const followings = await me.getFollowings({
-      where,
-      attributes: ['id', 'nickname'],
       order: [
         ['createdAt', 'DESC']
       ],
+      where,
+      attributes: ['id', 'nickname'],
       limit: parseInt(req.query.limit, 10) || 3,
     })
     res.json(followings)

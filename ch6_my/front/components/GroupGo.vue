@@ -2,16 +2,16 @@
   <v-container>
     <v-card>
       <v-app-bar dark color="black">
-        <v-toolbar-title>All Group</v-toolbar-title>
+        <v-toolbar-title>진행 중인 그룹...</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-card-actions>
           <v-btn v-if="isInIndex" text to="/groups">Go Group</v-btn>
           <group-create v-else />
         </v-card-actions>
       </v-app-bar>
-      <v-container v-if="allgrouplist.length > 0">
+      <v-container v-if="grouplist.length > 0">
         <v-row dense>
-          <v-col v-for="group in allgrouplist" :key="group.id" cols="12">
+          <v-col v-for="group in grouplist" :key="group.id" cols="12">
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
@@ -62,19 +62,14 @@ export default {
     me() {
       return this.$store.state.users.me;
     },
-    allgrouplist() {
-      return this.$store.state.groups.allgrouplist;
+    grouplist() {
+      return this.$store.state.groups.grouplist;
     },
     grouplist_doing() {
       return this.$store.state.groups.grouplist_doing;
     },
     isInIndex() {
       return this.$route.name === "index" ? true : false;
-    },
-    loadgrouplist_doing() {
-      if (this.isingroups) {
-        return this.$store.dispatch("groups/grouplistDoing", { status: 0 });
-      }
     }
   }
 };

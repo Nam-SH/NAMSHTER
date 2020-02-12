@@ -10,7 +10,10 @@ export const actions = {
   }, {
     req
   }) {
-    return Promise.all([dispatch('users/loadUser'), dispatch('groups/loadAllGroups')])
+    return Promise.all([dispatch('users/loadUser'), dispatch('groups/loadGroups', {
+      status: 0,
+      limit: 5
+    })])
   },
 
 };

@@ -8,9 +8,12 @@
         <v-row class="fill-height" align="center" justify="center">
           <v-container>
             <div>
-              <p>그룹아이디:: {{ group.id }}</p>
-              <p>그룹이름:: {{ group.name }}</p>
-              <p>그룹소개:: {{ group.intro }}</p>
+              <v-card-title>
+                <p class="title">
+                  <v-badge color="pink" dot>{{ group.name }}</v-badge>
+                </p>
+              </v-card-title>
+              <p>{{ group.intro }}</p>
               <p>그룹 제한:: {{ group.limit }}</p>
             </div>
             <v-btn :groupId="group.id" :to="`/groups/${group.id}`">들어가기</v-btn>

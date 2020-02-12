@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
-
+const {
+  isLoggedIn,
+  isNotLoggedIn
+} = require('./middlewares')
 
 // lastId 방식으로 불러오기
 router.get('/', async (req, res, next) => {
@@ -76,8 +79,7 @@ router.get('/thisweek', async (req, res, next) => {
     for (let i of posts) {
       calcPosts.push(i.dataValues.createdAt)
     }
-
-    res.json(calcPosts);
+    return res.json(calcPosts);
   } catch (err) {
     console.error('GET /', err)
     next(err)

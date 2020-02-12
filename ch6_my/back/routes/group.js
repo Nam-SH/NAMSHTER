@@ -37,7 +37,7 @@ router.get('/:groupId', isLoggedIn, async (req, res, next) => {
         }]
       }],
     });
-    res.json(group);
+    return res.json(group);
   } catch (err) {
     console.error('GET /:id', err)
     next(err)
@@ -98,5 +98,46 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     next(err)
   }
 });
+
+
+router.post("/changestatus", isLoggedIn, async (req, res, next) => {
+  try {
+    // 1. 해당 그룹 찾기
+    const group = await db.Group.findOne({
+      where: {
+        id: req.body.groupId
+      }
+    })
+    // 2. 그룹이 없으면 끝
+    if (!group) {
+      return res.status(404).send('그런 그룹이 없는데여;;')
+    }
+    // 3. 그룹이 있으면 해당 그룹의 마수터와 요청한 자의 id 비교하기
+    // 방장이 아니면 400에러 보내기
+    if (group.MasterId !== req.body.userId) {
+      return res.status(403).send('님은 상태를 변경할 권한이 없는데여;;')
+    }
+    // 4. 방장이라면 바꿔주기
+    let nextStatus = 1
+    if (group.status === 1) {
+      nextStatus = 2
+    } else if (group.status === 2) {
+      return res.status(400).send('완료 된 그룹인데여;;')
+    }
+
+    await db.Group.update({
+      status: nextStatus,
+    }, {
+      where: {
+        id: req.body.groupId
+      }
+    })
+    return res.send(nextStatus)
+  } catch (err) {
+    console.error(err);
+    next(err)
+
+  }
+})
 
 module.exports = router;

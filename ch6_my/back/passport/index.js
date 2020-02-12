@@ -15,7 +15,7 @@ module.exports = () => {
         where: {
           id
         },
-        attributes: ['id', 'nickname', 'name', 'isAdmin', 'snsId', 'provider'],
+        attributes: ['id', 'nickname', 'name', 'isAdmin'],
         include: [{
           model: db.Post,
           attributes: ['id'],

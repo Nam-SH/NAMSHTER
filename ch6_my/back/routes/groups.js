@@ -69,12 +69,12 @@ router.get("/:status", async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin'],
         },
         {
           model: db.User,
-          as: "Groupmember",
-          attributes: ["id", "name", "nickname"]
+          as: "Groupmembers",
+          attributes: ["id"]
         }, {
           model: db.Grouppost,
           attributes: ["id"]
@@ -83,10 +83,6 @@ router.get("/:status", async (req, res, next) => {
           model: db.Subject,
           as: "Groupsubjects",
           attributes: ['id', 'name'],
-          include: [{
-            model: db.Category,
-            attributes: ['id', 'name']
-          }]
         }
       ],
       order: [
@@ -96,11 +92,10 @@ router.get("/:status", async (req, res, next) => {
     });
     res.json(groups);
   } catch (err) {
-    console.error("GET /:id", err);
+    console.error("GET /:status", err);
     next(err);
   }
 });
-
 
 
 // 나의 전, 진행, 완료된 리스트 불러오기
@@ -108,7 +103,7 @@ router.get("/my/:status", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
-        id: 1
+        id: req.user.id
       },
     });
     let where = {
@@ -123,15 +118,15 @@ router.get("/my/:status", isLoggedIn, async (req, res, next) => {
     }
     const joinedgroups = await me.getGroupjoined({
       where,
-      attributes: ['id', 'intro', 'limit', 'status'],
+      attributes: ['id', 'name', 'intro', 'limit', 'status'],
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin'],
       }, {
         model: db.User,
         as: "Groupmembers",
-        attributes: ["id", "name", "nickname"]
+        attributes: ["id"]
       }],
       limit: parseInt(req.query.limit, 10) || 5,
     })
@@ -142,11 +137,10 @@ router.get("/my/:status", isLoggedIn, async (req, res, next) => {
   }
 });
 
-
 // 다른 유저의 전, 진행, 완료된 리스트 불러오기
-router.get("/:userId/:status", isLoggedIn, async (req, res, next) => {
+router.get("/user/:userId/:status", isLoggedIn, async (req, res, next) => {
   try {
-    const me = await db.User.findOne({
+    const user = await db.User.findOne({
       where: {
         id: req.params.userId
       },
@@ -161,13 +155,13 @@ router.get("/:userId/:status", isLoggedIn, async (req, res, next) => {
         }
       }
     }
-    const joinedgroups = await me.getGroupjoined({
+    const joinedgroups = await user.getGroupjoined({
       where,
-      attributes: ['id', 'intro', 'limit', 'status'],
+      attributes: ['id', 'name', 'intro', 'limit', 'status'],
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin'],
       }, {
         model: db.User,
         as: "Groupmembers",
@@ -177,9 +171,10 @@ router.get("/:userId/:status", isLoggedIn, async (req, res, next) => {
     })
     res.json(joinedgroups)
   } catch (err) {
-    console.error('GET /:userId/:status :::', err)
+    console.error('GET /user/:userId/:status :::', err)
     next(err)
   }
 });
+
 
 module.exports = router;
