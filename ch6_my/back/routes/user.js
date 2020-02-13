@@ -65,6 +65,10 @@ router.get('/:id', async (req, res, next) => {
       }, {
         model: db.Comment,
         attributes: ['id']
+      }, {
+        model: db.Group,
+        as: 'Groupjoined',
+        attributes: ['id']
       }],
     });
     res.json(user);
@@ -128,6 +132,10 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
           }, {
             model: db.Comment,
             attributes: ['id']
+          }, {
+            model: db.Group,
+            as: 'Groupjoined',
+            attributes: ['id']
           }],
         });
         return res.json(fullUser);
@@ -173,6 +181,10 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         }, {
           model: db.Comment,
           attributes: ['id'],
+        }, {
+          model: db.Group,
+          as: 'Groupjoined',
+          attributes: ['id']
         }],
       });
       return res.json(fullUser);

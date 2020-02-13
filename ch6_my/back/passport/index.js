@@ -30,6 +30,10 @@ module.exports = () => {
         }, {
           model: db.Comment,
           attributes: ['id'],
+        }, {
+          model: db.Group,
+          as: 'Groupjoined',
+          attributes: ['id']
         }],
       });
       return done(null, user); // req.user, req.isAuthenticated() === true,

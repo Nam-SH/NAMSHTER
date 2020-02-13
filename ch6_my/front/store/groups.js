@@ -35,7 +35,7 @@ export const mutations = {
     state.grouplist_before = state.grouplist_before.concat(payload)
   },
   grouplistDoing(state, payload) {
-    state.grouplist_doing = state.grouplist_doing.concat(payload)
+    state.grouplist_doing = payload
   },
 
   otherGrouplistBefore(state, payload) {
@@ -43,7 +43,7 @@ export const mutations = {
   },
   otherGrouplistDoing(state, payload) {
     state.othergrouplist_doing = state.othergrouplist_doing.concat(payload)
-  }
+  },
 };
 
 export const actions = {
@@ -64,6 +64,34 @@ export const actions = {
       })
       .catch((err) => {
         console.error('groupAdd :::', err);
+      })
+  },
+  groupEdit({
+    commit
+  }, payload) {
+
+  },
+  groupDelete({
+    commit
+  }, payload) {
+
+  },
+  groupUserInOut({
+    commit
+  }, payload) {
+    this.$axios.post(`/group/${payload.groupId}/userInOut`, {
+        userId: payload.userId
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        console.log('aaaaaaa', res.data);
+
+        // commit('groupUserInOut', res.data)
+      })
+      .catch((err) => {
+        console.error('groupUserInOut', err);
+
       })
   },
 
@@ -112,7 +140,7 @@ export const actions = {
   grouplistBefore({
     commit
   }, payload) {
-    return this.$axios.get(`/groups/my/${payload.status}`, {
+    return this.$axios.get(`/groups/my/${payload.status}?limit=${payload.limit}`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -126,7 +154,7 @@ export const actions = {
   grouplistDoing({
     commit
   }, payload) {
-    return this.$axios.get(`/groups/my/${payload.status}`, {
+    return this.$axios.get(`/groups/my/${payload.status}?limit=${payload.limit}`, {
         withCredentials: true,
       })
       .then((res) => {

@@ -1,15 +1,12 @@
 <template>
   <v-container>
     <v-card class="d-flex align-content-space-between flex-wrap" color="black" dark height="350px">
-      <!-- <p>{{ group.Groupsubjects[0] }}</p> -->
       <hr style="color:white" />
       <v-card-title>
         <p class="title">{{ group.name }}</p>
       </v-card-title>
-
       <v-container>
         <div style="height:100px">
-          <!-- <p>{{ group.intro }}</p> -->
           <p>{{ group.intro }}</p>
         </div>
         <v-spacer></v-spacer>
@@ -23,14 +20,12 @@
             <v-list-item-avatar color="grey darken-3">
               <v-img class="elevation-6" :src="group.Master.imgsrc" />
             </v-list-item-avatar>
-            <v-row align="center" justify="end">
+            <v-spacer></v-spacer>
+            <v-row align="end" justify="end" style="width:0px">
               <v-btn text icon>
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
-              <v-btn text style="text-decoration:none">
-                <v-icon>mdi-plus</v-icon>
-                <strong>둘러보기</strong>
-              </v-btn>
+              <group-intro :group="group" />
             </v-row>
           </v-list-item>
         </v-card-actions>
@@ -40,7 +35,12 @@
 </template>
 
 <script>
+import GroupIntro from "@/components/GroupIntro.vue";
+
 export default {
+  components: {
+    GroupIntro
+  },
   props: {
     group: {
       type: Object,

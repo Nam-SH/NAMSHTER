@@ -40,9 +40,12 @@
         <hr />
         <v-btn @click="onLogOut">로그아웃</v-btn>
         <v-row>
-          <v-col col="4">{{ me.Followings.length }}명을 팔로잉...</v-col>
-          <v-col col="4">{{ me.Followers.length }}명이 나를 팔로워...</v-col>
-          <v-col col="4">{{ me.Posts.length }}개의 글을 작성함...</v-col>
+          <v-col col="6">{{ me.Followings.length }}명을 팔로잉...</v-col>
+          <v-col col="6">{{ me.Followers.length }}명이 나를 팔로워...</v-col>
+        </v-row>
+        <v-row>
+          <v-col col="6">{{ me.Posts.length }}개의 글을 작성함...</v-col>
+          <v-col col="6">{{ me.Groupjoined.length }}개의 그룹을 가입함...</v-col>
         </v-row>
       </v-container>
     </v-card>

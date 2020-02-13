@@ -134,9 +134,35 @@ router.post("/changestatus", isLoggedIn, async (req, res, next) => {
     })
     return res.send(nextStatus)
   } catch (err) {
-    console.error(err);
+    console.error('POST /changestatus :::', err);
     next(err)
+  }
+})
 
+router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: req.body.userId
+      }
+    })
+
+    const userInGroups = await user.getGroupjoined({
+      where: {
+        id: req.params.groupId
+      },
+      attributes: ['id', 'MasterId']
+    })
+    if (userInGroups && userInGroups.length > 0 && user.id !== userInGroups.MasterId) {
+      await user.removeGroupjoined(req.params.groupId)
+      return res.send("탈퇴가 되었네여;;")
+    } else {
+      await user.addGroupjoined(req.params.groupId)
+      return res.send("가입이 되었네여;;")
+    }
+  } catch (err) {
+    console.error('POST /:groupId/userInOut', err);
+    next(err)
   }
 })
 

@@ -9,9 +9,10 @@
           <group-create v-else />
         </v-card-actions>
       </v-app-bar>
-      <v-container v-if="grouplist.length > 0">
+
+      <v-container v-if="grouplist_doing.length > 0">
         <v-row dense>
-          <v-col v-for="group in grouplist" :key="group.id" cols="12">
+          <v-col v-for="group in grouplist_doing" :key="group.id" cols="12">
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
@@ -30,6 +31,7 @@
           </v-col>
         </v-row>
       </v-container>
+
       <v-container v-else>
         <v-row dense>
           <v-col cols="12">

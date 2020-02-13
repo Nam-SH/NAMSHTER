@@ -1,9 +1,17 @@
 <template>
   <v-container outlined>
     <v-row justify="center" align="center">
-      <v-chip :color="isState ? 'red' : 'primary'" text-color="white" label>{{ stateName }}</v-chip>
+      <v-chip :color="isState ? 'primary' : 'red'" text-color="white" label>{{ stateName }}</v-chip>
     </v-row>
-    <v-carousel cycle height="300" show-arrows-on-hover progress progress-color="blue">
+    <br />
+    <v-carousel
+      v-if="grouplist && grouplist.length > 0"
+      cycle
+      height="300"
+      show-arrows-on-hover
+      progress
+      progress-color="blue"
+    >
       <v-carousel-item v-for="(group, i) in grouplist" :key="i">
         <v-row class="fill-height" align="center" justify="center">
           <v-container>
@@ -21,6 +29,17 @@
         </v-row>
       </v-carousel-item>
     </v-carousel>
+    <v-card v-else cycle height="300" progress progress-color="blue">
+      <v-container>
+        <div>
+          <v-card-title>
+            <p class="title">그룹이 없어요...</p>
+          </v-card-title>
+          <p>가입을 하던가...</p>
+          <p>그룹을 만들던가...</p>
+        </div>
+      </v-container>
+    </v-card>
   </v-container>
 </template>
 
@@ -30,19 +49,18 @@ export default {
     grouplist: {
       type: Array,
       required: true
+    },
+    isState: {
+      type: Boolean,
+      required: true
     }
   },
   computed: {
-    isState() {
-      return this.grouplist.length > 0 && this.grouplist[0].status == 0
-        ? true
-        : false;
-    },
     stateName() {
-      return this.isState ? "시작 전" : "진행 중...";
+      return this.isState ? "진행 중..." : "시작 전";
     }
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

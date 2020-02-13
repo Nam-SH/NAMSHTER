@@ -2,10 +2,10 @@
   <v-container>
     <v-layout style="display: flex">
       <v-container style="flex:1">
-        <my-groups :grouplist="grouplist_before" />
+        <my-groups :grouplist="grouplist_before" :isState="false" />
       </v-container>
       <v-container style="flex:1">
-        <my-groups :grouplist="grouplist_doing" />
+        <my-groups :grouplist="grouplist_doing" :isState="true" />
       </v-container>
     </v-layout>
     <br />

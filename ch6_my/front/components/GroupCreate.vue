@@ -3,7 +3,9 @@
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="600px">
         <template v-slot:activator="{ on }">
-          <v-btn color="pink" dark v-on="on">Make Group</v-btn>
+          <v-btn color="pink" dark v-on="on">
+            <strong>그룹 만들기</strong>
+          </v-btn>
         </template>
         <v-form ref="form" @submit.prevent="onSubmitForm">
           <v-card>
@@ -94,6 +96,7 @@ export default {
         !this.groupIntro
       ) {
         alert("빠진 내용이 있잖아요;;");
+        this.dialog = true;
         return;
       }
       if (this.$refs.form.validate()) {
