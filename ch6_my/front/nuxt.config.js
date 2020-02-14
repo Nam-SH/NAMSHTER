@@ -54,7 +54,7 @@ module.exports = {
     ],
     link: [{ rel: "shortcut icon", href: "/donut.png" }]
   },
-  modules: ["@nuxtjs/axios", "bootstrap-vue/nuxt"],
+  modules: ["@nuxtjs/axios", "bootstrap-vue/nuxt", "@nuxtjs/pwa"],
   buildModules: ["@nuxtjs/vuetify", "@nuxtjs/moment"],
   moment: {
     locales: ["ko"]
@@ -84,7 +84,7 @@ module.exports = {
       }
     }
   },
-  plugins: [],
+  plugins: ['@/plugins/sw.js'],
   vuetify: {},
   axios: {
     browserBaseURL:
@@ -99,5 +99,8 @@ module.exports = {
   },
   server: {
     port: process.env.PORT || 3081
+  },
+  manifest: {
+    "gcm_sender_id": "103953800507"
   }
 };
