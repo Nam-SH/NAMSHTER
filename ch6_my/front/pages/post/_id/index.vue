@@ -20,6 +20,18 @@ export default {
   computed: {
     post() {
       return this.$store.state.posts.mainPosts[0];
+    },
+    me() {
+      return this.$store.state.users.me;
+    }
+  },
+  watch: {
+    me(value, oldValue) {
+      if (!value) {
+        this.$router.push({
+          path: "/"
+        });
+      }
     }
   },
   head() {

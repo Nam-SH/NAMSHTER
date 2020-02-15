@@ -304,7 +304,7 @@ router.patch('/password', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// 팔로워 전체 목록 불러오기
+// 나를 팔로워 전체 목록 불러오기
 router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -316,18 +316,20 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
     if (parseInt(req.query.lastId, 10)) {
       where = {
         id: {
-          [db.Sequelize.Op.gt]: parseInt(req.query.lastId, 10)
+          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
         }
       }
     }
     const followers = await me.getFollowers({
       where,
-      attributes: ['id', 'nickname'],
+      attributes: ['id', 'nickname', 'name'],
       order: [
-        ['createdAt', 'DESC']
+        ['createdAt', 'DESC'],
+        ['id', 'DESC']
       ],
       limit: parseInt(req.query.limit, 10) || 3,
     })
+
     res.json(followers)
   } catch (err) {
     console.error('GET /:id/followers :::', err)
@@ -335,7 +337,7 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
   }
 })
 
-// 팔로우 전체 목록 불러오기
+// 내가 팔로우 전체 목록 불러오기
 router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -352,13 +354,24 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
       }
     }
     const followings = await me.getFollowings({
-      order: [
-        ['createdAt', 'DESC']
-      ],
       where,
-      attributes: ['id', 'nickname'],
+      attributes: ['id', 'nickname', 'name'],
+      order: [
+        ['createdAt', 'DESC'],
+        ['id', 'DESC']
+      ],
       limit: parseInt(req.query.limit, 10) || 3,
     })
+
+    console.log('??????????????????????????????????????????????????????????');
+    let isMore = true
+    if (followings.slice(3, 4) === []) {
+      isMore = false
+    }
+    console.log(isMore);
+    console.log(followings.slice(3, 4));
+
+    console.log('??????????????????????????????????????????????????????????');
     res.json(followings)
   } catch (err) {
     console.error('GET /:id/followings :::', err)

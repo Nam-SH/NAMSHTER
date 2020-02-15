@@ -299,7 +299,7 @@ export const actions = {
       }
       if (state.hasMoreFollowing) {
         const lastFollowing = state.followingList[state.followingList.length - 1]
-        const res = await this.$axios.get(`/user/${state.me.id}/followers?lastId=${lastFollowing && lastFollowing.id}&limit=3`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followings?lastId=${lastFollowing && lastFollowing.id}&limit=3`, {
           withCredentials: true,
         })
 

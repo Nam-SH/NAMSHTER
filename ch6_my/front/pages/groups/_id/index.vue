@@ -29,6 +29,19 @@ export default {
   computed: {
     onegroup() {
       return this.$store.state.groups.onegroup;
+    },
+    me() {
+      return this.$store.state.users.me;
+    }
+  },
+
+  watch: {
+    me(value, oldValue) {
+      if (!value) {
+        this.$router.push({
+          path: "/"
+        });
+      }
     }
   },
   middleware: "authenticated"
