@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import throttle from 'lodash.throttle'
+import firebase from 'firebase'
 
 export const state = () => ({
   mainPosts: [],
@@ -119,6 +120,22 @@ export const actions = {
       })
       .then((res) => {
         commit('addMainPost', res.data)
+        // return this.$axios.post('https://fcm.googleapis.com/fcm/send', {
+        //     "notification": {
+        //       "title": "dogdog!!!!",
+        //       "body": "dogdogdogdo",
+        //       "click_action": "http://localhost:3081/`"
+        //     },
+        //     "to": "fCTaYFTXYYESQh2PQqytTJ:APA91bHQa14HxwaAIzNo642F6RoDUrLsPpPrFEBM-QRCacsyfltFRKJogKN1wnj6YmcmhsiputrqgTFTbZrt1Q0GWS-e3Nxhj8Wpx7bIafODCFwRyQLTc1KymI8PZmNjSjjnwaCktznW"
+        //   }, {
+        //     "headers": {
+        //       "Content-Type": "application/json",
+        //       "Authorization": "key=AAAAQdqazAE:APA91bEsgOlbL5r3Z2NSItZoYdjJ4lAAz2CIFGZuiFgMrOpv1QcdNYhIse_3naet4_jU1jJlQ59DFzJvlDnFanCE_T8eN7y-UuZ59bN6dFDjV3JuKsnMQyDakc5XYSG1KRt1j2svitpk"
+        //     }
+        //   })
+        //   .then((res) => {
+        //     console.log('아아아아', res.data);
+        //   })
       })
       .catch((err) => {
         console.error('add:::', err)

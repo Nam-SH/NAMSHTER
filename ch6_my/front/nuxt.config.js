@@ -85,6 +85,9 @@ module.exports = {
     }
   },
   plugins: ['@/plugins/sw.js'],
+  manifest: {
+    "gcm_sender_id": "103953800507"
+  },
   vuetify: {},
   axios: {
     browserBaseURL:
@@ -99,8 +102,5 @@ module.exports = {
   },
   server: {
     port: process.env.PORT || 3081
-  },
-  manifest: {
-    "gcm_sender_id": "103953800507"
   }
 };

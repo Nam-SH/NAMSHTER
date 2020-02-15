@@ -9,6 +9,7 @@ export const state = () => ({
 
   allgrouplist: [],
   grouplist: [],
+  maingrouplist: [],
 
   onegroup: null,
 
@@ -25,6 +26,9 @@ export const mutations = {
   },
   loadGroups(state, payload) {
     state.grouplist = payload
+  },
+  loadMainGroups(state, payload) {
+    state.maingrouplist = payload
   },
 
   oneGroupDetail(state, payload) {
@@ -76,6 +80,7 @@ export const actions = {
   }, payload) {
 
   },
+
   groupUserInOut({
     commit
   }, payload) {
@@ -86,12 +91,10 @@ export const actions = {
       })
       .then((res) => {
         console.log('aaaaaaa', res.data);
-
         // commit('groupUserInOut', res.data)
       })
       .catch((err) => {
         console.error('groupUserInOut', err);
-
       })
   },
 
@@ -120,6 +123,20 @@ export const actions = {
       })
       .catch((err) => {
         console.error('loadGroups :::', err);
+      })
+  },
+
+  loadMainGroups({
+    commit
+  }, payload) {
+    return this.$axios.get(`/groups/${payload.status}?limit=${payload.limit || 0}`, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('loadMainGroups', res.data)
+      })
+      .catch((err) => {
+        console.error('loadMainGroups :::', err);
       })
   },
 

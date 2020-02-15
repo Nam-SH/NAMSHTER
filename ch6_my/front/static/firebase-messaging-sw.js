@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
+importScripts("https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js");
 
 var firebaseConfig = {
   apiKey: "AIzaSyCjZYFP6B0FRWWu5bSIwufnx1S1-Y-0E6s",
@@ -16,12 +16,11 @@ firebase.initializeApp(firebaseConfig);
 // firebase.analytics();
 
 const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler(function(payload){
- 
-    const title = "All Find";
-    const options = {
-            body: payload.data.status
-    };
- 
-    return self.registration.showNotification(title,options);
+messaging.setBackgroundMessageHandler(function(payload) {
+  const title = "All Find";
+  const options = {
+    body: payload.data.status
+  };
+
+  return self.registration.showNotification(title, options);
 });

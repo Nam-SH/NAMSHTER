@@ -25,11 +25,25 @@
         />
         <v-btn type="submit" color="blue" absolute right>제출</v-btn>
         <!-- 이미지데이터 추가 -->
-        <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
+        <input
+          ref="imageInput"
+          type="file"
+          multiple
+          hidden
+          @change="onChangeImages"
+        />
         <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
         <div>
-          <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
-            <img :src="`http://localhost:3085/${p}`" :alt="p" style="width: 200px" />
+          <div
+            v-for="(p, i) in imagePaths"
+            :key="p"
+            style="display: inline-block"
+          >
+            <img
+              :src="`http://localhost:3085/${p}`"
+              :alt="p"
+              style="width: 200px"
+            />
             <div>
               <button type="button" @click="onRemoveImage(i)">삭제</button>
             </div>
@@ -84,6 +98,30 @@ export default {
           this.error = false;
           this.successMessages = "게시글 등록을 성공했습니다요";
           // this.$router.push(`/post/${this.$store.state.posts.mainPosts[0].id}`);
+        })
+        .then(() => {
+          return this.$axios
+            .post(
+              "https://fcm.googleapis.com/fcm/send",
+              {
+                notification: {
+                  title: "글이 작성되었습니다.",
+                  body: "어떤 글을 썼을까요?"
+                },
+                to:
+                  "f97h81g9nr9IDcfgd5ZPmG:APA91bEzDLTnRsLT3J8o4H8zAVdL-1zdjc4fkZoBRVKetfba1ke6XYDREXqwSffUUdH5EYjM81KvzY8iVma8w3kF6kACMqEBELJCLDC6l0-yVrnO40DDcaWHjs671uvG26yYhPiZ8eTG"
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization:
+                    "key=AAAAQdqazAE:APA91bEsgOlbL5r3Z2NSItZoYdjJ4lAAz2CIFGZuiFgMrOpv1QcdNYhIse_3naet4_jU1jJlQ59DFzJvlDnFanCE_T8eN7y-UuZ59bN6dFDjV3JuKsnMQyDakc5XYSG1KRt1j2svitpk"
+                }
+              }
+            )
+            .then(res => {
+              console.log("아아아아아", res);
+            });
         });
     },
     onClickImageUpload() {

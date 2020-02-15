@@ -10,9 +10,9 @@
         </v-card-actions>
       </v-app-bar>
 
-      <v-container v-if="grouplist_doing.length > 0">
+      <v-container v-if="maingrouplist.length > 0">
         <v-row dense>
-          <v-col v-for="group in grouplist_doing" :key="group.id" cols="12">
+          <v-col v-for="group in maingrouplist" :key="group.id" cols="12">
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
@@ -64,11 +64,8 @@ export default {
     me() {
       return this.$store.state.users.me;
     },
-    grouplist() {
-      return this.$store.state.groups.grouplist;
-    },
-    grouplist_doing() {
-      return this.$store.state.groups.grouplist_doing;
+    maingrouplist() {
+      return this.$store.state.groups.maingrouplist;
     },
     isInIndex() {
       return this.$route.name === "index" ? true : false;

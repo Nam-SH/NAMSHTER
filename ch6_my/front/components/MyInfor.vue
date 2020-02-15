@@ -4,6 +4,7 @@
       <v-card-title class="text-center justify-center py-6">
         <h1 class="font-weight-bold display-1 basil--text">회원정보 수정</h1>
       </v-card-title>
+      {{ tab }}
       <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
         <v-tab v-for="name in editField" :key="name">
           {{ name }}
@@ -20,8 +21,6 @@
                   v-model="inputData"
                   :error="error"
                   :hide-details="hideDetails"
-                  :success-messages="successMessages"
-                  :success="success"
                   @input="onChangeTextarea"
                 />
                 <br />
@@ -42,9 +41,7 @@ export default {
       inputData: "",
       error: false,
       hideDetails: true,
-      successMessages: "",
-      success: false,
-      tab: null,
+      tab: 0,
       label: [
         "닉네임 변경하고 싶죠?",
         "이름 변경하고 싶죠?",
@@ -60,6 +57,11 @@ export default {
       }
     }
   },
+  computed: {
+    me() {
+      return this.$store.state.users.me;
+    }
+  },
   methods: {
     onChangeTab(tab) {
       this.inputData = "";
@@ -71,16 +73,20 @@ export default {
         this.error = false;
       }
       this.hideDetails = true;
-      // this.success = false;
-      // this.successMessages = "";
     },
     onSubmitForm() {
-      if (this.tab === 0 && this.inputData.length < 7) {
+      if ((this.tab === 0 || 1) && this.inputData.length > 20) {
+        alert("최대 20자만 되요;;");
+        return;
+      } else if (this.tab === 2 && this.inputData.length < 7) {
         alert("비밀번호는 최소 8자에요;;");
         return;
       }
-      if (this.tab === 1 || (2 && this.inputData.length > 20)) {
-        alert("최대 20자만 되요;;");
+      if (
+        (this.tab === 0 && this.inputData === this.me.nickname) ||
+        (this.tab === 1 && this.inputData === this.me.name)
+      ) {
+        alert("안 바꾼거 아님?;;");
         return;
       }
       if (!this.inputData.trim()) {
@@ -103,8 +109,7 @@ export default {
       this.inputData = "";
       this.hideDetails = false;
       this.error = false;
-      // this.success = true;
-      // this.successMessages = "변경을 성공했습니다요";
+      return alert("변경이 완료되었습니다.");
     }
   }
 };
