@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import throttle from 'lodash.throttle'
-import firebase from 'firebase'
+import firebase from "@/plugins/sw.js";
 
 export const state = () => ({
   mainPosts: [],
@@ -36,31 +36,20 @@ export const mutations = {
   },
 
   thisWeekPost(state, payload) {
-    const currentDay = new Date();
-    const theYear = currentDay.getFullYear();
-    const theMonth = currentDay.getMonth();
-    const theDate = currentDay.getDate();
-    const theDayName = currentDay.getDay();
-    let resultDay = new Date(theYear, theMonth, theDate + (1 - theDayName));
-    let yyyy = resultDay.getFullYear();
-    let mm = Number(resultDay.getMonth()) + 1;
-    let dd = resultDay.getDate();
-    mm = String(mm).length === 1 ? "0" + mm : mm;
-    dd = String(dd).length === 1 ? "0" + dd : dd;
-    let monDay = yyyy + mm + dd
+    const monthFirstDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDate()
+    let calcPost = new Array(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()).fill(0)
 
     if (payload) {
       let howManyPost = []
       for (let val of payload) {
-        howManyPost.push(val.substr(0, 10).replace(/-/gi, ''))
+        howManyPost.push(val.substr(8, 2))
       }
-      let calcPost = [0, 0, 0, 0, 0, 0, 0]
       for (let day of howManyPost) {
-        calcPost[parseInt(day, 10) - parseInt(monDay, 10)] += 1;
+        calcPost[parseInt(day, 10) - parseInt(monthFirstDay, 10)] += 1;
       }
-      state.calcPost = calcPost
-      return
+      return state.calcPost = calcPost
     }
+
     state.calcPost = []
   },
 
@@ -104,8 +93,76 @@ export const mutations = {
   }
 };
 
-
 export const actions = {
+
+  loadMessage({}, payload) {
+    const messageList = {
+      postadd: {
+        title: "글이 작성되었습니다.",
+        body: "어떤 글을 썼을까요?"
+      },
+      postedit: {
+        title: "글이 수정되었습니다.",
+        body: "어떤 글을 수정했을까요?"
+      },
+      postdelete: {
+        title: "글이 삭제되었습니다.",
+        body: "다른 새로운 글을 써볼까요?"
+      },
+      postlike: {
+        title: "글을 좋아합니다.",
+        body: "어떤 글을 좋아하나요?"
+      },
+      postunlike: {
+        title: "글의 좋아요를 취소합니다.",
+        body: "다른 글을 좋아해볼까요?"
+      },
+      postretweet: {
+        title: "글을 리트윗했습니다.",
+        body: "어떤 글을 리트윗 했을까요?"
+      },
+      postcomment: {
+        title: "댓글을 작성되었습니다.",
+        body: "어떤 글에 댓글을 썼을까요?"
+      },
+      userfollow: {
+        title: "유저를 팔로우했습니다.",
+        body: "어떤 사람을 팔로우 했을까요?"
+      },
+      userunfollow: {
+        title: "유저의 팔로우를 취소합니다.",
+        body: "다른 사람을 팔로우해볼을까요?"
+      }
+    }
+    let key = payload;
+    let {
+      title,
+      body
+    } = messageList[key]
+
+    const messaging = firebase.messaging();
+    messaging.getToken()
+      .then((token) => {
+        return this.$axios
+          .post(
+            "https://fcm.googleapis.com/fcm/send", {
+              notification: {
+                title: `${title}`,
+                body: `${body}`
+              },
+              to: `${token}`
+            }, {
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "key=AAAAQdqazAE:APA91bEsgOlbL5r3Z2NSItZoYdjJ4lAAz2CIFGZuiFgMrOpv1QcdNYhIse_3naet4_jU1jJlQ59DFzJvlDnFanCE_T8eN7y-UuZ59bN6dFDjV3JuKsnMQyDakc5XYSG1KRt1j2svitpk"
+              }
+            }
+          )
+          .then(res => {
+            console.log("아아아아아", res.data);
+          });
+      });
+  },
 
   // 글 작성
   add({
@@ -120,22 +177,6 @@ export const actions = {
       })
       .then((res) => {
         commit('addMainPost', res.data)
-        // return this.$axios.post('https://fcm.googleapis.com/fcm/send', {
-        //     "notification": {
-        //       "title": "dogdog!!!!",
-        //       "body": "dogdogdogdo",
-        //       "click_action": "http://localhost:3081/`"
-        //     },
-        //     "to": "fCTaYFTXYYESQh2PQqytTJ:APA91bHQa14HxwaAIzNo642F6RoDUrLsPpPrFEBM-QRCacsyfltFRKJogKN1wnj6YmcmhsiputrqgTFTbZrt1Q0GWS-e3Nxhj8Wpx7bIafODCFwRyQLTc1KymI8PZmNjSjjnwaCktznW"
-        //   }, {
-        //     "headers": {
-        //       "Content-Type": "application/json",
-        //       "Authorization": "key=AAAAQdqazAE:APA91bEsgOlbL5r3Z2NSItZoYdjJ4lAAz2CIFGZuiFgMrOpv1QcdNYhIse_3naet4_jU1jJlQ59DFzJvlDnFanCE_T8eN7y-UuZ59bN6dFDjV3JuKsnMQyDakc5XYSG1KRt1j2svitpk"
-        //     }
-        //   })
-        //   .then((res) => {
-        //     console.log('아아아아', res.data);
-        //   })
       })
       .catch((err) => {
         console.error('add:::', err)

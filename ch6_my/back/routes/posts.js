@@ -59,20 +59,17 @@ router.get('/', async (req, res, next) => {
 router.get('/thisweek', async (req, res, next) => {
   try {
     let where = {
-      UserId: req.user.id
+      UserId: req.user.id,
+      createdAt: {
+        [db.Sequelize.Op.gte]: new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString(),
+        [db.Sequelize.Op.lte]: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString(),
+      }
     };
-    // if (parseInt(req.query.lastId, 10)) {
-    //   where = {
-    //     id: {
-    //       [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
-    //     }
-    //   }
-    // }
     const posts = await db.Post.findAll({
       where,
       attributes: ['createdAt'],
       order: [
-        ['createdAt', 'DESC']
+        ['createdAt', 'ASC']
       ],
     });
     let calcPosts = []

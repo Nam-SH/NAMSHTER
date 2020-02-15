@@ -4,7 +4,6 @@
       <v-card-title class="text-center justify-center py-6">
         <h1 class="font-weight-bold display-1 basil--text">회원정보 수정</h1>
       </v-card-title>
-      {{ tab }}
       <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
         <v-tab v-for="name in editField" :key="name">
           {{ name }}

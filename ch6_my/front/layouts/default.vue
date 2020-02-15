@@ -27,6 +27,9 @@
           <v-btn v-else text nuxt to="/groups" :style="{ display: 'flex', alignItems: 'center' }">
             <div>그룹</div>
           </v-btn>
+          <v-btn text nuxt to="/qrcode" :style="{ display: 'flex', alignItems: 'center' }">
+            <div>QRcode</div>
+          </v-btn>
         </v-toolbar-items>
       </v-toolbar>
     </nav>
