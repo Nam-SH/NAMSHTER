@@ -36,7 +36,7 @@
         <a href="http://api.namshter.com/user/naver">
           <img src="../static/naver.png" alt style="width:50%" />
         </a>
-        <a href="http://localhost:3085/user/kakao">
+        <a href="http://api.namshter.com/users/kakao">
           <img src="../static/kakao.png" alt style="width:50%" />
         </a>
       </div>
