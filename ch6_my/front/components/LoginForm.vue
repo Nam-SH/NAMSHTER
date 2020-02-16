@@ -3,7 +3,13 @@
     <v-card>
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
-          <v-text-field label="이메일" type="email" required v-model="email" :rules="emailRules" />
+          <v-text-field
+            label="이메일"
+            type="email"
+            required
+            v-model="email"
+            :rules="emailRules"
+          />
           <v-text-field
             label="비밀번호"
             type="password"
@@ -21,8 +27,15 @@
         <a href="http://localhost:3085/user/naver">
           <img src="../static/naver.png" alt style="width:50%" />
         </a>
+        <a href="http://localhost:3085/user/kakao">
+          <img src="../static/kakao.png" alt style="width:50%" />
+        </a>
       </div>
+      <hr />
       <div class="ma-2" style="position: relative;left: 25%">
+        <a href="http://api.namshter.com/user/naver">
+          <img src="../static/naver.png" alt style="width:50%" />
+        </a>
         <a href="http://localhost:3085/user/kakao">
           <img src="../static/kakao.png" alt style="width:50%" />
         </a>
@@ -34,7 +47,9 @@
       <v-container>
         <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
         <v-avatar v-if="social" :color="socialColor" size="25">
-          <span class="black--text" style="font-size:20px">{{ socialName }}</span>
+          <span class="black--text" style="font-size:20px">{{
+            socialName
+          }}</span>
         </v-avatar>
         <span>{{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.</span>
         <hr />
@@ -45,7 +60,9 @@
         </v-row>
         <v-row>
           <v-col col="6">{{ me.Posts.length }}개의 글을 작성함...</v-col>
-          <v-col col="6">{{ me.Groupjoined.length }}개의 그룹을 가입함...</v-col>
+          <v-col col="6"
+            >{{ me.Groupjoined.length }}개의 그룹을 가입함...</v-col
+          >
         </v-row>
       </v-container>
     </v-card>
