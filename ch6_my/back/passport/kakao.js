@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const kakaoKey = {
   clientID: "52e89e9bfe5dc7d3109aebab55307f78",
   clientSecret: "WNt7JvfeNXuixPipmMdC8v48xjJROUtI",
-  callbackURL: "http://localhost:3085/user/kakao/callback"
+  callbackURL: process.env.NODE_ENV === "production" ? "http://api.namshter.com/user/kakao/callback" : "http://localhost:3085/user/kakao/callback"
 }
 
 function makeid() {
