@@ -25,7 +25,7 @@ if (process.client) {
     Notification.requestPermission()
       .then(() => {
         console.log("Notification permission granted.");
-        return messaging.getToken();
+        return pm2;
       })
       .then(result => {
         console.log("The token is: ", result);

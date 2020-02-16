@@ -16,8 +16,8 @@ router.get("/kakao", passport.authenticate("kakao"));
 router.get(
   "/kakao/callback",
   passport.authenticate("kakao", {
-    successRedirect: "http://localhost:3081/",
-    failureRedirect: "http://localhost:3081/"
+    successRedirect: process.env.NODE_ENV === "production" ? "http://namshter.com" : "http://localhost:3081/",
+    failureRedirect: process.env.NODE_ENV === "production" ? "http://namshter.com" : "http://localhost:3081/"
   })
 );
 
@@ -26,8 +26,8 @@ router.get("/naver", passport.authenticate("naver"));
 router.get(
   "/naver/callback",
   passport.authenticate("naver", {
-    successRedirect: "http://localhost:3081/",
-    failureRedirect: "http://localhost:3081/"
+    successRedirect: process.env.NODE_ENV === "production" ? "http://namshter.com" : "http://localhost:3081/",
+    failureRedirect: process.env.NODE_ENV === "production" ? "http://namshter.com" : "http://localhost:3081/"
   })
 );
 
