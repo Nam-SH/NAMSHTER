@@ -1,6 +1,12 @@
 <template>
   <v-list>
-    <v-col v-for="user in users" :key="user.id" cols="12" md="4" style="display: inline-block">
+    <v-col
+      v-for="user in users"
+      :key="user.id"
+      cols="12"
+      md="4"
+      style="display: inline-block"
+    >
       <v-list-item>
         <v-list-item-avatar color="indigo">
           <span class="white--text headline">{{ user.nickname[0] }}</span>
@@ -17,17 +23,16 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      users: {
-        type: Array,
-        required: true
-      },
-      remove: {
-        type: Function,
-        required: true
-      }
+export default {
+  props: {
+    users: {
+      type: Array,
+      required: true
+    },
+    remove: {
+      type: Function,
+      required: true
     }
-    
   }
+};
 </script>

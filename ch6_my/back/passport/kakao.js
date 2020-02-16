@@ -9,7 +9,7 @@ const kakaoKey = {
   callbackURL: process.env.NODE_ENV === "production" ? "http://api.namshter.com/user/kakao/callback" : "http://localhost:3085/user/kakao/callback"
 }
 
-function makeid() {
+function makeId() {
   let text = "";
   let possible = "abcdefghijklmnopqrstuvwxyz0123456789";
   for (let i = 0; i < 10; i++)
@@ -30,7 +30,7 @@ module.exports = () => {
         if (exUser) {
           return done(null, exUser);
         }
-        const hash = await bcrypt.hash(makeid(), 12);
+        const hash = await bcrypt.hash(makeId(), 12);
         const newUser = await db.User.create({
           email: profile._json.kakao_account.email,
           name: profile.username,

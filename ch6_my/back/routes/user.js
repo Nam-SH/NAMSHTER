@@ -204,53 +204,6 @@ router.post('/logout', isLoggedIn, async (req, res) => {
   }
 })
 
-// 팔로우
-router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
-  try {
-    const me = await db.User.findOne({
-      where: {
-        id: req.user.id,
-      }
-    });
-    await me.addFollowing(req.params.id);
-    res.send(req.params.id)
-  } catch (err) {
-    console.error('POST /:id/follow :::', err)
-    next(err)
-  }
-})
-
-// 언팔로우
-router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
-  try {
-    const me = await db.User.findOne({
-      where: {
-        id: req.user.id
-      },
-    });
-    await me.removeFollowing(req.params.id);
-    res.send(req.params.id)
-  } catch (err) {
-    console.error('DELETE /:id/follow :::', err)
-    next(err)
-  }
-});
-
-// 언팔로워
-router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
-  try {
-    const me = await db.User.findOne({
-      where: {
-        id: req.user.id
-      },
-    });
-    await me.removeFollower(req.params.id);
-    res.send(req.params.id)
-  } catch (err) {
-    console.error('DELETE /:id/follower :::', err)
-    next(err)
-  }
-});
 
 // 닉네임 변경
 router.patch('/nickname', isLoggedIn, async (req, res, next) => {
@@ -304,6 +257,54 @@ router.patch('/password', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 팔로우
+router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: {
+        id: req.user.id,
+      }
+    });
+    await me.addFollowing(req.params.id);
+    res.send(req.params.id)
+  } catch (err) {
+    console.error('POST /:id/follow :::', err)
+    next(err)
+  }
+})
+
+// 언팔로우
+router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: {
+        id: req.user.id
+      },
+    });
+    await me.removeFollowing(req.params.id);
+    res.send(req.params.id)
+  } catch (err) {
+    console.error('DELETE /:id/follow :::', err)
+    next(err)
+  }
+});
+
+// 언팔로워
+router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: {
+        id: req.user.id
+      },
+    });
+    await me.removeFollower(req.params.id);
+    res.send(req.params.id)
+  } catch (err) {
+    console.error('DELETE /:id/follower :::', err)
+    next(err)
+  }
+});
+
 // 나를 팔로워 전체 목록 불러오기
 router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
   try {
@@ -329,7 +330,11 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
       ],
       limit: parseInt(req.query.limit, 10) || 3,
     })
-
+    let isMore = (!followers.slice(3, 4).length) ? false : true
+    return res.json({
+      followers: followers.slice(0, 3),
+      hasMoreFollower: isMore
+    })
     res.json(followers)
   } catch (err) {
     console.error('GET /:id/followers :::', err)
@@ -360,19 +365,13 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => {
         ['createdAt', 'DESC'],
         ['id', 'DESC']
       ],
-      limit: parseInt(req.query.limit, 10) || 3,
+      limit: parseInt(req.query.limit, 10) || 4,
     })
-
-    console.log('??????????????????????????????????????????????????????????');
-    let isMore = true
-    if (followings.slice(3, 4) === []) {
-      isMore = false
-    }
-    console.log(isMore);
-    console.log(followings.slice(3, 4));
-
-    console.log('??????????????????????????????????????????????????????????');
-    res.json(followings)
+    let isMore = (!followings.slice(3, 4).length) ? false : true
+    return res.json({
+      followings: followings.slice(0, 3),
+      hasMoreFollowing: isMore
+    })
   } catch (err) {
     console.error('GET /:id/followings :::', err)
     next(err)

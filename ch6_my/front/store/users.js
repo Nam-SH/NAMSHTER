@@ -47,22 +47,23 @@ export const mutations = {
     state.followerList.splice(targetIndex, 1);
   },
 
-  // 팔로잉 팔로워
+  // 팔로잉 전체 불러오기
   loadFollowings(state, payload) {
     if (payload.reset) {
-      state.followingList = payload.data;
+      state.followingList = payload.followings;
     } else {
-      state.followingList = state.followingList.concat(payload.data);
+      state.followingList = state.followingList.concat(payload.followings);
     }
-    state.hasMoreFollowing = payload.data.length === 3;
+    state.hasMoreFollowing = payload.hasMoreFollowing;
   },
+  // 팔로워 전체 불러오기
   loadFollowers(state, payload) {
     if (payload.reset) {
-      state.followerList = payload.data;
+      state.followerList = payload.followers;
     } else {
-      state.followerList = state.followerList.concat(payload.data);
+      state.followerList = state.followerList.concat(payload.followers);
     }
-    state.hasMoreFollower = payload.data.length === 3;
+    state.hasMoreFollower = payload.hasMoreFollower;
   }
 }
 
@@ -257,22 +258,24 @@ export const actions = {
   }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/user/${state.me.id}/followers?limit=3`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followers?limit=4`, {
           withCredentials: true
         })
         commit('loadFollowers', {
-          data: res.data,
+          followers: res.data.followers,
+          hasMoreFollower: res.data.hasMoreFollower,
           reset: true,
         });
         return;
       }
       if (state.hasMoreFollower) {
         const lastFollower = state.followerList[state.followerList.length - 1]
-        const res = await this.$axios.get(`/user/${state.me.id}/followers?lastId=${lastFollower && lastFollower.id}&limit=3`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followers?lastId=${lastFollower && lastFollower.id}&limit=4`, {
           withCredentials: true,
         })
         commit('loadFollowers', {
-          data: res.data,
+          followers: res.data.followers,
+          hasMoreFollower: res.data.hasMoreFollower,
           reset: false,
         });
         return;
@@ -288,23 +291,24 @@ export const actions = {
   }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/user/${state.me.id}/followings?limit=3`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followings?limit=4`, {
           withCredentials: true
         })
         commit('loadFollowings', {
-          data: res.data,
+          followings: res.data.followings,
+          hasMoreFollowing: res.data.hasMoreFollowing,
           reset: true,
         });
         return;
       }
       if (state.hasMoreFollowing) {
         const lastFollowing = state.followingList[state.followingList.length - 1]
-        const res = await this.$axios.get(`/user/${state.me.id}/followings?lastId=${lastFollowing && lastFollowing.id}&limit=3`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followings?lastId=${lastFollowing && lastFollowing.id}&limit=4`, {
           withCredentials: true,
         })
-
         commit('loadFollowings', {
-          data: res.data,
+          followings: res.data.followings,
+          hasMoreFollowing: res.data.hasMoreFollowing,
           reset: false,
         });
         return;
