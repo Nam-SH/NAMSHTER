@@ -22,24 +22,40 @@
         </v-container>
       </v-form>
     </v-card>
-    <div class="text-align: center">
-      <div class="ma-2" style="position: relative; left: 25%">
-        <a href="http://localhost:3085/user/naver">
-          <img src="../static/naver.png" alt style="width:50%" />
-        </a>
-        <a href="http://localhost:3085/user/kakao">
-          <img src="../static/kakao.png" alt style="width:50%" />
-        </a>
-      </div>
-      <hr />
-      <div class="ma-2" style="position: relative;left: 25%">
-        <a href="http://api.namshter.com/user/naver">
-          <img src="../static/naver.png" alt style="width:50%" />
-        </a>
-        <a href="http://api.namshter.com/user/kakao">
-          <img src="../static/kakao.png" alt style="width:50%" />
-        </a>
-      </div>
+    <hr />
+    <h3>로컬용</h3>
+    <div class="mx-auto">
+      <a style="inline-block" href="http://localhost:3085/user/naver">
+        <img class="mt-1" src="../static/naver.png" alt style="width:30%;" />
+      </a>
+      <a href="http://localhost:3085/user/kakao">
+        <img
+          class="mt-1"
+          src="../static/kakao.png"
+          alt
+          style="width:30%;height:40px"
+        />
+      </a>
+    </div>
+    <hr />
+    <h3>배포용</h3>
+    <div class="mx-auto">
+      <a href="http://api.namshter.com/user/naver">
+        <img
+          class="mx-auto mt-1"
+          src="@/static/naver.png"
+          alt
+          style="width:30%;"
+        />
+      </a>
+      <a href="http://api.namshter.com/user/kakao">
+        <img
+          class="mx-auto mt-1"
+          src="@/static/kakao.png"
+          alt
+          style="width:30%;height:40px"
+        />
+      </a>
     </div>
   </v-container>
   <v-container v-else>
