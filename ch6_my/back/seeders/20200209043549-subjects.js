@@ -3,13 +3,14 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     const subjectname = [
-      ['python', 'JAVA', 'C', 'GO', 'MachinLearning', 'DeepLearning', '한국사', '컴활', '취업'],
-      ['축구', '농구', '야구', '배구', '하키', '헬스', '복싱', '레슬링'],
-      ['성악', '바이올린', '기타', '오페라', '첼로', '드럼'],
+      ["Python", "JAVA", "C", "go", "Django", "Vue", "HTML", "CSS", "JS", "ML", "DL"],
+      ["한국사", "영어", "컴활", "자소서", "면접"],
+      ["축구", "농구", "야구", "농구", "배구", "하키", "헬스", "복싱", "레슬링"],
+      ["성악", "바이올린", "기타", "첼로", "사물놀이", "드럼", "댄스"],
       ['기타']
     ]
     let datas = []
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       for (let subject of subjectname[i]) {
         let temp = {
           name: subject,

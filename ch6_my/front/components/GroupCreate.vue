@@ -83,7 +83,19 @@ export default {
     },
     items() {
       return this.groupCategory === "컴퓨터공부"
-        ? ["Python", "JAVA", "C", "go", "Django", "Vue", "HTML", "CSS", "JS"]
+        ? [
+            "Python",
+            "JAVA",
+            "C",
+            "go",
+            "Django",
+            "Vue",
+            "HTML",
+            "CSS",
+            "JS",
+            "ML",
+            "DL"
+          ]
         : this.groupCategory === "취업"
         ? ["한국사", "영어", "컴활", "자소서", "면접"]
         : this.groupCategory === "운동"

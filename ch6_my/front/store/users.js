@@ -1,4 +1,5 @@
 import throttle from 'lodash.throttle'
+import firebase from "@/plugins/sw.js";
 
 export const state = () => ({
   me: null,
@@ -70,6 +71,76 @@ export const mutations = {
 }
 
 export const actions = {
+  loadMessage({}, payload) {
+    const messageList = {
+      userSignUp: {
+        title: "회원가입이 되었습니다.",
+        body: "빨리 글을 써봐요!"
+      },
+      userLogIn: {
+        title: "로그인이 되었습니다.",
+        body: "안녕하세요!"
+      },
+      userLogOut: {
+        title: "로그아웃이 되었습니다.",
+        body: "로그인 다시 해주세요"
+      },
+
+      userChangeName: {
+        title: "로그아웃이 되었습니다.",
+        body: "로그인 다시 해주세요"
+      },
+      userChangeNickname: {
+        title: "로그아웃이 되었습니다.",
+        body: "로그인 다시 해주세요"
+      },
+      userChangePassword: {
+        title: "로그아웃이 되었습니다.",
+        body: "로그인 다시 해주세요"
+      },
+      userFollow: {
+        title: "유저를 팔로우했습니다.",
+        body: "어떤 사람을 팔로우 했을까요?"
+      },
+      userUnfollow: {
+        title: "유저의 팔로우를 취소합니다.",
+        body: "다른 사람을 팔로우해볼을까요?"
+      }
+    }
+    let key = payload;
+    let {
+      title,
+      body
+    } = messageList[key]
+
+    const messaging = firebase.messaging();
+    messaging.getToken()
+      .then((token) => {
+        return this.$axios
+          .post(
+            "https://fcm.googleapis.com/fcm/send", {
+              notification: {
+                title: `${title}`,
+                body: `${body}`,
+                icon: "https://i0.wp.com/quickstickeg.com/wp-content/uploads/2020/02/QUICK-STICK-4.jpg?fit=480%2C564",
+                click_action: "https://www.naver.com/"
+              },
+              to: `${token}`
+            }, {
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "key=AAAAQdqazAE:APA91bEsgOlbL5r3Z2NSItZoYdjJ4lAAz2CIFGZuiFgMrOpv1QcdNYhIse_3naet4_jU1jJlQ59DFzJvlDnFanCE_T8eN7y-UuZ59bN6dFDjV3JuKsnMQyDakc5XYSG1KRt1j2svitpk"
+              }
+            }
+          )
+          .then(res => {
+            console.log('title::: ', title);
+            console.log('body::: ', body);
+            console.log("PWA 결과는??", res.data);
+          });
+      });
+  },
+
   // 사용자정보 가져오기
   async loadUser({
     commit
@@ -106,7 +177,8 @@ export const actions = {
   },
 
   signUp({
-    commit
+    commit,
+    dispatch
   }, payload) {
     return this.$axios.post('/user', {
         email: payload.email,
@@ -118,6 +190,7 @@ export const actions = {
       })
       .then((res) => {
         commit('setMe', res.data)
+        dispatch('loadMessage', 'userSignUp')
       })
       .catch((err) => {
         console.error('signUp :::', err);
@@ -125,7 +198,8 @@ export const actions = {
   },
 
   logIn({
-    commit
+    commit,
+    dispatch
   }, payload) {
     return this.$axios.post('/user/login', {
         email: payload.email,
@@ -135,6 +209,7 @@ export const actions = {
       })
       .then((res) => {
         commit('setMe', res.data);
+        dispatch('loadMessage', 'userLogIn')
       })
       .catch((err) => {
         console.error('logIn :::', err)
@@ -142,13 +217,15 @@ export const actions = {
   },
 
   logOut({
-    commit
+    commit,
+    dispatch
   }) {
     return this.$axios.post('/user/logout', {}, {
         withCredentials: true,
       })
       .then((res) => {
         commit('setMe', null);
+        dispatch('loadMessage', 'userLogOut')
       })
       .catch((err) => {
         console.error('logOut :::', err)
@@ -165,6 +242,7 @@ export const actions = {
       })
       .then((res) => {
         commit('changeNickname', res.data)
+        dispatch('loadMessage', 'userChangeNickname')
       })
       .catch((err) => {
         console.error('changeNickname :::', err)
@@ -181,6 +259,7 @@ export const actions = {
       })
       .then((res) => {
         commit('changeName', res.data)
+        dispatch('loadMessage', 'userChangeName')
       })
       .catch((err) => {
         console.error('changename :::', err)
@@ -197,6 +276,7 @@ export const actions = {
       })
       .then((res) => {
         // commit('changePassword', res.data)
+        dispatch('loadMessage', 'userChangePassword')
       })
       .catch((err) => {
         console.error('changePassword :::', err)
@@ -205,7 +285,8 @@ export const actions = {
 
   // 팔로워, 언팔로워
   follow({
-    commit
+    commit,
+    dispatch
   }, payload) {
     return this.$axios.post(`/user/${payload.userId}/follow`, {}, {
         withCredentials: true
@@ -216,6 +297,7 @@ export const actions = {
           nickname: res.data.nickname,
           name: res.data.name,
         })
+        dispatch('loadMessage', 'userFollow')
       })
       .catch((err) => {
         console.error('follow :::', err);
@@ -223,7 +305,8 @@ export const actions = {
   },
 
   unfollow({
-    commit
+    commit,
+    dispatch
   }, payload) {
     return this.$axios.delete(`/user/${payload.userId}/follow`, {
         withCredentials: true
@@ -232,6 +315,7 @@ export const actions = {
         commit('unfollow', {
           userId: payload.userId
         })
+        dispatch('loadMessage', 'userUnfollow')
       })
       .catch((err) => {
         console.error('unfollow :::', err);

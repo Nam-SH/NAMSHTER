@@ -125,14 +125,6 @@ export const actions = {
         title: "댓글을 작성되었습니다.",
         body: "어떤 글에 댓글을 썼을까요?"
       },
-      userfollow: {
-        title: "유저를 팔로우했습니다.",
-        body: "어떤 사람을 팔로우 했을까요?"
-      },
-      userunfollow: {
-        title: "유저의 팔로우를 취소합니다.",
-        body: "다른 사람을 팔로우해볼을까요?"
-      }
     }
     let key = payload;
     let {
@@ -148,7 +140,9 @@ export const actions = {
             "https://fcm.googleapis.com/fcm/send", {
               notification: {
                 title: `${title}`,
-                body: `${body}`
+                body: `${body}`,
+                icon: "https://i0.wp.com/quickstickeg.com/wp-content/uploads/2020/02/QUICK-STICK-4.jpg?fit=480%2C564",
+                click_action: "https://www.naver.com/"
               },
               to: `${token}`
             }, {
@@ -159,7 +153,9 @@ export const actions = {
             }
           )
           .then(res => {
-            console.log("아아아아아", res.data);
+            console.log('title::: ', title);
+            console.log('body::: ', body);
+            console.log("PWA 결과는??", res.data);
           });
       });
   },

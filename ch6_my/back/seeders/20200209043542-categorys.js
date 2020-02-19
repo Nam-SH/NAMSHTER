@@ -3,8 +3,8 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     let datas = []
-    const names = ['공부', '운동', '음악', '기타']
-    for (let i = 0; i < 4; i++) {
+    const names = ['컴퓨터공부', '취업', '운동', '음악', '기타']
+    for (let i = 0; i < 5; i++) {
       let temp = {
         name: names[i],
         createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),

@@ -35,12 +35,12 @@ module.exports = {
       {
         hid: "ogimage",
         property: "og:image",
-        content: "https://img.favpng.com/22/12/5/donuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg"
+        content: "http://img.favpng.com/22/12/5/donuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg"
       },
       {
         hid: "ogurl",
         property: "og:url",
-        content: "https://namshter.com"
+        content: "http://namshter.com"
       }
     ],
     script: [{
@@ -93,9 +93,9 @@ module.exports = {
   vuetify: {},
   axios: {
     browserBaseURL: process.env.NODE_ENV === "production" ?
-      "https://api.namshter.com" : "https://localhost:3085",
+      "http://api.namshter.com" : "http://localhost:3085",
     baseURL: process.env.NODE_ENV === "production" ?
-      "https://api.namshter.com" : "https://localhost:3085",
+      "http://api.namshter.com" : "http://localhost:3085",
     https: true
   },
   server: {
