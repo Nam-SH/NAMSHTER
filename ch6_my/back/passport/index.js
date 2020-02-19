@@ -18,22 +18,22 @@ module.exports = () => {
         attributes: ['id', 'nickname', 'name', 'isAdmin'],
         include: [{
           model: db.Post,
-          attributes: ['id'],
+          attributes: ['id', 'createdAt'],
         }, {
           model: db.User,
           as: 'Followings',
-          attributes: ['id'],
+          attributes: ['id', 'nickname', 'name'],
         }, {
           model: db.User,
           as: 'Followers',
-          attributes: ['id'],
+          attributes: ['id', 'nickname', 'name'],
         }, {
           model: db.Comment,
           attributes: ['id'],
         }, {
           model: db.Group,
           as: 'Groupjoined',
-          attributes: ['id']
+          attributes: ['id', 'name', 'status'],
         }],
       });
       return done(null, user); // req.user, req.isAuthenticated() === true,

@@ -48,7 +48,7 @@ router.get('/:id', async (req, res, next) => {
       include: [{
         model: db.Post,
         as: 'Posts',
-        attributes: ['id'],
+        attributes: ['id', 'createdAt'],
       }, {
         // 이 유저가 좋아한다고(Liked) 한 글을 포함시켜라
         model: db.Post,
@@ -56,19 +56,17 @@ router.get('/:id', async (req, res, next) => {
         attributes: ['id'],
       }, {
         model: db.User,
-        as: 'Followings',
-        attributes: ['id'],
+        attributes: ['id', 'nickname', 'name'],
       }, {
         model: db.User,
-        as: 'Followers',
-        attributes: ['id'],
+        attributes: ['id', 'nickname', 'name'],
       }, {
         model: db.Comment,
         attributes: ['id']
       }, {
         model: db.Group,
         as: 'Groupjoined',
-        attributes: ['id']
+        attributes: ['id', 'name', 'status'],
       }],
     });
     res.json(user);
@@ -120,22 +118,22 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // 회원가입
           attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
           include: [{
             model: db.Post,
-            attributes: ['id'],
+            attributes: ['id', 'createdAt'],
           }, {
             model: db.User,
             as: 'Followings',
-            attributes: ['id'],
+            attributes: ['id', 'nickname', 'name'],
           }, {
             model: db.User,
             as: 'Followers',
-            attributes: ['id'],
+            attributes: ['id', 'nickname', 'name'],
           }, {
             model: db.Comment,
             attributes: ['id']
           }, {
             model: db.Group,
             as: 'Groupjoined',
-            attributes: ['id']
+            attributes: ['id', 'name', 'status'],
           }],
         });
         return res.json(fullUser);
@@ -169,22 +167,22 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
         include: [{
           model: db.Post,
-          attributes: ['id'],
+          attributes: ['id', 'createdAt'],
         }, {
           model: db.User,
           as: 'Followings',
-          attributes: ['id'],
+          attributes: ['id', 'nickname', 'name'],
         }, {
           model: db.User,
           as: 'Followers',
-          attributes: ['id'],
+          attributes: ['id', 'nickname', 'name'],
         }, {
           model: db.Comment,
           attributes: ['id'],
         }, {
           model: db.Group,
           as: 'Groupjoined',
-          attributes: ['id']
+          attributes: ['id', 'name', 'status'],
         }],
       });
       return res.json(fullUser);
@@ -266,7 +264,17 @@ router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
       }
     });
     await me.addFollowing(req.params.id);
-    res.send(req.params.id)
+    const user = await db.User.findOne({
+      where: {
+        id: req.params.id,
+      },
+      attributes: ['id', 'nickname', 'name']
+    });
+    res.send({
+      id: user.id,
+      nickname: user.nickname,
+      name: user.name
+    })
   } catch (err) {
     console.error('POST /:id/follow :::', err)
     next(err)
@@ -328,7 +336,7 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => {
         ['createdAt', 'DESC'],
         ['id', 'DESC']
       ],
-      limit: parseInt(req.query.limit, 10) || 3,
+      limit: parseInt(req.query.limit, 10) || 4,
     })
     let isMore = (!followers.slice(3, 4).length) ? false : true
     return res.json({

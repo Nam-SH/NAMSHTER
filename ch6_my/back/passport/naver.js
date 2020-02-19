@@ -31,8 +31,6 @@ module.exports = () => {
         if (exUser) {
           return done(null, exUser);
         }
-        console.log(profile);
-
         const newUser = await db.User.create({
           email: profile._json.email,
           name: profile.displayName,

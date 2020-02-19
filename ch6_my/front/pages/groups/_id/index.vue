@@ -8,6 +8,7 @@
           {{ onegroup.Master.name }}({{ onegroup.Master.nickname }}) //
           {{ onegroup.Master.email }}
         </p>
+        <v-btn @click="onChangeStatus">{{ statusName }}</v-btn>
         <hr />
         <p>{{ onegroup.Groupmembers.length }}명 / {{ onegroup.limit }}명</p>
         <div class="text--primary">{{ onegroup.intro }}</div>
@@ -21,10 +22,19 @@
 
 <script>
 export default {
-  fetch({ store, params }) {
-    store.dispatch("groups/oneGroupDetail", {
+  async fetch({ store, params }) {
+    await store.dispatch("groups/oneGroupDetail", {
       groupId: params.id
     });
+  },
+  methods: {
+    onChangeStatus() {
+      this.$store.dispatch("groups/changeStatus", {
+        userId: this.me.id,
+        groupId: this.onegroup.id
+      });
+      this.$router.go(-1);
+    }
   },
   computed: {
     onegroup() {
@@ -32,6 +42,13 @@ export default {
     },
     me() {
       return this.$store.state.users.me;
+    },
+    statusName() {
+      return this.onegroup.status === 0
+        ? "준비 중..."
+        : this.onegroup.status === 1
+        ? "진행 중"
+        : "끝인데요";
     }
   },
 

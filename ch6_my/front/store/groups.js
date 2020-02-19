@@ -21,6 +21,20 @@ export const mutations = {
     state.grouplist_before.unshift(payload)
   },
 
+  changeStatus(state, payload) {
+    if (payload.nextStatus === 1) {
+      let targetIndex = state.grouplist_before.findIndex(v => v.id === payload.groupId);
+      state.grouplist_before[targetIndex].status = payload.nextStatus
+      state.grouplist_doing.unshift(state.grouplist_before[targetIndex])
+      state.grouplist_before.splice(targetIndex, 1)
+    } else {
+      let targetIndex = state.grouplist_doing.findIndex(v => v.id === payload.groupId);
+      state.grouplist_doing[targetIndex].status = payload.nextStatus
+      state.grouplist_done.unshift(state.grouplist_doing[targetIndex])
+      state.grouplist_doing.splice(targetIndex, 1)
+    }
+  },
+
   loadAllGroups(state, payload) {
     state.allgrouplist = payload
   },
@@ -36,17 +50,17 @@ export const mutations = {
   },
 
   grouplistBefore(state, payload) {
-    state.grouplist_before = state.grouplist_before.concat(payload)
+    state.grouplist_before = payload
   },
   grouplistDoing(state, payload) {
     state.grouplist_doing = payload
   },
 
   otherGrouplistBefore(state, payload) {
-    state.othergrouplist_before = state.othergrouplist_before.concat(payload)
+    state.othergrouplist_before = payload
   },
   otherGrouplistDoing(state, payload) {
-    state.othergrouplist_doing = state.othergrouplist_doing.concat(payload)
+    state.othergrouplist_doing = payload
   },
 };
 
@@ -95,6 +109,25 @@ export const actions = {
       })
       .catch((err) => {
         console.error('groupUserInOut', err);
+      })
+  },
+
+  changeStatus({
+    commit
+  }, payload) {
+    this.$axios.post(`group/${payload.groupId}/changestatus`, {
+        userId: payload.userId
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('changeStatus', {
+          groupId: payload.groupId,
+          nextStatus: res.data
+        })
+      })
+      .catch((err) => {
+        console.error('changeStatus :::', err);
       })
   },
 

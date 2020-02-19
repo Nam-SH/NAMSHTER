@@ -7,21 +7,37 @@ module.exports = {
       name: 'viewport',
       content: 'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover',
     }, {
-      'http-equiv': 'X-UA-Compatible', content: 'IE=edge',
+      'http-equiv': 'X-UA-Compatible',
+      content: 'IE=edge',
     }, {
-      hid: 'desc', name: 'description', content: 'Namshter',
+      hid: 'desc',
+      name: 'description',
+      content: 'Namshter',
     }, {
-      hid: 'ogtitle', name: 'og:title', content: 'Namshter',
+      hid: 'ogtitle',
+      name: 'og:title',
+      content: 'Namshter',
     }, {
-      hid: 'ogdesc', name: 'og:description', content: 'nam의 Namshter',
+      hid: 'ogdesc',
+      name: 'og:description',
+      content: 'nam의 Namshter',
     }, {
-      hid: 'ogtype', property: 'og:type', content: 'website',
+      hid: 'ogtype',
+      property: 'og:type',
+      content: 'website',
     }, {
-      hid: 'ogimage', property: 'og:image', content: 'https://img.favpng.com/22/12/5/donuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg',
+      hid: 'ogimage',
+      property: 'og:image',
+      content: 'https://img.favpng.com/22/12/5/donuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg',
     }, {
-      hid: 'ogurl', property: 'og:url', content: 'https://namshter.com',
+      hid: 'ogurl',
+      property: 'og:url',
+      content: 'https://namshter.com',
     }],
-    link: [{ rel: 'shortcut icon', href: '/donut.png' }],
+    link: [{
+      rel: 'shortcut icon',
+      href: '/donut.png'
+    }],
   },
   modules: [
     '@nuxtjs/axios',
@@ -48,7 +64,11 @@ module.exports = {
       }
     },
     analyze: false,
-    extend(config, { isServer, isClient, isDev }) {
+    extend(config, {
+      isServer,
+      isClient,
+      isDev
+    }) {
       // console.log('webpack :::', config, isServer, isClient);
       if (isServer && !isDev) {
         config.devtool = 'hidden-source-map'

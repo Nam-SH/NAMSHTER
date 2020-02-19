@@ -10,8 +10,8 @@
   "author": "NAM-SH",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.610.0",
-    "bcrypt": "^3.0.7",
+    "aws-sdk": "^2.619.0",
+    "bcrypt": "^3.0.8",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "cross-env": "^6.0.3",
@@ -28,7 +28,7 @@
     "passport-kakao": "^1.0.0",
     "passport-local": "^1.0.0",
     "pm2": "^4.2.3",
-    "sequelize": "^5.21.3"
+    "sequelize": "^5.21.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.2",

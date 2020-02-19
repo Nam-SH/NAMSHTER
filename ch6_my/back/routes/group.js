@@ -100,12 +100,12 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 });
 
 
-router.post("/changestatus", isLoggedIn, async (req, res, next) => {
+router.post("/:groupId/changestatus", async (req, res, next) => {
   try {
     // 1. 해당 그룹 찾기
     const group = await db.Group.findOne({
       where: {
-        id: req.body.groupId
+        id: parseInt(req.params.groupId, 10)
       }
     })
     // 2. 그룹이 없으면 끝
@@ -118,21 +118,21 @@ router.post("/changestatus", isLoggedIn, async (req, res, next) => {
       return res.status(403).send('님은 상태를 변경할 권한이 없는데여;;')
     }
     // 4. 방장이라면 바꿔주기
-    let nextStatus = 1
+    let nxt = 1
     if (group.status === 1) {
-      nextStatus = 2
+      nxt = 2
     } else if (group.status === 2) {
       return res.status(400).send('완료 된 그룹인데여;;')
     }
 
     await db.Group.update({
-      status: nextStatus,
+      status: nxt,
     }, {
       where: {
-        id: req.body.groupId
+        id: parseInt(req.params.groupId, 10)
       }
     })
-    return res.send(nextStatus)
+    return res.json(nxt)
   } catch (err) {
     console.error('POST /changestatus :::', err);
     next(err)

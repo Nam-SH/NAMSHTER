@@ -3,13 +3,7 @@
     <v-card>
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
-          <v-text-field
-            label="이메일"
-            type="email"
-            required
-            v-model="email"
-            :rules="emailRules"
-          />
+          <v-text-field label="이메일" type="email" required v-model="email" :rules="emailRules" />
           <v-text-field
             label="비밀번호"
             type="password"
@@ -22,64 +16,43 @@
         </v-container>
       </v-form>
     </v-card>
-    <hr />
-    <h3>로컬용</h3>
-    <div class="mx-auto">
-      <a style="inline-block" href="http://localhost:3085/user/naver">
-        <img class="mt-1" src="../static/naver.png" alt style="width:30%;" />
-      </a>
-      <a href="http://localhost:3085/user/kakao">
-        <img
-          class="mt-1"
-          src="../static/kakao.png"
-          alt
-          style="width:30%;height:40px"
-        />
-      </a>
-    </div>
-    <hr />
-    <h3>배포용</h3>
-    <div class="mx-auto">
-      <a href="http://api.namshter.com/user/naver">
-        <img
-          class="mx-auto mt-1"
-          src="@/static/naver.png"
-          alt
-          style="width:30%;"
-        />
-      </a>
-      <a href="http://api.namshter.com/user/kakao">
-        <img
-          class="mx-auto mt-1"
-          src="@/static/kakao.png"
-          alt
-          style="width:30%;height:40px"
-        />
-      </a>
-    </div>
+    <v-card>
+      <hr />
+      <h3>로컬용</h3>
+      <div class="mx-auto">
+        <a style="inline-block" href="http://localhost:3085/user/naver">
+          <img class="mt-1" src="../static/naver.png" alt style="width:30%;" />
+        </a>
+        <a href="http://localhost:3085/user/kakao">
+          <img class="mt-1" src="../static/kakao.png" alt style="width:30%;height:40px" />
+        </a>
+      </div>
+      <hr />
+      <h3>배포용</h3>
+      <div class="mx-auto">
+        <a href="http://api.namshter.com/user/naver">
+          <img class="mx-auto mt-1" src="@/static/naver.png" alt style="width:30%;" />
+        </a>
+        <a href="http://api.namshter.com/user/kakao">
+          <img class="mx-auto mt-1" src="@/static/kakao.png" alt style="width:30%;height:40px" />
+        </a>
+      </div>
+    </v-card>
   </v-container>
   <v-container v-else>
     <v-card>
       <v-container>
         <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
         <v-avatar v-if="social" :color="socialColor" size="25">
-          <span class="black--text" style="font-size:20px">{{
-            socialName
-          }}</span>
+          <span class="black--text" style="font-size:20px">{{ socialName }}</span>
         </v-avatar>
+        <br />
         <span>{{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.</span>
         <hr />
         <v-btn @click="onLogOut">로그아웃</v-btn>
-        <v-row>
-          <v-col col="6">{{ me.Followings.length }}명을 팔로잉...</v-col>
-          <v-col col="6">{{ me.Followers.length }}명이 나를 팔로워...</v-col>
-        </v-row>
-        <v-row>
-          <v-col col="6">{{ me.Posts.length }}개의 글을 작성함...</v-col>
-          <v-col col="6"
-            >{{ me.Groupjoined.length }}개의 그룹을 가입함...</v-col
-          >
-        </v-row>
+        <!-- 내 글 통계 -->
+        <my-activity :me="me" />
+        <!--  -->
       </v-container>
     </v-card>
   </v-container>
@@ -87,8 +60,12 @@
 
 <script>
 import { mapState } from "vuex";
+import MyActivity from "@/components/MyActivity.vue";
 
 export default {
+  components: {
+    MyActivity
+  },
   data() {
     return {
       valid: false,
@@ -145,3 +122,6 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+</style>

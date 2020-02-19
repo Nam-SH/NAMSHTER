@@ -29,7 +29,9 @@ export const mutations = {
 
   following(state, payload) {
     state.me.Followings.push({
-      id: payload.userId
+      id: payload.id,
+      nickname: payload.nickname,
+      name: payload.name,
     })
   },
 
@@ -210,7 +212,9 @@ export const actions = {
       })
       .then((res) => {
         commit('following', {
-          userId: payload.userId
+          id: res.data.id,
+          nickname: res.data.nickname,
+          name: res.data.name,
         })
       })
       .catch((err) => {

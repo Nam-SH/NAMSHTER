@@ -18,17 +18,13 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="groupCategory"
-                      :items="['공부', '운동', '취업', '취미']"
+                      :items="['컴퓨터공부', '취업', '운동', '음악', '기타']"
                       label="분류"
                       required
                     ></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-autocomplete
-                      v-model="groupSubject"
-                      :items="['Python', 'JAVA', 'C', 'go', 'Ruby', 'JS', 'HTML', 'CSS', 'Django', 'ML', 'DL']"
-                      label="주제"
-                    ></v-autocomplete>
+                    <v-autocomplete v-model="groupSubject" :items="items" label="주제"></v-autocomplete>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
@@ -84,6 +80,27 @@ export default {
   computed: {
     me() {
       return this.$store.state.users.me;
+    },
+    items() {
+      return this.groupCategory === "컴퓨터공부"
+        ? ["Python", "JAVA", "C", "go", "Django", "Vue", "HTML", "CSS", "JS"]
+        : this.groupCategory === "취업"
+        ? ["한국사", "영어", "컴활", "자소서", "면접"]
+        : this.groupCategory === "운동"
+        ? [
+            "축구",
+            "농구",
+            "야구",
+            "농구",
+            "배구",
+            "하키",
+            "헬스",
+            "복싱",
+            "레슬링"
+          ]
+        : this.groupCategory === "음악"
+        ? ["성악", "바이올린", "기타", "첼로", "사물놀이", "드럼", "댄스"]
+        : ["기타"];
     }
   },
   methods: {
@@ -113,9 +130,6 @@ export default {
             this.groupName = null;
             this.groupIntro = null;
             this.groupLimit = null;
-            this.$router.push(
-              `/groups/${this.$store.state.groups.grouplist_before[0].id}`
-            );
           });
       }
     }
