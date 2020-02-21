@@ -1,4 +1,7 @@
-const { Nuxt, Builder } = require("nuxt");
+const {
+  Nuxt,
+  Builder
+} = require("nuxt");
 
 const https = require("https");
 const http = require("http");
@@ -26,7 +29,6 @@ if (config.dev) {
 //   app.listen(port)
 //   console.log('Server listening on `localhost:' + port + '`.')
 // }
-
 function listen() {
   if (isProd) {
     const lex = require("greenlock-express").create({
@@ -42,14 +44,11 @@ function listen() {
           opts.email = "gtsmell@gmail.com";
           opts.agreeTos = true;
         }
-        cb(null, {
-          options: opts,
-          certs
-        });
+        cb(null, { options: opts, certs });
       },
       renewWithin: 81 * 24 * 60 * 60 * 1000,
       renewBy: 80 * 24 * 60 * 60 * 1000
-    });
+    })
     https.createServer(lex.httpsOptions, lex.middleware(app)).listen(443);
     http.createServer(lex.middleware(require("redirect-https")())).listen(80);
   } else {

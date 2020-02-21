@@ -16,13 +16,13 @@
     "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/moment": "^1.6.0",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
-    "@nuxtjs/vuetify": "^1.10.3",
+    "@nuxtjs/vuetify": "^1.11.0",
     "axios": "^0.19.2",
-    "bootstrap-vue": "^2.4.2",
+    "bootstrap-vue": "^2.5.0",
     "cross-env": "^6.0.3",
     "express": "^4.17.1",
     "fcm-cli": "^0.2.1",
-    "firebase": "^7.8.2",
+    "firebase": "^7.9.0",
     "greenlock-express": "^4.0.3",
     "greenlock-store-fs": "^3.2.2",
     "jquery": "^3.4.1",
@@ -32,10 +32,10 @@
     "redirect-https": "^1.3.0",
     "vue": "^2.6.11",
     "vue-qrcode-reader": "^2.1.1",
-    "vuetify": "^2.2.12"
+    "vuetify": "^2.2.14"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^6.2.0"
+    "eslint-plugin-vue": "^6.2.1"
   }
 }
