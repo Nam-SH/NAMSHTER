@@ -4,8 +4,10 @@ const db = require("./models");
 const app = express();
 const hpp = require("hpp");
 const helmet = require("helmet");
-const http = require("http");
+
 const https = require("https");
+const http = require("http");
+
 const session = require("express-session");
 const passport = require("passport");
 const passportConfig = require("./passport");
@@ -95,35 +97,6 @@ app.use("/hashtag", hashtagRouter);
 app.use("/group", groupRouter);
 app.use("/groups", groupsRouter);
 
-// app.listen(prod ? process.env.PORT : 3085, () => {
-//   console.log(`백엔드 서버 ${prod ? process.env.PORT : 3085}번 포트에서 작동 중...`);
-// })
-
-
-if (prod) {
-  const lex = require('greenlock-express').create({
-    version: 'draft-11', // 버전2
-    configDir: '/etc/letsencrypt', // 또는 ~/letsencrypt/etc
-    server: 'https://acme-staging-v02.api.letsencrypt.org/directory',
-    email: "gtsmell@gmail.com",
-    store: require("greenlock-store-fs"),
-    approveDomains: (opts, certs, cb) => {
-      if (certs) {
-        opts.domains = ['api.namshter.com'];
-      } else {
-        opts.email = 'gtsmell@gmail.com';
-        opts.agreeTos = true;
-      }
-      cb(null, { options: opts, certs });
-    },
-    renewWithin: 81 * 24 * 60 * 60 * 1000,
-    renewBy: 80 * 24 * 60 * 60 * 1000,
-  })
-  https.createServer(lex.httpsOptions, lex.middleware(app)).listen(443);
-  http.createServer(lex.middleware(require("redirect-https")())).listen(80);
-} 
-else {
-  app.listen(prod ? process.env.PORT : 3085, () => {
-    console.log(`server is running on ${prod ? process.env.PORT : 3085}`);
-  });
-}
+app.listen(prod ? process.env.PORT : 3085, () => {
+  console.log(`백엔드 서버 ${prod ? process.env.PORT : 3085}번 포트에서 작동 중...`);
+})

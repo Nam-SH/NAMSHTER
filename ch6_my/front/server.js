@@ -25,35 +25,7 @@ if (config.dev) {
   listen();
 }
 
-// function listen() {
-//   app.listen(port)
-//   console.log('Server listening on `localhost:' + port + '`.')
-// }
 function listen() {
-  if (isProd) {
-    const lex = require("greenlock-express").create({
-      version: "draft-11",
-      configDir: "/etc/letsencrypt", // 또는 ~/letsencrypt/etc
-      server: "https://acme-v02.api.letsencrypt.org/directory",
-      email: "gtsmell@gmail.com",
-      store: require("greenlock-store-fs"),
-      approveDomains: (opts, certs, cb) => {
-        if (certs) {
-          opts.domains = ["namshter.com", "www.namshter.com"];
-        } else {
-          opts.email = "gtsmell@gmail.com";
-          opts.agreeTos = true;
-        }
-        cb(null, { options: opts, certs });
-      },
-      renewWithin: 81 * 24 * 60 * 60 * 1000,
-      renewBy: 80 * 24 * 60 * 60 * 1000
-    })
-    https.createServer(lex.httpsOptions, lex.middleware(app)).listen(443);
-    http.createServer(lex.middleware(require("redirect-https")())).listen(80);
-  } else {
-    app.listen(process.env.PORT || 3081, () => {
-      console.log(`server is running on ${process.env.PORT || 3081}`);
-    });
-  }
+  app.listen(port)
+  console.log('Server listening on `localhost:' + port + '`.')
 }

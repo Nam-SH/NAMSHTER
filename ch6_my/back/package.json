@@ -19,8 +19,6 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "fcm-node": "^1.5.2",
-    "greenlock-express": "^4.0.3",
-    "greenlock-store-fs": "^3.2.2",
     "helmet": "^3.21.2",
     "hpp": "^0.2.3",
     "morgan": "^1.9.1",
@@ -33,7 +31,6 @@
     "passport-local": "^1.0.0",
     "passport-naver": "^1.0.6",
     "pm2": "^4.2.3",
-    "redirect-https": "^1.3.0",
     "sequelize": "^5.21.4"
   },
   "devDependencies": {
