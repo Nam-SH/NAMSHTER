@@ -16,10 +16,10 @@ module.exports = {
       }
       datas.push(temp)
     }
-    return queryInterface.bulkInsert('users', datas, {});
+    return queryInterface.bulkInsert(process.env.NODE_ENV === 'production' ? "Users" : 'users', datas, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('users', null, {});
+    return queryInterface.bulkDelete(process.env.NODE_ENV === 'production' ? "Users" : 'users', null, {});
   }
 };

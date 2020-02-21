@@ -17,24 +17,25 @@
       </v-form>
     </v-card>
     <v-card>
+      {{ $moment("2020-02-21T07:17:01.963Z").format('YY/MM/DD') }}
       <hr />
       <h3>로컬용</h3>
       <div class="mx-auto">
         <a style="inline-block" href="http://localhost:3085/user/naver">
-          <img class="mt-1" src="../static/naver.png" alt style="width:30%;" />
+          <img class="mt-1" src="../static/naver.png" alt style="width:200px;height:50px" />
         </a>
         <a href="http://localhost:3085/user/kakao">
-          <img class="mt-1" src="../static/kakao.png" alt style="width:30%;height:40px" />
+          <img class="mt-1" src="../static/kakao.png" alt style="width:200px;height:50px" />
         </a>
       </div>
       <hr />
       <h3>배포용</h3>
       <div class="mx-auto">
         <a href="http://api.namshter.com/user/naver">
-          <img class="mx-auto mt-1" src="@/static/naver.png" alt style="width:30%;" />
+          <img class="mx-auto mt-1" src="@/static/naver.png" alt style="width:200px;height:50px" />
         </a>
         <a href="http://api.namshter.com/user/kakao">
-          <img class="mx-auto mt-1" src="@/static/kakao.png" alt style="width:30%;height:40px" />
+          <img class="mx-auto mt-1" src="@/static/kakao.png" alt style="width:200px;height:50px" />
         </a>
       </div>
     </v-card>

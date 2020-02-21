@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     db.Subject.belongsTo(db.Category)
     db.Subject.belongsToMany(db.Group, {
       through: "Groupsubject",
-      as: "Joinedgroup"
     })
   };
 
