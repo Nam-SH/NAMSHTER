@@ -90,13 +90,12 @@ module.exports = {
   manifest: {
     "gcm_sender_id": "103953800507"
   },
-  vuetify: {},
   axios: {
     browserBaseURL: process.env.NODE_ENV === "production" ?
       "http://api.namshter.com" : "http://localhost:3085",
     baseURL: process.env.NODE_ENV === "production" ?
       "http://api.namshter.com" : "http://localhost:3085",
-    https: true
+    https: false
   },
   server: {
     port: process.env.PORT || 3081
