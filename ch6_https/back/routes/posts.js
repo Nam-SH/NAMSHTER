@@ -55,7 +55,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-
+// 이번주 작성한 글 가져오기
 router.get('/thisweek', async (req, res, next) => {
   try {
     let where = {

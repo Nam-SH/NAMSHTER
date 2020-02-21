@@ -60,11 +60,11 @@ module.exports = (sequelize, DataTypes) => {
       through: "Groupuser",
       as: "Groupjoined"
     });
-    db.User.belongsToMany(db.Daily, {
-      through: "Daily",
-      as: "checkDate",
+    db.User.belongsToMany(db.DailyTz, {
+      through: "DailyUser",
+      as: "Checking",
     });
-    db.User.hasMany(db.Grouppost);
+    db.User.hasMany(db.GroupPost);
   };
   return User;
 };

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Grouppost = sequelize.define('Grouppost', {
+  const GroupPost = sequelize.define('GroupPost', {
     title: {
       type: DataTypes.STRING(40),
       allowNull: false,
@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     collate: 'utf8mb4_general_ci',
   });
 
-  Grouppost.associate = (db) => {
-    db.Grouppost.belongsTo(db.Group);
-    db.Grouppost.belongsTo(db.User)
+  GroupPost.associate = (db) => {
+    db.GroupPost.belongsTo(db.Group);
+    db.GroupPost.belongsTo(db.User)
 
   };
-  return Grouppost;
+  return GroupPost;
 };

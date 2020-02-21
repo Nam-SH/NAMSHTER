@@ -16,8 +16,8 @@ db.follow = require('./follow')(sequelize, Sequelize);
 db.Category = require('./category')(sequelize, Sequelize);
 db.Subject = require('./subject')(sequelize, Sequelize);
 db.Group = require('./group')(sequelize, Sequelize);
-db.Grouppost = require('./grouppost')(sequelize, Sequelize);
-db.Daily = require('./daily')(sequelize, Sequelize);
+db.GroupPost = require('./grouppost')(sequelize, Sequelize);
+db.DailyTz = require('./dailyTz')(sequelize, Sequelize);
 
 // db.Grouimage = require('./groupimage')(sequelize, Sequelize);
 // db.Groupcomment = require('./groupcomment')(sequelize, Sequelize);

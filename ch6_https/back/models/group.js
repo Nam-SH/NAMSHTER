@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     db.Group.belongsTo(db.User, {
       as: "Master"
     });
-    db.Group.hasMany(db.Grouppost);
+    db.Group.hasMany(db.GroupPost);
 
   };
 
