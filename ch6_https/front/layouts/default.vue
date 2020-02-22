@@ -14,9 +14,7 @@
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="font-weight-black font-weight-bold"
-                  text
                   rounded
-                  outlined
                   color="blue"
                   x-large
                   v-on="on"
@@ -29,13 +27,13 @@
 
         <v-spacer />
 
-        <v-tooltip right color="black">
+        <v-tooltip right color="white">
           <template v-slot:activator="{ on }">
             <div class="my-auto ml-5" id="clock" v-on="on">
               <span class="time">{{ time }}</span>
             </div>
           </template>
-          <span class="time">{{ date }}</span>
+          <span class="time" style="color:black">{{ date }}</span>
         </v-tooltip>
 
         <v-spacer />
@@ -45,12 +43,18 @@
               <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
             </div>
           </v-form>
-          <v-tooltip top>
+          <v-tooltip top v-if="!me">
+            <template v-slot:activator="{ on }">
+              <v-btn text to="/signup" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
+                <div>회원가입</div>
+              </v-btn>
+            </template>
+            <span>회원가입해요</span>
+          </v-tooltip>
+          <v-tooltip top v-if="me">
             <template v-slot:activator="{ on }">
               <v-btn
-                v-if="me"
                 text
-                nuxt
                 to="/profile"
                 :style="{ display: 'flex', alignItems: 'center' }"
                 v-on="on"
@@ -60,31 +64,9 @@
             </template>
             <span>프로필보기</span>
           </v-tooltip>
-          <v-tooltip top>
+          <v-tooltip top v-if="me">
             <template v-slot:activator="{ on }">
-              <v-btn
-                v-if="!me"
-                text
-                nuxt
-                to="/signup"
-                :style="{ display: 'flex', alignItems: 'center' }"
-                v-on="on"
-              >
-                <div>회원가입</div>
-              </v-btn>
-            </template>
-            <span>회원가입해요</span>
-          </v-tooltip>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-if="me"
-                text
-                nuxt
-                to="/groups"
-                :style="{ display: 'flex', alignItems: 'center' }"
-                v-on="on"
-              >
+              <v-btn text to="/groups" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
                 <div>그룹</div>
               </v-btn>
             </template>
@@ -92,13 +74,7 @@
           </v-tooltip>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-btn
-                text
-                nuxt
-                to="/qrcode"
-                :style="{ display: 'flex', alignItems: 'center' }"
-                v-on="on"
-              >
+              <v-btn text to="/qrcode" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
                 <div>QRcode</div>
               </v-btn>
             </template>

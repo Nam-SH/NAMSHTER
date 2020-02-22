@@ -1,14 +1,13 @@
 <template>
   <v-container>
     <v-card class="d-flex align-content-space-between flex-wrap" color="black" dark height="350px">
-      <hr style="color:white" />
       <v-card-title>
         <p class="title">{{ group.name }}</p>
       </v-card-title>
       <v-container>
-        <div style="height:100px">
+        <v-card style="height:100px">
           <p>{{ group.intro }}</p>
-        </div>
+        </v-card>
         <v-spacer></v-spacer>
         <ul>
           <li>그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})</li>
@@ -18,11 +17,12 @@
         <v-card-actions>
           <v-list-item class="grow">
             <v-list-item-avatar color="grey darken-3">
-              <v-img class="elevation-6" :src="group.Master.imgsrc" />
+              <!-- <v-img class="elevation-6" :src="group.Master.imgsrc" /> -->
+              <img class="elevation-6" src="@/static/donut.png" />
             </v-list-item-avatar>
             <v-spacer></v-spacer>
-            <v-row align="end" justify="end" style="width:0px">
-              <v-btn text icon>
+            <v-row style="position:relative;left:30%">
+              <v-btn text icon class="ml-3 mr-2">
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
               <group-intro :group="group" />

@@ -10,7 +10,7 @@
     </v-layout>
     <br />
     <v-bottom-navigation v-model="navNum" shift>
-      <v-btn v-for="(item, i) in items" :key="i" @click="onLoadGroup(i)">
+      <v-btn v-for="(item, i) in items" :key="i" @click.prevent="onLoadGroup(i)">
         <span>{{ item.name }}</span>
         <v-icon>{{ item.icon }}</v-icon>
       </v-btn>

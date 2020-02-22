@@ -17,7 +17,7 @@
                 <div>
                   <span
                     class="font-weight-bold ml-3"
-                  >[{{ group.Selectsubject[0].Category.name }}] //</span>
+                  >[{{ group.Selectsubject[0].Category.name }}] ||</span>
                   <span v-for="sub in group.Selectsubject" :key="sub.id">
                     <span>{{ sub.name }}</span>
                   </span>
