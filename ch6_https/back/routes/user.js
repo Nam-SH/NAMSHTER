@@ -16,9 +16,9 @@ router.get(
   "/kakao/callback",
   passport.authenticate("kakao", {
     successRedirect: process.env.NODE_ENV === "production" ?
-      "http://namshter.com" : "http://localhost:3081/",
+      "https://namshter.com" : "http://localhost:3081/",
     failureRedirect: process.env.NODE_ENV === "production" ?
-      "http://namshter.com" : "http://localhost:3081/"
+      "https://namshter.com" : "http://localhost:3081/"
   })
 );
 

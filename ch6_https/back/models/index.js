@@ -12,12 +12,11 @@ db.Hashtag = require('./hashtag')(sequelize, Sequelize);
 db.Image = require('./image')(sequelize, Sequelize);
 db.follow = require('./follow')(sequelize, Sequelize);
 
-
 db.Category = require('./category')(sequelize, Sequelize);
 db.Subject = require('./subject')(sequelize, Sequelize);
 db.Group = require('./group')(sequelize, Sequelize);
 db.GroupPost = require('./grouppost')(sequelize, Sequelize);
-db.DailyTz = require('./dailyTz')(sequelize, Sequelize);
+db.DailyTz = require('./dailytz')(sequelize, Sequelize);
 
 // db.Grouimage = require('./groupimage')(sequelize, Sequelize);
 // db.Groupcomment = require('./groupcomment')(sequelize, Sequelize);

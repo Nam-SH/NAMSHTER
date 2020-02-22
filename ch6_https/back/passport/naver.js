@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const naverKey = {
   clientID: "QKT07MaQAc9q37sQ8N3S",
   clientSecret: "LFx0_PLxaP",
-  callbackURL: process.env.NODE_ENV === "production" ? "http://api.namshter.com/user/naver/callback" : "http://localhost:3085/user/naver/callback"
+  callbackURL: process.env.NODE_ENV === "production" ? "https://api.namshter.com/user/naver/callback" : "http://localhost:3085/user/naver/callback"
 }
 
 function makeId() {
