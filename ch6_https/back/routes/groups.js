@@ -30,11 +30,11 @@ router.get("/", async (req, res, next) => {
           attributes: ["id", "name", "nickname"]
         },
         {
-          model: db.Grouppost,
+          model: db.GroupPost,
           attributes: ["id"]
         }, {
           model: db.Subject,
-          as: "Groupsubjects",
+          as: "Selectsubject",
           attributes: ['id', 'name'],
 
         }
@@ -76,13 +76,17 @@ router.get("/:status", async (req, res, next) => {
           as: "Groupmembers",
           attributes: ["id"]
         }, {
-          model: db.Grouppost,
+          model: db.GroupPost,
           attributes: ["id"]
         },
         {
           model: db.Subject,
-          as: "Groupsubjects",
+          as: "Selectsubject",
           attributes: ['id', 'name'],
+          include: [{
+            model: db.Category,
+            attributes: ['id', 'name']
+          }]
         }
       ],
       order: [

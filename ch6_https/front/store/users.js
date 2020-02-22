@@ -108,7 +108,6 @@ export const actions = {
 
   signUp({
     commit,
-    dispatch
   }, payload) {
     return this.$axios.post('/user', {
         email: payload.email,
@@ -128,7 +127,6 @@ export const actions = {
 
   logIn({
     commit,
-    dispatch
   }, payload) {
     return this.$axios.post('/user/login', {
         email: payload.email,
@@ -146,7 +144,6 @@ export const actions = {
 
   logOut({
     commit,
-    dispatch
   }) {
     return this.$axios.post('/user/logout', {}, {
         withCredentials: true,
@@ -210,7 +207,6 @@ export const actions = {
   // 팔로워, 언팔로워
   follow({
     commit,
-    dispatch
   }, payload) {
     return this.$axios.post(`/user/${payload.userId}/follow`, {}, {
         withCredentials: true
@@ -229,7 +225,6 @@ export const actions = {
 
   unfollow({
     commit,
-    dispatch
   }, payload) {
     return this.$axios.delete(`/user/${payload.userId}/follow`, {
         withCredentials: true
@@ -268,7 +263,7 @@ export const actions = {
   }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/user/${state.me.id}/followers?limit=4`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followers?limit=5`, {
           withCredentials: true
         })
         commit('loadFollowers', {
@@ -280,7 +275,7 @@ export const actions = {
       }
       if (state.hasMoreFollower) {
         const lastFollower = state.followerList[state.followerList.length - 1]
-        const res = await this.$axios.get(`/user/${state.me.id}/followers?lastId=${lastFollower && lastFollower.id}&limit=4`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followers?lastId=${lastFollower && lastFollower.id}&limit=5`, {
           withCredentials: true,
         })
         commit('loadFollowers', {
@@ -301,7 +296,7 @@ export const actions = {
   }, payload) {
     try {
       if (payload && payload.reset) {
-        const res = await this.$axios.get(`/user/${state.me.id}/followings?limit=4`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followings?limit=5`, {
           withCredentials: true
         })
         commit('loadFollowings', {
@@ -313,7 +308,7 @@ export const actions = {
       }
       if (state.hasMoreFollowing) {
         const lastFollowing = state.followingList[state.followingList.length - 1]
-        const res = await this.$axios.get(`/user/${state.me.id}/followings?lastId=${lastFollowing && lastFollowing.id}&limit=4`, {
+        const res = await this.$axios.get(`/user/${state.me.id}/followings?lastId=${lastFollowing && lastFollowing.id}&limit=5`, {
           withCredentials: true,
         })
         commit('loadFollowings', {

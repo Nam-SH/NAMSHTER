@@ -17,55 +17,62 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      images: {
-        type: Array,
-        required: true,
-      },
-      closeModal: {
-        type: Function,
-        required: true,
-      },
+export default {
+  computed: {
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://www.api.namshter.com"
+        : "http://localhost:3085";
+    }
+  },
+  props: {
+    images: {
+      type: Array,
+      required: true
+    },
+    closeModal: {
+      type: Function,
+      required: true
     }
   }
+};
 </script>
 
 <style scoped>
-  #image-zoom {
-    position: fixed;
-    z-index: 5000;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  #image-zoom header {
-    height: 44px;
-    background: white;
-    position: relative;
-    padding: 0;
-    text-align: center;
-  }
-  #image-zoom header h1 {
-    margin: 0;
-    font-size: 17px;
-    color: #333;
-    line-height: 44px;
-  }
-  #close-btn {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 15px;
-    line-height: 14px;
-    cursor: pointer;
-  }
-  #carousel-wrapper {
-    height: calc(100% - 44px);
-    background: #090909;
-  }
-  #carousel-wrapper > div {
-    height: auto !important;
-  }
+#image-zoom {
+  position: fixed;
+  z-index: 5000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+#image-zoom header {
+  height: 44px;
+  background: white;
+  position: relative;
+  padding: 0;
+  text-align: center;
+}
+#image-zoom header h1 {
+  margin: 0;
+  font-size: 17px;
+  color: #333;
+  line-height: 44px;
+}
+#close-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 15px;
+  line-height: 14px;
+  cursor: pointer;
+}
+#carousel-wrapper {
+  height: calc(100% - 44px);
+  background: #090909;
+}
+#carousel-wrapper > div {
+  height: auto !important;
+}
 </style>

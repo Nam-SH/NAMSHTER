@@ -107,6 +107,7 @@ export const actions = {
       })
       .then((res) => {
         commit('addMainPost', res.data)
+        // this.$router.push(`/post/${state.mainPosts[0].id}`);
       })
       .catch((err) => {
         console.error('add:::', err)

@@ -6,8 +6,9 @@ const {
   isLoggedIn
 } = require('./middlewares')
 
+
 // 한개 그룹 디테일
-router.get('/:groupId', isLoggedIn, async (req, res, next) => {
+router.get('/:groupId', async (req, res, next) => {
   try {
     const group = await db.Group.findOne({
       where: {
@@ -22,14 +23,14 @@ router.get('/:groupId', isLoggedIn, async (req, res, next) => {
         as: "Groupmembers",
         attributes: ['id', 'nickname', 'name', 'email'],
       }, {
-        model: db.Grouppost,
+        model: db.GroupPost,
         include: [{
           model: db.User,
           attributes: ['id', 'nickname', 'name', 'email'],
         }]
       }, {
         model: db.Subject,
-        as: "Groupsubjects",
+        as: "Selectsubject",
         attributes: ['id', 'name'],
         include: [{
           model: db.Category,
@@ -59,8 +60,8 @@ router.post('/', isLoggedIn, async (req, res, next) => {
         name: req.body.subjectName
       }
     })
-    await newGroup.addGroupmember(req.user.id)
-    await newGroup.addGroupsubject(targetSubject.id)
+    await newGroup.addGroupmembers(req.user.id)
+    await newGroup.addSelectsubject(targetSubject.id)
 
     const fullGroup = await db.Group.findOne({
       where: {
@@ -76,14 +77,14 @@ router.post('/', isLoggedIn, async (req, res, next) => {
           as: "Groupmembers",
           attributes: ['id', 'nickname', 'name', 'email'],
         }, {
-          model: db.Grouppost,
+          model: db.GroupPost,
           include: [{
             model: db.User,
             attributes: ['id', 'nickname', 'name', 'email'],
           }]
         }, {
           model: db.Subject,
-          as: "Groupsubjects",
+          as: "Selectsubject",
           attributes: ['id', 'name'],
           include: [{
             model: db.Category,
@@ -99,7 +100,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   }
 });
 
-
+// 그룹 상태 변혼하기
 router.post("/:groupId/changestatus", async (req, res, next) => {
   try {
     // 1. 해당 그룹 찾기
@@ -146,14 +147,23 @@ router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
         id: req.body.userId
       }
     })
-
-    const userInGroups = await user.getGroupjoined({
+    const targetGroup = await db.Group.findOne({
       where: {
         id: req.params.groupId
       },
       attributes: ['id', 'MasterId']
     })
-    if (userInGroups && userInGroups.length > 0 && user.id !== userInGroups.MasterId) {
+
+    if (user.id === targetGroup.MasterId) {
+      return res.send("님은 방장이라 가입/탈퇴 못함;;")
+    }
+    const usersInGroup = await targetGroup.getGroupmembers({
+      where: {
+        id: user.id
+      },
+      attributes: ['id']
+    })
+    if (usersInGroup) {
       await user.removeGroupjoined(req.params.groupId)
       return res.send("탈퇴가 되었네여;;")
     } else {

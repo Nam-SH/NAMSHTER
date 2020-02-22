@@ -9,15 +9,17 @@
           <group-create v-else />
         </v-card-actions>
       </v-app-bar>
-
-      <v-container v-if="maingrouplist.length > 0">
+      <v-container v-if="maingrouplist && maingrouplist.length > 0">
         <v-row dense>
           <v-col v-for="group in maingrouplist" :key="group.id" cols="12">
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
-                  <span v-for="(val, key, idx) of group.Groupsubjects[0]" :key="idx">
-                    <v-card-title v-if="idx ===1" v-text="val" />
+                  <span
+                    class="font-weight-bold ml-3"
+                  >[{{ group.Selectsubject[0].Category.name }}] //</span>
+                  <span v-for="sub in group.Selectsubject" :key="sub.id">
+                    <span>{{ sub.name }}</span>
                   </span>
                   <v-card-title class="headline" v-text="group.name" />
                   <v-card-subtitle v-text="group.intro" />

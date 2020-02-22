@@ -2,17 +2,16 @@
   <v-container>
     <!-- 1. 내 정보 수정하기 -->
     <my-infor />
+    <!-- 2. 내 출첵 히트맵 보여주기 -->
 
-    <!-- 2. 그래프 보여주기 -->
+    <!-- 3. 그래프 보여주기 -->
     <v-container>
       <v-btn
         v-model="isMyPostCalc"
         @click="onGetMyPost"
         :text="isMyPostCalc"
         :color="isMyPostCalc ? 'blue' : 'yellow'"
-        >{{ myGraphContent }}
-      </v-btn>
-
+      >{{ myGraphContent }}</v-btn>
       <v-card>
         <v-container>
           <v-sparkline
@@ -29,19 +28,12 @@
         </v-container>
       </v-card>
     </v-container>
-
-    <!-- 3. 팔로잉, 팔로워 조회하기 -->
+    <!-- 4. 팔로잉, 팔로워 조회하기 -->
     <v-card>
       <v-container>
         <v-subheader>팔로잉</v-subheader>
         <follow-list :users="followingList" :remove="removeFollowing" />
-        <v-btn
-          @click="loadFollowings"
-          v-if="hasMoreFollowing"
-          color="blue"
-          style="width: 100%"
-          >더 보기</v-btn
-        >
+        <v-btn @click="loadFollowings" v-if="hasMoreFollowing" color="blue" style="width: 100%">더 보기</v-btn>
         <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
       </v-container>
     </v-card>
@@ -49,13 +41,7 @@
       <v-container>
         <v-subheader>팔로워</v-subheader>
         <follow-list :users="followerList" :remove="removeFollower" />
-        <v-btn
-          @click="loadFollowers"
-          v-if="hasMoreFollower"
-          color="blue"
-          style="width: 100%"
-          >더 보기</v-btn
-        >
+        <v-btn @click="loadFollowers" v-if="hasMoreFollower" color="blue" style="width: 100%">더 보기</v-btn>
         <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
       </v-container>
     </v-card>
@@ -95,7 +81,7 @@ export default {
   computed: {
     myGraphContent() {
       return this.isMyPostCalc
-        ? "내가 이번 주에 쓴 글 상태네요!"
+        ? "내가 이번 달에 쓴 글 상태네요!"
         : "나의 상태 보기!!";
     },
     me() {
@@ -149,7 +135,7 @@ export default {
       this.$store.dispatch("users/loadFollowers", { reset: false });
     },
     loadFollowings() {
-      this.$store.dispatch("users/loadFollowings", { offset: 0 });
+      this.$store.dispatch("users/loadFollowings", { reset: false });
     },
     onGetMyPost() {
       this.isMyPostCalc = !this.isMyPostCalc;

@@ -2,16 +2,23 @@
   <v-container>
     <v-card class="mx-auto" max-width="100%">
       <v-card-text>
-        <div>{{ onegroup.Groupsubjects[0].Category.name }} - {{ onegroup.Groupsubjects[0].name }}</div>
+        <h3>{{ onegroup.Selectsubject[0].Category.name }}</h3>
+        <div v-for="sub of onegroup.Selectsubject" :key="sub.id">
+          <span>{{ sub.name }}</span>
+        </div>
         <p class="display-1 text--primary">{{ onegroup.name }}</p>
         <p>
           {{ onegroup.Master.name }}({{ onegroup.Master.nickname }}) //
           {{ onegroup.Master.email }}
         </p>
         <v-btn @click="onChangeStatus">{{ statusName }}</v-btn>
-        <hr />
+        <hr class="my-3" />
         <p>{{ onegroup.Groupmembers.length }}명 / {{ onegroup.limit }}명</p>
-        <div class="text--primary">{{ onegroup.intro }}</div>
+        <v-card
+          class="font-weight-black mx-auto"
+          height="300px"
+          max-height="500px"
+        >{{ onegroup.intro }}</v-card>
       </v-card-text>
       <v-card-actions>
         <v-btn text color="deep-purple accent-4">글 쓰기</v-btn>
@@ -48,7 +55,7 @@ export default {
         ? "준비 중..."
         : this.onegroup.status === 1
         ? "진행 중"
-        : "끝인데요";
+        : "끝인데요;;";
     }
   },
 

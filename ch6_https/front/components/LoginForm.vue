@@ -17,7 +17,6 @@
       </v-form>
     </v-card>
     <v-card>
-      {{ $moment("2020-02-21T07:17:01.963Z").format('YY/MM/DD') }}
       <hr />
       <h3>로컬용</h3>
       <div class="mx-auto">
@@ -47,10 +46,9 @@
         <v-avatar v-if="social" :color="socialColor" size="25">
           <span class="black--text" style="font-size:20px">{{ socialName }}</span>
         </v-avatar>
-        <br />
         <span>{{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.</span>
-        <hr />
-        <v-btn @click="onLogOut">로그아웃</v-btn>
+        <hr class="my-2" />
+        <v-btn class="mb-3" @click="onLogOut">로그아웃</v-btn>
         <!-- 내 글 통계 -->
         <my-activity :me="me" />
         <!--  -->
@@ -70,10 +68,8 @@ export default {
   data() {
     return {
       valid: false,
-
       email: "",
       password: "",
-
       emailRules: [
         v => !!v || "E-mail is required",
         v => /.+@.+\..+/.test(v) || "이메일이 아닌 거 같은데여;;"

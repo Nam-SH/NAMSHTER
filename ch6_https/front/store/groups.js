@@ -162,7 +162,7 @@ export const actions = {
   loadMainGroups({
     commit
   }, payload) {
-    return this.$axios.get(`/groups/${payload.status}?limit=${payload.limit || 0}`, {
+    return this.$axios.get(`/groups/${payload.status}?limit=${payload.limit}`, {
         withCredentials: true
       })
       .then((res) => {

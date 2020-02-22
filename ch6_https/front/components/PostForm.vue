@@ -23,27 +23,14 @@
           dark
           dismissible
         />
+        <br />
         <v-btn type="submit" color="blue" absolute right>제출</v-btn>
         <!-- 이미지데이터 추가 -->
-        <input
-          ref="imageInput"
-          type="file"
-          multiple
-          hidden
-          @change="onChangeImages"
-        />
+        <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
         <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
         <div>
-          <div
-            v-for="(p, i) in imagePaths"
-            :key="p"
-            style="display: inline-block"
-          >
-            <img
-              :src="`http://localhost:3085/${p}`"
-              :alt="p"
-              style="width: 200px"
-            />
+          <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
+            <img :src="`http://localhost:3085/${p}`" :alt="p" style="width: 200px" />
             <div>
               <button type="button" @click="onRemoveImage(i)">삭제</button>
             </div>
@@ -90,15 +77,13 @@ export default {
       }
       await this.$store
         .dispatch("posts/add", { content: this.content })
-        .then(() => {
-          this.$store.dispatch("users/loadUser");
+        .then(async () => {
+          await this.$store.dispatch("users/loadUser");
           this.content = "";
           this.hideDetails = false;
           this.success = true;
           this.error = false;
           this.successMessages = "게시글 등록을 성공했습니다요";
-          this.$store.dispatch("posts/loadMessage", "postadd");
-          this.$router.push(`/post/${this.$store.state.posts.mainPosts[0].id}`);
         });
     },
     onClickImageUpload() {

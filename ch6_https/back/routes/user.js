@@ -420,11 +420,11 @@ router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
         ["createdAt", "DESC"],
         ["id", "DESC"]
       ],
-      limit: parseInt(req.query.limit, 10) || 4
+      limit: parseInt(req.query.limit, 10) || 5
     });
-    let isMore = !followers.slice(3, 4).length ? false : true;
+    let isMore = !followers.slice(4, 5).length ? false : true;
     return res.json({
-      followers: followers.slice(0, 3),
+      followers: followers.slice(0, 4),
       hasMoreFollower: isMore
     });
     res.json(followers);
@@ -457,11 +457,11 @@ router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
         ["createdAt", "DESC"],
         ["id", "DESC"]
       ],
-      limit: parseInt(req.query.limit, 10) || 4
+      limit: parseInt(req.query.limit, 10) || 5
     });
-    let isMore = !followings.slice(3, 4).length ? false : true;
+    let isMore = !followings.slice(4, 5).length ? false : true;
     return res.json({
-      followings: followings.slice(0, 3),
+      followings: followings.slice(0, 4),
       hasMoreFollowing: isMore
     });
   } catch (err) {

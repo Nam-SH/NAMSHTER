@@ -2,41 +2,44 @@
   <div v-if="images.length === 0"></div>
   <div v-else-if="images.length === 1">
     <!-- :src="images[0].src.replace(/\:3081/, ':3085/')"  -->
-    <v-img 
-      :src="`http://localhost:3085/${images[0].src}`" 
-      contain 
+    <v-img
+      :src="`http://localhost:3085/${images[0].src}`"
+      contain
       aspect-ratio="2"
       @click="zoomImages"
     />
     <image-zoom v-if="imageZoomed" :close-modal="closeModal" :images="images" />
   </div>
   <div v-else-if="images.length === 2" style="display: flex">
-    <v-img 
-      :src="`http://localhost:3085/${images[0].src}`" 
-      contain 
+    <v-img
+      :src="`http://localhost:3085/${images[0].src}`"
+      contain
       aspect-ratio="2"
       style="flex: 1"
       @click="zoomImages"
     />
-    <v-img 
-      :src="`http://localhost:3085/${images[0].src}`" 
-      contain 
+    <v-img
+      :src="`http://localhost:3085/${images[0].src}`"
+      contain
       aspect-ratio="2"
       style="flex: 1"
       @click="zoomImages"
     />
     <image-zoom v-if="imageZoomed" :close-modal="closeModal" :images="images" />
   </div>
-  
+
   <div v-else style="display: flex">
-    <v-img 
-      :src="`http://localhost:3085/${images[0].src}`" 
-      contain 
+    <v-img
+      :src="`http://localhost:3085/${images[0].src}`"
+      contain
       aspect-ratio="2"
       style="flex: 1"
       @click="zoomImages"
     />
-    <div style="flex: 1; align-items: center; justify-content: center; display: flex" @click="zoomImages">
+    <div
+      style="flex: 1; align-items: center; justify-content: center; display: flex"
+      @click="zoomImages"
+    >
       <div style="text-align: center">
         <v-icon>mdi-dots-horizontal</v-icon>
         <div>더 보기</div>
@@ -47,30 +50,37 @@
 </template>
 
 <script>
-  import ImageZoom from '@/components/ImageZoom.vue';
+import ImageZoom from "@/components/ImageZoom.vue";
 
-  export default {
-    components: {
-      ImageZoom
+export default {
+  components: {
+    ImageZoom
+  },
+  props: {
+    images: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      imageZoomed: false
+    };
+  },
+  computed: {
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://www.api.namshter.com"
+        : "http://localhost:3085";
+    }
+  },
+  methods: {
+    closeModal() {
+      this.imageZoomed = false;
     },
-    props: {
-      images: {
-        type: Array,
-        required: true,
-      }
-    },
-    data() {
-      return {
-        imageZoomed: false,
-      }
-    },
-    methods: {
-      closeModal() {
-        this.imageZoomed = false;
-      },
-      zoomImages() {
-        this.imageZoomed = true;
-      }
-    },
-  };
+    zoomImages() {
+      this.imageZoomed = true;
+    }
+  }
+};
 </script>
