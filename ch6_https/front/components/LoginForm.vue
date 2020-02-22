@@ -42,11 +42,17 @@
   <v-container v-else>
     <v-card>
       <v-container>
-        <i v-if="me.isAdmin" class="fas fa-user-lock"></i>
-        <v-avatar v-if="social" :color="socialColor" size="25">
-          <span class="black--text" style="font-size:20px">{{ socialName }}</span>
-        </v-avatar>
-        <span>{{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.</span>
+        <v-tooltip right color="black">
+          <template v-slot:activator="{ on }">
+            <i v-if="me.isAdmin" class="fas fa-user-lock" v-on="on"></i>
+            <v-avatar v-if="social" :color="socialColor" size="25" v-on="on">
+              <span class="black--text" style="font-size:20px">{{ socialName }}</span>
+            </v-avatar>
+            <span v-on="on">{{ me.nickname }}({{ me.name }}) 로그인이 되었습니다.</span>
+          </template>
+          <img height="200" width="200" src="@/static/donut.png" />
+        </v-tooltip>
+
         <hr class="my-2" />
         <v-btn class="mb-3" @click="onLogOut">로그아웃</v-btn>
         <!-- 내 글 통계 -->

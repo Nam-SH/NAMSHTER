@@ -1,57 +1,113 @@
 <template>
-  <v-app>
+  <v-app style="background-color:#E5EFF8">
     <nav>
-      <v-toolbar dark color="blue">
+      <v-toolbar
+        dark
+        color="blue"
+        src="https://picsum.photos/1920/1080?random"
+        shrink-on-scroll
+        prominent
+      >
         <v-toolbar-title>
-          <nuxt-link to="/" style="color: black">NAMSHTER</nuxt-link>
+          <nuxt-link to="/" style="color: black">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="font-weight-black font-weight-bold"
+                  text
+                  rounded
+                  outlined
+                  color="blue"
+                  x-large
+                  v-on="on"
+                >NAMSHTER</v-btn>
+              </template>
+              <span>메인으로</span>
+            </v-tooltip>
+          </nuxt-link>
         </v-toolbar-title>
+
         <v-spacer />
-        <v-toolbar-items>
+
+        <v-tooltip right color="black">
+          <template v-slot:activator="{ on }">
+            <div class="my-auto ml-5" id="clock" v-on="on">
+              <span class="time">{{ time }}</span>
+            </div>
+          </template>
+          <span class="time">{{ date }}</span>
+        </v-tooltip>
+
+        <v-spacer />
+        <v-toolbar-items mt-5>
           <v-form @submit.prevent="onSearchHashtag">
             <div :style="{ display: 'flex', height: '100%', alignItems: 'center' }">
               <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
             </div>
           </v-form>
-          <v-btn text nuxt to="/profile" :style="{ display: 'flex', alignItems: 'center' }">
-            <div>프로필</div>
-          </v-btn>
-          <v-btn
-            v-if="!me"
-            text
-            nuxt
-            to="/signup"
-            :style="{ display: 'flex', alignItems: 'center' }"
-          >
-            <div>회원가입</div>
-          </v-btn>
-          <v-btn v-else text nuxt to="/groups" :style="{ display: 'flex', alignItems: 'center' }">
-            <div>그룹</div>
-          </v-btn>
-          <v-btn text nuxt to="/qrcode" :style="{ display: 'flex', alignItems: 'center' }">
-            <div>QRcode</div>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-if="me"
+                text
+                nuxt
+                to="/profile"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
+                <div>프로필</div>
+              </v-btn>
+            </template>
+            <span>프로필보기</span>
+          </v-tooltip>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-if="!me"
+                text
+                nuxt
+                to="/signup"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
+                <div>회원가입</div>
+              </v-btn>
+            </template>
+            <span>회원가입해요</span>
+          </v-tooltip>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-if="me"
+                text
+                nuxt
+                to="/groups"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
+                <div>그룹</div>
+              </v-btn>
+            </template>
+            <span>놀러가요</span>
+          </v-tooltip>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                text
+                nuxt
+                to="/qrcode"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
+                <div>QRcode</div>
+              </v-btn>
+            </template>
+            <span>QRcode 구경</span>
+          </v-tooltip>
         </v-toolbar-items>
       </v-toolbar>
     </nav>
-
-    <!-- <div v-if="!me">
-      <v-card class="mx-auto" width="800px" height="200px" outlined style="margin-top:100px">
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title class="headline mb-1">시계</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card>
-      <v-card class="mx-auto" width="800px" height="400px" outlined style="margin-top:50px">
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title class="headline mb-1">설명</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-btn>입장하기</v-btn>
-      </v-card>
-    </div>-->
-
+    <!-- 오른쪽 화면 -->
     <v-row no-gutters>
       <v-col cols="12" md="4">
         <login-form />
@@ -75,7 +131,9 @@ export default {
   },
   data() {
     return {
-      hashtag: ""
+      hashtag: "",
+      time: "",
+      date: ""
     };
   },
   computed: {
@@ -83,12 +141,45 @@ export default {
       return this.$store.state.users.me;
     }
   },
+  created() {
+    setInterval(this.updateTime, 1000);
+  },
   methods: {
     onSearchHashtag() {
+      if (this.hashtag.trim().length < 1) {
+        return;
+      }
       this.$router.push({
         path: `/hashtag/${encodeURIComponent(this.hashtag)}`
       }),
         (this.hashtag = "");
+    },
+    updateTime() {
+      const week = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+      const cd = new Date();
+      this.time =
+        this.zeroPadding(cd.getHours(), 2) +
+        ":" +
+        this.zeroPadding(cd.getMinutes(), 2) +
+        ":" +
+        this.zeroPadding(cd.getSeconds(), 2) +
+        (this.zeroPadding(cd.getHours(), 2) < 12 ? " am" : " pm");
+
+      this.date =
+        this.zeroPadding(cd.getFullYear(), 4) +
+        "-" +
+        this.zeroPadding(cd.getMonth() + 1, 2) +
+        "-" +
+        this.zeroPadding(cd.getDate(), 2) +
+        " " +
+        week[cd.getDay()];
+    },
+    zeroPadding(num, digit) {
+      let zero = "";
+      for (let i = 0; i < digit; i++) {
+        zero += "0";
+      }
+      return (zero + num).slice(-digit);
     }
   }
 };
@@ -98,5 +189,15 @@ export default {
 a {
   display: inline-block;
   text-decoration: none;
+}
+#clock {
+  font-family: "Share Tech Mono", monospace;
+  color: orchid;
+  color: whitesmoke;
+  text-shadow: 0 0 20px red, 0 0 20px rgba(10, 175, 230, 0);
+}
+.time {
+  letter-spacing: 0.05em;
+  font-size: 30px;
 }
 </style>
