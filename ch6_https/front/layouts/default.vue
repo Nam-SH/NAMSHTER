@@ -34,6 +34,24 @@
       </v-toolbar>
     </nav>
 
+    <!-- <div v-if="!me">
+      <v-card class="mx-auto" width="800px" height="200px" outlined style="margin-top:100px">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="headline mb-1">시계</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-card>
+      <v-card class="mx-auto" width="800px" height="400px" outlined style="margin-top:50px">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="headline mb-1">설명</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-btn>입장하기</v-btn>
+      </v-card>
+    </div>-->
+
     <v-row no-gutters>
       <v-col cols="12" md="4">
         <login-form />

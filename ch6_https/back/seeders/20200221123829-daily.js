@@ -21,11 +21,11 @@ module.exports = {
       }
     }
     // return queryInterface.bulkInsert('dailytzs', datas, {});
-    return queryInterface.bulkInsert("Dailytzs", datas, {});
+    return queryInterface.bulkInsert("DailyTzs", datas, {});
   },
 
   down: (queryInterface, Sequelize) => {
     // return queryInterface.bulkInsert('dailytzs', null, {});
-    return queryInterface.bulkInsert("Dailytzs", null, {});
+    return queryInterface.bulkInsert("DailyTzs", null, {});
   }
 };
