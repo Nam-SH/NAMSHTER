@@ -12,10 +12,12 @@ module.exports = {
       }
       datas.push(temp)
     }
-    return queryInterface.bulkInsert(process.env.NODE_ENV === 'production' ? "Categories" : 'categories', datas, {});
+    // return queryInterface.bulkInsert('categories', datas, {});
+    return queryInterface.bulkInsert("Categories", datas, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete(process.env.NODE_ENV === 'production' ? "Categories" : 'categories', null, {});
+    // return queryInterface.bulkDelete('categories', null, {});
+    return queryInterface.bulkDelete("Categories", null, {});
   }
 };
