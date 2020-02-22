@@ -40,7 +40,7 @@ module.exports = {
       {
         hid: "ogurl",
         property: "og:url",
-        content: "http://namshter.com"
+        content: "https://namshter.com"
       }
     ],
     script: [{
@@ -88,10 +88,10 @@ module.exports = {
   },
   axios: {
     browserBaseURL: process.env.NODE_ENV === "production" ?
-      "http://api.namshter.com" : "http://localhost:3085",
+      "https://api.namshter.com" : "http://localhost:3085",
     baseURL: process.env.NODE_ENV === "production" ?
-      "http://api.namshter.com" : "http://localhost:3085",
-    https: true
+      "https://api.namshter.com" : "http://localhost:3085",
+    https: false
   },
   server: {
     port: process.env.PORT || 3081
