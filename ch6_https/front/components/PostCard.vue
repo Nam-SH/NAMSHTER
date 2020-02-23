@@ -92,10 +92,11 @@ export default {
     post: {
       type: Object,
       required: true
-    },
-    fromIndex: {
-      type: Boolean,
-      required: true
+    }
+  },
+  created() {
+    if (this.$route.name !== "index") {
+      this.fromIndex = false;
     }
   },
   data() {
@@ -103,7 +104,8 @@ export default {
       commentOpened: false,
       avgTotal: 0,
       commentList: null,
-      isEditting: false
+      isEditting: false,
+      fromIndex: true
     };
   },
   computed: {

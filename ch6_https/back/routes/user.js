@@ -69,10 +69,12 @@ router.get("/:id", async (req, res, next) => {
         },
         {
           model: db.User,
+          as: "Followings",
           attributes: ["id", "nickname", "name"]
         },
         {
           model: db.User,
+          as: "Followers",
           attributes: ["id", "nickname", "name"]
         },
         {

@@ -1,15 +1,17 @@
 <template>
   <div>
     <div id="component" style="width: 300px; height: 400px;">
-      <file-pond
-        name="image"
-        ref="pond"
-        label-idle="Drop files here..."
-        allow-multiple="true"
-        v-bind:server="myServer"
-        v-bind:files="myFiles"
-        v-on:init="handleFilePondInit"
-      />
+      <no-ssr>
+        <file-pond
+          name="image"
+          ref="pond"
+          label-idle="Drop files here..."
+          allow-multiple="true"
+          v-bind:server="myServer"
+          v-bind:files="myFiles"
+          v-on:init="handleFilePondInit"
+        />
+      </no-ssr>
     </div>
   </div>
 </template>
@@ -35,17 +37,17 @@ const FilePond = vueFilePond(
 );
 
 export default {
-  data: function() {
+  components: {
+    FilePond
+  },
+  data() {
     return {
       // fake server to simulate loading a 'local' server file and processing a file
       myServer: {
+        url: "http://localhost:3085",
         process: (fieldName, file, metadata, load) => {
-          // simulates uploading a file
-          console.log(file.name);
-
-          setTimeout(() => {
-            load(Date.now());
-          }, 1500);
+          method: "POST";
+          withCredentials: false;
         },
         load: (source, load) => {
           // simulates loading a file from the server
@@ -54,14 +56,7 @@ export default {
             .then(load);
         }
       },
-      myFiles: [
-        {
-          source: "photo.jpeg",
-          options: {
-            type: "local"
-          }
-        }
-      ],
+      myFiles: [],
       filename: ""
     };
   },
@@ -73,8 +68,8 @@ export default {
       console.log("FilePond has initialized");
     }
   },
-  components: {
-    FilePond
+  mounted() {
+    console.log(this.filename);
   }
 };
 </script>

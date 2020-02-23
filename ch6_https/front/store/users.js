@@ -99,8 +99,8 @@ export const actions = {
       const res = await this.$axios.get(`/user/${payload.userId}`, {
         withCredentials: true
       });
-      commit('setOther', res.data)
-      return
+      return commit('setOther', res.data)
+
     } catch (err) {
       console.error('loadOther :::', err)
     }

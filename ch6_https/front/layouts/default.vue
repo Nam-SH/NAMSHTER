@@ -18,7 +18,8 @@
                   color="blue"
                   x-large
                   v-on="on"
-                >NAMSHTER</v-btn>
+                  >NAMSHTER</v-btn
+                >
               </template>
               <span>메인으로</span>
             </v-tooltip>
@@ -39,13 +40,25 @@
         <v-spacer />
         <v-toolbar-items mt-5>
           <v-form @submit.prevent="onSearchHashtag">
-            <div :style="{ display: 'flex', height: '100%', alignItems: 'center' }">
-              <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
+            <div
+              :style="{ display: 'flex', height: '100%', alignItems: 'center' }"
+            >
+              <v-text-field
+                v-model="hashtag"
+                label="검색"
+                hide-details
+                prepend-icon="mdi-magnify"
+              />
             </div>
           </v-form>
           <v-tooltip top v-if="!me">
             <template v-slot:activator="{ on }">
-              <v-btn text to="/signup" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
+              <v-btn
+                text
+                to="/signup"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
                 <div>회원가입</div>
               </v-btn>
             </template>
@@ -66,19 +79,16 @@
           </v-tooltip>
           <v-tooltip top v-if="me">
             <template v-slot:activator="{ on }">
-              <v-btn text to="/groups" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
+              <v-btn
+                text
+                to="/groups"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
                 <div>그룹</div>
               </v-btn>
             </template>
             <span>놀러가요</span>
-          </v-tooltip>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-btn text to="/qrcode" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
-                <div>QRcode</div>
-              </v-btn>
-            </template>
-            <span>QRcode 구경</span>
           </v-tooltip>
         </v-toolbar-items>
       </v-toolbar>

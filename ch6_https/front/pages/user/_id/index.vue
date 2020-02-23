@@ -3,12 +3,7 @@
     <v-card style="margin-bottom: 20px">
       <v-container>
         {{ other.nickname }}님은 누굴까요?
-        <v-row>
-          <v-col cols="4">{{ other.Liked.length }}개의 글을 좋아함... </v-col>
-          <v-col cols="4"> {{ other.Followings.length }}명을 팔로잉... </v-col>
-          <v-col cols="4"> {{ other.Followers.length }}명이 나를 팔로워... </v-col>
-          <v-col cols="4"> {{ other.Posts.length }}개의 글을 작성함... </v-col>
-        </v-row>
+        <user-activity :user="other" />
       </v-container>
     </v-card>
     <div>
@@ -18,53 +13,58 @@
 </template>
 
 <script>
-  import PostCard from '~/components/PostCard';
-  
-  export default {
-    components: {
-      PostCard,
-    },
+import PostCard from "~/components/PostCard";
+import UserActivity from "@/components/UserActivity.vue";
 
-    computed: {
-      other() {
-        return this.$store.state.users.other;
-      },
-      mainPosts() {
-        return this.$store.state.posts.mainPosts;
-      },
-      hasMorePost() {
-        return this.$store.state.posts.hasMorePost;
-      }
-    },
+export default {
+  components: {
+    PostCard,
+    UserActivity
+  },
 
-    fetch({ store, params }) {
-      return Promise.all([
-        store.dispatch('users/loadOther', {
-          userId: params.id,
-        }),
-        store.dispatch('posts/loadUserPosts', {
-          userId: params.id,
-          reset: true,
-        }),
-      ])
+  computed: {
+    other() {
+      return this.$store.state.users.other;
     },
-    mounted() {
-      window.addEventListener('scroll', this.onScroll)
+    mainPosts() {
+      return this.$store.state.posts.mainPosts;
     },
-    beforeDestroy() {
-      window.removeEventListener('scroll', this.onScroll)
-    },
-    methods: {
-      onScroll() {
-        if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-          if (this.hasMorePost) {
-            this.$store.dispatch('posts/loadUserPosts', {
-              userId: this.other.id,
-              reset: false
-            });
-          }
+    hasMorePost() {
+      return this.$store.state.posts.hasMorePost;
+    }
+  },
+
+  fetch({ store, params }) {
+    return Promise.all([
+      store.dispatch("users/loadOther", {
+        userId: params.id
+      }),
+      store.dispatch("posts/loadUserPosts", {
+        userId: params.id,
+        reset: true
+      })
+    ]);
+  },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
+  },
+  methods: {
+    onScroll() {
+      if (
+        window.scrollY + document.documentElement.clientHeight >
+        document.documentElement.scrollHeight - 300
+      ) {
+        if (this.hasMorePost) {
+          this.$store.dispatch("posts/loadUserPosts", {
+            userId: this.other.id,
+            reset: false
+          });
         }
-      },
-    },
+      }
+    }
   }
+};
 </script>

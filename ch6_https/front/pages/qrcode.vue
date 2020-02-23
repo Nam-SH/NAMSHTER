@@ -1,15 +1,34 @@
 <template>
-  <div>
-    <p class="error">{{ error }}</p>
-
-    <p class="decode-result">
-      Last result:
-      <b>{{ result }}</b>
-    </p>
-
-    <qrcode-stream @decode="onDecode" @init="onInit" />
-    <qrcode-drop-zone></qrcode-drop-zone>
-  </div>
+  <v-row justify="center">
+    <v-btn class="ml-auto" @click.stop="dialog = true">
+      <i class="fas fa-camera"></i>
+    </v-btn>
+    <v-dialog v-model="dialog" max-width="600">
+      <v-card height="600px">
+        <div>
+          <p class="error">{{ error }}</p>
+          <p class="decode-result">
+            <b>{{ result }}</b>
+          </p>
+          <qrcode-stream
+            style="width:100px;height:100px"
+            @decode="onDecode"
+            @init="onInit"
+          />
+          <qrcode-drop-zone></qrcode-drop-zone>
+        </div>
+      </v-card>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="white darken-1" text @click="dialog = false">
+          보러가기
+        </v-btn>
+        <v-btn color="white darken-1" text @click="dialog = false">
+          닫기
+        </v-btn>
+      </v-card-actions>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script>
@@ -21,13 +40,25 @@ export default {
   data() {
     return {
       result: "",
-      error: ""
+      error: "",
+      dialog: false
     };
   },
 
   methods: {
     onDecode(result) {
       this.result = result;
+
+      var expUrl = /^http[s]?\:\/\//i;
+      if (expUrl.test(this.result)) {
+        return window.open(this.result);
+      } else if (this.result.id) {
+        return this.$store
+          .dispatch("users/loadOther", {
+            userId: result.id
+          })
+          .then(() => {});
+      }
     },
 
     async onInit(promise) {

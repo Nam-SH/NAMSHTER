@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="post">
-    <post-card :post="post" :fromIndex="false" />
+    <post-card :post="post" />
   </v-container>
   <div v-else>
     <v-container>글이 없는데요;;</v-container>
