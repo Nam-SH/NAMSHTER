@@ -11,6 +11,7 @@ module.exports = {
         name: "고양이" + i,
         nickname: "cat" + i,
         password: hash,
+        src: "donut.png",
         createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
       }
