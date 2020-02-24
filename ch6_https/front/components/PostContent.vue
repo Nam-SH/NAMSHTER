@@ -3,16 +3,27 @@
     <post-images :images="post.Images || []" />
     <v-card-title>
       <h3>
-        <nuxt-link v-if="this.me && this.me.id !== post.User.id" :to="/user/ + post.User.id">
-          <span>{{ post.User.nickname }}</span>
-        </nuxt-link>
-        <span v-else-if="this.me && this.me.id == post.User.id">{{ post.User.nickname }} (나)</span>
+        <template v-if="me">
+          <v-tooltip right color="rgba(255, 255, 255, 0)">
+            <template v-slot:activator="{ on }">
+              <nuxt-link :to="/user/ + post.User.id">
+                <span v-if="me.id !== post.User.id" v-on="on">{{ post.User.nickname }}</span>
+                <span v-else v-on="on">{{ post.User.nickname }} (나)</span>
+              </nuxt-link>
+            </template>
+            <v-img
+              :src="`http://localhost:3085/profile/${post.User.src}`"
+              min-height="200px"
+              max-height="300px"
+              width="200px"
+            ></v-img>
+          </v-tooltip>
+        </template>
         <span v-else>{{ post.User.nickname }}</span>
         <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
         <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
       </h3>
     </v-card-title>
-
     <v-card-text v-if="!isEditting">
       <div>
         <template v-for="(node, i) in nodes">

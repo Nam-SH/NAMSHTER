@@ -48,11 +48,7 @@
             <template v-slot:activator="{ on }">
               <i v-if="me.isAdmin" class="fas fa-user-lock" v-on="on"></i>
               <v-avatar v-if="social" :color="socialColor" size="25" v-on="on">
-                <span class="black--text" style="font-size:20px">
-                  {{
-                  socialName
-                  }}
-                </span>
+                <span class="black--text" style="font-size:20px">{{ socialName }}</span>
               </v-avatar>
               <span v-on="on">{{ me.nickname }}({{ me.name }})</span>
             </template>
