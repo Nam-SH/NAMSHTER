@@ -20,15 +20,15 @@
       <hr />
       <h3>로컬용</h3>
       <div class="mx-auto">
-        <a style="inline-block" href="http://localhost:3085/user/naver">
+        <a style="inline-block" :href="`${srcAddress}/user/naver`">
           <img class="mt-1" src="../static/naver.png" alt style="width:200px;height:50px" />
         </a>
-        <a href="http://localhost:3085/user/kakao">
+        <a :href="`${srcAddress}/user/kakao`">
           <img class="mt-1" src="../static/kakao.png" alt style="width:200px;height:50px" />
         </a>
       </div>
       <hr />
-      <h3>배포용</h3>
+      <!-- <h3>배포용</h3>
       <div class="mx-auto">
         <a href="https://api.namshter.com/user/naver">
           <img class="mx-auto mt-1" src="@/static/naver.png" alt style="width:200px;height:50px" />
@@ -36,7 +36,7 @@
         <a href="https://api.namshter.com/user/kakao">
           <img class="mx-auto mt-1" src="@/static/kakao.png" alt style="width:200px;height:50px" />
         </a>
-      </div>
+      </div>-->
     </v-card>
   </v-container>
   <!-- 로그인 후 -->
@@ -52,8 +52,9 @@
               </v-avatar>
               <span v-on="on">{{ me.nickname }}({{ me.name }})</span>
             </template>
+            <!-- :src="`http://localhost:3085/profile/${me.src}`" -->
             <v-img
-              :src="`http://localhost:3085/profile/${me.src}`"
+              :src="`${srcAddress}/profile/${me.src}`"
               min-height="200px"
               max-height="300px"
               width="200px"
@@ -134,6 +135,11 @@ export default {
         return (this.socialName = "N"), (this.socialColor = "green");
       }
       return false;
+    },
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://www.api.namshter.com"
+        : "http://localhost:3085";
     }
   }
 };

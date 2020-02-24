@@ -11,8 +11,9 @@
                 <span v-else v-on="on">{{ post.User.nickname }} (나)</span>
               </nuxt-link>
             </template>
+            <!-- :src="`http://localhost:3085/profile/${post.User.src}`" -->
             <v-img
-              :src="`http://localhost:3085/profile/${post.User.src}`"
+              :src="`${srcAddress}/profile/${post.User.src}`"
               min-height="200px"
               max-height="300px"
               width="200px"
@@ -98,6 +99,11 @@ export default {
         this.post.User.id !== this.me.id &&
         this.me.Followings.find(v => v.id === this.post.User.id)
       );
+    },
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://www.api.namshter.com"
+        : "http://localhost:3085";
     }
   },
   methods: {

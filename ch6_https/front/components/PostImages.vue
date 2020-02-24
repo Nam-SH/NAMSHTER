@@ -1,25 +1,21 @@
 <template>
   <div v-if="images.length === 0"></div>
   <div v-else-if="images.length === 1">
-    <!-- :src="images[0].src.replace(/\:3081/, ':3085/')"  -->
-    <v-img
-      :src="`http://localhost:3085/${images[0].src}`"
-      contain
-      aspect-ratio="2"
-      @click="zoomImages"
-    />
+    <!-- :src="images[0].src.replace(/original\//, 'thumb/')" -->
+    <!-- :src="`http://localhost:3085/${images[0].src}`" -->
+    <v-img :src="`${srcAddress}/${images[0].src}`" contain aspect-ratio="2" @click="zoomImages" />
     <image-zoom v-if="imageZoomed" :close-modal="closeModal" :images="images" />
   </div>
   <div v-else-if="images.length === 2" style="display: flex">
     <v-img
-      :src="`http://localhost:3085/${images[0].src}`"
+      :src="`${srcAddress}/${images[0].src}`"
       contain
       aspect-ratio="2"
       style="flex: 1"
       @click="zoomImages"
     />
     <v-img
-      :src="`http://localhost:3085/${images[0].src}`"
+      :src="`${srcAddress}/${images[0].src}`"
       contain
       aspect-ratio="2"
       style="flex: 1"
@@ -30,7 +26,7 @@
 
   <div v-else style="display: flex">
     <v-img
-      :src="`http://localhost:3085/${images[0].src}`"
+      :src="`${srcAddress}/${images[0].src}`"
       contain
       aspect-ratio="2"
       style="flex: 1"
