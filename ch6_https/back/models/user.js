@@ -2,8 +2,9 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User", {
       email: {
-        type: DataTypes.STRING(40), // 40자 이내
-        allowNull: false // 필수
+        type: DataTypes.STRING(40),
+        unique: true,
+        allowNull: false
       },
       name: {
         type: DataTypes.STRING(20),
@@ -17,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING(100),
         allowNull: false
+      },
+      src: {
+        type: DataTypes.STRING(200),
+        defaultValue: "donut.png",
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,

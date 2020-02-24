@@ -1,16 +1,16 @@
 const express = require("express");
-const multer = require("multer");
+const router = express.Router();
 
+// 업로드 관련
+const multer = require("multer");
 const AWS = require("aws-sdk");
 const multerS3 = require("multer-s3");
+const path = require("path");
 
 const {
   isLoggedIn
 } = require("./middlewares");
-const router = express.Router();
 const db = require("../models");
-
-const path = require("path");
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -74,6 +74,7 @@ router.get("/:id", async (req, res, next) => {
             "nickname",
             "name",
             "email",
+            "src",
             "isAdmin",
             "snsId",
             "provider"
@@ -96,7 +97,7 @@ router.get("/:id", async (req, res, next) => {
           as: "Retweet",
           include: [{
               model: db.User,
-              attributes: ["id", "nickname"]
+              attributes: ["id", "nickname", "name", "src"]
             },
             {
               model: db.Image
@@ -163,6 +164,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
             "nickname",
             "name",
             "email",
+            "src",
             "isAdmin",
             "snsId",
             "provider"
@@ -268,6 +270,7 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
           "nickname",
           "name",
           "email",
+          "src",
           "isAdmin",
           "snsId",
           "provider"
@@ -303,6 +306,7 @@ router.get("/:id/comments", async (req, res, next) => {
           "nickname",
           "name",
           "email",
+          "src",
           "isAdmin",
           "snsId",
           "provider"
@@ -371,6 +375,7 @@ router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
             "nickname",
             "name",
             "email",
+            "src",
             "isAdmin",
             "snsId",
             "provider"
@@ -386,6 +391,7 @@ router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
                 "nickname",
                 "name",
                 "email",
+                "src",
                 "isAdmin",
                 "snsId",
                 "provider"

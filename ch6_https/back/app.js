@@ -54,6 +54,7 @@ if (prod) {
 }
 
 app.use("/", express.static("uploads"));
+app.use("/profile", express.static("userprofile"));
 
 app.use(express.json());
 app.use(

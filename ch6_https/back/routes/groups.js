@@ -22,12 +22,12 @@ router.get("/", async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin', 'snsId', 'provider'],
+          attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin', 'snsId', 'provider'],
         },
         {
           model: db.User,
           as: "Groupmembers",
-          attributes: ["id", "name", "nickname"]
+          attributes: ['id', 'nickname', 'name', 'email', 'src'],
         },
         {
           model: db.GroupPost,
@@ -69,7 +69,7 @@ router.get("/:status", async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email', 'isAdmin'],
+          attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin'],
         },
         {
           model: db.User,
@@ -126,7 +126,7 @@ router.get("/my/:status", isLoggedIn, async (req, res, next) => {
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin'],
       }, {
         model: db.User,
         as: "Groupmembers",
@@ -165,7 +165,7 @@ router.get("/user/:userId/:status", isLoggedIn, async (req, res, next) => {
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin'],
       }, {
         model: db.User,
         as: "Groupmembers",

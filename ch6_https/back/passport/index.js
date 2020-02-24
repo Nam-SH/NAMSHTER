@@ -15,18 +15,18 @@ module.exports = () => {
         where: {
           id
         },
-        attributes: ['id', 'nickname', 'name', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         include: [{
           model: db.Post,
           attributes: ['id', 'createdAt'],
         }, {
           model: db.User,
           as: 'Followings',
-          attributes: ['id', 'nickname', 'name'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         }, {
           model: db.User,
           as: 'Followers',
-          attributes: ['id', 'nickname', 'name'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         }, {
           model: db.Comment,
           attributes: ['id'],

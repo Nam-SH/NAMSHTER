@@ -1,17 +1,59 @@
 const express = require("express");
 const router = express.Router();
 
+// 사용자 관련
 const bcrypt = require("bcrypt");
 const passport = require("passport");
-const db = require("../models");
 
+// 업로드 관련
+const multer = require("multer");
+const AWS = require("aws-sdk");
+const multerS3 = require("multer-s3");
+const path = require("path");
+
+const moment = require("moment");
+
+const db = require("../models");
 const {
   isLoggedIn,
   isNotLoggedIn
 } = require("./middlewares");
 
-router.get("/kakao", passport.authenticate("kakao"));
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "userprofile");
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      done(null, basename + Date.now() + ext);
+    }
+  }),
+  limit: {
+    fileSize: 1000 * 1024 * 1024
+  }
+});
 
+// 이미지업로드(/post/images)
+router.patch("/images", isLoggedIn, upload.single("image"), async (req, res) => {
+  try {
+    await db.User.update({
+      src: req.file.filename
+    }, {
+      where: {
+        id: req.user.id
+      }
+    });
+    res.send(req.file.filename);
+  } catch (err) {
+    console.error("PATCH /name :::", err);
+    next(err);
+  }
+});
+
+
+router.get("/kakao", passport.authenticate("kakao"));
 router.get(
   "/kakao/callback",
   passport.authenticate("kakao", {
@@ -23,7 +65,6 @@ router.get(
 );
 
 router.get("/naver", passport.authenticate("naver"));
-
 router.get(
   "/naver/callback",
   passport.authenticate("naver", {
@@ -52,6 +93,7 @@ router.get("/:id", async (req, res, next) => {
         "nickname",
         "name",
         "email",
+        "src",
         "isAdmin",
         "snsId",
         "provider"
@@ -70,12 +112,12 @@ router.get("/:id", async (req, res, next) => {
         {
           model: db.User,
           as: "Followings",
-          attributes: ["id", "nickname", "name"]
+          attributes: ["id", "nickname", "name", "src"]
         },
         {
           model: db.User,
           as: "Followers",
-          attributes: ["id", "nickname", "name"]
+          attributes: ["id", "nickname", "name", "src"]
         },
         {
           model: db.Comment,
@@ -141,6 +183,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
             "nickname",
             "name",
             "email",
+            "src",
             "isAdmin",
             "snsId",
             "provider"
@@ -152,12 +195,12 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
             {
               model: db.User,
               as: "Followings",
-              attributes: ["id", "nickname", "name"]
+              attributes: ["id", "nickname", "name", "src"]
             },
             {
               model: db.User,
               as: "Followers",
-              attributes: ["id", "nickname", "name"]
+              attributes: ["id", "nickname", "name", "src"]
             },
             {
               model: db.Comment,
@@ -195,7 +238,6 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
   }
 });
 
-const moment = require("moment");
 // 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -222,6 +264,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
             "nickname",
             "name",
             "email",
+            "src",
             "isAdmin",
             "snsId",
             "provider"
@@ -233,12 +276,12 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
             {
               model: db.User,
               as: "Followings",
-              attributes: ["id", "nickname", "name"]
+              attributes: ["id", "nickname", "name", "src"]
             },
             {
               model: db.User,
               as: "Followers",
-              attributes: ["id", "nickname", "name"]
+              attributes: ["id", "nickname", "name", "src"]
             },
             {
               model: db.Comment,
@@ -334,7 +377,7 @@ router.patch("/password", isLoggedIn, async (req, res, next) => {
         id: req.user.id
       }
     });
-    res.send();
+    res.send('비밀번호 변경 성공~');
   } catch (err) {
     console.error("PATCH /nickname :::", err);
     next(err);
@@ -354,7 +397,7 @@ router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
       where: {
         id: req.params.id
       },
-      attributes: ["id", "nickname", "name"]
+      attributes: ["id", "nickname", "name", "src"]
     });
     res.send({
       id: user.id,
@@ -417,7 +460,7 @@ router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
     }
     const followers = await me.getFollowers({
       where,
-      attributes: ["id", "nickname", "name"],
+      attributes: ["id", "nickname", "name", "src"],
       order: [
         ["createdAt", "DESC"],
         ["id", "DESC"]
@@ -454,7 +497,7 @@ router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
     }
     const followings = await me.getFollowings({
       where,
-      attributes: ["id", "nickname", "name"],
+      attributes: ["id", "nickname", "name", "src"],
       order: [
         ["createdAt", "DESC"],
         ["id", "DESC"]
@@ -494,6 +537,7 @@ router.get("/:id/posts", async (req, res, next) => {
             "nickname",
             "name",
             "email",
+            "src",
             "isAdmin",
             "snsId",
             "provider"
@@ -517,6 +561,7 @@ router.get("/:id/posts", async (req, res, next) => {
                 "nickname",
                 "name",
                 "email",
+                "src",
                 "isAdmin",
                 "snsId",
                 "provider"

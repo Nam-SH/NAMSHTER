@@ -3,13 +3,7 @@
     <v-card>
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
-          <v-text-field
-            label="이메일"
-            type="email"
-            required
-            v-model="email"
-            :rules="emailRules"
-          />
+          <v-text-field label="이메일" type="email" required v-model="email" :rules="emailRules" />
           <v-text-field
             label="비밀번호"
             type="password"
@@ -27,40 +21,20 @@
       <h3>로컬용</h3>
       <div class="mx-auto">
         <a style="inline-block" href="http://localhost:3085/user/naver">
-          <img
-            class="mt-1"
-            src="../static/naver.png"
-            alt
-            style="width:200px;height:50px"
-          />
+          <img class="mt-1" src="../static/naver.png" alt style="width:200px;height:50px" />
         </a>
         <a href="http://localhost:3085/user/kakao">
-          <img
-            class="mt-1"
-            src="../static/kakao.png"
-            alt
-            style="width:200px;height:50px"
-          />
+          <img class="mt-1" src="../static/kakao.png" alt style="width:200px;height:50px" />
         </a>
       </div>
       <hr />
       <h3>배포용</h3>
       <div class="mx-auto">
         <a href="https://api.namshter.com/user/naver">
-          <img
-            class="mx-auto mt-1"
-            src="@/static/naver.png"
-            alt
-            style="width:200px;height:50px"
-          />
+          <img class="mx-auto mt-1" src="@/static/naver.png" alt style="width:200px;height:50px" />
         </a>
         <a href="https://api.namshter.com/user/kakao">
-          <img
-            class="mx-auto mt-1"
-            src="@/static/kakao.png"
-            alt
-            style="width:200px;height:50px"
-          />
+          <img class="mx-auto mt-1" src="@/static/kakao.png" alt style="width:200px;height:50px" />
         </a>
       </div>
     </v-card>
@@ -74,15 +48,21 @@
             <template v-slot:activator="{ on }">
               <i v-if="me.isAdmin" class="fas fa-user-lock" v-on="on"></i>
               <v-avatar v-if="social" :color="socialColor" size="25" v-on="on">
-                <span class="black--text" style="font-size:20px">{{
+                <span class="black--text" style="font-size:20px">
+                  {{
                   socialName
-                }}</span>
+                  }}
+                </span>
               </v-avatar>
-              <span v-on="on"> {{ me.nickname }}({{ me.name }}) </span>
+              <span v-on="on">{{ me.nickname }}({{ me.name }})</span>
             </template>
-            <img height="200" width="200" src="@/static/donut.png" />
-          </v-tooltip>
-          로그인이 되었습니다.
+            <v-img
+              :src="`http://localhost:3085/profile/${me.src}`"
+              min-height="200px"
+              max-height="300px"
+              width="200px"
+            ></v-img>
+          </v-tooltip>로그인이 되었습니다.
           <v-btn to="/qrcode">
             <i class="fas fa-camera ml-auto"></i>
           </v-btn>

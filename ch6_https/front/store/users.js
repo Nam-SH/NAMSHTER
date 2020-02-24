@@ -7,6 +7,7 @@ export const state = () => ({
   hasMoreFollowing: true,
   hasMoreFollower: true,
   other: null,
+  imagePaths: ''
 });
 
 
@@ -25,6 +26,13 @@ export const mutations = {
   },
   changeName(state, payload) {
     state.me.name = payload;
+  },
+  pushImagePaths(state, payload) {
+    state.me.src = payload
+    state.imagePaths = payload
+  },
+  removeImagePath(state, payload) {
+    state.imagePaths = ''
   },
 
   following(state, payload) {
@@ -201,6 +209,22 @@ export const actions = {
       })
       .catch((err) => {
         console.error('changePassword :::', err)
+      })
+  },
+
+  // 이미지 업로드
+  uploadImages({
+    commit
+  }, payload) {
+    return this.$axios.patch('/user/images', payload, {
+        withCredentials: true,
+      })
+      .then(async (res) => {
+        await commit('pushImagePaths', res.data);
+        alert('프로필이미지 변경이 완료되었어요.')
+      })
+      .catch((err) => {
+        console.error('uploadImages:::', err)
       })
   },
 
