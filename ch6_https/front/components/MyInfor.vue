@@ -30,7 +30,7 @@
                     <v-col cols="12" md="5">
                       <v-card width="250px" min-height="250px" max-height="300px" outlined>
                         <img
-                          :src="`http://localhost:3085/profile/${defaultSrc}`"
+                          :src="`${srcAddress}/profile/${defaultSrc}`"
                           style="width: 60%;height: 60%"
                         />
                       </v-card>
@@ -39,7 +39,7 @@
                       <v-card width="250px" min-height="250px" max-height="300px" outlined>
                         <img
                           v-if="imagePaths && imagePaths.length > 0"
-                          :src="`http://localhost:3085/profile/${imagePaths}`"
+                          :src="`${srcAddress}/profile/${imagePaths}`"
                           :alt="imagePaths"
                           style="width: 60%;height: 60%"
                         />
@@ -108,6 +108,11 @@ export default {
     },
     imagePaths() {
       return this.$store.state.users.imagePaths;
+    },
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085";
     }
   },
   methods: {
