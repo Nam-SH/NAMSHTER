@@ -21,7 +21,7 @@ export default {
   computed: {
     srcAddress() {
       return process.env.NODE_ENV === "production"
-        ? "https://www.api.namshter.com"
+        ? "https://api.namshter.com"
         : "http://localhost:3085";
     }
   },

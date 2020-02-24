@@ -15,7 +15,7 @@
       @click="zoomImages"
     />
     <v-img
-      :src="`${srcAddress}/${images[0].src}`"
+      :src="`${srcAddress}/${images[1].src}`"
       contain
       aspect-ratio="2"
       style="flex: 1"
@@ -66,7 +66,7 @@ export default {
   computed: {
     srcAddress() {
       return process.env.NODE_ENV === "production"
-        ? "https://www.api.namshter.com"
+        ? "https://api.namshter.com"
         : "http://localhost:3085";
     }
   },

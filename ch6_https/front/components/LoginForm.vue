@@ -17,26 +17,14 @@
       </v-form>
     </v-card>
     <v-card>
-      <hr />
-      <h3>로컬용</h3>
-      <div class="mx-auto">
+      <v-card class="mx-auto ml-3">
         <a style="inline-block" :href="`${srcAddress}/user/naver`">
           <img class="mt-1" src="../static/naver.png" alt style="width:200px;height:50px" />
         </a>
         <a :href="`${srcAddress}/user/kakao`">
           <img class="mt-1" src="../static/kakao.png" alt style="width:200px;height:50px" />
         </a>
-      </div>
-      <hr />
-      <!-- <h3>배포용</h3>
-      <div class="mx-auto">
-        <a href="https://api.namshter.com/user/naver">
-          <img class="mx-auto mt-1" src="@/static/naver.png" alt style="width:200px;height:50px" />
-        </a>
-        <a href="https://api.namshter.com/user/kakao">
-          <img class="mx-auto mt-1" src="@/static/kakao.png" alt style="width:200px;height:50px" />
-        </a>
-      </div>-->
+      </v-card>
     </v-card>
   </v-container>
   <!-- 로그인 후 -->
@@ -52,7 +40,6 @@
               </v-avatar>
               <span v-on="on">{{ me.nickname }}({{ me.name }})</span>
             </template>
-            <!-- :src="`http://localhost:3085/profile/${me.src}`" -->
             <v-img
               :src="`${srcAddress}/profile/${me.src}`"
               min-height="200px"
@@ -138,7 +125,7 @@ export default {
     },
     srcAddress() {
       return process.env.NODE_ENV === "production"
-        ? "https://www.api.namshter.com"
+        ? "https://api.namshter.com"
         : "http://localhost:3085";
     }
   }
