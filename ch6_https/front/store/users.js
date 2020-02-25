@@ -36,7 +36,7 @@ export const mutations = {
   },
 
   following(state, payload) {
-    state.me.Followings.push({
+    state.me.Followings.unshift({
       id: payload.id,
       nickname: payload.nickname,
       name: payload.name,

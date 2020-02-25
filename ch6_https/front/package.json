@@ -8,7 +8,7 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "prestart": "npm run build",
-    "start": "cross-env PORT=80 NODE_ENV=production pm2 start server.js",
+    "start": "cross-env PORT=80 NODE_ENV=production pm2 start server.js -i max",
     "lint": "eslint **/*"
   },
   "author": "NAM-SH",
