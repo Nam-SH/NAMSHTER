@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- 1. 내 정보 수정하기 -->
-    <my-infor />
+    <infor-edit />
 
     <!-- 2. 내 출첵 히트맵 보여주기 -->
 
@@ -51,12 +51,12 @@
 
 <script>
 import FollowList from "~/components/FollowList";
-import MyInfor from "@/components/MyInfor.vue";
+import InforEdit from "@/components/InforEdit.vue";
 
 export default {
   components: {
     FollowList,
-    MyInfor
+    InforEdit
   },
   data() {
     return {

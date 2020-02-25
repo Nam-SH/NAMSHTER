@@ -22,7 +22,7 @@ router.get('/:tag', async (req, res, next) => {
         },
       }, {
         model: db.User,
-        attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin', 'snsId', 'provider'],
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }, {
         model: db.Image,
       }, {
@@ -34,7 +34,7 @@ router.get('/:tag', async (req, res, next) => {
         as: 'Retweet',
         include: [{
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin', 'snsId', 'provider'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         }, {
           model: db.Image,
         }],

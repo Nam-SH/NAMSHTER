@@ -35,24 +35,6 @@ const upload = multer({
   }
 });
 
-// 이미지업로드(/post/images)
-router.patch("/images", isLoggedIn, upload.single("image"), async (req, res) => {
-  try {
-    await db.User.update({
-      src: req.file.filename
-    }, {
-      where: {
-        id: req.user.id
-      }
-    });
-    res.send(req.file.filename);
-  } catch (err) {
-    console.error("PATCH /name :::", err);
-    next(err);
-  }
-});
-
-
 router.get("/kakao", passport.authenticate("kakao"));
 router.get(
   "/kakao/callback",
@@ -112,12 +94,12 @@ router.get("/:id", async (req, res, next) => {
         {
           model: db.User,
           as: "Followings",
-          attributes: ["id", "nickname", "name", "src"]
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.User,
           as: "Followers",
-          attributes: ["id", "nickname", "name", "src"]
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.Comment,
@@ -125,9 +107,24 @@ router.get("/:id", async (req, res, next) => {
         },
         {
           model: db.Group,
-          as: "Groupjoined",
+          as: "GroupJoined",
           attributes: ["id", "name", "status"]
         }
+      ],
+      order: [
+        [{
+          model: db.User,
+          as: 'Followings'
+        }, 'createdAt', 'DESC'],
+        [{
+          model: db.User,
+          as: 'Followers'
+        }, 'createdAt', 'DESC'],
+        [db.Post, 'createdAt', 'DESC'],
+        [{
+          model: db.Group,
+          as: 'GroupJoined'
+        }, 'createdAt', 'DESC'],
       ]
     });
     res.json(user);
@@ -195,12 +192,12 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
             {
               model: db.User,
               as: "Followings",
-              attributes: ["id", "nickname", "name", "src"]
+              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
             },
             {
               model: db.User,
               as: "Followers",
-              attributes: ["id", "nickname", "name", "src"]
+              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
             },
             {
               model: db.Comment,
@@ -208,24 +205,40 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
             },
             {
               model: db.Group,
-              as: "Groupjoined",
+              as: "GroupJoined",
               attributes: ["id", "name", "status"]
             }
+          ],
+          order: [
+            [{
+              model: db.User,
+              as: 'Followings'
+            }, 'createdAt', 'DESC'],
+            [{
+              model: db.User,
+              as: 'Followers'
+            }, 'createdAt', 'DESC'],
+            [db.Post, 'createdAt', 'DESC'],
+            [{
+              model: db.Group,
+              as: 'GroupJoined'
+            }, 'createdAt', 'DESC'],
           ]
         });
         // 데일리 체크
-        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + ' 00:00:00Z'
+        const today =
+          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
-            createdAt: today,
+            createdAt: today
           },
-          attributes: ['id']
+          attributes: ["id"]
         });
         const checkedToday = await checkingDay.getCheckedUser({
           where: {
             id: user.id
           }
-        })
+        });
         if (checkingDay && checkedToday && checkedToday.length === 0) {
           await fullUser.addChecking(checkingDay.id);
         }
@@ -276,12 +289,12 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
             {
               model: db.User,
               as: "Followings",
-              attributes: ["id", "nickname", "name", "src"]
+              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
             },
             {
               model: db.User,
               as: "Followers",
-              attributes: ["id", "nickname", "name", "src"]
+              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
             },
             {
               model: db.Comment,
@@ -289,24 +302,40 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
             },
             {
               model: db.Group,
-              as: "Groupjoined",
+              as: "GroupJoined",
               attributes: ["id", "name", "status"]
             }
+          ],
+          order: [
+            [{
+              model: db.User,
+              as: 'Followings'
+            }, 'createdAt', 'DESC'],
+            [{
+              model: db.User,
+              as: 'Followers'
+            }, 'createdAt', 'DESC'],
+            [db.Post, 'createdAt', 'DESC'],
+            [{
+              model: db.Group,
+              as: 'GroupJoined'
+            }, 'createdAt', 'DESC'],
           ]
         });
         // 데일리 체크
-        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + ' 00:00:00Z'
+        const today =
+          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
-            createdAt: today,
+            createdAt: today
           },
-          attributes: ['id']
+          attributes: ["id"]
         });
         const checkedToday = await checkingDay.getCheckedUser({
           where: {
             id: user.id
           }
-        })
+        });
         if (checkingDay && checkedToday && checkedToday.length === 0) {
           await fullUser.addChecking(checkingDay.id);
         }
@@ -315,7 +344,6 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         console.error("POST-4 /login :::", err);
         return next(err);
       }
-
     });
   })(req, res, next);
 });
@@ -377,12 +405,34 @@ router.patch("/password", isLoggedIn, async (req, res, next) => {
         id: req.user.id
       }
     });
-    res.send('비밀번호 변경 성공~');
+    res.send("비밀번호 변경 성공~");
   } catch (err) {
     console.error("PATCH /nickname :::", err);
     next(err);
   }
 });
+
+// 이미지업로드(/post/images)
+router.patch(
+  "/images",
+  isLoggedIn,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      await db.User.update({
+        src: req.file.filename
+      }, {
+        where: {
+          id: req.user.id
+        }
+      });
+      res.send(req.file.filename);
+    } catch (err) {
+      console.error("PATCH /images :::", err);
+      next(err);
+    }
+  }
+);
 
 // 팔로우
 router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
@@ -397,7 +447,7 @@ router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
       where: {
         id: req.params.id
       },
-      attributes: ["id", "nickname", "name", "src"]
+      attributes: ["id", "nickname", "name"]
     });
     res.send({
       id: user.id,
@@ -460,7 +510,7 @@ router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
     }
     const followers = await me.getFollowers({
       where,
-      attributes: ["id", "nickname", "name", "src"],
+      attributes: ['id', 'nickname', 'name', 'src', 'email'],
       order: [
         ["createdAt", "DESC"],
         ["id", "DESC"]
@@ -497,7 +547,7 @@ router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
     }
     const followings = await me.getFollowings({
       where,
-      attributes: ["id", "nickname", "name", "src"],
+      attributes: ['id', 'nickname', 'name', 'src', 'email'],
       order: [
         ["createdAt", "DESC"],
         ["id", "DESC"]
@@ -532,16 +582,7 @@ router.get("/:id/posts", async (req, res, next) => {
       where,
       include: [{
           model: db.User,
-          attributes: [
-            "id",
-            "nickname",
-            "name",
-            "email",
-            "src",
-            "isAdmin",
-            "snsId",
-            "provider"
-          ]
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.Image
@@ -556,16 +597,7 @@ router.get("/:id/posts", async (req, res, next) => {
           as: "Retweet",
           include: [{
               model: db.User,
-              attributes: [
-                "id",
-                "nickname",
-                "name",
-                "email",
-                "src",
-                "isAdmin",
-                "snsId",
-                "provider"
-              ]
+              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
             },
             {
               model: db.Image

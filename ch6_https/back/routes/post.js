@@ -69,16 +69,7 @@ router.get("/:id", async (req, res, next) => {
       },
       include: [{
           model: db.User,
-          attributes: [
-            "id",
-            "nickname",
-            "name",
-            "email",
-            "src",
-            "isAdmin",
-            "snsId",
-            "provider"
-          ]
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.Image
@@ -97,7 +88,7 @@ router.get("/:id", async (req, res, next) => {
           as: "Retweet",
           include: [{
               model: db.User,
-              attributes: ["id", "nickname", "name", "src"]
+              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
             },
             {
               model: db.Image
@@ -112,8 +103,6 @@ router.get("/:id", async (req, res, next) => {
     next(err);
   }
 });
-
-
 
 // 글 작성(POST /post)
 router.post("/", isLoggedIn, async (req, res, next) => {
@@ -159,16 +148,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       include: [{
           // 요청을 받으면 프론트에 User: { id: 1, nickname: "남승현" } 형식이 추가된다.
           model: db.User,
-          attributes: [
-            "id",
-            "nickname",
-            "name",
-            "email",
-            "src",
-            "isAdmin",
-            "snsId",
-            "provider"
-          ]
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.Image
@@ -192,21 +172,24 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 });
 
 // 글 수정
-router.patch("/:id", isLoggedIn, async (req, res, next) => {
+router.patch("/:postId", isLoggedIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
     if (!post) {
       return res.status(400).send("포스트가 존재하지 않습니다.");
     }
+    if (post.UserId !== req.user.id) {
+      return res.status(400).send("님이 작성한 글이 아니에여;;");
+    }
     await db.Post.update({
       content: req.body.content
     }, {
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
     res.json(req.body.content);
@@ -217,22 +200,25 @@ router.patch("/:id", isLoggedIn, async (req, res, next) => {
 });
 
 // 글 삭제
-router.delete("/:id", isLoggedIn, async (req, res, next) => {
+router.delete("/:postId", isLoggedIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
     if (!post) {
       return res.status(400).send("포스트가 존재하지 않습니다.");
     }
+    if (post.UserId !== req.user.id) {
+      return res.status(400).send("님이 작성한 글이 아니에여;;");
+    }
     await db.Post.destroy({
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
-    return res.send("삭제가 잘 됐어요...ㅎ");
+    return res.send(req.params.postId);
   } catch (err) {
     console.error(err);
     next("DELETE /:id :::", err);
@@ -265,16 +251,7 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
       },
       include: [{
         model: db.User,
-        attributes: [
-          "id",
-          "nickname",
-          "name",
-          "email",
-          "src",
-          "isAdmin",
-          "snsId",
-          "provider"
-        ]
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }]
     });
     return res.json(comment);
@@ -301,16 +278,7 @@ router.get("/:id/comments", async (req, res, next) => {
       },
       include: [{
         model: db.User,
-        attributes: [
-          "id",
-          "nickname",
-          "name",
-          "email",
-          "src",
-          "isAdmin",
-          "snsId",
-          "provider"
-        ]
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }],
       order: [
         ["createdAt", "ASC"]
@@ -370,32 +338,14 @@ router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
       },
       include: [{
           model: db.User,
-          attributes: [
-            "id",
-            "nickname",
-            "name",
-            "email",
-            "src",
-            "isAdmin",
-            "snsId",
-            "provider"
-          ]
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.Post,
           as: "Retweet",
           include: [{
               model: db.User,
-              attributes: [
-                "id",
-                "nickname",
-                "name",
-                "email",
-                "src",
-                "isAdmin",
-                "snsId",
-                "provider"
-              ]
+              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
             },
             {
               model: db.Image

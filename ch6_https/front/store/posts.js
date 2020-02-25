@@ -15,7 +15,7 @@ export const mutations = {
   },
 
   removeMainPost(state, payload) {
-    const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
+    const targetIndex = state.mainPosts.findIndex(v => v.id === payload);
     state.mainPosts.splice(targetIndex, 1);
   },
 
@@ -126,6 +126,7 @@ export const actions = {
       })
       .catch((err) => {
         console.error('remove:::', err)
+        alert(err.response.data)
       })
   },
 

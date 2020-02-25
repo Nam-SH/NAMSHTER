@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
       where,
       include: [{
         model: db.User,
-        attributes: ["id", "nickname", "name", "src"]
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }, {
         model: db.Image,
       }, {
@@ -36,7 +36,7 @@ router.get('/', async (req, res, next) => {
         as: "Retweet",
         include: [{
             model: db.User,
-            attributes: ["id", "nickname", "name", "src"]
+            attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
           },
           {
             model: db.Image

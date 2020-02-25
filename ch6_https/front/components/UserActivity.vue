@@ -20,11 +20,7 @@
                       : user.Followings.length"
                     :key="n - 1"
                   >
-                    <li>
-                      {{ n }}번: {{ user.Followings[n - 1].nickname }}({{
-                        user.Followings[n - 1].name
-                      }})
-                    </li>
+                    <li>{{ n }}번: {{ user.Followings[n - 1].nickname }}({{ user.Followings[n - 1].name }})</li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -51,11 +47,7 @@
                       : user.Followers.length"
                     :key="n - 1"
                   >
-                    <li>
-                      {{ n }}번: {{ user.Followers[n - 1].nickname }}({{
-                        user.Followers[n - 1].name
-                      }})
-                    </li>
+                    <li>{{ n }}번: {{ user.Followers[n - 1].nickname }}({{ user.Followers[n - 1].name }})</li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -80,7 +72,7 @@
                 >
                   <ul
                     class="m-0 text-left"
-                    v-for="n in user.Posts.length > 3 ? 3 : user.Posts.length"
+                    v-for="n of user.Posts.length > 3 ? 3 : user.Posts.length"
                     :key="n - 1"
                   >
                     <li>
@@ -102,7 +94,7 @@
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto" color="grey lighten-4" max-width="600">
             <v-card height="100px" class="text-center">
-              {{ user.Groupjoined.length }}개의 그룹을 가입함...
+              {{ user.GroupJoined.length }}개의 그룹을 가입함...
               <v-expand-transition>
                 <div
                   v-if="hover"
@@ -111,12 +103,12 @@
                 >
                   <ul
                     class="m-0 text-left"
-                    v-for="n in user.Groupjoined.length > 3
+                    v-for="n in user.GroupJoined.length > 3
                       ? 3
-                      : user.Groupjoined.length"
+                      : user.GroupJoined.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번: {{ user.Groupjoined[n - 1].name }}</li>
+                    <li>{{ n }}번: {{ user.GroupJoined[n - 1].name }}</li>
                   </ul>
                 </div>
               </v-expand-transition>

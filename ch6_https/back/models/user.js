@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
 
     db.User.belongsToMany(db.Group, {
       through: "Groupuser",
-      as: "Groupjoined"
+      as: "GroupJoined"
     });
     db.User.belongsToMany(db.DailyTz, {
       through: "DailyUser",

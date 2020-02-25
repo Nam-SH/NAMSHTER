@@ -22,12 +22,12 @@ router.get("/", async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin', 'snsId', 'provider'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.User,
           as: "Groupmembers",
-          attributes: ['id', 'nickname', 'name', 'email', 'src'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.GroupPost,
@@ -69,7 +69,7 @@ router.get("/:status", async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.User,
@@ -120,13 +120,13 @@ router.get("/my/:status", isLoggedIn, async (req, res, next) => {
         }
       }
     }
-    const joinedgroups = await me.getGroupjoined({
+    const joinedgroups = await me.getGroupJoined({
       where,
       attributes: ['id', 'name', 'intro', 'limit', 'status'],
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }, {
         model: db.User,
         as: "Groupmembers",
@@ -159,13 +159,13 @@ router.get("/user/:userId/:status", isLoggedIn, async (req, res, next) => {
         }
       }
     }
-    const joinedgroups = await user.getGroupjoined({
+    const joinedgroups = await user.getGroupJoined({
       where,
       attributes: ['id', 'name', 'intro', 'limit', 'status'],
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }, {
         model: db.User,
         as: "Groupmembers",

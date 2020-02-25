@@ -17,16 +17,16 @@ router.get('/:groupId', async (req, res, next) => {
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'email', 'src', 'isAdmin', 'snsId', 'provider'],
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }, {
         model: db.User,
         as: "Groupmembers",
-        attributes: ['id', 'nickname', 'name', 'email', 'src'],
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
       }, {
         model: db.GroupPost,
         include: [{
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'email', 'src'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         }]
       }, {
         model: db.Subject,
@@ -70,17 +70,17 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       include: [{
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'email', 'src'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
           model: db.User,
           as: "Groupmembers",
-          attributes: ['id', 'nickname', 'name', 'email', 'src'],
+          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         }, {
           model: db.GroupPost,
           include: [{
             model: db.User,
-            attributes: ['id', 'nickname', 'name', 'email', 'src'],
+            attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
           }]
         }, {
           model: db.Subject,
@@ -164,10 +164,10 @@ router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
       attributes: ['id']
     })
     if (usersInGroup) {
-      await user.removeGroupjoined(req.params.groupId)
+      await user.removeGroupJoined(req.params.groupId)
       return res.send("탈퇴가 되었네여;;")
     } else {
-      await user.addGroupjoined(req.params.groupId)
+      await user.addGroupJoined(req.params.groupId)
       return res.send("가입이 되었네여;;")
     }
   } catch (err) {
