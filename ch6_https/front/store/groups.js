@@ -1,66 +1,94 @@
+import throttle from 'lodash.throttle'
+
 export const state = () => ({
-  grouplist_before: [],
-  grouplist_doing: [],
-  grouplist_done: [],
+  groupPosts: [],
+  imagePaths: [],
+  hasMoreGroupPost: true,
 
-  othergrouplist_before: [],
-  othergrouplist_doing: [],
-  othergrouplist_done: [],
+  oneGroup: null,
 
-  allgrouplist: [],
+  grouplistBefore: [],
+  grouplistDoing: [],
+  grouplistDone: [],
+  otherGrouplistBefore: [],
+  otherGrouplistDoing: [],
+  otherGrouplistDone: [],
+  allGrouplist: [],
   grouplist: [],
-  maingrouplist: [],
 
-  onegroup: null,
+  mainGrouplist: [],
 
 });
 
 export const mutations = {
   groupAdd(state, payload) {
-    state.allgrouplist.unshift(payload)
-    state.grouplist_before.unshift(payload)
+    state.allGrouplist.unshift(payload)
+    state.grouplistBefore.unshift(payload)
   },
 
   changeStatus(state, payload) {
     if (payload.nextStatus === 1) {
-      let targetIndex = state.grouplist_before.findIndex(v => v.id === payload.groupId);
-      state.grouplist_before[targetIndex].status = payload.nextStatus
-      state.grouplist_doing.unshift(state.grouplist_before[targetIndex])
-      state.grouplist_before.splice(targetIndex, 1)
+      let targetIndex = state.grouplistBefore.findIndex(v => v.id === payload.groupId);
+      state.grouplistBefore[targetIndex].status = payload.nextStatus
+      state.grouplistDoing.unshift(state.grouplistBefore[targetIndex])
+      state.grouplistBefore.splice(targetIndex, 1)
     } else {
       let targetIndex = state.grouplist_doing.findIndex(v => v.id === payload.groupId);
-      state.grouplist_doing[targetIndex].status = payload.nextStatus
-      state.grouplist_done.unshift(state.grouplist_doing[targetIndex])
-      state.grouplist_doing.splice(targetIndex, 1)
+      state.grouplistDoing[targetIndex].status = payload.nextStatus
+      state.grouplistDone.unshift(state.grouplistDoing[targetIndex])
+      state.grouplistDoing.splice(targetIndex, 1)
     }
   },
 
+  // 글 작성관련
+  addGroupPost(state, payload) {
+    state.groupPosts.unshift(payload);
+    state.imagePaths = [];
+  },
+
+  concatImagePaths(state, payload) {
+    state.imagePaths = state.imagePaths.concat(payload)
+  },
+  removeImagePath(state, payload) {
+    state.imagePaths.splice(payload, 1)
+  },
+
+  loadGroupPosts(state, payload) {
+    if (payload.reset) {
+      state.groupPosts = payload.data
+    } else {
+      state.groupPosts = state.groupPosts.concat(payload.data)
+    }
+    state.hasMoreGroupPost = payload.data.length === 10;
+  },
+
+  // 그룹 불러오기 관련
   loadAllGroups(state, payload) {
-    state.allgrouplist = payload
+    state.allGrouplist = payload
   },
   loadGroups(state, payload) {
     state.grouplist = payload
   },
   loadMainGroups(state, payload) {
-    state.maingrouplist = payload
+    state.mainGrouplist = payload
   },
 
   oneGroupDetail(state, payload) {
-    state.onegroup = payload
+    state.oneGroup = payload
   },
 
   grouplistBefore(state, payload) {
-    state.grouplist_before = payload
+    state.grouplistBefore = payload
   },
   grouplistDoing(state, payload) {
-    state.grouplist_doing = payload
+    state.grouplistDoing = payload
   },
 
   otherGrouplistBefore(state, payload) {
-    state.othergrouplist_before = payload
+    state.otherGrouplistBefore = payload
   },
   otherGrouplistDoing(state, payload) {
-    state.othergrouplist_doing = payload
+    state.otherGrouplistDoing = payload
   },
 };
 
@@ -94,7 +122,73 @@ export const actions = {
   }, payload) {
 
   },
+  // 그룹 포스트 작성
+  add({
+    commit,
+    state
+  }, payload) {
+    return this.$axios.post(`/group/${payload.groupId}/post`, {
+        title: payload.title,
+        content: payload.content,
+        image: state.imagePaths
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('addGroupPost', res.data)
+      })
+      .catch((err) => {
+        console.error('addGroupPost:::', err)
+      })
+  },
+  // 이미지 업로드
+  uploadImages({
+    commit
+  }, payload) {
+    return this.$axios.post('/group/images', payload, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        commit('concatImagePaths', res.data);
+      })
+      .catch((err) => {
+        console.error('uploadImages:::', err)
+      })
+  },
 
+  // 전체 글 불러오기 - 쓰로틀링 설정
+  loadGroupPosts: throttle(async function ({
+    commit,
+    state
+  }, payload) {
+    try {
+      if (payload && payload.reset) {
+        const res = await this.$axios.get(`/group/${payload.groupId}/posts?&limit=10`, {
+          withCredentials: true
+        })
+        commit('loadGroupPosts', {
+          data: res.data,
+          reset: true,
+        });
+        return;
+      }
+      if (state.hasMoreGroupPost) {
+        const lastPost = state.groupPosts[state.mainPosts.length - 1];
+        const res = await this.$axios.get(`/group/${payload.groupId}/posts?lastId=${lastPost && lastPost.id}&limit=10`, {
+          withCredentials: true
+        })
+        commit('loadGroupPosts', {
+          data: res.data,
+          reset: false
+        });
+        return;
+      }
+    } catch (err) {
+      console.error('loadPosts :::', err)
+    }
+  }, 3000),
+
+  // 그룹 관련
   groupUserInOut({
     commit
   }, payload) {
@@ -104,7 +198,8 @@ export const actions = {
         withCredentials: true
       })
       .then((res) => {
-        console.log('aaaaaaa', res.data);
+        console.log('res', res.data);
+
         // commit('groupUserInOut', res.data)
       })
       .catch((err) => {
@@ -131,6 +226,8 @@ export const actions = {
       })
   },
 
+  // 아래부터는 그룹 가져오는 것들
+  // 쓰로틀링 해야 함
   loadAllGroups({
     commit
   }, payload) {
@@ -145,6 +242,7 @@ export const actions = {
       })
   },
 
+  // 쓰로틀링 해야 함
   loadGroups({
     commit
   }, payload) {

@@ -2,10 +2,10 @@
   <v-container>
     <v-layout style="display: flex">
       <v-container style="flex:1">
-        <my-groups :grouplist="grouplist_before" :isState="false" />
+        <my-groups :grouplist="grouplistBefore" :isState="false" />
       </v-container>
       <v-container style="flex:1">
-        <my-groups :grouplist="grouplist_doing" :isState="true" />
+        <my-groups :grouplist="grouplistDoing" :isState="true" />
       </v-container>
     </v-layout>
     <br />
@@ -57,16 +57,16 @@ export default {
     grouplist() {
       // 나중에 if 0과 else만 있음요
       if (!this.navNum) {
-        return this.$store.state.groups.allgrouplist;
+        return this.$store.state.groups.allGrouplist;
       } else {
         return this.$store.state.groups.grouplist;
       }
     },
-    grouplist_before() {
-      return this.$store.state.groups.grouplist_before;
+    grouplistBefore() {
+      return this.$store.state.groups.grouplistBefore;
     },
-    grouplist_doing() {
-      return this.$store.state.groups.grouplist_doing;
+    grouplistDoing() {
+      return this.$store.state.groups.grouplistDoing;
     }
   },
   methods: {

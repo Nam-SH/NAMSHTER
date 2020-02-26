@@ -1,13 +1,7 @@
 <template>
   <v-app style="background-color:#E5EFF8">
     <nav>
-      <v-toolbar
-        dark
-        color="blue"
-        src="https://picsum.photos/1920/1080?random"
-        shrink-on-scroll
-        prominent
-      >
+      <v-toolbar dark src="https://source.unsplash.com/random" shrink-on-scroll prominent>
         <v-toolbar-title>
           <nuxt-link to="/" style="color: black">
             <v-tooltip top>
@@ -18,8 +12,7 @@
                   color="blue"
                   x-large
                   v-on="on"
-                  >NAMSHTER</v-btn
-                >
+                >NAMSHTER</v-btn>
               </template>
               <span>메인으로</span>
             </v-tooltip>
@@ -40,25 +33,13 @@
         <v-spacer />
         <v-toolbar-items mt-5>
           <v-form @submit.prevent="onSearchHashtag">
-            <div
-              :style="{ display: 'flex', height: '100%', alignItems: 'center' }"
-            >
-              <v-text-field
-                v-model="hashtag"
-                label="검색"
-                hide-details
-                prepend-icon="mdi-magnify"
-              />
+            <div :style="{ display: 'flex', height: '100%', alignItems: 'center' }">
+              <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
             </div>
           </v-form>
           <v-tooltip top v-if="!me">
             <template v-slot:activator="{ on }">
-              <v-btn
-                text
-                to="/signup"
-                :style="{ display: 'flex', alignItems: 'center' }"
-                v-on="on"
-              >
+              <v-btn text to="/signup" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
                 <div>회원가입</div>
               </v-btn>
             </template>
@@ -79,12 +60,7 @@
           </v-tooltip>
           <v-tooltip top v-if="me">
             <template v-slot:activator="{ on }">
-              <v-btn
-                text
-                to="/groups"
-                :style="{ display: 'flex', alignItems: 'center' }"
-                v-on="on"
-              >
+              <v-btn text to="/groups" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
                 <div>그룹</div>
               </v-btn>
             </template>

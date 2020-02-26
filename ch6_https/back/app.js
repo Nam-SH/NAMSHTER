@@ -55,6 +55,7 @@ if (prod) {
 
 app.use("/", express.static("uploads"));
 app.use("/profile", express.static("userprofile"));
+app.use("/postimage", express.static("grouppostimage"));
 
 app.use(express.json());
 app.use(

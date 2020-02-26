@@ -106,8 +106,9 @@ export default {
           });
       }
     },
-    onLogOut() {
-      this.$store.dispatch("users/logOut");
+    async onLogOut() {
+      await this.$store.dispatch("users/logOut");
+      this.$router.push({ path: "/" });
       this.email = "";
       this.password = "";
     }

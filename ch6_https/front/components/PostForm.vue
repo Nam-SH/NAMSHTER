@@ -30,12 +30,13 @@
         <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
         <div>
           <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
-            <img :src="`http://localhost:3085/${p}`" :alt="p" style="width: 200px" />
+            <img :src="`${srcAddress}/${p}`" :alt="p" style="width: 200px" />
             <div>
               <button type="button" @click="onRemoveImage(i)">삭제</button>
             </div>
           </div>
         </div>
+        <!--  -->
       </v-form>
     </v-container>
   </v-card>
@@ -57,7 +58,12 @@ export default {
   },
   computed: {
     ...mapState("users", ["me"]),
-    ...mapState("posts", ["imagePaths"])
+    ...mapState("posts", ["imagePaths"]),
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085";
+    }
   },
   methods: {
     onChangeTextarea(value) {

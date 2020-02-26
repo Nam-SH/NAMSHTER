@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const GroupPost = sequelize.define('GroupPost', {
     title: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING(20),
       allowNull: false,
     },
     content: {
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   GroupPost.associate = (db) => {
     db.GroupPost.belongsTo(db.Group);
     db.GroupPost.belongsTo(db.User)
-
+    db.GroupPost.hasMany(db.GroupPostImage)
   };
   return GroupPost;
 };

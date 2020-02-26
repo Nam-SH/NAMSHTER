@@ -29,11 +29,6 @@ export const mutations = {
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
 
-  // 글 하나 불러오기
-  loadPost(state, payload) {
-    state.mainPosts = [payload]
-  },
-
   thisWeekPost(state, payload) {
     const monthFirstDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDate()
     let calcPost = new Array(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()).fill(0)
@@ -52,6 +47,10 @@ export const mutations = {
     state.calcPost = []
   },
 
+  // 글 하나 불러오기
+  loadPost(state, payload) {
+    state.mainPosts = [payload]
+  },
   // 글 전체 불러오기
   loadPosts(state, payload) {
     if (payload.reset) {
