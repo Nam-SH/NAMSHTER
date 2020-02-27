@@ -72,7 +72,7 @@
     <!-- 오른쪽 화면 -->
     <v-row no-gutters>
       <v-col cols="12" md="4">
-        <login-form />
+        <login-card />
         <group-go />
       </v-col>
       <v-col cols="12" md="8">
@@ -83,12 +83,12 @@
 </template>
 
 <script>
-import LoginForm from "~/components/LoginForm";
+import LoginCard from "~/components/LoginCard";
 import GroupGo from "@/components/GroupGo.vue";
 
 export default {
   components: {
-    LoginForm,
+    LoginCard,
     GroupGo
   },
   data() {

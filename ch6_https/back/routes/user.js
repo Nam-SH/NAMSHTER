@@ -134,6 +134,22 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+// 다른 사용자정보 가져오기
+router.get("/image/:userEmail", async (req, res, next) => {
+  try {
+    const userSrc = await db.User.findOne({
+      where: {
+        email: req.params.userEmail
+      },
+      attributes: ["nickname", "src"],
+    });
+    res.json(userSrc);
+  } catch (err) {
+    console.error("GET /image/:userEmail :::", err);
+    next(err);
+  }
+});
+
 // 회원가입(signUp)
 router.post("/", isNotLoggedIn, async (req, res, next) => {
   // 회원가입

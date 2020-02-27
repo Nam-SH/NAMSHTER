@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="user">
     <v-row>
       <!-- 팔로우 관련 -->
       <v-col col="6">
@@ -20,7 +20,7 @@
                       : user.Followings.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번: {{ user.Followings[n - 1].nickname }}({{ user.Followings[n - 1].name }})</li>
+                    <li>{{ n }}: {{ user.Followings[n - 1].nickname }}({{ user.Followings[n - 1].name }})</li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -47,14 +47,13 @@
                       : user.Followers.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번: {{ user.Followers[n - 1].nickname }}({{ user.Followers[n - 1].name }})</li>
+                    <li>{{ n }}: {{ user.Followers[n - 1].nickname }}({{ user.Followers[n - 1].name }})</li>
                   </ul>
                 </div>
               </v-expand-transition>
             </v-card>
           </v-card>
         </v-hover>
-        <!--  -->
       </v-col>
     </v-row>
     <v-row>
@@ -75,12 +74,7 @@
                     v-for="n of user.Posts.length > 3 ? 3 : user.Posts.length"
                     :key="n - 1"
                   >
-                    <li>
-                      {{ n }}번:
-                      {{ $moment(user.Posts[n - 1].createdAt).fromNow() }}에
-                      작성함...
-                    </li>
-                    <!-- <li>{{ n }}번: {{ me.Posts[n - 1].id }} 구현안함</li> -->
+                    <li>{{ n }}: {{ $moment(user.Posts[n - 1].createdAt).fromNow() }}에 작성함</li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -88,7 +82,6 @@
           </v-card>
         </v-hover>
       </v-col>
-
       <!-- 그룹 관련  -->
       <v-col col="6">
         <v-hover v-slot:default="{ hover }">
@@ -108,14 +101,13 @@
                       : user.GroupJoined.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번: {{ user.GroupJoined[n - 1].name }}</li>
+                    <li>{{ n }}: {{ user.GroupJoined[n - 1].name }}</li>
                   </ul>
                 </div>
               </v-expand-transition>
             </v-card>
           </v-card>
         </v-hover>
-        <!--  -->
       </v-col>
     </v-row>
   </div>

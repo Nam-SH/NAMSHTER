@@ -27,6 +27,7 @@
             <v-btn :groupId="group.id" :to="`/groups/${group.id}`">들어가기</v-btn>
           </v-container>
         </v-row>
+        <v-divider></v-divider>
       </v-carousel-item>
     </v-carousel>
     <v-card v-else cycle height="300" progress progress-color="blue">

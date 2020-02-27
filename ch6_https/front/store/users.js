@@ -7,6 +7,7 @@ export const state = () => ({
   hasMoreFollowing: true,
   hasMoreFollower: true,
   other: null,
+  loggingInUser: null,
   imagePaths: ''
 });
 
@@ -19,6 +20,10 @@ export const mutations = {
   // 다른 사용자 정보
   setOther(state, payload) {
     state.other = payload;
+  },
+
+  loggingInUser(state, payload) {
+    state.loggingInUser = payload
   },
 
   changeNickname(state, payload) {
@@ -108,6 +113,21 @@ export const actions = {
         withCredentials: true
       });
       return commit('setOther', res.data)
+
+    } catch (err) {
+      console.error('loadOther :::', err)
+    }
+  },
+
+  // 로그인 유저 사진가져오기
+  async loggingInUser({
+    commit
+  }, payload) {
+    try {
+      const res = await this.$axios.get(`/user/image/${payload.userEmail}`, {
+        withCredentials: true
+      });
+      return commit('loggingInUser', res.data)
 
     } catch (err) {
       console.error('loadOther :::', err)

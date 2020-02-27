@@ -1,136 +1,139 @@
 <template>
-  <v-container v-if="!me">
-    <v-card>
-      <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
+  <v-container>
+    <v-card class="mx-auto" max-width="500">
+      <v-card-title class="title font-weight-regular justify-space-between">
+        <span>{{ currentTitle }}</span>
+        <v-avatar color="primary lighten-2" class="subheading white--text" size="24" v-text="step"></v-avatar>
+      </v-card-title>
+      <v-form v-model="valid" @submit.prevent="onSubmitForm">
+        <v-window v-model="step">
+          <v-window-item :value="1">
+            <v-card-text>
+              <v-text-field v-model="email" label="Email" value="dog@dog.com" :rules="emailRules"></v-text-field>
+              <p class="caption grey--text text--darken-1">가입하신 이메일을 입력하시오.</p>
+            </v-card-text>
+          </v-window-item>
+          <v-window-item :value="2">
+            <div class="pa-4 text-center">
+              <template v-if="loggingInUser">
+                <v-img
+                  class="mb-4"
+                  contain
+                  height="70"
+                  :src="`${srcAddress}/profile/${loggingInUser.src}`"
+                ></v-img>
+                <span>{{ loggingInUser.nickname }}</span>
+              </template>
+              <template v-else>
+                <v-img class="mb-4" contain height="80" :src="`${srcAddress}/profile/donut.png`"></v-img>
+                <span>anonymous</span>
+              </template>
+            </div>
+            <v-card-text>
+              <v-text-field
+                v-model="password"
+                label="Password"
+                type="password"
+                :rules="passwordRules"
+              ></v-text-field>
+              <p class="caption grey--text text--darken-1">비밀번호를 입력하시오.</p>
+            </v-card-text>
+          </v-window-item>
+        </v-window>
         <v-container>
-          <v-text-field label="이메일" type="email" required v-model="email" :rules="emailRules" />
-          <v-text-field
-            label="비밀번호"
-            type="password"
-            required
-            v-model="password"
-            :rules="passwordRules"
-          />
-          <v-btn color="green" type="submit" :disabled="!valid">로그인</v-btn>
-          <v-btn nuxt to="/signup">회원가입</v-btn>
+          <span>
+            아직 회원이 아니세요?
+            <router-link to="/signup">
+              <span>회원가입 하러가기</span>
+            </router-link>
+          </span>
+          <a style="inline-block" :href="`${srcAddress}/user/naver`">
+            <img class="mt-1" src="../static/naver.png" alt style="width:180px;height:50px" />
+          </a>
+          <a :href="`${srcAddress}/user/kakao`">
+            <img class="mt-1" src="../static/kakao.png" alt style="width:180px;height:50px" />
+          </a>
         </v-container>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn :disabled="step === 1 || !valid" text @click="step--">Back</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn :hidden="step === 2" color="primary" @click="step++;onLoggingInUser()">Next</v-btn>
+          <v-btn v-if="step === 2" :disabled="!valid" color="yellow" type="submit">로그인</v-btn>
+        </v-card-actions>
       </v-form>
-    </v-card>
-    <v-card>
-      <v-card class="mx-auto ml-3">
-        <a style="inline-block" :href="`${srcAddress}/user/naver`">
-          <img class="mt-1" src="../static/naver.png" alt style="width:200px;height:50px" />
-        </a>
-        <a :href="`${srcAddress}/user/kakao`">
-          <img class="mt-1" src="../static/kakao.png" alt style="width:200px;height:50px" />
-        </a>
-      </v-card>
-    </v-card>
-  </v-container>
-  <!-- 로그인 후 -->
-  <v-container v-else>
-    <v-card>
-      <v-container>
-        <v-row class="mx-3">
-          <v-tooltip right color="rgba(255, 255, 255, 0)">
-            <template v-slot:activator="{ on }">
-              <i v-if="me.isAdmin" class="fas fa-user-lock" v-on="on"></i>
-              <v-avatar v-if="social" :color="socialColor" size="25" v-on="on">
-                <span class="black--text" style="font-size:20px">{{ socialName }}</span>
-              </v-avatar>
-              <span v-on="on">{{ me.nickname }}({{ me.name }})</span>
-            </template>
-            <v-img
-              :src="`${srcAddress}/profile/${me.src}`"
-              min-height="200px"
-              max-height="300px"
-              width="200px"
-            ></v-img>
-          </v-tooltip>로그인이 되었습니다.
-          <v-btn to="/qrcode">
-            <i class="fas fa-camera ml-auto"></i>
-          </v-btn>
-        </v-row>
-        <hr class="my-2" />
-        <v-btn class="mb-3" @click="onLogOut">로그아웃</v-btn>
-        <!-- 내 글 통계 -->
-        <user-activity :user="me" />
-        <!--  -->
-      </v-container>
     </v-card>
   </v-container>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import UserActivity from "@/components/UserActivity.vue";
 
 export default {
-  components: {
-    UserActivity
-  },
   data() {
     return {
       valid: false,
+      step: 1,
       email: "",
       password: "",
       emailRules: [
-        v => !!v || "E-mail is required",
+        v => !!v || "빈칸은 ㄴㄴ임",
         v => /.+@.+\..+/.test(v) || "이메일이 아닌 거 같은데여;;"
       ],
       passwordRules: [
-        v => !!v || "Password is required",
+        v => !!v || "빈칸은 ㄴㄴ임",
         v => (v && v.length >= 10) || "비밀번호는 최소 10자에여;;"
       ],
-      socialName: "",
-      socialColor: "",
-      //
       result: "",
       error: ""
     };
   },
   methods: {
     onSubmitForm() {
-      if (this.$refs.form.validate()) {
-        this.$store
-          .dispatch("users/logIn", {
-            email: this.email,
-            password: this.password
-          })
-          .then(() => {
-            this.$router.push({ path: "/" });
-          })
-          .catch(err => {
-            console.log(err);
-            alert("회원가입 실패!!");
-          });
-      }
+      this.$store
+        .dispatch("users/logIn", {
+          email: this.email,
+          password: this.password
+        })
+        .then(() => {
+          this.$router.push({ path: "/" });
+          this.email = "";
+          this.password = "";
+        })
+        .catch(err => {
+          console.error(err);
+          alert("회원가입 실패!!");
+        });
     },
-    async onLogOut() {
-      await this.$store.dispatch("users/logOut");
-      this.$router.push({ path: "/" });
-      this.email = "";
-      this.password = "";
+    async onLoggingInUser() {
+      await this.$store.dispatch("users/loggingInUser", {
+        userEmail: encodeURIComponent(this.email)
+      });
     }
   },
   computed: {
     ...mapState("users", ["me"]),
-    social() {
-      if (this.me && this.me.snsId && this.me.provider) {
-        if (this.me.provider === "kakao") {
-          return (this.socialName = "K"), (this.socialColor = "yellow");
-        }
-        return (this.socialName = "N"), (this.socialColor = "green");
-      }
-      return false;
-    },
     srcAddress() {
       return process.env.NODE_ENV === "production"
         ? "https://api.namshter.com"
         : "http://localhost:3085";
+    },
+    currentTitle() {
+      switch (this.step) {
+        case 1:
+          return "로그인";
+        case 2:
+          return "비밀번호";
+        default:
+          return "로그인";
+      }
+    },
+    loggingInUser() {
+      return this.$store.state.users.loggingInUser;
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

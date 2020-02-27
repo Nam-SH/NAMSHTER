@@ -20,9 +20,18 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red darken-3" text @click="dialog = false">취소</v-btn>
-          <!-- v-if="!isSignIn && !isMaster" -->
-          <v-btn color="blue darken-3" text @click="groupUserInOut">가입하기</v-btn>
-          <v-btn v-if="isSignIn || isMaster" color="blue darken-3" text>자세히</v-btn>
+          <v-btn
+            v-if="!isSignIn && !isMaster"
+            color="blue darken-3"
+            text
+            @click="groupUserInOut"
+          >가입하기</v-btn>
+          <v-btn
+            v-if="isSignIn || isMaster"
+            color="blue darken-3"
+            text
+            :to="`/groups/${group.id}`"
+          >자세히</v-btn>
           <v-btn
             v-if="isSignIn && !isMaster"
             color="blue darken-3"
@@ -53,10 +62,10 @@ export default {
       return this.$store.state.users.me;
     },
     isSignIn() {
-      return this.me.id === this.group.Groupmembers[0].id;
+      return this.me && this.me.id === this.group.Groupmembers[0].id;
     },
     isMaster() {
-      return this.me.id === this.group.MasterId;
+      return this.me && this.me.id === this.group.MasterId;
     }
   },
   methods: {
