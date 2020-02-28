@@ -57,7 +57,7 @@ export default {
     grouplist() {
       // 나중에 if 0과 else만 있음요
       if (!this.navNum) {
-        return this.$store.state.groups.allGrouplist;
+        return this.$store.state.groups.grouplist;
       } else {
         return this.$store.state.groups.grouplist;
       }

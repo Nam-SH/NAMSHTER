@@ -1,10 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../models');
+const db = require("../models");
 
-const {
-  isLoggedIn
-} = require('./middlewares')
+const { isLoggedIn } = require("./middlewares");
 
 // 업로드 관련
 const multer = require("multer");
@@ -59,95 +57,111 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res) => {
 // });
 
 // 한개 그룹 디테일
-router.get('/:groupId', async (req, res, next) => {
+router.get("/:groupId", async (req, res, next) => {
   try {
     const group = await db.Group.findOne({
       where: {
         id: req.params.groupId
       },
-      include: [{
-        model: db.User,
-        as: "Master",
-        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-      }, {
-        model: db.User,
-        as: "Groupmembers",
-        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-      }, {
-        model: db.GroupPost,
-        include: [{
+      include: [
+        {
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-        }]
-      }, {
-        model: db.Subject,
-        as: "Selectsubject",
-        attributes: ['id', 'name'],
-        include: [{
-          model: db.Category,
-          attributes: ['id', 'name']
-        }]
-      }],
+          as: "Master",
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+        },
+        {
+          model: db.User,
+          as: "Groupmembers",
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+        },
+        {
+          model: db.GroupPost,
+          include: [
+            {
+              model: db.User,
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+            }
+          ]
+        },
+        {
+          model: db.Subject,
+          as: "Selectsubject",
+          attributes: ["id", "name"],
+          include: [
+            {
+              model: db.Category,
+              attributes: ["id", "name"]
+            }
+          ]
+        }
+      ]
     });
     return res.json(group);
   } catch (err) {
-    console.error('GET /:id', err)
-    next(err)
+    console.error("GET /:id", err);
+    next(err);
   }
 });
 
 // 그룹 한개 생성
-router.post('/', isLoggedIn, async (req, res, next) => {
+router.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const newGroup = await db.Group.create({
       name: req.body.name,
       intro: req.body.intro,
       limit: req.body.limit,
-      MasterId: req.user.id,
-    })
+      MasterId: req.user.id
+    });
 
     const targetSubject = await db.Subject.findOne({
       where: {
         name: req.body.subjectName
       }
-    })
-    await newGroup.addGroupmembers(req.user.id)
-    await newGroup.addSelectsubject(targetSubject.id)
+    });
+    await newGroup.addGroupmembers(req.user.id);
+    await newGroup.addSelectsubject(targetSubject.id);
 
     const fullGroup = await db.Group.findOne({
       where: {
         id: newGroup.id
       },
-      include: [{
+      include: [
+        {
           model: db.User,
           as: "Master",
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
         {
           model: db.User,
           as: "Groupmembers",
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-        }, {
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+        },
+        {
           model: db.GroupPost,
-          include: [{
-            model: db.User,
-            attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-          }]
-        }, {
+          include: [
+            {
+              model: db.User,
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+            }
+          ]
+        },
+        {
           model: db.Subject,
           as: "Selectsubject",
-          attributes: ['id', 'name'],
-          include: [{
-            model: db.Category,
-            attributes: ['id', 'name']
-          }]
+          attributes: ["id", "name"],
+          include: [
+            {
+              model: db.Category,
+              attributes: ["id", "name"]
+            }
+          ]
         }
-      ],
+      ]
     });
     return res.json(fullGroup);
   } catch (err) {
-    console.error('POST /:id', err)
-    next(err)
+    console.error("POST /:id", err);
+    next(err);
   }
 });
 
@@ -159,78 +173,81 @@ router.post("/:groupId/changestatus", isLoggedIn, async (req, res, next) => {
       where: {
         id: parseInt(req.params.groupId, 10)
       }
-    })
+    });
     // 2. 그룹이 없으면 끝
     if (!group) {
-      return res.status(404).send('그런 그룹이 없는데여;;')
+      return res.status(404).send("그런 그룹이 없는데여;;");
     }
     // 3. 그룹이 있으면 해당 그룹의 마수터와 요청한 자의 id 비교하기
     // 방장이 아니면 400에러 보내기
     if (group.MasterId !== req.body.userId) {
-      return res.status(403).send('님은 상태를 변경할 권한이 없는데여;;')
+      return res.status(403).send("님은 상태를 변경할 권한이 없는데여;;");
     }
     // 4. 방장이라면 바꿔주기
-    let nxt = 1
+    let nxt = 1;
     if (group.status === 1) {
-      nxt = 2
+      nxt = 2;
     } else if (group.status === 2) {
-      return res.status(400).send('완료 된 그룹인데여;;')
+      return res.status(400).send("완료 된 그룹인데여;;");
     }
 
-    await db.Group.update({
-      status: nxt,
-    }, {
-      where: {
-        id: parseInt(req.params.groupId, 10)
+    await db.Group.update(
+      {
+        status: nxt
+      },
+      {
+        where: {
+          id: parseInt(req.params.groupId, 10)
+        }
       }
-    })
-    return res.json(nxt)
+    );
+    return res.json(nxt);
   } catch (err) {
-    console.error('POST /changestatus :::', err);
-    next(err)
+    console.error("POST /changestatus :::", err);
+    next(err);
   }
-})
+});
 
+// 그룹 가입탈퇴
 router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {
         id: req.body.userId
       }
-    })
+    });
     const targetGroup = await db.Group.findOne({
       where: {
         id: req.params.groupId
       },
-      attributes: ['id', 'MasterId']
-    })
+      attributes: ["id", "MasterId"]
+    });
 
     if (user.id === targetGroup.MasterId) {
-      return res.send("님은 방장이라 가입/탈퇴 못함;;")
+      return res.send("님은 방장이라 가입/탈퇴 못함;;");
     }
     const usersInGroup = await targetGroup.getGroupmembers({
       where: {
         id: user.id
       },
-      attributes: ['id']
-    })
+      attributes: ["id"]
+    });
     if (usersInGroup && usersInGroup.length > 0) {
-      await user.removeGroupJoined(req.params.groupId)
-      return res.send("탈퇴가 되었네여;;")
+      await user.removeGroupJoined(req.params.groupId);
+      return res.json(user.id);
     } else {
-      await user.addGroupJoined(req.params.groupId)
-      return res.send("가입이 되었네여;;")
+      await user.addGroupJoined(req.params.groupId);
+      return res.json(user.id);
     }
   } catch (err) {
-    console.error('POST /:groupId/userInOut', err);
-    next(err)
+    console.error("POST /:groupId/userInOut", err);
+    next(err);
   }
-})
+});
 
 // 글 전체 불러오기
-router.get('/:groupId/posts', async (req, res, next) => {
+router.get("/:groupId/posts", async (req, res, next) => {
   try {
-
     let where = {
       GroupId: req.params.groupId
     };
@@ -239,28 +256,28 @@ router.get('/:groupId/posts', async (req, res, next) => {
         id: {
           [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
         }
-      }
+      };
     }
     const groupPosts = await db.GroupPost.findAll({
       where,
-      include: [{
-        model: db.User,
-        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-      }, {
-        model: db.GroupPostImage,
-      }],
-      order: [
-        ['createdAt', 'DESC']
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+        },
+        {
+          model: db.GroupPostImage
+        }
       ],
-      limit: parseInt(req.query.limit, 10) || 10,
+      order: [["createdAt", "DESC"]],
+      limit: parseInt(req.query.limit, 10) || 10
     });
     res.json(groupPosts);
   } catch (err) {
-    console.error('GET /:groupId/posts', err)
-    next(err)
+    console.error("GET /:groupId/posts", err);
+    next(err);
   }
 });
-
 
 // 글 작성(POST /post)
 router.post("/:groupId/post", isLoggedIn, async (req, res, next) => {
@@ -292,13 +309,14 @@ router.post("/:groupId/post", isLoggedIn, async (req, res, next) => {
       where: {
         id: newGroupPost.id
       },
-      include: [{
+      include: [
+        {
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
         {
           model: db.GroupPostImage
-        },
+        }
       ]
     });
     return res.json(fullGroupPost);
@@ -314,6 +332,5 @@ router.post("/:groupId/post", isLoggedIn, async (req, res, next) => {
 // 4댓글 생성
 // 5댓글 삭제
 // 6.좋아요
-
 
 module.exports = router;

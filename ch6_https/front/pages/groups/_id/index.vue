@@ -8,7 +8,7 @@
         </div>
         <p class="display-1 text--primary">{{ oneGroup.name }}</p>
         <p>{{ oneGroup.Master.name }}({{ oneGroup.Master.nickname }}) || {{ oneGroup.Master.email }}</p>
-        <v-btn @click="onChangeStatus">{{ statusName }}</v-btn>
+        <v-btn @click="onChangeStatus" :disabled="oneGroup.MasterId !== me.id">{{ statusName }}</v-btn>
         <hr class="my-3" />
         <p>{{ oneGroup.Groupmembers.length }}명 / {{ oneGroup.limit }}명</p>
         <v-card
@@ -19,14 +19,17 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
-          v-if="this.oneGroup.status === 1"
+          :disabled="oneGroup && oneGroup.status !== 1"
           block
           color="yellow accent-1"
           @click="onPostForm"
         >글 쓰기</v-btn>
       </v-card-actions>
     </v-card>
-    <group-post-form v-if="isPostForm" :onPostForm="onPostForm" />
+    <group-post-form
+      v-if="oneGroup && oneGroup.status === 1 && isPostForm"
+      :onPostForm="onPostForm"
+    />
     <group-all-posts :groupPosts="groupPosts" />
   </v-container>
 </template>
