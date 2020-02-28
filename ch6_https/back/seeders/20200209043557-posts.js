@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     const contents = [
-      "",
+      "사랑은 무엇보다도 자신을 위한 선물이다 - 장 아누이s",
       "한글은 세계 어떤 나라의 문자에서도 볼 수 없는 가장 과학적인 표기체계이다.",
       "한글은 인류의 가장 위대한 지적 성취 가운데 하나임은 이론의 여지가 없다.",
       "A man has to have a code, a way of life to live by.",

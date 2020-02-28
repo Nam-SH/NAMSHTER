@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="mx-auto" max-width="500">
+    <v-card class="mx-auto">
       <v-card-title class="title font-weight-regular justify-space-between">
         <span>{{ currentTitle }}</span>
         <v-avatar color="primary lighten-2" class="subheading white--text" size="24" v-text="step"></v-avatar>
@@ -41,12 +41,12 @@
           </v-window-item>
         </v-window>
         <v-container>
-          <span>
+          <p>
             아직 회원이 아니세요?
             <router-link to="/signup">
               <span>회원가입 하러가기</span>
             </router-link>
-          </span>
+          </p>
           <a style="inline-block" :href="`${srcAddress}/user/naver`">
             <img class="mt-1" src="../static/naver.png" alt style="width:180px;height:50px" />
           </a>

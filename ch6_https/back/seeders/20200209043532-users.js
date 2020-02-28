@@ -4,14 +4,17 @@ const bcrypt = require('bcrypt');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const hash = await bcrypt.hash("q1w2e3r41234", 12);
+    const names = ["박해환", "태기동", "간장환", "박채린", "최평화", "임예람", "박강수", "어정영", "전영하", "강다심"]
+    const nicknames = ["Ader", "Bjar", "Blon", "Brah", "Cott", "Frid", "Glyn", "Lius", "Seve", "Srah"]
+    const srcs = ["bee.png", "bird.png", "cat.png", "dog.png", "elephant.png", "hamster.png", "horse.png", "lion.png", "pandab.png", "penguinb.png"]
     let datas = [];
-    for (let i = 1; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
       let temp = {
-        email: "cat" + i + "@cat.cat",
-        name: "고양이" + i,
-        nickname: "cat" + i,
+        email: nicknames[i] + "@namshter.com",
+        name: names[i],
+        nickname: nicknames[i],
         password: hash,
-        src: "donut.png",
+        src: srcs[i],
         createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
       }

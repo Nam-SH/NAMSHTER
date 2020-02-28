@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       src: {
         type: DataTypes.STRING(200),
-        defaultValue: "donut.png",
+        defaultValue: "profile.png",
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
