@@ -367,11 +367,11 @@ router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
 });
 
 // 좋아요
-router.post("/:id/like", isLoggedIn, async (req, res, next) => {
+router.post("/:postId/like", isLoggedIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
     if (!post) {
@@ -389,11 +389,11 @@ router.post("/:id/like", isLoggedIn, async (req, res, next) => {
 });
 
 // 좋아요 취소
-router.delete("/:id/like", isLoggedIn, async (req, res, next) => {
+router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
   try {
     const post = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
     if (!post) {

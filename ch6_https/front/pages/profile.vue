@@ -4,7 +4,17 @@
     <infor-edit />
 
     <!-- 2. 내 출첵 히트맵 보여주기 -->
-
+    <div class="main">
+      <div class="main_1 main_common">
+        <p class="content">test1</p>
+      </div>
+      <div class="main_2 main_common">
+        <p class="content">test2</p>
+      </div>
+      <div class="main_3 main_common">
+        <p class="content">test3</p>
+      </div>
+    </div>
     <!-- 3. 그래프 보여주기 -->
     <v-container>
       <v-btn
@@ -150,3 +160,31 @@ export default {
   middleware: "authenticated"
 };
 </script>
+
+<style scoped>
+.main {
+  background-color: yellow;
+  border: 1px solid red;
+  width: 300px;
+  height: 100px;
+}
+.main_common {
+  display: inline-table;
+  float: left;
+  width: 100px;
+  height: 100px;
+  border: 1px solid blue;
+}
+.content {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.main_1,
+.main_3 {
+  font-size: 30px;
+}
+.main_2 {
+  font-size: 40px;
+}
+</style>

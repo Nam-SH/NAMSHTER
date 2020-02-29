@@ -9,7 +9,9 @@
           <group-create v-else />
         </v-card-actions>
       </v-app-bar>
+
       <v-container v-if="mainGrouplist && mainGrouplist.length > 0">
+        <hr />
         <v-row dense>
           <v-col v-for="group in mainGrouplist" :key="group.id" cols="12">
             <v-card dark>

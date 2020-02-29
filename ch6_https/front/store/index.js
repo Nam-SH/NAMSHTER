@@ -11,7 +11,7 @@ export const actions = {
     req
   }) {
     return Promise.all([dispatch('users/loadUser'), dispatch('groups/loadMainGroups', {
-      status: 1,
+      state: 1,
       limit: 5
     })])
   },

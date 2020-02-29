@@ -6,7 +6,6 @@ export const state = () => ({
   imagePaths: [],
   hasMoreGroupPost: true,
 
-  oneGroup: null,
 
   grouplistBefore: [],
   grouplistDoing: [],
@@ -16,6 +15,7 @@ export const state = () => ({
   otherGrouplistDone: [],
 
   grouplist: [],
+  oneGroup: null,
 
   mainGrouplist: []
 });
@@ -26,21 +26,20 @@ export const mutations = {
     state.grouplistBefore.unshift(payload);
   },
 
-  changeStatus(state, payload) {
-    if (payload.nextStatus === 1) {
+  // 그룹 상태 변경 
+  changeState(state, payload) {
+    if (payload.nextState === 1) {
       let targetIndex = state.grouplistBefore.findIndex(
         v => v.id === payload.groupId
       );
-      state.grouplistBefore[targetIndex].status = payload.nextStatus;
-      state.grouplistDoing.unshift(state.grouplistBefore[targetIndex]);
-      state.grouplistBefore.splice(targetIndex, 1);
+      state.mainGrouplist.unshift(state.grouplistBefore[targetIndex]);
+      state.oneGroup.state = payload.nextState
     } else {
-      let targetIndex = state.grouplist_doing.findIndex(
+      state.oneGroup.state = payload.nextState
+      let targetIndex = state.mainGrouplist.findIndex(
         v => v.id === payload.groupId
       );
-      state.grouplistDoing[targetIndex].status = payload.nextStatus;
-      state.grouplistDone.unshift(state.grouplistDoing[targetIndex]);
-      state.grouplistDoing.splice(targetIndex, 1);
+      state.mainGrouplist.splice(targetIndex, 1);
     }
   },
 
@@ -125,8 +124,9 @@ export const actions = {
           withCredentials: true
         }
       )
-      .then(res => {
-        commit("groupAdd", res.data);
+      .then(async (res) => {
+        await commit("groupAdd", res.data)
+        this.$router.push(`/groups/${res.data.id}`)
       })
       .catch(err => {
         console.error("groupAdd :::", err);
@@ -199,25 +199,25 @@ export const actions = {
       });
   },
 
-  changeStatus({
+  changeState({
     commit
   }, payload) {
     this.$axios
       .post(
-        `group/${payload.groupId}/changestatus`, {
+        `group/${payload.groupId}/changestate`, {
           userId: payload.userId
         }, {
           withCredentials: true
         }
       )
       .then(res => {
-        commit("changeStatus", {
+        commit("changeState", {
           groupId: payload.groupId,
-          nextStatus: res.data
+          nextState: res.data.next
         });
       })
       .catch(err => {
-        console.error("changeStatus :::", err);
+        console.error("changeState :::", err);
       });
   },
 
@@ -280,7 +280,7 @@ export const actions = {
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/${payload.status}?limit=${payload.limit || 0}`, {
+      .get(`/groups/${payload.state}?limit=${payload.limit || 0}`, {
         withCredentials: true
       })
       .then(res => {
@@ -295,7 +295,7 @@ export const actions = {
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/${payload.status}?limit=${payload.limit}`, {
+      .get(`/groups/${payload.state}?limit=${payload.limit}`, {
         withCredentials: true
       })
       .then(res => {
@@ -325,7 +325,7 @@ export const actions = {
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/my/${payload.status}?limit=${payload.limit}`, {
+      .get(`/groups/my/${payload.state}?limit=${payload.limit}`, {
         withCredentials: true
       })
       .then(res => {
@@ -340,7 +340,7 @@ export const actions = {
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/my/${payload.status}?limit=${payload.limit}`, {
+      .get(`/groups/my/${payload.state}?limit=${payload.limit}`, {
         withCredentials: true
       })
       .then(res => {
@@ -355,7 +355,7 @@ export const actions = {
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/${payload.userId}/${payload.status}`, {
+      .get(`/groups/${payload.userId}/${payload.state}`, {
         withCredentials: true
       })
       .then(res => {
@@ -370,7 +370,7 @@ export const actions = {
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/${payload.userId}/${payload.status}`, {
+      .get(`/groups/${payload.userId}/${payload.state}`, {
         withCredentials: true
       })
       .then(res => {

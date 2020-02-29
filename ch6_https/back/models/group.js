@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      status: {
+      state: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       }
@@ -37,8 +37,6 @@ module.exports = (sequelize, DataTypes) => {
       as: "Master"
     });
     db.Group.hasMany(db.GroupPost);
-
   };
-
   return Group;
 };

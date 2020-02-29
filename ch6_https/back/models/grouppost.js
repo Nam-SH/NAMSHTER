@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     db.GroupPost.belongsTo(db.Group);
     db.GroupPost.belongsTo(db.User)
     db.GroupPost.hasMany(db.GroupPostImage)
+    db.GroupPost.belongsToMany(db.User, {
+      through: "GroupPostLike",
+      as: "GroupPostLiker"
+    })
   };
   return GroupPost;
 };

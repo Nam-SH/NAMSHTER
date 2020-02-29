@@ -108,7 +108,7 @@ router.get("/:id", async (req, res, next) => {
         {
           model: db.Group,
           as: "GroupJoined",
-          attributes: ["id", "name", "status"]
+          attributes: ["id", "name", "state"]
         }
       ],
       order: [
@@ -222,7 +222,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
             {
               model: db.Group,
               as: "GroupJoined",
-              attributes: ["id", "name", "status"]
+              attributes: ["id", "name", "state"]
             }
           ],
           order: [
@@ -319,7 +319,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
             {
               model: db.Group,
               as: "GroupJoined",
-              attributes: ["id", "name", "status"]
+              attributes: ["id", "name", "state"]
             }
           ],
           order: [

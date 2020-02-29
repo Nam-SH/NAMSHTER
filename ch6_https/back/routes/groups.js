@@ -19,26 +19,27 @@ router.get("/", async (req, res, next) => {
     }
     const groups = await db.Group.findAll({
       where,
+      attributes: ["id", "name", "intro", "limit", "state", 'createdAt'],
       include: [{
-          model: db.User,
-          as: "Master",
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-        },
-        {
-          model: db.User,
-          as: "Groupmembers",
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-        },
-        {
-          model: db.GroupPost,
-          attributes: ["id"]
-        }, {
-          model: db.Subject,
-          as: "Selectsubject",
-          attributes: ['id', 'name'],
-
-        }
-      ],
+        model: db.User,
+        as: "Master",
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+      }, {
+        model: db.User,
+        as: "Groupmembers",
+        attributes: ['id'],
+      }, {
+        model: db.GroupPost,
+        attributes: ["id"]
+      }, {
+        model: db.Subject,
+        as: "Selectsubject",
+        attributes: ['id', 'name'],
+        include: [{
+          model: db.Category,
+          attributes: ["id", "name"]
+        }]
+      }],
       order: [
         ["createdAt", "DESC"]
       ],
@@ -52,10 +53,10 @@ router.get("/", async (req, res, next) => {
 });
 
 // 전체의 전, 진행, 완료된 그룹 구분해서 가져오는 것
-router.get("/:status", async (req, res, next) => {
+router.get("/:state", async (req, res, next) => {
   try {
     let where = {
-      status: req.params.status
+      state: req.params.state
     };
     if (parseInt(req.query.lastId, 10)) {
       where = {
@@ -66,6 +67,7 @@ router.get("/:status", async (req, res, next) => {
     }
     const groups = await db.Group.findAll({
       where,
+      attributes: ['id', 'name', 'intro', 'limit', 'state', 'createdAt'],
       include: [{
           model: db.User,
           as: "Master",
@@ -96,33 +98,25 @@ router.get("/:status", async (req, res, next) => {
     });
     res.json(groups);
   } catch (err) {
-    console.error("GET /:status", err);
+    console.error("GET /:state", err);
     next(err);
   }
 });
 
 
 // 나의 전, 진행, 완료된 리스트 불러오기
-router.get("/my/:status", isLoggedIn, async (req, res, next) => {
+router.get("/my/:state", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
         id: req.user.id
       },
     });
-    let where = {
-      status: req.params.status,
-    };
-    if (parseInt(req.query.lastId, 10)) {
-      where = {
-        id: {
-          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
-        }
-      }
-    }
-    const joinedgroups = await me.getGroupJoined({
-      where,
-      attributes: ['id', 'name', 'intro', 'limit', 'status'],
+    const joinedGroups = await me.getGroupJoined({
+      where: {
+        state: req.params.state,
+      },
+      attributes: ['id', 'name', 'intro', 'limit', 'state'],
       include: [{
         model: db.User,
         as: "Master",
@@ -131,37 +125,39 @@ router.get("/my/:status", isLoggedIn, async (req, res, next) => {
         model: db.User,
         as: "Groupmembers",
         attributes: ["id"]
+      }, {
+        model: db.GroupPost,
+        attributes: ["id"]
+      }, {
+        model: db.Subject,
+        as: "Selectsubject",
+        attributes: ['id', 'name'],
+        include: [{
+          model: db.Category,
+          attributes: ["id", "name"]
+        }]
       }],
-      limit: parseInt(req.query.limit, 10) || 5,
     })
-    res.json(joinedgroups)
+    res.json(joinedGroups)
   } catch (err) {
-    console.error('GET /my/:status :::', err)
+    console.error('GET /my/:state :::', err)
     next(err)
   }
 });
 
 // 다른 유저의 전, 진행, 완료된 리스트 불러오기
-router.get("/user/:userId/:status", isLoggedIn, async (req, res, next) => {
+router.get("/user/:userId/:state", isLoggedIn, async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {
         id: req.params.userId
       },
     });
-    let where = {
-      status: req.params.status,
-    };
-    if (parseInt(req.query.lastId, 10)) {
-      where = {
-        id: {
-          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
-        }
-      }
-    }
-    const joinedgroups = await user.getGroupJoined({
-      where,
-      attributes: ['id', 'name', 'intro', 'limit', 'status'],
+    const joinedGroups = await user.getGroupJoined({
+      where: {
+        state: req.params.state,
+      },
+      attributes: ['id', 'name', 'intro', 'limit', 'state'],
       include: [{
         model: db.User,
         as: "Master",
@@ -170,12 +166,22 @@ router.get("/user/:userId/:status", isLoggedIn, async (req, res, next) => {
         model: db.User,
         as: "Groupmembers",
         attributes: ['id']
-      }],
-      limit: parseInt(req.query.limit, 10) || 5,
+      }, {
+        model: db.GroupPost,
+        attributes: ["id"]
+      }, {
+        model: db.Subject,
+        as: "Selectsubject",
+        attributes: ['id', 'name'],
+        include: [{
+          model: db.Category,
+          attributes: ["id", "name"]
+        }]
+      }]
     })
-    res.json(joinedgroups)
+    res.json(joinedGroups)
   } catch (err) {
-    console.error('GET /user/:userId/:status :::', err)
+    console.error('GET /user/:userId/:state :::', err)
     next(err)
   }
 });

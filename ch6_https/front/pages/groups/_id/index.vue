@@ -8,7 +8,10 @@
         </div>
         <p class="display-1 text--primary">{{ oneGroup.name }}</p>
         <p>{{ oneGroup.Master.name }}({{ oneGroup.Master.nickname }}) || {{ oneGroup.Master.email }}</p>
-        <v-btn @click="onChangeStatus" :disabled="oneGroup.MasterId !== me.id">{{ statusName }}</v-btn>
+        <v-btn
+          @click.prevent="onChangeState"
+          :disabled="oneGroup.MasterId !== me.id"
+        >{{ stateName }}</v-btn>
         <hr class="my-3" />
         <p>{{ oneGroup.Groupmembers.length }}명 / {{ oneGroup.limit }}명</p>
         <v-card
@@ -19,7 +22,7 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
-          :disabled="oneGroup && oneGroup.status !== 1"
+          :disabled="oneGroup && oneGroup.state !== 1"
           block
           color="yellow accent-1"
           @click="onPostForm"
@@ -27,7 +30,7 @@
       </v-card-actions>
     </v-card>
     <group-post-form
-      v-if="oneGroup && oneGroup.status === 1 && isPostForm"
+      v-if="oneGroup && oneGroup.state === 1 && isPostForm"
       :onPostForm="onPostForm"
     />
     <group-all-posts :groupPosts="groupPosts" />
@@ -60,12 +63,12 @@ export default {
   },
 
   methods: {
-    onChangeStatus() {
-      this.$store.dispatch("groups/changeStatus", {
+    onChangeState() {
+      this.$store.dispatch("groups/changeState", {
         userId: this.me.id,
         groupId: this.oneGroup.id
       });
-      this.$router.go(-1);
+      // this.$router.go(-1);
     },
     onPostForm() {
       this.isPostForm = !this.isPostForm;
@@ -94,10 +97,10 @@ export default {
     me() {
       return this.$store.state.users.me;
     },
-    statusName() {
-      return this.oneGroup.status === 0
+    stateName() {
+      return this.oneGroup.state === 0
         ? "준비 중..."
-        : this.oneGroup.status === 1
+        : this.oneGroup.state === 1
         ? "진행 중"
         : "끝인데요;;";
     },

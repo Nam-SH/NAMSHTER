@@ -42,10 +42,10 @@ export default {
   fetch({ store }) {
     return Promise.all([
       store.dispatch("groups/grouplistBefore", {
-        status: "0"
+        state: "0"
       }),
       store.dispatch("groups/grouplistDoing", {
-        status: "1"
+        state: "1"
       }),
       store.dispatch("groups/loadAllGroups")
     ]);
@@ -75,7 +75,7 @@ export default {
         await this.$store.dispatch("groups/loadAllGroups");
         return;
       } else {
-        await this.$store.dispatch("groups/loadGroups", { status: navNum - 1 });
+        await this.$store.dispatch("groups/loadGroups", { state: navNum - 1 });
         return;
       }
     }

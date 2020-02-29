@@ -33,7 +33,7 @@ module.exports = () => {
         }, {
           model: db.Group,
           as: 'GroupJoined',
-          attributes: ['id', 'name', 'status']
+          attributes: ['id', 'name', 'state']
         }],
         order: [
           [{

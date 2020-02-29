@@ -47,11 +47,26 @@
               <span>회원가입 하러가기</span>
             </router-link>
           </p>
-          <a style="inline-block" :href="`${srcAddress}/user/naver`">
-            <img class="mt-1" src="../static/naver.png" alt style="width:180px;height:50px" />
+          <hr class="my-3" style="border: solid 1px black;" />
+          <a :href="`${srcAddress}/user/naver`" style="text-decoration: none">
+            <div class="main">
+              <div class="main_img_naver">
+                <p class="content" style="color:white">N</p>
+              </div>
+              <div class="main_naver">
+                <p class="content" style="color:white">NAVER</p>
+              </div>
+            </div>
           </a>
-          <a :href="`${srcAddress}/user/kakao`">
-            <img class="mt-1" src="../static/kakao.png" alt style="width:180px;height:50px" />
+          <a class :href="`${srcAddress}/user/kakao`" style="text-decoration: none">
+            <div class="main mt-2">
+              <div class="main_img_kakao">
+                <p class="content" style="color:black">K</p>
+              </div>
+              <div class="main_kakao">
+                <p class="content" style="color:black">KAKAO</p>
+              </div>
+            </div>
           </a>
         </v-container>
         <v-divider></v-divider>
@@ -141,4 +156,49 @@ export default {
 </script>
 
 <style scoped>
+.main {
+  width: 100%;
+  height: 50px;
+}
+.main_img_kakao {
+  display: inline-table;
+  float: left;
+  width: 20%;
+  height: 100%;
+  background-color: yellow;
+  border: 1px solid black;
+  font-size: 20px;
+}
+.main_kakao {
+  display: inline-table;
+  float: left;
+  width: 80%;
+  height: 100%;
+  background-color: yellow;
+  border: 1px solid black;
+  font-size: 20px;
+}
+.main_img_naver {
+  display: inline-table;
+  float: left;
+  width: 20%;
+  height: 100%;
+  background-color: #1ec800;
+  border: 1px solid black;
+  font-size: 20px;
+}
+.main_naver {
+  display: inline-table;
+  float: left;
+  width: 80%;
+  height: 100%;
+  background-color: #1ec800;
+  border: 1px solid black;
+  font-size: 20px;
+}
+.content {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
 </style>
