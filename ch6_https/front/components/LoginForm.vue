@@ -9,7 +9,13 @@
         <v-window v-model="step">
           <v-window-item :value="1">
             <v-card-text>
-              <v-text-field v-model="email" label="Email" value="dog@dog.com" :rules="emailRules"></v-text-field>
+              <v-text-field
+                v-model="email"
+                hideDetails
+                label="Email"
+                value="dog@dog.com"
+                :rules="emailRules"
+              ></v-text-field>
               <p class="caption grey--text text--darken-1">가입하신 이메일을 입력하시오.</p>
             </v-card-text>
           </v-window-item>
@@ -44,7 +50,7 @@
           <p>
             아직 회원이 아니세요?
             <router-link to="/signup">
-              <span>회원가입 하러가기</span>
+              <span @click.prevent="reset">회원가입 하러가기</span>
             </router-link>
           </p>
           <hr class="my-3" style="border: solid 1px black;" />
@@ -97,15 +103,13 @@ export default {
       email: "",
       password: "",
       emailRules: [
-        v => !!v || "빈칸은 ㄴㄴ임",
-        v => /.+@.+\..+/.test(v) || "이메일이 아닌 거 같은데여;;"
+        v => !!v || "이메일은 필수인데여;;",
+        v => (v && /.+@.+\..+/.test(v)) || "이메일이 아닌 거 같은데여;;"
       ],
       passwordRules: [
-        v => !!v || "빈칸은 ㄴㄴ임",
+        v => !!v || "비밀번호는 필수인데여;;",
         v => (v && v.length >= 10) || "비밀번호는 최소 10자에여;;"
-      ],
-      result: "",
-      error: ""
+      ]
     };
   },
   methods: {
@@ -129,6 +133,10 @@ export default {
       await this.$store.dispatch("users/loggingInUser", {
         userEmail: encodeURIComponent(this.email)
       });
+    },
+    reset() {
+      this.email = "";
+      this.password = "";
     }
   },
   computed: {
@@ -150,6 +158,16 @@ export default {
     },
     loggingInUser() {
       return this.$store.state.users.loggingInUser;
+    },
+    routeName() {
+      return this.$route.name;
+    }
+  },
+  watch: {
+    routeName(newValue, oldValue) {
+      if (newValue === "signup") {
+        this.reset();
+      }
     }
   }
 };
