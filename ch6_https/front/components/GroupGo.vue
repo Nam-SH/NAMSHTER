@@ -17,20 +17,18 @@
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
-                  <span
-                    class="font-weight-bold ml-3"
-                  >[{{ group.Selectsubject[0].Category.name }}] ||</span>
+                  <span class="font-weight-bold ml-3">[{{ group.Selectsubject[0].Category.name }}] ||</span>
                   <span v-for="sub in group.Selectsubject" :key="sub.id">
                     <span>{{ sub.name }}</span>
                   </span>
                   <v-card-title class="headline" v-text="group.name" />
                   <v-card-subtitle v-text="group.intro" />
                 </div>
-                <v-avatar class="ma-3" size="125" tile>
-                  <v-img></v-img>
+                <v-avatar class="ma-3 my-auto" size="125" tile>
+                  <v-img src="https://cdn.vuetifyjs.com/images/cards/store.jpg" ></v-img>
                 </v-avatar>
               </div>
-              <v-btn :to="`/groups/${group.id}`" right>상세히</v-btn>
+              <v-btn :to="`/groups/${group.id}`" block >상세히</v-btn>
             </v-card>
           </v-col>
         </v-row>

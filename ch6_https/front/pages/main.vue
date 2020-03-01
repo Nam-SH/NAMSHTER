@@ -181,7 +181,7 @@ export default {
 <style scoped>
 .main {
   width: 100%;
-  height: 50px;
+  height: 40px;
 }
 .main_img_kakao {
   display: inline-table;
@@ -189,7 +189,6 @@ export default {
   width: 20%;
   height: 100%;
   background-color: yellow;
-  border: 1px solid black;
   font-size: 20px;
 }
 .main_kakao {
@@ -198,7 +197,6 @@ export default {
   width: 80%;
   height: 100%;
   background-color: yellow;
-  border: 1px solid black;
   font-size: 20px;
 }
 .main_img_naver {
@@ -207,7 +205,6 @@ export default {
   width: 20%;
   height: 100%;
   background-color: #1ec800;
-  border: 1px solid black;
   font-size: 20px;
 }
 .main_naver {
@@ -216,7 +213,6 @@ export default {
   width: 80%;
   height: 100%;
   background-color: #1ec800;
-  border: 1px solid black;
   font-size: 20px;
 }
 .content {

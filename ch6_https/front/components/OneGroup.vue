@@ -17,8 +17,7 @@
         <v-card-actions>
           <v-list-item class="grow">
             <v-list-item-avatar color="grey darken-3">
-              <!-- <v-img class="elevation-6" :src="group.Master.imgsrc" /> -->
-              <img class="elevation-6" src="@/static/donut.png" />
+              <img :src="`${srcAddress}/profile/${group.Master.src}`" />
             </v-list-item-avatar>
             <v-spacer></v-spacer>
             <v-row style="position:relative;left:30%">
@@ -64,6 +63,11 @@ export default {
         default:
           return {};
       }
+    },
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085";
     }
   }
 };
