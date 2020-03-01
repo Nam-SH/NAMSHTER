@@ -44,7 +44,8 @@ router.get('/', async (req, res, next) => {
         ]
       }],
       order: [
-        ['createdAt', 'DESC']
+        ['createdAt', 'DESC'],
+        ['id', 'DESC']
       ],
       limit: parseInt(req.query.limit, 10) || 10,
     });

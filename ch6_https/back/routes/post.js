@@ -192,7 +192,15 @@ router.patch("/:postId", isLoggedIn, async (req, res, next) => {
         id: req.params.postId
       }
     });
-    res.json(req.body.content);
+    const updatePost = await db.Post.findOne({
+      where: {
+        id: req.params.postId
+      }
+    })
+    res.json({
+      content: req.body.content,
+      updateTime: updatePost.updatedAt
+    });
   } catch (err) {
     console.error("PATCH /:id", err);
     next(err);

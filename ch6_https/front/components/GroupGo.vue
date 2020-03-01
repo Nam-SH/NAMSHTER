@@ -5,8 +5,8 @@
         <v-toolbar-title>진행 중인 그룹...</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-card-actions>
-          <v-btn v-if="isInIndex" text to="/groups">Go Group</v-btn>
-          <group-create v-else />
+          <group-create v-if="isInGroups" />
+          <v-btn v-else text to="/groups">Go Group</v-btn>
         </v-card-actions>
       </v-app-bar>
 
@@ -71,8 +71,8 @@ export default {
     mainGrouplist() {
       return this.$store.state.groups.mainGrouplist;
     },
-    isInIndex() {
-      return this.$route.name === "index" ? true : false;
+    isInGroups() {
+      return this.$route.name === "groups" ? true : false;
     }
   }
 };

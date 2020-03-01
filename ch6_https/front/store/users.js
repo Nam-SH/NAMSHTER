@@ -164,6 +164,7 @@ export const actions = {
       })
       .then((res) => {
         commit('setMe', res.data);
+        this.$router.push('/');
       })
       .catch((err) => {
         console.error('logIn :::', err)

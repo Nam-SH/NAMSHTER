@@ -1,9 +1,14 @@
 <template>
-  <v-container>
-    <v-card class="mx-auto">
+  <v-container v-if="isLoading">
+    <div class="text-center" style="transition-delay: 3s;">
+      <v-progress-circular :size="70" :width="7" color="purple" indeterminate></v-progress-circular>
+    </div>
+  </v-container>
+  <v-container v-else>
+    <v-card class="mx-auto" max-width="500px">
       <v-card-title class="title font-weight-regular justify-space-between">
-        <span>{{ currentTitle }}</span>
-        <v-avatar color="primary lighten-2" class="subheading white--text" size="24" v-text="step"></v-avatar>
+        <span>NAMSHTER</span>
+        <v-chip class="ma-2" color="secondary">{{ stepName }}</v-chip>
       </v-card-title>
       <v-form v-model="valid" @submit.prevent="onSubmitForm">
         <v-window v-model="step">
@@ -50,7 +55,7 @@
           <p>
             아직 회원이 아니세요?
             <router-link to="/signup">
-              <span @click.prevent="reset">회원가입 하러가기</span>
+              <span>회원가입 하러가기</span>
             </router-link>
           </p>
           <hr class="my-3" style="border: solid 1px black;" />
@@ -109,18 +114,19 @@ export default {
       passwordRules: [
         v => !!v || "비밀번호는 필수인데여;;",
         v => (v && v.length >= 10) || "비밀번호는 최소 10자에여;;"
-      ]
+      ],
+      isLoading: false
     };
   },
   methods: {
     onSubmitForm() {
+      this.isLoading = true;
       this.$store
         .dispatch("users/logIn", {
           email: this.email,
           password: this.password
         })
         .then(() => {
-          this.$router.push({ path: "/" });
           this.email = "";
           this.password = "";
         })
@@ -133,10 +139,6 @@ export default {
       await this.$store.dispatch("users/loggingInUser", {
         userEmail: encodeURIComponent(this.email)
       });
-    },
-    reset() {
-      this.email = "";
-      this.password = "";
     }
   },
   computed: {
@@ -146,10 +148,10 @@ export default {
         ? "https://api.namshter.com"
         : "http://localhost:3085";
     },
-    currentTitle() {
+    stepName() {
       switch (this.step) {
         case 1:
-          return "로그인";
+          return "이메일";
         case 2:
           return "비밀번호";
         default:
@@ -164,12 +166,15 @@ export default {
     }
   },
   watch: {
-    routeName(newValue, oldValue) {
-      if (newValue === "signup") {
-        this.reset();
+    me(value, oldValue) {
+      if (value) {
+        this.$router.push({
+          path: "/"
+        });
       }
     }
-  }
+  },
+  middleware: "anonymous"
 };
 </script>
 

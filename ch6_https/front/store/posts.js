@@ -22,6 +22,7 @@ export const mutations = {
   editMainPost(state, payload) {
     const targetIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
     state.mainPosts[targetIndex].content = payload.content
+    state.mainPosts[targetIndex].updatedAt = payload.updateTime
   },
 
   addComment(state, payload) {
@@ -140,7 +141,8 @@ export const actions = {
       .then((res) => {
         commit('editMainPost', {
           postId: payload.postId,
-          content: res.data
+          content: res.data.content,
+          updateTime: res.data.updateTime
         })
       })
       .catch((err) => {

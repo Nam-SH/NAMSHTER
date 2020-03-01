@@ -18,9 +18,7 @@
             </v-tooltip>
           </nuxt-link>
         </v-toolbar-title>
-
         <v-spacer />
-
         <v-tooltip right color="white">
           <template v-slot:activator="{ on }">
             <div class="my-auto ml-5" id="clock" v-on="on">
@@ -29,7 +27,6 @@
           </template>
           <span class="time" style="color:black">{{ date }}</span>
         </v-tooltip>
-
         <v-spacer />
         <v-toolbar-items mt-5>
           <v-form @submit.prevent="onSearchHashtag">
@@ -70,7 +67,7 @@
       </v-toolbar>
     </nav>
     <!-- 오른쪽 화면 -->
-    <v-row no-gutters>
+    <v-row v-if="me" no-gutters>
       <v-col cols="12" md="4">
         <login-card />
         <group-go />
@@ -78,6 +75,9 @@
       <v-col cols="12" md="8">
         <nuxt />
       </v-col>
+    </v-row>
+    <v-row v-else>
+      <nuxt />
     </v-row>
   </v-app>
 </template>

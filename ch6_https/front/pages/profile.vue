@@ -4,17 +4,19 @@
     <infor-edit />
 
     <!-- 2. 내 출첵 히트맵 보여주기 -->
-    <div class="main">
-      <div class="main_1 main_common">
-        <p class="content">test1</p>
+    <!-- <v-container>
+      <div class="main">
+        <div class="main_1 main_common">
+          <p class="content">test1</p>
+        </div>
+        <div class="main_2 main_common">
+          <p class="content">test2</p>
+        </div>
+        <div class="main_3 main_common">
+          <p class="content">test3</p>
+        </div>
       </div>
-      <div class="main_2 main_common">
-        <p class="content">test2</p>
-      </div>
-      <div class="main_3 main_common">
-        <p class="content">test3</p>
-      </div>
-    </div>
+    </v-container>-->
     <!-- 3. 그래프 보여주기 -->
     <v-container>
       <v-btn

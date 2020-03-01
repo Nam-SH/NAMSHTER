@@ -29,7 +29,7 @@ export default {
     me(value, oldValue) {
       if (!value) {
         this.$router.push({
-          path: "/"
+          path: "/main"
         });
       }
     }

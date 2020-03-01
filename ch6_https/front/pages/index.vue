@@ -16,8 +16,8 @@ export default {
     PostCard,
     PostForm
   },
-
   fetch({ store }) {
+    // this.isLoading = true;
     return store.dispatch("posts/loadPosts", {
       reset: true
     });
@@ -52,6 +52,16 @@ export default {
         }
       }
     }
-  }
+  },
+  watch: {
+    me(value, oldValue) {
+      if (!value) {
+        this.$router.push({
+          path: "/main"
+        });
+      }
+    }
+  },
+  middleware: "authenticated"
 };
 </script>

@@ -11,7 +11,6 @@
                 <span v-else v-on="on">{{ post.User.nickname }} (나)</span>
               </nuxt-link>
             </template>
-            <!-- :src="`http://localhost:3085/profile/${post.User.src}`" -->
             <v-img
               :src="`${srcAddress}/profile/${post.User.src}`"
               min-height="200px"
@@ -25,23 +24,27 @@
         <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
       </h3>
     </v-card-title>
-    <v-card-text v-if="!isEditting">
-      <div>
-        <template v-for="(node, i) in nodes">
+    <v-container v-if="!isEditting" class="pb-0">
+      <v-container>
+        <span v-for="(node, i) in nodes" :key="i">
           <nuxt-link
             v-if="node.startsWith('#')"
-            :key="i"
             :to="`/hashtag/${node.slice(1)}`"
             style="color: deepskyblue"
           >{{ node }}</nuxt-link>
-          <template v-else>{{ node }}</template>
-        </template>
-      </div>
-      <br />
-      <div>{{ $moment(post.createdAt).fromNow() }}</div>
-      <div v-if="post.createdAt !== post.updatedAt">(수정됨: {{ $moment(post.updatedAt).fromNow() }})</div>
-    </v-card-text>
-
+          <span v-else>{{ node }}</span>
+        </span>
+      </v-container>
+      <v-divider class="mt-5"></v-divider>
+      <v-container class="mb-0 pb-0">
+        <div>
+          {{ $moment(post.createdAt).fromNow() }}에 작성됨...
+          <span
+            v-if="post.createdAt !== post.updatedAt"
+          >(수정됨: {{ $moment(post.updatedAt).fromNow() }})</span>
+        </div>
+      </v-container>
+    </v-container>
     <v-card-text v-else>
       <div>
         <v-form ref="form" @submit.prevent="onSubmitForm">

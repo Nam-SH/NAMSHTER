@@ -4,6 +4,7 @@ import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
 const _94c513da = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
+const _7450a498 = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
 const _76e556fe = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
 const _79098c49 = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
 const _991f365a = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
@@ -33,6 +34,10 @@ export const routerOptions = {
     path: "/groups",
     component: _94c513da,
     name: "groups"
+  }, {
+    path: "/main",
+    component: _7450a498,
+    name: "main"
   }, {
     path: "/profile",
     component: _76e556fe,

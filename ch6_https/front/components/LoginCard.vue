@@ -1,7 +1,5 @@
 <template>
-  <login-form v-if="!me" />
-  <!-- 로그인 후 -->
-  <v-container v-else>
+  <v-container>
     <v-card>
       <v-container>
         <v-row class="mx-3">
@@ -20,7 +18,7 @@
               width="200px"
             ></v-img>
           </v-tooltip>로그인이 되었습니다.
-          <v-btn to="/qrcode">
+          <v-btn to="/qrcode" absolute right text>
             <i class="fas fa-camera ml-auto"></i>
           </v-btn>
         </v-row>
@@ -40,12 +38,10 @@
 <script>
 import { mapState } from "vuex";
 import UserActivity from "@/components/UserActivity.vue";
-import LoginForm from "@/components/LoginForm.vue";
 
 export default {
   components: {
-    UserActivity,
-    LoginForm
+    UserActivity
   },
   data() {
     return {
@@ -56,7 +52,7 @@ export default {
   methods: {
     async onLogOut() {
       await this.$store.dispatch("users/logOut");
-      this.$router.push({ path: "/" });
+      this.$router.push({ path: "/main" });
     }
   },
   computed: {

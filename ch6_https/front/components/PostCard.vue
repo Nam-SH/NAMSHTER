@@ -2,27 +2,23 @@
   <div>
     <v-card style="margin-bottom: 20px">
       <div v-if="post.RetweetId && post.Retweet">
-        <v-subheader>{{ post.User.nickname }}님이 리트윗했다. </v-subheader>
+        <v-subheader>{{ post.User.nickname }}님이 리트윗했다.</v-subheader>
         <v-card style="margin: 0 20px">
           <post-content :post="post.Retweet" :isEditting="isEditting" />
         </v-card>
       </div>
 
-      <post-content
-        v-else
-        :post="post"
-        :isEditting="isEditting"
-        @onEditPost="onEditPost"
-      />
+      <post-content v-else :post="post" :isEditting="isEditting" @onEditPost="onEditPost" />
 
       <v-btn
-        v-if="fromIndex"
+        v-if="isInIndex"
         text
         color="primary"
         nuxt-link
         :to="`/post/${post.id}`"
-        >상세보기</v-btn
-      >
+        absolute
+        right
+      >상세보기</v-btn>
 
       <v-card-actions>
         <v-btn text color="orange" @click="onRetweet">
@@ -55,11 +51,7 @@
 
     <!-- 댓글 창 클릭시 -->
     <template v-if="commentOpened">
-      <comment-form
-        :post-id="post.id"
-        style="margin-bottom: 30px"
-        :change="AvgRank"
-      />
+      <comment-form :post-id="post.id" style="margin-bottom: 30px" :change="AvgRank" />
       <v-list style="margin-bottom: 20px">
         <div>댓글 수: {{ post.Comments.length }}개</div>
         <div>평점 평균: {{ avgTotal }}점</div>
@@ -94,19 +86,19 @@ export default {
       required: true
     }
   },
-  created() {
-    if (this.$route.name !== "index") {
-      this.fromIndex = false;
-    }
-  },
   data() {
     return {
       commentOpened: false,
       avgTotal: 0,
       commentList: null,
       isEditting: false,
-      fromIndex: true
+      isInIndex: true
     };
+  },
+  created() {
+    if (this.$route.name !== "index") {
+      this.isInIndex = false;
+    }
   },
   computed: {
     me() {
