@@ -156,6 +156,69 @@ router.post("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 그룹 정보 수정
+router.put('/:groupId', async (req, res, next) => {
+  try {
+    const group = await db.Group.findOne({
+      where: {
+        id: parseInt(req.params.groupId, 10)
+      }
+    });
+    if (!group) {
+      return res.status(404).send("그런 그룹이 없는데여;;");
+    }
+    if (group.MasterId !== 11) {
+      return res.status(403).send("님은 그룹을 수정할 권한이 없는데여;;");
+    }
+    await db.Group.update({
+      name: req.body.name,
+      intro: req.body.intro,
+      limit: req.body.limit
+    }, {
+      where: {
+        id: req.params.groupId
+      }
+    })
+    res.json({
+      name: req.body.name,
+      intro: req.body.intro,
+      limit: req.body.limit
+    })
+  } catch (err) {
+    console.error('PUT :groupId', err);
+    next(err)
+  }
+})
+
+
+
+
+// 그룹 삭제
+router.delete('/:groupId', isLoggedIn, async (req, res, next) => {
+  try {
+    const group = await db.Group.findOne({
+      where: {
+        id: parseInt(req.params.groupId, 10)
+      }
+    });
+    if (!group) {
+      return res.status(404).send("그런 그룹이 없는데여;;");
+    }
+    if (group.MasterId !== req.user.id) {
+      return res.status(403).send("님은 그룹을 삭제할 권한이 없는데여;;");
+    }
+    await db.Group.destroy({
+      where: {
+        id: req.params.groupId
+      }
+    })
+    return res.json(req.params.groupId)
+  } catch (err) {
+    console.error('DELETE /:groupId');
+    next(err)
+  }
+})
+
 // 그룹 상태 변경하기
 router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
   try {
@@ -171,7 +234,7 @@ router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
     }
     // 3. 그룹이 있으면 해당 그룹의 마수터와 요청한 자의 id 비교하기
     // 방장이 아니면 400에러 보내기
-    if (group.MasterId !== req.body.userId) {
+    if (group.MasterId !== req.user.id) {
       return res.status(403).send("님은 상태를 변경할 권한이 없는데여;;");
     }
     // 4. 방장이라면 바꿔주기
@@ -203,7 +266,7 @@ router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {
-        id: req.body.userId
+        id: req.user.id
       }
     });
     const targetGroup = await db.Group.findOne({

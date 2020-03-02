@@ -2,23 +2,20 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-
-    const subjects = [12, 1, 18, 13, 27, 5, 17, 29, 22, 2, 14, 30]
-
     let datas = []
     for (let i = 0; i < 12; i++) {
       let temp = {
         GroupId: i + 1,
-        SubjectId: subjects[i],
+        UserId: i == 10 ? 4 : i == 11 ? 7 : i + 1,
         createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
       }
       datas.push(temp)
     }
-    return queryInterface.bulkInsert("GroupSubject", datas, {});
+    return queryInterface.bulkInsert("Groupuser", datas, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("GroupSubject", null, {});
+    return queryInterface.bulkInsert("Groupuser", null, {});
   }
 };

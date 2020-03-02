@@ -5,10 +5,10 @@ module.exports = {
 
     const names = [
       '니들이 한국사아냐?', 'Python 뿌시기', '농구왕 조던',
-      ' 영어를 먹자', '바이올린은 필수죠', 'Django는 요기요!!', 
+      ' 영어를 먹자', '바이올린은 필수죠', 'Django는 요기요!!',
       '축구좀 하나', '첼로 같이 켜요', '캐나다 선생의 하키',
       'JAVA 좀 잡자!', '컴활 1급은 필수에여 요즘', '사물놀이 같이 추실?'
-                ]
+    ]
     const intros = [
       '매일매일 한국사 공부한 내용을 자유롭게 인증하는 스터디입니다! 한국사 인강/깜지/필노 빵노 스터디/기출문제 풀이 등 한국사 공부 관련 내용을 매일 공부하고 날짜 시간 나오는 카메라로 촬영하여 인증해주세요!',
       '프로그래밍이 필수인 시대가 도래하고 있습니다. 컨셉은 초보도 따라할 수 있는 재밌는 파이썬 이란 컨셉으로 기초부터 할려고 하고 차주부터 ~ 12월 중순까지 1달 반 정도 진행코자 합니다.',
@@ -27,7 +27,7 @@ module.exports = {
     const states = [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2]
 
     let datas = []
-    for (let i=0;i < 12;i++) {
+    for (let i = 0; i < 12; i++) {
       let temp = {
         name: names[i],
         intro: intros[i],
@@ -35,16 +35,16 @@ module.exports = {
         state: states[i],
         createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-        
+
         MasterId: i == 10 ? 4 : i == 11 ? 7 : i + 1
       }
       datas.push(temp)
     }
-      return queryInterface.bulkInsert('Groups', datas, {});
+    return queryInterface.bulkInsert('Groups', datas, {});
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Groups', null, {});
-    
+
   }
 };

@@ -25,6 +25,14 @@ export const mutations = {
     // state.loadGroups.unshift(payload)
     state.grouplistBefore.unshift(payload);
   },
+  groupEdit(state, payload) {
+    state.oneGroup.name = payload.name
+    state.oneGroup.intro = payload.intro
+    state.oneGroup.limit = payload.limit
+  },
+  groupDelete(state, payload) {
+    this.$router.push('/groups')
+  },
 
   // 그룹 상태 변경 
   changeState(state, payload) {
@@ -63,11 +71,13 @@ export const mutations = {
     const targetIndex = state.grouplist[targetGroupIndex].Groupmembers.findIndex(v => v.id === payload.userId)
     if (targetIndex !== -1) {
       Vue.delete(state.grouplist[targetGroupIndex].Groupmembers, targetIndex)
+      this.$router.push('/groups')
       return
     } else {
       state.grouplist[targetGroupIndex].Groupmembers.unshift({
         id: payload.userId
       })
+      this.$router.push(`/groups/${payload.groupId}`)
       return
     }
   },
@@ -124,8 +134,8 @@ export const actions = {
           withCredentials: true
         }
       )
-      .then(async (res) => {
-        await commit("groupAdd", res.data)
+      .then((res) => {
+        commit("groupAdd", res.data)
         this.$router.push(`/groups/${res.data.id}`)
       })
       .catch(err => {
@@ -134,10 +144,41 @@ export const actions = {
   },
   groupEdit({
     commit
-  }, payload) {},
+  }, payload) {
+    return this.$axios.put(`/group/${payload.groupId}`, {
+        name: payload.name,
+        intro: payload.intro,
+        limit: payload.limit
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('groupEdit', {
+          name: payload.name,
+          intro: payload.intro,
+          limit: payload.limit,
+          groupId: res.data
+        })
+      })
+      .catch(err => {
+        console.error('groupDelete :::', err);
+
+      })
+  },
   groupDelete({
     commit
-  }, payload) {},
+  }, payload) {
+    return this.$axios.delete(`/group/${payload.groupId}`, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('groupDelete', res.data)
+      })
+      .catch(err => {
+        console.error('groupDelete :::', err);
+      })
+  },
+
   // 그룹 포스트 작성
   add({
     commit,

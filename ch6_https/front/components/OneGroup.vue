@@ -1,33 +1,30 @@
 <template>
   <v-container>
-    <v-card class="d-flex align-content-space-between flex-wrap" color="black" dark height="350px">
-      <v-card-title>
-        <p class="title">{{ group.name }}</p>
-      </v-card-title>
+    <v-card color="#F5DA81" height="350px">
+      <v-container class="pb-0">
+        <h3>{{ group.name }}</h3>
+      </v-container>
       <v-container>
-        <v-card style="height:100px">
-          <p>{{ group.intro }}</p>
+        <v-card style="height:150px">
+          <v-container>{{ group.intro }}</v-container>
         </v-card>
-        <v-spacer></v-spacer>
+        <v-spacer class="my-3"></v-spacer>
         <ul>
           <li>그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})</li>
           <li>문의 메일 :: {{ group.Master.email }}</li>
           <li>그룹 인원 {{ group.Groupmembers.length }} / {{ group.limit }}</li>
         </ul>
-        <v-card-actions>
-          <v-list-item class="grow">
-            <v-list-item-avatar color="grey darken-3">
-              <img :src="`${srcAddress}/profile/${group.Master.src}`" />
-            </v-list-item-avatar>
-            <v-spacer></v-spacer>
-            <v-row style="position:relative;left:30%">
-              <v-btn text icon class="ml-3 mr-2">
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <group-intro :group="group" />
-            </v-row>
-          </v-list-item>
-        </v-card-actions>
+        <v-row justify="space-between" align="center">
+          <v-list-item-avatar class="ma-2" color="grey darken-3">
+            <img :src="`${srcAddress}/profile/${group.Master.src}`" />
+          </v-list-item-avatar>
+          <div>
+            <v-btn text icon style="float: left;">
+              <v-icon>mdi-heart</v-icon>
+            </v-btn>
+            <group-intro :group="group" style="float: left;" />
+          </div>
+        </v-row>
       </v-container>
     </v-card>
   </v-container>
@@ -86,9 +83,9 @@ div p {
   overflow: hidden;
   text-overflow: ellipsis;
   /* white-space: nowrap; */
-  -webkit-line-clamp: 2; /* 라인수 */
+  -webkit-line-clamp: 6; /* 라인수 */
   -webkit-box-orient: vertical;
   line-height: 1em;
-  height: 2em;
+  height: 6em;
 }
 </style>

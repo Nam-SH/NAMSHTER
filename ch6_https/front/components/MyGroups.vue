@@ -7,15 +7,15 @@
     <v-carousel
       v-if="grouplist && grouplist.length > 0"
       cycle
-      height="300"
+      height="250"
       show-arrows-on-hover
       progress
       progress-color="blue"
     >
-      <v-carousel-item v-for="(group, i) in grouplist" :key="i">
-        <v-row class="fill-height" align="center" justify="center">
-          <v-container>
-            <div>
+      <v-carousel-item v-for="(group, i) in grouplist" :key="i" height="100%">
+        <v-row class="fill-height" align="center">
+          <div>
+            <v-container color="yellow">
               <v-card-title>
                 <p class="title">
                   <v-badge color="pink" dot>{{ group.name }}</v-badge>
@@ -23,13 +23,14 @@
               </v-card-title>
               <p>{{ group.intro }}</p>
               <p>그룹 제한:: {{ group.limit }}</p>
-            </div>
-            <v-btn :groupId="group.id" :to="`/groups/${group.id}`">들어가기</v-btn>
-          </v-container>
+              <v-btn :groupId="group.id" :to="`/groups/${group.id}`">들어가기</v-btn>
+            </v-container>
+          </div>
         </v-row>
         <v-divider></v-divider>
       </v-carousel-item>
     </v-carousel>
+
     <v-card v-else cycle height="300" progress progress-color="blue">
       <v-container>
         <div>
@@ -64,4 +65,5 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

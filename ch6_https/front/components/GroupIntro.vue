@@ -1,40 +1,43 @@
 <template>
-  <v-row>
-    <v-dialog v-model="dialog" max-width="290">
-      <template v-slot:activator="{ on }" style="width:200px">
-        <v-btn text v-on="on" style="text-decoration:none">
-          <v-icon>mdi-plus</v-icon>
-          <strong>둘러보기</strong>
-        </v-btn>
-      </template>
-      <v-card>
-        <v-row>
-          <v-card-title class="headline ml-3">{{ group.name }}</v-card-title>
-          <v-spacer></v-spacer>
-          <v-btn
-            v-if="!isMaster"
-            class="mr-3"
-            color="blue darken-3"
-            text
-            @click="groupUserInOut"
-          >{{ isSignIn }}</v-btn>
-        </v-row>
-        <v-card-text>현재인원/최대인원: {{ group.Groupmembers.length }}/{{ group.limit }}</v-card-text>
-        <hr />
-        <p class="ml-6">{{ group.intro }}</p>
-        <hr />
-        <p class="ml-6">
-          안녕하세요 {{ group.Master.name }}입니다.
-          <br />같은 목표를 이룹시다!
-        </p>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="red darken-3" text @click="dialog = false">취소</v-btn>
-          <v-btn color="blue darken-3" text :to="`/groups/${group.id}`">들어가기</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+  <div>
+    <v-row justify="center">
+      <v-btn class="mx-3" @click="dialog = true" text icon>
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+
+      <v-dialog v-model="dialog" max-width="500px">
+        <v-card>
+          <v-row justify="space-between">
+            <v-card-title class="ml-5">{{ group.name }}</v-card-title>
+            <v-btn
+              v-if="!isMaster"
+              class="mr-3"
+              color="blue darken-3"
+              text
+              @click="groupUserInOut"
+            >{{ isSignIn }}</v-btn>
+          </v-row>
+          <v-card-text>
+            현재인원/최대인원: {{ group.Groupmembers.length }}/{{ group.limit }}
+            <hr />
+            <strong>그룹소개</strong>
+            <p>{{ group.intro }}</p>
+            <hr />
+            <strong>방장 한마디</strong>
+            <p>
+              안녕하세요 {{ group.Master.name }}입니다.
+              <br />같은 목표를 이룹시다!
+            </p>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn color="red darken-3" text @click="dialog = false">취소</v-btn>
+            <v-btn color="blue darken-3" text :to="`/groups/${group.id}`">들어가기</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </div>
 </template>
 
 <script>

@@ -8,10 +8,16 @@
         </div>
         <p class="display-1 text--primary">{{ oneGroup.name }}</p>
         <p>{{ oneGroup.Master.name }}({{ oneGroup.Master.nickname }}) || {{ oneGroup.Master.email }}</p>
-        <v-btn
-          @click.prevent="onChangeState"
-          :disabled="oneGroup.MasterId !== me.id"
-        >{{ stateName }}</v-btn>
+        <v-row class="mx-1" justify="space-between">
+          <v-btn
+            @click.prevent="onChangeState"
+            :disabled="oneGroup.MasterId !== me.id"
+          >{{ stateName }}</v-btn>
+          <div>
+            <v-btn @click="onEditGroupInfo" dark color="blue">수정</v-btn>
+            <v-btn @click="onDeleteGroup" dark color="red">삭제</v-btn>
+          </div>
+        </v-row>
         <hr class="my-3" />
         <p>{{ oneGroup.Groupmembers.length }}명 / {{ oneGroup.limit }}명</p>
         <v-card
@@ -22,7 +28,7 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
-          :disabled="oneGroup && oneGroup.state !== 1"
+          :disabled="(oneGroup && oneGroup.state !== 1) || !isMember"
           block
           color="yellow accent-1"
           @click="onPostForm"
@@ -48,10 +54,17 @@ export default {
   },
   data() {
     return {
-      isPostForm: false
+      isPostForm: false,
+      name: null,
+      intro: null,
+      limit: null
     };
   },
-
+  created() {
+    this.name = this.oneGroup.name;
+    this.intro = this.oneGroup.intro;
+    this.limit = this.oneGroup.limit;
+  },
   async fetch({ store, params }) {
     await store.dispatch("groups/oneGroupDetail", {
       groupId: params.id
@@ -73,6 +86,19 @@ export default {
     onPostForm() {
       this.isPostForm = !this.isPostForm;
     },
+    onEditGroupInfo() {
+      this.$store.dispatch("groups/groupEdit", {
+        name: this.name,
+        intro: this.intro,
+        limit: this.limit,
+        groupId: this.oneGroup.id
+      });
+    },
+    onDeleteGroup() {
+      this.$store.dispatch("groups/groupDelete", {
+        groupId: this.oneGroup.id
+      });
+    },
     onScroll() {
       if (
         window.scrollY + document.documentElement.clientHeight >
@@ -83,12 +109,6 @@ export default {
         }
       }
     }
-  },
-  mounted() {
-    window.addEventListener("scroll", this.onScroll);
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.onScroll);
   },
   computed: {
     oneGroup() {
@@ -104,12 +124,24 @@ export default {
         ? "진행 중"
         : "끝인데요;;";
     },
+    isMember() {
+      return this.oneGroup.Groupmembers.find(v => v.id === this.me.id)
+        ? true
+        : false;
+    },
+
     groupPosts() {
       return this.$store.state.groups.groupPosts;
     },
     hasMoreGroupPost() {
       return this.$store.state.groups.hasMoreGroupPost;
     }
+  },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
   },
   watch: {
     me(value, oldValue) {
