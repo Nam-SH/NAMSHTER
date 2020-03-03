@@ -6,7 +6,6 @@ export const state = () => ({
   imagePaths: [],
   hasMoreGroupPost: true,
 
-
   grouplistBefore: [],
   grouplistDoing: [],
   grouplistDone: [],
@@ -56,6 +55,15 @@ export const mutations = {
     state.groupPosts.unshift(payload);
     state.imagePaths = [];
   },
+  editGroupPost(state, payload) {
+    const targetIndex = state.groupPosts.findIndex(v => v.id === payload.postId)
+    state.groupPosts[targetIndex].title = payload.title
+    state.groupPosts[targetIndex].content = payload.content
+  },
+  deleteGroupPost(state, payload) {
+    const targetIndex = state.groupPosts.findIndex(v => v.id === payload.postId)
+    Vue.delete(state.groupPosts, targetIndex)
+  },
 
   concatImagePaths(state, payload) {
     state.imagePaths = state.imagePaths.concat(payload);
@@ -65,20 +73,30 @@ export const mutations = {
   },
 
   groupUserInOut(state, payload) {
-    const targetGroupIndex = state.grouplist.findIndex(
-      v => v.id === payload.groupId
-    );
-    const targetIndex = state.grouplist[targetGroupIndex].Groupmembers.findIndex(v => v.id === payload.userId)
-    if (targetIndex !== -1) {
-      Vue.delete(state.grouplist[targetGroupIndex].Groupmembers, targetIndex)
-      this.$router.push('/groups')
+    if (state.oneGroup) {
+      const targetIndex = state.oneGroup.Groupmembers.findIndex(v => v.id === payload.userId)
+      if (targetIndex !== -1) {
+        Vue.delete(state.oneGroup.Groupmembers, targetIndex)
+      } else {
+        state.oneGroup.Groupmembers.unshift({
+          id: payload.userId
+        })
+      }
       return
     } else {
-      state.grouplist[targetGroupIndex].Groupmembers.unshift({
-        id: payload.userId
-      })
-      this.$router.push(`/groups/${payload.groupId}`)
-      return
+      const targetGroupIndex = state.grouplist.findIndex(v => v.id === payload.groupId);
+      const targetIndex = state.grouplist[targetGroupIndex].Groupmembers.findIndex(v => v.id === payload.userId)
+      if (targetIndex !== -1) {
+        Vue.delete(state.grouplist[targetGroupIndex].Groupmembers, targetIndex)
+        this.$router.push('/groups')
+        return
+      } else {
+        state.grouplist[targetGroupIndex].Groupmembers.unshift({
+          id: payload.userId
+        })
+        this.$router.push(`/groups/${payload.groupId}`)
+        return
+      }
     }
   },
 
@@ -201,6 +219,48 @@ export const actions = {
         console.error("addGroupPost:::", err);
       });
   },
+  // 글 수정
+  postEdit({
+    commit,
+    state
+  }, payload) {
+    return this.$axios
+      .put(
+        `/group/${payload.groupId}/post/${payload.postId}`, {
+          title: payload.title,
+          content: payload.content,
+        }, {
+          withCredentials: true
+        }
+      )
+      .then(res => {
+        commit("editGroupPost", {
+          title: res.data.title,
+          content: res.data.content,
+          postId: payload.postId
+        });
+      })
+      .catch(err => {
+        console.error("postEdit :::", err);
+      });
+  },
+  // 포스트 삭제
+  postDelete({
+    commit
+  }, payload) {
+    this.$axios.delete(`/group/${payload.groupId}/post/${payload.postId}`, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('deleteGroupPost', {
+          postId: payload.postId
+        })
+      })
+      .catch(err => {
+        console.error("postDelete :::", err);
+      })
+  },
+
   // 이미지 업로드
   uploadImages({
     commit

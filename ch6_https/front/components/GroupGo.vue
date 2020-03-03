@@ -26,7 +26,7 @@
                   <v-card-subtitle v-text="group.intro" />
                 </div>
                 <v-avatar class="ma-3 my-auto" size="125" tile>
-                  <v-img src="https://cdn.vuetifyjs.com/images/cards/store.jpg"></v-img>
+                  <v-img :src="`${srcAddress}/groupimage/${group.src}`"></v-img>
                 </v-avatar>
               </div>
               <v-btn :to="`/groups/${group.id}`" block color="#CEE3F6">상세히</v-btn>
@@ -34,7 +34,6 @@
           </v-col>
         </v-row>
       </v-container>
-
       <v-container v-else>
         <v-row dense>
           <v-col cols="12">
@@ -72,6 +71,11 @@ export default {
     },
     isInGroups() {
       return this.$route.name === "groups" ? true : false;
+    },
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085";
     }
   }
 };

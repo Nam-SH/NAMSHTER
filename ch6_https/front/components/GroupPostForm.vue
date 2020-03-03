@@ -12,22 +12,40 @@
             autofocus
             outlined
           ></v-text-field>
-          <v-textarea v-model="content" color="teal" :counter="300" outlined>
-            <template v-slot:label>
-              <div>
-                내용
-                <small>(응~애)</small>
-              </div>
-            </template>
-          </v-textarea>
-          <v-btn class="mx-2" absolute right @click.prevent="clear">내용 클리어</v-btn>
+          <client-only>
+            <TuiEditor
+              mode="markdown"
+              v-model="content"
+              preview-style="vertical"
+              height="300px"
+            />
+          </client-only>
+          <v-btn class="mx-2" absolute right @click.prevent="clear"
+            >내용 클리어</v-btn
+          >
           <v-btn type="submit" color="blue" absolute right>제출</v-btn>
-          <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
-          <v-btn type="button" @click.prevent="onClickImageUpload">이미지 업로드</v-btn>
+          <input
+            ref="imageInput"
+            type="file"
+            multiple
+            hidden
+            @change="onChangeImages"
+          />
+          <v-btn type="button" @click.prevent="onClickImageUpload"
+            >이미지 업로드</v-btn
+          >
           <br />
-          <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
+          <div
+            v-for="(p, i) in imagePaths"
+            :key="p"
+            style="display: inline-block"
+          >
             <div>
-              <img :src="`${srcAddress}/postimage/${p}`" :alt="p" style="width: 200px" />
+              <img
+                :src="`${srcAddress}/postimage/${p}`"
+                :alt="p"
+                style="width: 200px"
+              />
             </div>
             <v-btn text type="button" @click.prevent="onRemoveImage(i)">
               <v-icon>mdi-delete</v-icon>
@@ -107,5 +125,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

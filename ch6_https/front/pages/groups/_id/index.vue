@@ -6,15 +6,41 @@
         <div v-for="sub of oneGroup.Selectsubject" :key="sub.id">
           <span>{{ sub.name }}</span>
         </div>
-        <p class="display-1 text--primary">{{ oneGroup.name }}</p>
-        <p>{{ oneGroup.Master.name }}({{ oneGroup.Master.nickname }}) || {{ oneGroup.Master.email }}</p>
-        <v-row class="mx-1" justify="space-between">
+        <div style="display: flex;justify-content: space-between">
+          <div class="display-1 text--primary" style="display: flex;">
+            <p>{{ oneGroup.name }}</p>
+
+            <v-chip v-if="oneGroup && oneGroup.state === 0" class="ma-2" label
+              >준비 중</v-chip
+            >
+            <v-chip
+              v-else-if="oneGroup && oneGroup.state === 1"
+              class="ma-2"
+              color="red"
+              outlined
+            >
+              <v-icon left>mdi-fire</v-icon>진행 중...
+            </v-chip>
+            <v-chip v-else class="ma-2" color="teal" text-color="white">
+              <v-icon left>mdi-checkbox-marked-circle</v-icon>종료
+            </v-chip>
+          </div>
           <v-btn
+            v-if="oneGroup.MasterId === me.id"
             @click.prevent="onChangeState"
-            :disabled="oneGroup.MasterId !== me.id"
-          >{{ stateName }}</v-btn>
-          <div>
-            <v-btn @click="onEditGroupInfo" dark color="blue">수정</v-btn>
+            >{{ stateName }}</v-btn
+          >
+          <v-btn v-else color="yellow" @click="groupUserInOut">{{
+            isSignIn
+          }}</v-btn>
+        </div>
+        <p>
+          {{ oneGroup.Master.name }}({{ oneGroup.Master.nickname }}) ||
+          {{ oneGroup.Master.email }}
+        </p>
+        <v-row class="mx-1" justify="space-between">
+          <div v-if="oneGroup.MasterId === me.id">
+            <v-btn @click="onEditGroupInfo" right dark color="blue">수정</v-btn>
             <v-btn @click="onDeleteGroup" dark color="red">삭제</v-btn>
           </div>
         </v-row>
@@ -24,7 +50,9 @@
           class="font-weight-black mx-auto"
           height="300px"
           max-height="500px"
-        >{{ oneGroup.intro }}</v-card>
+        >
+          <v-container>{{ oneGroup.intro }}</v-container>
+        </v-card>
       </v-card-text>
       <v-card-actions>
         <v-btn
@@ -32,7 +60,8 @@
           block
           color="yellow accent-1"
           @click="onPostForm"
-        >글 쓰기</v-btn>
+          >글 쓰기</v-btn
+        >
       </v-card-actions>
     </v-card>
     <group-post-form
@@ -57,7 +86,8 @@ export default {
       isPostForm: false,
       name: null,
       intro: null,
-      limit: null
+      limit: null,
+      isMember: false
     };
   },
   created() {
@@ -108,6 +138,12 @@ export default {
           this.$store.dispatch("groups/loadGroupPosts", { reset: false });
         }
       }
+    },
+    groupUserInOut() {
+      this.$store.dispatch("groups/groupUserInOut", {
+        userId: this.me.id,
+        groupId: this.oneGroup.id
+      });
     }
   },
   computed: {
@@ -124,17 +160,16 @@ export default {
         ? "진행 중"
         : "끝인데요;;";
     },
-    isMember() {
-      return this.oneGroup.Groupmembers.find(v => v.id === this.me.id)
-        ? true
-        : false;
-    },
-
     groupPosts() {
       return this.$store.state.groups.groupPosts;
     },
     hasMoreGroupPost() {
       return this.$store.state.groups.hasMoreGroupPost;
+    },
+    isSignIn() {
+      return this.me && this.oneGroup.Groupmembers.find(v => v.id == this.me.id)
+        ? ((this.isMember = true), "탈퇴하기")
+        : ((this.isMember = false), "가입하기");
     }
   },
   mounted() {

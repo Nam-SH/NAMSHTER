@@ -17,6 +17,7 @@
     "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/moment": "^1.6.0",
     "@nuxtjs/vuetify": "^1.10.3",
+    "@tui-nuxt/editor": "^1.0.0-beta.3",
     "axios": "^0.19.2",
     "cross-env": "^6.0.3",
     "express": "^4.17.1",

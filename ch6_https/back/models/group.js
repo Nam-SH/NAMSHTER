@@ -17,7 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       state: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
-      }
+      },
+      src: {
+        type: DataTypes.STRING(200),
+        defaultValue: "group.jpg",
+      },
     }, {
       charset: "utf8mb4",
       collate: "utf8mb4_general_ci"

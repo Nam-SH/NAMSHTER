@@ -4,9 +4,12 @@
       <v-container style="border: 2px solid black; border-radius: 10px;">
         <v-card>
           <v-card>
-            <group-post-content :groupPost="groupPost" />
+            <group-post-content
+              :groupPost="groupPost"
+              :isEditting="isEditting"
+              :onEditting="onEditting"
+            />
           </v-card>
-
           <v-card-actions>
             <!-- 좋아요 -->
             <v-btn text color="orange" @click="onClickHeart">
@@ -20,8 +23,10 @@
                 </v-btn>
               </template>
               <div style="background: white">
-                <v-btn cark color="orange">수정</v-btn>
-                <v-btn cark color="red">삭제</v-btn>
+                <v-btn cark color="orange" @click.prevent="onEditting"
+                  >수정</v-btn
+                >
+                <v-btn cark color="red" @click.prevent="onDelete">삭제</v-btn>
               </div>
             </v-menu>
           </v-card-actions>
@@ -63,6 +68,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      isEditting: false
+    };
+  },
   computed: {
     me() {
       return this.$store.state.users.me;
@@ -75,6 +85,20 @@ export default {
     },
     heartIcon() {
       return this.liked ? "mdi-heart" : "mdi-heart-outline";
+    }
+  },
+  methods: {
+    onClickHeart() {
+      console.log("아직 구현 안 함");
+    },
+    onEditting() {
+      this.isEditting = !this.isEditting;
+    },
+    onDelete() {
+      this.$store.dispatch("groups/postDelete", {
+        groupId: this.$route.params.id,
+        postId: this.groupPost.id
+      });
     }
   }
 };

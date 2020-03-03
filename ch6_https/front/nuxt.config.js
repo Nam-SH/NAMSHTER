@@ -1,12 +1,14 @@
 module.exports = {
   head: {
     title: "Namshter",
-    meta: [{
+    meta: [
+      {
         charset: "utf-8"
       },
       {
         name: "viewport",
-        content: "width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover"
+        content:
+          "width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover"
       },
       {
         "http-equiv": "X-UA-Compatible",
@@ -35,7 +37,8 @@ module.exports = {
       {
         hid: "ogimage",
         property: "og:image",
-        content: "http://img.favpng.com/22/12/5/donuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg"
+        content:
+          "http://img.favpng.com/22/12/5/donuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg"
       },
       {
         hid: "ogurl",
@@ -43,16 +46,23 @@ module.exports = {
         content: "https://namshter.com"
       }
     ],
-    script: [{
-      src: "https://kit.fontawesome.com/4ddf7507f2.js",
-      crossorigin: "anonymous"
-    }],
-    link: [{
-      rel: "shortcut icon",
-      href: "/donut.png"
-    }]
+    script: [
+      {
+        src: "https://kit.fontawesome.com/4ddf7507f2.js",
+        crossorigin: "anonymous"
+      }
+    ],
+    link: [
+      {
+        rel: "shortcut icon",
+        href: "/donut.png"
+      }
+    ]
   },
-  modules: ["@nuxtjs/axios"],
+  modules: ["@nuxtjs/axios", "@tui-nuxt/editor"],
+  tui: {
+    editor: {}
+  },
   buildModules: ["@nuxtjs/vuetify", "@nuxtjs/moment"],
   moment: {
     locales: ["ko"]
@@ -72,11 +82,7 @@ module.exports = {
       }
     },
     analyze: false,
-    extend(config, {
-      isServer,
-      isClient,
-      isDev
-    }) {
+    extend(config, { isServer, isClient, isDev }) {
       // console.log('webpack :::', config, isServer, isClient);
       if (isServer && !isDev) {
         config.devtool = "hidden-source-map";
@@ -84,13 +90,17 @@ module.exports = {
     }
   },
   manifest: {
-    "gcm_sender_id": "103953800507"
+    gcm_sender_id: "103953800507"
   },
   axios: {
-    browserBaseURL: process.env.NODE_ENV === "production" ?
-      "https://api.namshter.com" : "http://localhost:3085",
-    baseURL: process.env.NODE_ENV === "production" ?
-      "https://api.namshter.com" : "http://localhost:3085",
+    browserBaseURL:
+      process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085",
+    baseURL:
+      process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085",
     https: false
   },
   server: {

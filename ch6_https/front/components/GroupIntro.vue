@@ -50,8 +50,7 @@ export default {
   },
   data() {
     return {
-      dialog: false,
-      isMember: false
+      dialog: false
     };
   },
   created() {},
@@ -61,8 +60,8 @@ export default {
     },
     isSignIn() {
       return this.me && !!this.group.Groupmembers.find(v => v.id == this.me.id)
-        ? ((this.isMember = false), "탈퇴하기")
-        : ((this.isMember = true), "가입하기");
+        ? "탈퇴하기"
+        : "가입하기";
     },
     isMaster() {
       return this.me && this.me.id === this.group.MasterId;

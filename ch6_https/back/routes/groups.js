@@ -19,7 +19,7 @@ router.get("/", async (req, res, next) => {
     }
     const groups = await db.Group.findAll({
       where,
-      attributes: ["id", "name", "intro", "limit", "state", 'createdAt'],
+      attributes: ["id", "name", "intro", "limit", "state", 'createdAt', "src"],
       include: [{
         model: db.User,
         as: "Master",
@@ -67,7 +67,7 @@ router.get("/:state", async (req, res, next) => {
     }
     const groups = await db.Group.findAll({
       where,
-      attributes: ['id', 'name', 'intro', 'limit', 'state', 'createdAt'],
+      attributes: ['id', 'name', 'intro', 'limit', 'state', 'createdAt', "src"],
       include: [{
           model: db.User,
           as: "Master",
@@ -116,7 +116,7 @@ router.get("/my/:state", isLoggedIn, async (req, res, next) => {
       where: {
         state: req.params.state,
       },
-      attributes: ['id', 'name', 'intro', 'limit', 'state'],
+      attributes: ['id', 'name', 'intro', 'limit', 'state', "src"],
       include: [{
         model: db.User,
         as: "Master",
@@ -157,7 +157,7 @@ router.get("/user/:userId/:state", isLoggedIn, async (req, res, next) => {
       where: {
         state: req.params.state,
       },
-      attributes: ['id', 'name', 'intro', 'limit', 'state'],
+      attributes: ['id', 'name', 'intro', 'limit', 'state', "src"],
       include: [{
         model: db.User,
         as: "Master",

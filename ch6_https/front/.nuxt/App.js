@@ -10,6 +10,16 @@ import NuxtError from '..\\layouts\\error.vue'
 import NuxtLoading from './components/nuxt-loading.vue'
 import NuxtBuildIndicator from './components/nuxt-build-indicator'
 
+import '..\\node_modules\\tui-editor\\dist\\tui-editor.min.css'
+
+import '..\\node_modules\\tui-editor\\dist\\tui-editor-contents.min.css'
+
+import '..\\node_modules\\codemirror\\lib\\codemirror.css'
+
+import '..\\node_modules\\highlight.js\\styles\\github.css'
+
+import '..\\node_modules\\tui-color-picker\\dist\\tui-color-picker.min.css'
+
 import '..\\node_modules\\vuetify\\dist\\vuetify.css'
 
 import _6f6c098b from '..\\layouts\\default.vue'

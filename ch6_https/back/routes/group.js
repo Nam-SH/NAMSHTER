@@ -123,7 +123,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       where: {
         id: newGroup.id
       },
-      attributes: ["id", "name", "intro", "limit", "state"],
+      attributes: ["id", "name", "intro", "limit", "state", "src"],
       include: [{
           model: db.User,
           as: "Master",
@@ -189,9 +189,6 @@ router.put('/:groupId', async (req, res, next) => {
     next(err)
   }
 })
-
-
-
 
 // 그룹 삭제
 router.delete('/:groupId', isLoggedIn, async (req, res, next) => {
@@ -262,11 +259,11 @@ router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
 });
 
 // 그룹 가입탈퇴
-router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
+router.post("/:groupId/userInOut", async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {
-        id: req.user.id
+        id: 11
       }
     });
     const targetGroup = await db.Group.findOne({
@@ -283,11 +280,22 @@ router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
       where: {
         id: user.id
       },
-      attributes: ["id"]
+      attributes: ["id", "createdAt"]
     });
     if (usersInGroup && usersInGroup.length > 0) {
-      await user.removeGroupJoined(req.params.groupId);
-      return res.json(user.id);
+      const cDay = usersInGroup[0].createdAt
+      const cYear = new Date(cDay).getFullYear()
+      const cMonth = new Date(cDay).getMonth()
+      const cDate = new Date(cDay).getDate()
+      const dayStart = new Date(cYear, cMonth, cDate)
+      const today = new Date()
+      const dayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      if (dayEnd - dayStart >= 259200000) {
+        await user.removeGroupJoined(req.params.groupId);
+        return res.json(user.id);
+      } else {
+        return res.status(403).send('3일 후 탈퇴 가능함;;')
+      }
     } else {
       await user.addGroupJoined(req.params.groupId);
       return res.json(user.id);
@@ -401,7 +409,7 @@ router.put("/:groupId/post/:postId", isLoggedIn, async (req, res, next) => {
       return res.status(404).send("글이 없는데요;;");
     }
 
-    if (targetPost.UserId != 11) {
+    if (targetPost.UserId != req.user.id) {
       return res.status(403).send('님 글이 아닌데요;;')
     } else {
       await db.GroupPost.update({
@@ -412,20 +420,10 @@ router.put("/:groupId/post/:postId", isLoggedIn, async (req, res, next) => {
           id: req.params.postId
         }
       })
-      const fullPost = await db.GroupPost.findOne({
-        where: {
-          id: req.params.postId
-        },
-        include: [{
-            model: db.User,
-            attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
-          },
-          {
-            model: db.GroupPostImage
-          }
-        ],
+      return res.json({
+        title: req.body.title,
+        content: req.body.content
       })
-      return res.json(fullPost)
     }
   } catch (err) {
     console.error('PUT /:groupId/post/:postId :::', err);
