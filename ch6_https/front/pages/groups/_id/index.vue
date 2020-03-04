@@ -10,15 +10,8 @@
           <div class="display-1 text--primary" style="display: flex;">
             <p>{{ oneGroup.name }}</p>
 
-            <v-chip v-if="oneGroup && oneGroup.state === 0" class="ma-2" label
-              >준비 중</v-chip
-            >
-            <v-chip
-              v-else-if="oneGroup && oneGroup.state === 1"
-              class="ma-2"
-              color="red"
-              outlined
-            >
+            <v-chip v-if="oneGroup && oneGroup.state === 0" class="ma-2" label>준비 중</v-chip>
+            <v-chip v-else-if="oneGroup && oneGroup.state === 1" class="ma-2" color="red" outlined>
               <v-icon left>mdi-fire</v-icon>진행 중...
             </v-chip>
             <v-chip v-else class="ma-2" color="teal" text-color="white">
@@ -26,31 +19,33 @@
             </v-chip>
           </div>
           <v-btn
-            v-if="oneGroup.MasterId === me.id"
-            @click.prevent="onChangeState"
-            >{{ stateName }}</v-btn
-          >
-          <v-btn v-else color="yellow" @click="groupUserInOut">{{
-            isSignIn
-          }}</v-btn>
+            v-if="oneGroup.MasterId !== me.id"
+            color="yellow"
+            @click="groupUserInOut"
+          >{{ isSignIn }}</v-btn>
         </div>
         <p>
           {{ oneGroup.Master.name }}({{ oneGroup.Master.nickname }}) ||
           {{ oneGroup.Master.email }}
         </p>
         <v-row class="mx-1" justify="space-between">
-          <div v-if="oneGroup.MasterId === me.id">
-            <v-btn @click="onEditGroupInfo" right dark color="blue">수정</v-btn>
-            <v-btn @click="onDeleteGroup" dark color="red">삭제</v-btn>
+          <v-btn v-if="oneGroup.MasterId === me.id" @click.prevent="onChangeState">{{ stateName }}</v-btn>
+          <div v-if="oneGroup.MasterId === me.id && oneGroup.state !== 2">
+            <div>
+              <v-btn @click="onEditGroupInfo" right dark color="blue">수정</v-btn>
+              <div class="mb-4" style="display:inline-block">
+                <v-btn color="primary" @click="alert = !alert">삭제</v-btn>
+              </div>
+              <v-alert :value="alert" color="orange" transition="scroll-y-reverse-transition" dark>
+                정말로 삭제하실 생각임??
+                <v-btn @click="onDeleteGroup" dark color="red">삭제</v-btn>
+              </v-alert>
+            </div>
           </div>
         </v-row>
         <hr class="my-3" />
         <p>{{ oneGroup.Groupmembers.length }}명 / {{ oneGroup.limit }}명</p>
-        <v-card
-          class="font-weight-black mx-auto"
-          height="300px"
-          max-height="500px"
-        >
+        <v-card class="font-weight-black mx-auto" height="300px" max-height="500px">
           <v-container>{{ oneGroup.intro }}</v-container>
         </v-card>
       </v-card-text>
@@ -60,8 +55,7 @@
           block
           color="yellow accent-1"
           @click="onPostForm"
-          >글 쓰기</v-btn
-        >
+        >글 쓰기</v-btn>
       </v-card-actions>
     </v-card>
     <group-post-form
@@ -87,7 +81,8 @@ export default {
       name: null,
       intro: null,
       limit: null,
-      isMember: false
+      isMember: false,
+      alert: false
     };
   },
   created() {
@@ -107,6 +102,9 @@ export default {
 
   methods: {
     onChangeState() {
+      if (this.oneGroup.state === 2) {
+        return;
+      }
       this.$store.dispatch("groups/changeState", {
         userId: this.me.id,
         groupId: this.oneGroup.id

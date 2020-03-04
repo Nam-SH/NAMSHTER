@@ -5,9 +5,11 @@
         <v-tooltip right color="rgba(255, 255, 255, 0)">
           <template v-slot:activator="{ on }">
             <nuxt-link :to="/user/ + groupPost.User.id">
-              <span v-if="me.id !== groupPost.User.id" v-on="on">{{
+              <span v-if="me.id !== groupPost.User.id" v-on="on">
+                {{
                 groupPost.User.nickname
-              }}</span>
+                }}
+              </span>
               <span v-else v-on="on">{{ groupPost.User.nickname }} (나)</span>
             </nuxt-link>
           </template>
@@ -35,11 +37,7 @@
       ></v-text-field>
       <hr />
       <client-only>
-        <TuiEditorViewer
-          v-if="!isEditting"
-          :value="groupPost.content"
-          height="500px"
-        />
+        <TuiEditorViewer v-if="!isEditting" :value="groupPost.content" height="500px" />
         <TuiEditor
           v-else
           mode="markdown"
@@ -50,20 +48,10 @@
       </client-only>
       <br />
       <div style="display: flex;justify-content: space-between;">
-        <div class="my-auto">
-          {{ $moment(groupPost.createdAt).fromNow() }}에 작성함...
-        </div>
+        <div class="my-auto">{{ $moment(groupPost.createdAt).fromNow() }}에 작성함...</div>
         <div>
-          <v-btn v-if="isEditting" color="red" dark @click.prevent="onEditting"
-            >취소</v-btn
-          >
-          <v-btn
-            v-if="isEditting"
-            color="blue"
-            dark
-            @click.prevent="onSubmitForm"
-            >수정</v-btn
-          >
+          <v-btn v-if="isEditting" color="red" dark @click.prevent="onEditting">취소</v-btn>
+          <v-btn v-if="isEditting" color="blue" dark @click.prevent="onSubmitForm">수정</v-btn>
         </div>
       </div>
     </v-card-text>

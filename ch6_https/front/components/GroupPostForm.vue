@@ -13,39 +13,22 @@
             outlined
           ></v-text-field>
           <client-only>
-            <TuiEditor
-              mode="markdown"
-              v-model="content"
-              preview-style="vertical"
-              height="300px"
-            />
+            <TuiEditor mode="markdown" v-model="content" preview-style="vertical" height="300px" />
           </client-only>
-          <v-btn class="mx-2" absolute right @click.prevent="clear"
-            >내용 클리어</v-btn
-          >
-          <v-btn type="submit" color="blue" absolute right>제출</v-btn>
-          <input
-            ref="imageInput"
-            type="file"
-            multiple
-            hidden
-            @change="onChangeImages"
-          />
-          <v-btn type="button" @click.prevent="onClickImageUpload"
-            >이미지 업로드</v-btn
-          >
+          <div class="mt-3">
+            <div style="float: left;">
+              <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
+              <v-btn type="button" @click.prevent="onClickImageUpload">이미지 업로드</v-btn>
+            </div>
+            <div style="float: right;">
+              <v-btn class="mx-2" @click.prevent="clear">내용 클리어</v-btn>
+              <v-btn type="submit" color="blue" dark>제출</v-btn>
+            </div>
+          </div>
           <br />
-          <div
-            v-for="(p, i) in imagePaths"
-            :key="p"
-            style="display: inline-block"
-          >
+          <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
             <div>
-              <img
-                :src="`${srcAddress}/postimage/${p}`"
-                :alt="p"
-                style="width: 200px"
-              />
+              <img :src="`${srcAddress}/postimage/${p}`" :alt="p" style="width: 200px" />
             </div>
             <v-btn text type="button" @click.prevent="onRemoveImage(i)">
               <v-icon>mdi-delete</v-icon>

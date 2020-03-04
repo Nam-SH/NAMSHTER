@@ -23,15 +23,16 @@
                 </v-btn>
               </template>
               <div style="background: white">
-                <v-btn cark color="orange" @click.prevent="onEditting"
-                  >수정</v-btn
-                >
+                <v-btn cark color="orange" @click.prevent="onEditting">수정</v-btn>
                 <v-btn cark color="red" @click.prevent="onDelete">삭제</v-btn>
               </div>
             </v-menu>
           </v-card-actions>
         </v-card>
         <v-divider></v-divider>
+        <!--  -->
+        <!--  -->
+        <!--  -->
         <v-card color="#F5F5DC">
           <v-card-text class="pb-0">
             <span>실시간 댓글</span>
@@ -50,6 +51,9 @@
             </v-text-field>
           </v-card-actions>
         </v-card>
+        <!--  -->
+        <!--  -->
+        <!--  -->
       </v-container>
     </v-container>
   </v-row>

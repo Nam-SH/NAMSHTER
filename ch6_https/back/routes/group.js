@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 
-const {
-  isLoggedIn
-} = require("./middlewares");
+const { isLoggedIn } = require("./middlewares");
 
 // 업로드 관련
 const multer = require("multer");
@@ -67,7 +65,8 @@ router.get("/:groupId", async (req, res, next) => {
       where: {
         id: req.params.groupId
       },
-      include: [{
+      include: [
+        {
           model: db.User,
           as: "Master",
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
@@ -79,19 +78,23 @@ router.get("/:groupId", async (req, res, next) => {
         },
         {
           model: db.GroupPost,
-          include: [{
-            model: db.User,
-            attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
-          }]
+          include: [
+            {
+              model: db.User,
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+            }
+          ]
         },
         {
           model: db.Subject,
           as: "Selectsubject",
           attributes: ["id", "name"],
-          include: [{
-            model: db.Category,
-            attributes: ["id", "name"]
-          }]
+          include: [
+            {
+              model: db.Category,
+              attributes: ["id", "name"]
+            }
+          ]
         }
       ]
     });
@@ -124,7 +127,8 @@ router.post("/", isLoggedIn, async (req, res, next) => {
         id: newGroup.id
       },
       attributes: ["id", "name", "intro", "limit", "state", "src"],
-      include: [{
+      include: [
+        {
           model: db.User,
           as: "Master",
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
@@ -142,10 +146,12 @@ router.post("/", isLoggedIn, async (req, res, next) => {
           model: db.Subject,
           as: "Selectsubject",
           attributes: ["id", "name"],
-          include: [{
-            model: db.Category,
-            attributes: ["id", "name"]
-          }]
+          include: [
+            {
+              model: db.Category,
+              attributes: ["id", "name"]
+            }
+          ]
         }
       ]
     });
@@ -157,7 +163,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 });
 
 // 그룹 정보 수정
-router.put('/:groupId', async (req, res, next) => {
+router.put("/:groupId", async (req, res, next) => {
   try {
     const group = await db.Group.findOne({
       where: {
@@ -170,28 +176,31 @@ router.put('/:groupId', async (req, res, next) => {
     if (group.MasterId !== 11) {
       return res.status(403).send("님은 그룹을 수정할 권한이 없는데여;;");
     }
-    await db.Group.update({
-      name: req.body.name,
-      intro: req.body.intro,
-      limit: req.body.limit
-    }, {
-      where: {
-        id: req.params.groupId
+    await db.Group.update(
+      {
+        name: req.body.name,
+        intro: req.body.intro,
+        limit: req.body.limit
+      },
+      {
+        where: {
+          id: req.params.groupId
+        }
       }
-    })
+    );
     res.json({
       name: req.body.name,
       intro: req.body.intro,
       limit: req.body.limit
-    })
+    });
   } catch (err) {
-    console.error('PUT :groupId', err);
-    next(err)
+    console.error("PUT :groupId", err);
+    next(err);
   }
-})
+});
 
 // 그룹 삭제
-router.delete('/:groupId', isLoggedIn, async (req, res, next) => {
+router.delete("/:groupId", isLoggedIn, async (req, res, next) => {
   try {
     const group = await db.Group.findOne({
       where: {
@@ -208,13 +217,13 @@ router.delete('/:groupId', isLoggedIn, async (req, res, next) => {
       where: {
         id: req.params.groupId
       }
-    })
-    return res.json(req.params.groupId)
+    });
+    return res.json(req.params.groupId);
   } catch (err) {
-    console.error('DELETE /:groupId');
-    next(err)
+    console.error("DELETE /:groupId");
+    next(err);
   }
-})
+});
 
 // 그룹 상태 변경하기
 router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
@@ -242,13 +251,16 @@ router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
       return res.status(400).send("완료 된 그룹인데여;;");
     }
 
-    await db.Group.update({
-      state: nxtState
-    }, {
-      where: {
-        id: parseInt(req.params.groupId, 10)
+    await db.Group.update(
+      {
+        state: nxtState
+      },
+      {
+        where: {
+          id: parseInt(req.params.groupId, 10)
+        }
       }
-    });
+    );
     return res.json({
       next: nxtState
     });
@@ -283,18 +295,22 @@ router.post("/:groupId/userInOut", async (req, res, next) => {
       attributes: ["id", "createdAt"]
     });
     if (usersInGroup && usersInGroup.length > 0) {
-      const cDay = usersInGroup[0].createdAt
-      const cYear = new Date(cDay).getFullYear()
-      const cMonth = new Date(cDay).getMonth()
-      const cDate = new Date(cDay).getDate()
-      const dayStart = new Date(cYear, cMonth, cDate)
-      const today = new Date()
-      const dayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      const cDay = usersInGroup[0].createdAt;
+      const cYear = new Date(cDay).getFullYear();
+      const cMonth = new Date(cDay).getMonth();
+      const cDate = new Date(cDay).getDate();
+      const dayStart = new Date(cYear, cMonth, cDate);
+      const today = new Date();
+      const dayEnd = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
       if (dayEnd - dayStart >= 259200000) {
         await user.removeGroupJoined(req.params.groupId);
         return res.json(user.id);
       } else {
-        return res.status(403).send('3일 후 탈퇴 가능함;;')
+        return res.status(403).send("3일 후 탈퇴 가능함;;");
       }
     } else {
       await user.addGroupJoined(req.params.groupId);
@@ -323,7 +339,8 @@ router.get("/:groupId/posts", async (req, res, next) => {
     }
     const groupPosts = await db.GroupPost.findAll({
       where,
-      include: [{
+      include: [
+        {
           model: db.User,
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
@@ -331,9 +348,7 @@ router.get("/:groupId/posts", async (req, res, next) => {
           model: db.GroupPostImage
         }
       ],
-      order: [
-        ["createdAt", "DESC"]
-      ],
+      order: [["createdAt", "DESC"]],
       limit: parseInt(req.query.limit, 10) || 10
     });
     res.json(groupPosts);
@@ -373,7 +388,8 @@ router.post("/:groupId/post", isLoggedIn, async (req, res, next) => {
       where: {
         id: newGroupPost.id
       },
-      include: [{
+      include: [
+        {
           model: db.User,
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
@@ -396,40 +412,43 @@ router.put("/:groupId/post/:postId", isLoggedIn, async (req, res, next) => {
       where: {
         id: req.params.groupId
       }
-    })
+    });
     if (!group) {
-      return res.status(404).send('없는 그룹인데요;;')
+      return res.status(404).send("없는 그룹인데요;;");
     }
     const targetPost = await db.GroupPost.findOne({
       where: {
         id: req.params.postId
       }
-    })
+    });
     if (!targetPost) {
       return res.status(404).send("글이 없는데요;;");
     }
 
     if (targetPost.UserId != req.user.id) {
-      return res.status(403).send('님 글이 아닌데요;;')
+      return res.status(403).send("님 글이 아닌데요;;");
     } else {
-      await db.GroupPost.update({
-        title: req.body.title,
-        content: req.body.content
-      }, {
-        where: {
-          id: req.params.postId
+      await db.GroupPost.update(
+        {
+          title: req.body.title,
+          content: req.body.content
+        },
+        {
+          where: {
+            id: req.params.postId
+          }
         }
-      })
+      );
       return res.json({
         title: req.body.title,
         content: req.body.content
-      })
+      });
     }
   } catch (err) {
-    console.error('PUT /:groupId/post/:postId :::', err);
-    next(err)
+    console.error("PUT /:groupId/post/:postId :::", err);
+    next(err);
   }
-})
+});
 
 // 글 삭제
 router.delete("/:groupId/post/:postId", isLoggedIn, async (req, res, next) => {
@@ -438,93 +457,98 @@ router.delete("/:groupId/post/:postId", isLoggedIn, async (req, res, next) => {
       where: {
         id: req.params.groupId
       }
-    })
+    });
     if (!group) {
-      return res.status(404).send('없는 그룹인데요;;')
+      return res.status(404).send("없는 그룹인데요;;");
     }
     const targetPost = await db.GroupPost.findOne({
       where: {
         id: req.params.postId
       }
-    })
+    });
     if (!targetPost) {
       return res.status(404).send("글이 없는데요;;");
     }
 
     if (targetPost.UserId != 11) {
-      return res.status(403).send('님 글이 아닌데요;;')
+      return res.status(403).send("님 글이 아닌데요;;");
     } else {
       await db.GroupPost.destroy({
         where: {
           id: req.params.postId
         }
-      })
-      return res.json(req.params.postId)
+      });
+      return res.json(req.params.postId);
     }
   } catch (err) {
-    console.error('PUT /:groupId/post/:postId :::', err);
-    next(err)
+    console.error("PUT /:groupId/post/:postId :::", err);
+    next(err);
   }
-})
+});
 
 // 포스트 좋아요
-router.post("/:groupId/post/:postId/like", isLoggedIn, async (req, res, next) => {
-  try {
-    const group = await db.Group.findOne({
-      where: {
-        id: req.params.groupId
+router.post(
+  "/:groupId/post/:postId/like",
+  isLoggedIn,
+  async (req, res, next) => {
+    try {
+      const group = await db.Group.findOne({
+        where: {
+          id: req.params.groupId
+        }
+      });
+      if (!group) {
+        return res.status(404).send("없는 그룹인데요;;");
       }
-    })
-    if (!group) {
-      return res.status(404).send('없는 그룹인데요;;')
-    }
-    const targetPost = await db.GroupPost.findOne({
-      where: {
-        id: req.params.postId
+      const targetPost = await db.GroupPost.findOne({
+        where: {
+          id: req.params.postId
+        }
+      });
+      if (!targetPost) {
+        return res.status(404).send("글이 없는데요;;");
       }
-    })
-    if (!targetPost) {
-      return res.status(404).send("글이 없는데요;;");
+      await targetPost.addGroupPostLiker(req.user.id);
+      res.send(req.user.id);
+    } catch (err) {
+      console.error("POST /:groupId/post/:postId/like :::", err);
+      next(err);
     }
-    await targetPost.addGroupPostLiker(req.user.id)
-    res.send(req.user.id)
-  } catch (err) {
-    console.error('POST /:groupId/post/:postId/like :::', err);
-    next(err)
   }
-})
+);
 
-router.delete("/:groupId/post/:postId/like", isLoggedIn, async (req, res, next) => {
-  try {
-    const group = await db.Group.findOne({
-      where: {
-        id: req.params.groupId
+router.delete(
+  "/:groupId/post/:postId/like",
+  isLoggedIn,
+  async (req, res, next) => {
+    try {
+      const group = await db.Group.findOne({
+        where: {
+          id: req.params.groupId
+        }
+      });
+      if (!group) {
+        return res.status(404).send("없는 그룹인데요;;");
       }
-    })
-    if (!group) {
-      return res.status(404).send('없는 그룹인데요;;')
-    }
-    const targetPost = await db.GroupPost.findOne({
-      where: {
-        id: req.params.postId
+      const targetPost = await db.GroupPost.findOne({
+        where: {
+          id: req.params.postId
+        }
+      });
+      if (!targetPost) {
+        return res.status(404).send("글이 없는데요;;");
       }
-    })
-    if (!targetPost) {
-      return res.status(404).send("글이 없는데요;;");
+      await targetPost.removeGroupPostLiker(req.user.id);
+      return res.send(req.user.id);
+    } catch (err) {
+      console.error("POST /:groupId/post/:postId/like :::", err);
+      next(err);
     }
-    await targetPost.removeGroupPostLiker(req.user.id)
-    return res.send(req.user.id)
-  } catch (err) {
-    console.error('POST /:groupId/post/:postId/like :::', err);
-    next(err)
   }
-})
-
-
+);
 
 // 3댓글 조회
 // 4댓글 생성
 // 5댓글 삭제
-
 
 module.exports = router;

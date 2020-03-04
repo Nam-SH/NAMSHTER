@@ -28,6 +28,7 @@
         <!-- 이미지데이터 추가 -->
         <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
         <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
+
         <div>
           <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
             <img :src="`${srcAddress}/${p}`" :alt="p" style="width: 200px" />
