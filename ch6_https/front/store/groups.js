@@ -390,7 +390,9 @@ export const actions = {
         });
       })
       .catch(err => {
-        console.error("groupUserInOut", err);
+        // this.$toast.show(err.response.data ,{ duration : 2000 })
+        // this.$toast.success(err.response.data ,{ duration : 2000 })
+        this.$toast.error(err.response.data ,{ duration : 2000 })
       });
   },
 

@@ -52,9 +52,24 @@ module.exports = {
       href: "/donut.png"
     }]
   },
-  modules: ["@nuxtjs/axios", "@tui-nuxt/editor"],
+  modules: ["@nuxtjs/axios", "@tui-nuxt/editor", "@nuxtjs/toast"],
   tui: {
     editor: {}
+  },
+  toast: {
+    position: "top-center",
+    register: [
+      // Register custom toasts
+      // this.$toast.global.test()
+      {
+        name: "test",
+        message: "Oops...Something went wrong",
+        options: {
+          type: "error",
+          duration: 1000
+        }
+      }
+    ]
   },
   buildModules: ["@nuxtjs/vuetify", "@nuxtjs/moment"],
   moment: {
@@ -85,9 +100,6 @@ module.exports = {
         config.devtool = "hidden-source-map";
       }
     }
-  },
-  manifest: {
-    gcm_sender_id: "103953800507"
   },
   axios: {
     browserBaseURL: process.env.NODE_ENV === "production" ?
