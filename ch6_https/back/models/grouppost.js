@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     content: {
-      type: DataTypes.STRING(300),
+      type: DataTypes.TEXT,
       allowNull: false,
     }
   }, {
@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     db.GroupPost.belongsTo(db.Group);
     db.GroupPost.belongsTo(db.User)
     db.GroupPost.hasMany(db.GroupPostImage)
+    db.GroupPost.hasMany(db.GroupPostComment)
     db.GroupPost.belongsToMany(db.User, {
       through: "GroupPostLike",
       as: "GroupPostLiker"

@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 
-const { isLoggedIn } = require("./middlewares");
+const {
+  isLoggedIn
+} = require("./middlewares");
 
 // 업로드 관련
 const multer = require("multer");
@@ -65,8 +67,7 @@ router.get("/:groupId", async (req, res, next) => {
       where: {
         id: req.params.groupId
       },
-      include: [
-        {
+      include: [{
           model: db.User,
           as: "Master",
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
@@ -78,23 +79,19 @@ router.get("/:groupId", async (req, res, next) => {
         },
         {
           model: db.GroupPost,
-          include: [
-            {
-              model: db.User,
-              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
-            }
-          ]
+          include: [{
+            model: db.User,
+            attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
+          }]
         },
         {
           model: db.Subject,
           as: "Selectsubject",
           attributes: ["id", "name"],
-          include: [
-            {
-              model: db.Category,
-              attributes: ["id", "name"]
-            }
-          ]
+          include: [{
+            model: db.Category,
+            attributes: ["id", "name"]
+          }]
         }
       ]
     });
@@ -127,8 +124,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
         id: newGroup.id
       },
       attributes: ["id", "name", "intro", "limit", "state", "src"],
-      include: [
-        {
+      include: [{
           model: db.User,
           as: "Master",
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
@@ -146,12 +142,10 @@ router.post("/", isLoggedIn, async (req, res, next) => {
           model: db.Subject,
           as: "Selectsubject",
           attributes: ["id", "name"],
-          include: [
-            {
-              model: db.Category,
-              attributes: ["id", "name"]
-            }
-          ]
+          include: [{
+            model: db.Category,
+            attributes: ["id", "name"]
+          }]
         }
       ]
     });
@@ -176,18 +170,15 @@ router.put("/:groupId", async (req, res, next) => {
     if (group.MasterId !== 11) {
       return res.status(403).send("님은 그룹을 수정할 권한이 없는데여;;");
     }
-    await db.Group.update(
-      {
-        name: req.body.name,
-        intro: req.body.intro,
-        limit: req.body.limit
-      },
-      {
-        where: {
-          id: req.params.groupId
-        }
+    await db.Group.update({
+      name: req.body.name,
+      intro: req.body.intro,
+      limit: req.body.limit
+    }, {
+      where: {
+        id: req.params.groupId
       }
-    );
+    });
     res.json({
       name: req.body.name,
       intro: req.body.intro,
@@ -251,16 +242,13 @@ router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
       return res.status(400).send("완료 된 그룹인데여;;");
     }
 
-    await db.Group.update(
-      {
-        state: nxtState
-      },
-      {
-        where: {
-          id: parseInt(req.params.groupId, 10)
-        }
+    await db.Group.update({
+      state: nxtState
+    }, {
+      where: {
+        id: parseInt(req.params.groupId, 10)
       }
-    );
+    });
     return res.json({
       next: nxtState
     });
@@ -339,16 +327,26 @@ router.get("/:groupId/posts", async (req, res, next) => {
     }
     const groupPosts = await db.GroupPost.findAll({
       where,
-      include: [
-        {
+      include: [{
           model: db.User,
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
         {
           model: db.GroupPostImage
-        }
+        },
+        {
+          model: db.GroupPostComment,
+          attributes: ['id', 'comment', 'createdAt'],
+          include: [{
+            model: db.User,
+            attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+          }],
+        },
       ],
-      order: [["createdAt", "DESC"]],
+      order: [
+        ["createdAt", "DESC"],
+        [db.GroupPostComment, "createdAt", "DESC"]
+      ],
       limit: parseInt(req.query.limit, 10) || 10
     });
     res.json(groupPosts);
@@ -388,14 +386,17 @@ router.post("/:groupId/post", isLoggedIn, async (req, res, next) => {
       where: {
         id: newGroupPost.id
       },
-      include: [
-        {
+      include: [{
           model: db.User,
           attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
         {
           model: db.GroupPostImage
-        }
+        },
+        {
+          model: db.GroupPostComment,
+          attributes: ['id']
+        },
       ]
     });
     return res.json(fullGroupPost);
@@ -428,17 +429,14 @@ router.put("/:groupId/post/:postId", isLoggedIn, async (req, res, next) => {
     if (targetPost.UserId != req.user.id) {
       return res.status(403).send("님 글이 아닌데요;;");
     } else {
-      await db.GroupPost.update(
-        {
-          title: req.body.title,
-          content: req.body.content
-        },
-        {
-          where: {
-            id: req.params.postId
-          }
+      await db.GroupPost.update({
+        title: req.body.title,
+        content: req.body.content
+      }, {
+        where: {
+          id: req.params.postId
         }
-      );
+      });
       return res.json({
         title: req.body.title,
         content: req.body.content
@@ -517,6 +515,7 @@ router.post(
   }
 );
 
+// 좋아요 취소
 router.delete(
   "/:groupId/post/:postId/like",
   isLoggedIn,
@@ -548,7 +547,122 @@ router.delete(
 );
 
 // 3댓글 조회
+router.get('/:groupId/post/:postId/comments', async (req, res, next) => {
+  try {
+    let where = {
+      GroupId: req.params.groupId,
+      GroupPostId: req.params.postId
+    };
+    if (parseInt(req.query.lastId, 10)) {
+      where = {
+        id: {
+          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
+        }
+      };
+    }
+    const comments = await db.GroupPostComment.findAll({
+      where,
+      attributes: ["id", "comment", 'createdAt'],
+      include: [{
+        model: db.User,
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+      }],
+      order: [
+        ["createdAt", "DESC"]
+      ],
+      limit: parseInt(req.query.limit, 10) || 10
+    });
+    res.json(comments);
+  } catch (err) {
+    console.error("GET /:groupId/post/:postId/comments :::", err);
+    next(err);
+  }
+})
+
 // 4댓글 생성
+router.post('/:groupId/post/:postId/comment', isLoggedIn, async (req, res, next) => {
+  try {
+    const group = await db.Group.findOne({
+      where: {
+        id: req.params.groupId
+      }
+    });
+    if (!group) {
+      return res.status(404).send("없는 그룹인데요;;");
+    }
+    const targetPost = await db.GroupPost.findOne({
+      where: {
+        id: req.params.postId
+      }
+    });
+    if (!targetPost) {
+      return res.status(404).send("글이 없는데요;;");
+    }
+    const newComment = await db.GroupPostComment.create({
+      comment: req.body.comment,
+      UserId: req.user.id,
+      GroupId: req.params.groupId,
+      GroupPostId: req.params.postId
+    })
+
+    const fullComment = await db.GroupPostComment.findOne({
+      where: {
+        id: newComment.id
+      },
+      attributes: ['id', 'comment', "createdAt"],
+      include: [{
+        model: db.User,
+        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+      }]
+    })
+
+    return res.json(fullComment)
+
+  } catch (err) {
+    console.error('POST /:groupId/post/:postId/comment', err);
+    next(err)
+  }
+})
+
+
 // 5댓글 삭제
+router.delete('/:groupId/post/:postId/comment/:commentId', async (req, res, next) => {
+  try {
+    const group = await db.Group.findOne({
+      where: {
+        id: req.params.groupId
+      }
+    });
+    if (!group) {
+      return res.status(404).send("없는 그룹인데요;;");
+    }
+    const targetPost = await db.GroupPost.findOne({
+      where: {
+        id: req.params.postId
+      }
+    });
+    if (!targetPost) {
+      return res.status(404).send("글이 없는데요;;");
+    }
+    const targetComment = await db.GroupPostComment.findOne({
+      where: {
+        id: req.params.commentId
+      }
+    })
+    if (!targetComment) {
+      return res.status(404).send("댓글이 없는데요;;");
+    }
+    await db.GroupPostComment.destroy({
+      where: {
+        id: req.params.commentId
+      }
+    })
+    return res.send(req.params.commentId)
+
+  } catch (err) {
+    console.error('DELETE /:groupId/post/:postId/comment/:commentId', err);
+    next(err)
+  }
+})
 
 module.exports = router;

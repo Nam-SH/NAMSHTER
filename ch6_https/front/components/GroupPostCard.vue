@@ -30,30 +30,30 @@
           </v-card-actions>
         </v-card>
         <v-divider></v-divider>
-        <!--  -->
-        <!--  -->
-        <!--  -->
         <v-card color="#F5F5DC">
           <v-card-text class="pb-0">
-            <span>실시간 댓글</span>
-            <v-btn rounded color="yellow" small right absolute>전체 보기</v-btn>
+            <span>댓글</span>
+            <v-btn rounded color="yellow" small right absolute @click="testClick">전체 보기</v-btn>
             <v-divider></v-divider>
-            <div class="text--primary">1. well meaning and kindly.</div>
-            <div class="text--primary">2. well meaning and kindly.</div>
-            <div class="text--primary">3. well meaning and kindly.</div>
-            <div class="text--primary">4. well meaning and kindly.</div>
+            <div v-for="c in groupPost.GroupPostComments" :key="c.id">
+              <div class="text--primary">{{ c.User.src }}</div>
+              <div class="text--primary">{{ c.User.name }}({{ c.User.nickname }})</div>
+              <div class="text--primary">{{ c.comment }}</div>
+              <v-btn @click="onDeleteComment(c.id)">삭제</v-btn>
+            </div>
           </v-card-text>
-          <v-card-actions class="mt-0 pt-0">
-            <v-text-field class="mt-0 pt-0" label="댓글" hide-details>
-              <v-btn slot="append" icon small color="primary">
-                <v-icon dark>mdi-pencil</v-icon>
-              </v-btn>
-            </v-text-field>
-          </v-card-actions>
+          <v-container>
+            <v-card-actions class="mt-0 pt-0">
+              <v-form @submit.prevent="onSubmitForm" width="100%">
+                <v-text-field class="mt-0 pt-0" label="댓글" hide-details v-model="comment">
+                  <v-btn type="submit" slot="append" icon small color="primary">
+                    <v-icon dark>mdi-pencil</v-icon>
+                  </v-btn>
+                </v-text-field>
+              </v-form>
+            </v-card-actions>
+          </v-container>
         </v-card>
-        <!--  -->
-        <!--  -->
-        <!--  -->
       </v-container>
     </v-container>
   </v-row>
@@ -74,7 +74,8 @@ export default {
   },
   data() {
     return {
-      isEditting: false
+      isEditting: false,
+      comment: ""
     };
   },
   computed: {
@@ -102,6 +103,35 @@ export default {
       this.$store.dispatch("groups/postDelete", {
         groupId: this.$route.params.id,
         postId: this.groupPost.id
+      });
+    },
+    testClick() {
+      this.$store.dispatch("groups/loadPostComments", {
+        groupId: this.$route.params.id,
+        postId: this.groupPost.id,
+        reset: true
+      });
+    },
+    async onSubmitForm() {
+      if (!this.comment.trim()) {
+        alert("빈 값은 안 돼요;;");
+        return;
+      }
+      await this.$store
+        .dispatch("groups/postCommentAdd", {
+          comment: this.comment,
+          groupId: this.$route.params.id,
+          postId: this.groupPost.id
+        })
+        .then(async () => {
+          this.comment = "";
+        });
+    },
+    onDeleteComment(i) {
+      return this.$store.dispatch("groups/postCommentDelete", {
+        groupId: this.$route.params.id,
+        postId: this.groupPost.id,
+        commentId: i
       });
     }
   }

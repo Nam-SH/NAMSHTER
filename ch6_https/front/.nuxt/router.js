@@ -8,7 +8,6 @@ const _7450a498 = () => interopDefault(import('..\\pages\\main.vue' /* webpackCh
 const _76e556fe = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
 const _79098c49 = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
 const _991f365a = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
-const _fc044fe6 = () => interopDefault(import('..\\pages\\test.vue' /* webpackChunkName: "pages_test" */))
 const _7cbeaa32 = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
 const _e240600e = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
 const _59721e73 = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
@@ -51,10 +50,6 @@ export const routerOptions = {
     path: "/signup",
     component: _991f365a,
     name: "signup"
-  }, {
-    path: "/test",
-    component: _fc044fe6,
-    name: "test"
   }, {
     path: "/groups/:id",
     component: _7cbeaa32,

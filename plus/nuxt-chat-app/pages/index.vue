@@ -12,19 +12,8 @@
         </v-card-title>
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit">
-            <v-text-field
-              v-model="name"
-              :counter="16"
-              :rules="nameRules"
-              label="Name"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="room"
-              :rules="roomRules"
-              label="Enter the room"
-              required
-            ></v-text-field>
+            <v-text-field v-model="name" :counter="16" :rules="nameRules" label="Name" required></v-text-field>
+            <v-text-field v-model="room" :rules="roomRules" label="Enter the room" required></v-text-field>
             <v-btn :disabled="!valid" color="primary" class="mr-4" type="submit">Submit</v-btn>
           </v-form>
         </v-card-text>
@@ -34,8 +23,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-
 export default {
   name: "index",
   layout: "login",
@@ -55,6 +42,7 @@ export default {
     roomRules: [v => !!v || "Enter the room"],
     snackbar: false
   }),
+
   mounted() {
     const { message } = this.$route.query;
     if (message === "noUser") {
@@ -66,7 +54,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setUser"]),
     submit() {
       if (this.$refs.form.validate()) {
         const user = {
@@ -76,7 +63,7 @@ export default {
         };
         this.$socket.emit("createUser", user, data => {
           user.id = data.id;
-          this.setUser(user);
+          this.$store.commit("setUser", user);
           this.$router.push("/chat");
         });
       }

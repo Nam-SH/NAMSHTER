@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "Master"
     });
     db.Group.hasMany(db.GroupPost);
+    db.Group.hasMany(db.GroupPostComment);
   };
   return Group;
 };

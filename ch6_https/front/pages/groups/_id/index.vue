@@ -19,7 +19,7 @@
             </v-chip>
           </div>
           <v-btn
-            v-if="oneGroup.MasterId !== me.id"
+            :disabled="oneGroup.MasterId === me.id"
             color="yellow"
             @click="groupUserInOut"
           >{{ isSignIn }}</v-btn>
@@ -165,9 +165,13 @@ export default {
       return this.$store.state.groups.hasMoreGroupPost;
     },
     isSignIn() {
-      return this.me && this.oneGroup.Groupmembers.find(v => v.id == this.me.id)
-        ? ((this.isMember = true), "탈퇴하기")
-        : ((this.isMember = false), "가입하기");
+      if (this.me && this.oneGroup.Groupmembers.find(v => v.id == this.me.id)) {
+        this.isMember = true;
+        return "탈퇴하기";
+      } else {
+        this.isMember = false;
+        return "가입하기";
+      }
     }
   },
   mounted() {

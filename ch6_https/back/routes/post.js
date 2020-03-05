@@ -61,11 +61,11 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res) => {
 // });
 
 // 글 상세보기(/post/:id) - 글하나만 가져오기
-router.get("/:id", async (req, res, next) => {
+router.get("/:postId", async (req, res, next) => {
   try {
     const fullpost = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       },
       include: [{
           model: db.User,
@@ -99,7 +99,7 @@ router.get("/:id", async (req, res, next) => {
     });
     return res.json(fullpost);
   } catch (err) {
-    console.error("GET /:id :::", err);
+    console.error("GET /:postId :::", err);
     next(err);
   }
 });
@@ -202,7 +202,7 @@ router.patch("/:postId", isLoggedIn, async (req, res, next) => {
       updateTime: updatePost.updatedAt
     });
   } catch (err) {
-    console.error("PATCH /:id", err);
+    console.error("PATCH /:postId", err);
     next(err);
   }
 });
@@ -229,17 +229,17 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
     return res.send(req.params.postId);
   } catch (err) {
     console.error(err);
-    next("DELETE /:id :::", err);
+    next("DELETE /:postId :::", err);
   }
 });
 
 // 댓글작성
-router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
+router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   // POST /post/:id/comment
   try {
     const post = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
     if (!post) {
@@ -264,17 +264,17 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
     });
     return res.json(comment);
   } catch (err) {
-    console.error("POST /:id/comment :::", err);
+    console.error("POST /:postId/comment :::", err);
     next(err);
   }
 });
 
 // 댓글조회
-router.get("/:id/comments", async (req, res, next) => {
+router.get("/:postId/comments", async (req, res, next) => {
   try {
     const post = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       }
     });
     if (!post) {
@@ -282,7 +282,7 @@ router.get("/:id/comments", async (req, res, next) => {
     }
     const comments = await db.Comment.findAll({
       where: {
-        PostId: req.params.id
+        PostId: req.params.postId
       },
       include: [{
         model: db.User,
@@ -294,18 +294,49 @@ router.get("/:id/comments", async (req, res, next) => {
     });
     res.json(comments);
   } catch (err) {
-    console.error("GET /:id/comments :::", err);
+    console.error("GET /:postId/comments :::", err);
     next(err);
   }
 });
 
+// 댓글 삭제
+router.delete('/:postId/comment/:commentId', isLoggedIn, async (req, res, next) => {
+  try {
+    const targetPost = await db.Post.findOne({
+      where: {
+        id: req.params.postId
+      }
+    });
+    if (!targetPost) {
+      return res.status(404).send("포스트가 존재하지 않습니다.");
+    }
+    const targetComment = await db.Comment.findOne({
+      where: {
+        id: req.params.commentId
+      }
+    });
+    if (!targetComment) {
+      return res.status(404).send("포스트가 존재하지 않습니다.");
+    }
+    await db.Comment.destroy({
+      where: {
+        id: req.params.commentId
+      }
+    })
+    res.send(req.params.commentId)
+  } catch (err) {
+    console.error("DELETE /:postId/comment/:commentId :::", err);
+    next(err);
+  }
+})
+
 // 리트윗 하기
-router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
+router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
   try {
     // 글이 없으면 리트윗 안 됨
     const post = await db.Post.findOne({
       where: {
-        id: req.params.id
+        id: req.params.postId
       },
       include: [{
         model: db.Post,

@@ -70,7 +70,7 @@ export default {
         return;
       }
       await this.$store
-        .dispatch("groups/add", {
+        .dispatch("groups/postAdd", {
           title: this.title,
           content: this.content,
           groupId: this.$route.params.id

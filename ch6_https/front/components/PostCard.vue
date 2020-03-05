@@ -63,7 +63,10 @@
           <v-rating :value="c.score" readonly dense small></v-rating>
           <v-list-item-content>
             <v-list-item-title>{{ c.User.nickname }}</v-list-item-title>
-            <v-list-item-subtitle>{{ c.content }}</v-list-item-subtitle>
+            <div>
+              <span style="vertical-align: middle">{{ c.content }}</span>
+              <v-btn text @click="onDeleteComment(c.id)" color="red" absolute right>삭제</v-btn>
+            </div>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -164,6 +167,12 @@ export default {
         res += one.score;
       }
       return (this.avgTotal = res / comments.length);
+    },
+    onDeleteComment(i) {
+      return this.$store.dispatch("posts/deleteComment", {
+        postId: this.post.id,
+        commentId: i
+      });
     }
   }
 };

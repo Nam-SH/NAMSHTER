@@ -5,11 +5,7 @@
         <v-tooltip right color="rgba(255, 255, 255, 0)">
           <template v-slot:activator="{ on }">
             <nuxt-link :to="/user/ + groupPost.User.id">
-              <span v-if="me.id !== groupPost.User.id" v-on="on">
-                {{
-                groupPost.User.nickname
-                }}
-              </span>
+              <span v-if="me.id !== groupPost.User.id" v-on="on">{{ groupPost.User.nickname }}</span>
               <span v-else v-on="on">{{ groupPost.User.nickname }} (나)</span>
             </nuxt-link>
           </template>

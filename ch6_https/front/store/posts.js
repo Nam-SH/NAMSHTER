@@ -30,6 +30,12 @@ export const mutations = {
     state.mainPosts[targetIndex].Comments.unshift(payload)
   },
 
+  deleteComment(state, payload) {
+    const targetPostIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
+    const targetCommentIndex = state.mainPosts[targetPostIndex].Comments.findIndex(v => v.id === payload.commentId);
+    Vue.delete(state.mainPosts[targetPostIndex].Comments, targetCommentIndex)
+  },
+
   thisWeekPost(state, payload) {
     const monthFirstDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getDate()
     let calcPost = new Array(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()).fill(0)
@@ -165,6 +171,22 @@ export const actions = {
       })
       .catch((err) => {
         console.error('addComment:::', err)
+      })
+  },
+  deleteComment({
+    commit
+  }, payload) {
+    return this.$axios.delete(`/post/${payload.postId}/comment/${payload.commentId}`, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('deleteComment', {
+          postId: payload.postId,
+          commentId: res.data
+        })
+      })
+      .catch((err) => {
+        console.error('deleteComment:::', err)
       })
   },
 

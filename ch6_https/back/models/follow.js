@@ -16,9 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     charset: 'utf8',
     collate: 'utf8_general_ci', // 한글 저장돼요
   });
-
-  Follow.associate = (db) => {
-
-  };
+  Follow.associate = (db) => {};
   return Follow;
 };

@@ -67,6 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "Checking",
     });
     db.User.hasMany(db.GroupPost);
+    db.User.hasMany(db.GroupPostComment);
     db.User.belongsToMany(db.GroupPost, {
       through: "GroupPostLike",
       as: "LikedGroupPost"

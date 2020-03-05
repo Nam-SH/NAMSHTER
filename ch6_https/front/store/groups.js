@@ -49,29 +49,6 @@ export const mutations = {
       state.mainGrouplist.splice(targetIndex, 1);
     }
   },
-
-  // 글 작성관련
-  addGroupPost(state, payload) {
-    state.groupPosts.unshift(payload);
-    state.imagePaths = [];
-  },
-  editGroupPost(state, payload) {
-    const targetIndex = state.groupPosts.findIndex(v => v.id === payload.postId)
-    state.groupPosts[targetIndex].title = payload.title
-    state.groupPosts[targetIndex].content = payload.content
-  },
-  deleteGroupPost(state, payload) {
-    const targetIndex = state.groupPosts.findIndex(v => v.id === payload.postId)
-    Vue.delete(state.groupPosts, targetIndex)
-  },
-
-  concatImagePaths(state, payload) {
-    state.imagePaths = state.imagePaths.concat(payload);
-  },
-  removeImagePath(state, payload) {
-    state.imagePaths.splice(payload, 1);
-  },
-
   groupUserInOut(state, payload) {
     if (state.oneGroup) {
       const targetIndex = state.oneGroup.Groupmembers.findIndex(v => v.id === payload.userId)
@@ -98,6 +75,48 @@ export const mutations = {
         return
       }
     }
+  },
+
+  // 글 작성관련
+  addGroupPost(state, payload) {
+    state.groupPosts.unshift(payload);
+    state.imagePaths = [];
+  },
+  editGroupPost(state, payload) {
+    const targetIndex = state.groupPosts.findIndex(v => v.id === payload.postId)
+    state.groupPosts[targetIndex].title = payload.title
+    state.groupPosts[targetIndex].content = payload.content
+  },
+  deleteGroupPost(state, payload) {
+    const targetIndex = state.groupPosts.findIndex(v => v.id === payload.postId)
+    Vue.delete(state.groupPosts, targetIndex)
+  },
+
+  concatImagePaths(state, payload) {
+    state.imagePaths = state.imagePaths.concat(payload);
+  },
+  removeImagePath(state, payload) {
+    state.imagePaths.splice(payload, 1);
+  },
+
+  loadPostComments(state, payload) {
+    const targetIndex = state.groupPosts.findIndex(v => v.id === payload.postId)
+    if (payload.reset) {
+      Vue.set(state.groupPosts[targetIndex], 'GroupPostComments', payload.data)
+    } else {
+      state.groupPosts[targetIndex].GroupPostComments = state.groupPosts[targetIndex].GroupPostComments.concat(payload.data);
+    }
+  },
+
+  postCommentAdd(state, payload) {
+    const targetPost = state.groupPosts.findIndex(v => v.id === payload.postId)
+    state.groupPosts[targetPost].GroupPostComments.unshift(payload.data)
+  },
+
+  postCommentDelete(state, payload) {
+    const targetPost = state.groupPosts.findIndex(v => v.id === payload.postId)
+    const targetComment = state.groupPosts[targetPost].GroupPostComments.findIndex(v => v.id === payload.commentId)
+    Vue.delete(state.groupPosts[targetPost].GroupPostComments, targetComment)
   },
 
   loadGroupPosts(state, payload) {
@@ -198,7 +217,7 @@ export const actions = {
   },
 
   // 그룹 포스트 작성
-  add({
+  postAdd({
     commit,
     state
   }, payload) {
@@ -275,6 +294,81 @@ export const actions = {
       .catch(err => {
         console.error("uploadImages:::", err);
       });
+  },
+
+  loadPostComments: throttle(async function ({
+    commit,
+    state
+  }, payload) {
+    try {
+      if (payload && payload.reset) {
+        const res = await this.$axios.get(
+          `/group/${payload.groupId}/post/${payload.postId}/comments?&limit=10`, {
+            withCredentials: true
+          }
+        );
+        commit("loadPostComments", {
+          data: res.data,
+          postId: payload.postId,
+          reset: true
+        });
+        return;
+      }
+      // if (state.hasMoreGroupPostComment) {
+      //   const lastPost = state.groupPosts[state.mainPosts.length - 1];
+      //   const res = await this.$axios.get(
+      //     `/group/${payload.groupId}/posts?lastId=${lastPost &&
+      //       lastPost.id}&limit=10`, {
+      //       withCredentials: true
+      //     }
+      //   );
+
+      //   commit("loadPostComments", {
+      //     data: res.data,
+      //     reset: false
+      //   });
+      //   return;
+      // }
+    } catch (err) {
+      console.error("loadPosts :::", err);
+    }
+  }, 3000),
+
+
+  postCommentAdd({
+    commit
+  }, payload) {
+    this.$axios.post(`/group/${payload.groupId}/post/${payload.postId}/comment`, {
+        comment: payload.comment
+      }, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('postCommentAdd', {
+          postId: payload.postId,
+          data: res.data
+        })
+      })
+      .catch(err => {
+        console.error("postCommentAdd:::", err);
+      })
+  },
+
+  postCommentDelete({
+    commit
+  }, payload) {
+    this.$axios.delete(`/group/${payload.groupId}/post/${payload.postId}/comment/${payload.commentId}`, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('postCommentDelete', {
+          postId: payload.postId,
+          commentId: res.data
+        })
+      })
+      .catch((err) => {
+        console.error("postCommentDelete:::", err);
+      })
   },
 
   // 그룹 관련
