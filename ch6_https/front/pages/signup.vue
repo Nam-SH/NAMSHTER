@@ -40,13 +40,15 @@
             :rules="passwordCheckRules"
           />
           <v-checkbox
-            label="남승현 말을 잘 들을 것을 약속합니다."
+            label="NAMSHTER 규칙을 잘 지킬 것을 약속합니다."
             required
             v-model="terms"
             :rules="[v => !!v || 'You must agree to continue!']"
           />
-          <v-btn color="blue" type="submit" :disabled="!valid">가입완료</v-btn>
-          <v-btn to="/main" absolute right text>아이디가 있다구요?</v-btn>
+          <v-btn color="blue" type="submit" :disabled="!valid" dark>가입완료</v-btn>
+          <v-btn to="/main" absolute right text>
+            <span style="text-decoration:underline;color:red">아이디가 있다구요?</span>
+          </v-btn>
         </v-form>
       </v-container>
     </v-card>

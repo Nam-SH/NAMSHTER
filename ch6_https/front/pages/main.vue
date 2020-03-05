@@ -101,7 +101,7 @@
 import { mapState } from "vuex";
 
 export default {
-  // layout: "main",
+  layout: "main",
   data() {
     return {
       valid: false,
