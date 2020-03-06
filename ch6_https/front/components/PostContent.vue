@@ -1,4 +1,5 @@
 <template>
+
   <v-container>
     <post-images :images="post.Images || []" />
     <v-container v-if="!isEditting" class="pb-0">

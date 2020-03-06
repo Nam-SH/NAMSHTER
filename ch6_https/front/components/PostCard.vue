@@ -5,6 +5,7 @@
         <v-subheader>{{ post.User.nickname }}님이 리트윗했다.</v-subheader>
         <post-header :post="post" />
         <v-card style="margin: 0 20px">
+          <post-header :post="post.Retweet" />
           <post-content :post="post.Retweet" :isEditting="isEditting" :onEditPost="onEditPost" />
         </v-card>
         <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
