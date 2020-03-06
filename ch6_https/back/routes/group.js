@@ -283,23 +283,23 @@ router.post("/:groupId/userInOut", async (req, res, next) => {
       attributes: ["id", "createdAt"]
     });
     if (usersInGroup && usersInGroup.length > 0) {
-      const cDay = usersInGroup[0].createdAt;
-      const cYear = new Date(cDay).getFullYear();
-      const cMonth = new Date(cDay).getMonth();
-      const cDate = new Date(cDay).getDate();
-      const dayStart = new Date(cYear, cMonth, cDate);
-      const today = new Date();
-      const dayEnd = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate()
-      );
-      if (dayEnd - dayStart >= 259200000) {
-        await user.removeGroupJoined(req.params.groupId);
-        return res.json(user.id);
-      } else {
-        return res.status(403).send("3일 후 탈퇴 가능함;;");
-      }
+      // const cDay = usersInGroup[0].createdAt;
+      // const cYear = new Date(cDay).getFullYear();
+      // const cMonth = new Date(cDay).getMonth();
+      // const cDate = new Date(cDay).getDate();
+      // const dayStart = new Date(cYear, cMonth, cDate);
+      // const today = new Date();
+      // const dayEnd = new Date(
+      //   today.getFullYear(),
+      //   today.getMonth(),
+      //   today.getDate()
+      // );
+      // if (dayEnd - dayStart >= 259200000) {
+      await user.removeGroupJoined(req.params.groupId);
+      return res.json(user.id);
+      // } else {
+      //   return res.status(403).send("3일 후 탈퇴 가능함;;");
+      // }
     } else {
       await user.addGroupJoined(req.params.groupId);
       return res.json(user.id);

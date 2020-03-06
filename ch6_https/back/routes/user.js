@@ -242,8 +242,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
           ]
         });
         // 데일리 체크
-        const today =
-          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
+        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
             createdAt: today
@@ -582,10 +581,10 @@ router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
 });
 
 // 특정 사용자가 작성한 글 불러오기
-router.get("/:id/posts", async (req, res, next) => {
+router.get("/:userId/posts", async (req, res, next) => {
   try {
     let where = {
-      UserId: parseInt(req.params.id, 10)
+      UserId: parseInt(req.params.userId, 10)
     };
     if (parseInt(req.query.lastId, 10)) {
       where = {
@@ -632,5 +631,38 @@ router.get("/:id/posts", async (req, res, next) => {
     next(err);
   }
 });
+
+// 출석률 확인
+router.get('/:userId/daily', isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: req.params.userId
+      }
+    })
+    if (!user) {
+      return res.status(404).send('없는 사용자 인데요')
+    }
+    const rawData = await user.getChecking()
+    const thisYear = new Date(rawData[0].createdAt).getFullYear()
+    let allYearCheck = [
+      []
+    ]
+    for (i = 1; i < 13; i++) {
+      let lastDay = new Date(thisYear, i, 0).getDate()
+      allYearCheck.push(new Array(lastDay + 1).fill(0))
+    }
+    for (i = 0; i < rawData.length; i++) {
+      let checkMonth = new Date(rawData[i].createdAt).getMonth() + 1
+      let checkday = new Date(rawData[i].createdAt).getDay() + 1
+      allYearCheck[checkMonth][checkday] = 1
+    }
+    return res.json(allYearCheck)
+
+  } catch (err) {
+    console.error('GET /:userId/daily', err);
+    next(err)
+  }
+})
 
 module.exports = router;

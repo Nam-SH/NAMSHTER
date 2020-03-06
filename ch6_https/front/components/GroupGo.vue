@@ -5,7 +5,7 @@
         <v-toolbar-title>진행 중인 그룹...</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-card-actions>
-          <group-create v-if="isInGroups" />
+          <group-create-form v-if="isInGroups" />
           <v-btn v-else text to="/groups">Go Group</v-btn>
         </v-card-actions>
       </v-app-bar>
@@ -56,11 +56,11 @@
 </template>
 
 <script>
-import GroupCreate from "@/components/GroupCreate.vue";
+import GroupCreateForm from "@/components/GroupCreateForm.vue";
 
 export default {
   components: {
-    GroupCreate
+    GroupCreateForm
   },
   computed: {
     me() {

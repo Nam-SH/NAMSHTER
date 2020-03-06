@@ -4,60 +4,95 @@
     <infor-edit />
 
     <!-- 2. 내 출첵 히트맵 보여주기 -->
-    <!-- <v-container>
-      <div class="main">
-        <div class="main_1 main_common">
-          <p class="content">test1</p>
-        </div>
-        <div class="main_2 main_common">
-          <p class="content">test2</p>
-        </div>
-        <div class="main_3 main_common">
-          <p class="content">test3</p>
-        </div>
-      </div>
-    </v-container>-->
-    <!-- 3. 그래프 보여주기 -->
     <v-container>
-      <v-btn
-        v-model="isMyPostCalc"
-        @click="onGetMyPost"
-        :text="isMyPostCalc"
-        :color="isMyPostCalc ? 'blue' : 'yellow'"
-      >{{ myGraphContent }}</v-btn>
-      <v-card>
+      <v-card color="basil">
+        <v-card-title class="text-center justify-center py-6">
+          <h1 class="font-weight-bold display-1 basil--text">출석률</h1>
+        </v-card-title>
         <v-container>
-          <v-sparkline
-            line-width="2"
-            padding="8"
-            smooth="10"
-            :gradient="gradient"
-            :value="isMyPostCalc ? calcPost : fakeCalcPost"
-            auto-draw
-            :labels="isMyPostCalc ? labels : fakeLabels"
-            label-size="3"
-          />
-          <v-divider />
+          <div class="main">
+            <div class="main2">
+              <div v-for="i in 32" :key="i" class="main3">{{ i == 1 ? '구분' : i - 1 }}</div>
+            </div>
+            <div v-for="j in 12" :key="j" class="main2">
+              <div
+                v-for="i in 32"
+                :key="i"
+                class="main3"
+                :style="{background: i == 1 ? 'yellow' : dailyData[j][i - 1] == 1 ? 'gray' : 'white'}"
+              >{{ i == 1 ? `${j}월`: '' }}</div>
+            </div>
+          </div>
         </v-container>
       </v-card>
     </v-container>
+
+    <!-- 3. 그래프 보여주기 -->
+    <v-container>
+      <v-card color="basil">
+        <v-card-title class="text-center justify-center py-6">
+          <h1 class="font-weight-bold display-1 basil--text">글쓰기 상태</h1>
+        </v-card-title>
+        <v-container>
+          <v-btn
+            v-model="isMyPostCalc"
+            @click.prevent="onGetMyPost"
+            :text="isMyPostCalc"
+            :color="isMyPostCalc ? 'blue' : 'yellow'"
+          >{{ myGraphContent }}</v-btn>
+          <v-card>
+            <v-container>
+              <v-sparkline
+                line-width="2"
+                padding="8"
+                smooth="10"
+                :gradient="gradient"
+                :value="isMyPostCalc ? calcPost : fakeCalcPost"
+                auto-draw
+                :labels="isMyPostCalc ? labels : fakeLabels"
+                label-size="3"
+              />
+              <v-divider />
+            </v-container>
+          </v-card>
+        </v-container>
+      </v-card>
+    </v-container>
+
     <!-- 4. 팔로잉, 팔로워 조회하기 -->
-    <v-card>
-      <v-container>
-        <v-subheader>팔로잉</v-subheader>
-        <follow-list :users="followingList" :remove="removeFollowing" />
-        <v-btn @click="loadFollowings" v-if="hasMoreFollowing" color="blue" style="width: 100%">더 보기</v-btn>
-        <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
-      </v-container>
-    </v-card>
-    <v-card>
-      <v-container>
-        <v-subheader>팔로워</v-subheader>
-        <follow-list :users="followerList" :remove="removeFollower" />
-        <v-btn @click="loadFollowers" v-if="hasMoreFollower" color="blue" style="width: 100%">더 보기</v-btn>
-        <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
-      </v-container>
-    </v-card>
+    <v-container>
+      <v-card color="basil">
+        <v-card-title class="text-center justify-center py-6">
+          <h1 class="font-weight-bold display-1 basil--text">나의 팔로우 팔로워</h1>
+        </v-card-title>
+        <v-card>
+          <v-container>
+            <v-subheader>팔로잉</v-subheader>
+            <follow-list :users="followingList" :remove="removeFollowing" />
+            <v-btn
+              @click="loadFollowings"
+              v-if="hasMoreFollowing"
+              color="blue"
+              style="width: 100%"
+            >더 보기</v-btn>
+            <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
+          </v-container>
+        </v-card>
+        <v-card>
+          <v-container>
+            <v-subheader>팔로워</v-subheader>
+            <follow-list :users="followerList" :remove="removeFollower" />
+            <v-btn
+              @click="loadFollowers"
+              v-if="hasMoreFollower"
+              color="blue"
+              style="width: 100%"
+            >더 보기</v-btn>
+            <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
+          </v-container>
+        </v-card>
+      </v-card>
+    </v-container>
   </v-container>
 </template>
 
@@ -114,13 +149,17 @@ export default {
     },
     calcPost() {
       return this.$store.state.posts.calcPost;
+    },
+    dailyData() {
+      return this.$store.state.users.dailyData;
     }
   },
   fetch({ store }) {
     return Promise.all([
       store.dispatch("users/loadFollowings", { reset: true }),
       store.dispatch("users/loadFollowers", { reset: true }),
-      store.dispatch("posts/thisWeekPost")
+      store.dispatch("posts/thisWeekPost"),
+      store.dispatch("users/dailyCheck")
     ]);
   },
   watch: {
@@ -165,28 +204,27 @@ export default {
 
 <style scoped>
 .main {
-  background-color: yellow;
-  border: 1px solid red;
-  width: 300px;
-  height: 100px;
+  display: flex;
+  flex-direction: column;
 }
-.main_common {
-  display: inline-table;
-  float: left;
-  width: 100px;
-  height: 100px;
-  border: 1px solid blue;
-}
-.content {
-  display: table-cell;
-  vertical-align: middle;
+.main2 {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  background: yellow;
   text-align: center;
+  font-size: 8px;
 }
-.main_1,
-.main_3 {
-  font-size: 30px;
+.main3 {
+  flex: 1;
+  border: 1px solid black;
+  font-size: 8px;
+  /* background: green; */
 }
-.main_2 {
-  font-size: 40px;
+.main4 {
+  flex: 1;
+  border: 1px solid black;
+  font-size: 8px;
+  /* background: green; */
 }
 </style>

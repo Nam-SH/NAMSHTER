@@ -32,7 +32,20 @@
           <v-btn v-if="oneGroup.MasterId === me.id" @click.prevent="onChangeState">{{ stateName }}</v-btn>
           <div v-if="oneGroup.MasterId === me.id && oneGroup.state !== 2">
             <div>
-              <v-btn @click="onEditGroupInfo" right dark color="blue">수정</v-btn>
+              <!--  -->
+              <!--  -->
+              <!--  -->
+              <v-btn @click.stop="onEdit" right dark color="blue">수정</v-btn>
+              <group-edit-form
+                hidden
+                :oneGroup="oneGroup"
+                :onEdit="onEdit"
+                :isEditting="isEditting"
+              />
+              <!--  -->
+              <!--  -->
+              <!--  -->
+              <!--  -->
               <div class="mb-4" style="display:inline-block">
                 <v-btn color="primary" @click="alert = !alert">삭제</v-btn>
               </div>
@@ -69,26 +82,21 @@
 <script>
 import GroupPostForm from "@/components/GroupPostForm.vue";
 import GroupAllPosts from "@/components/GroupAllPosts.vue";
+import GroupEditForm from "@/components/GroupEditForm.vue";
 
 export default {
   components: {
     GroupPostForm,
-    GroupAllPosts
+    GroupAllPosts,
+    GroupEditForm
   },
   data() {
     return {
       isPostForm: false,
-      name: null,
-      intro: null,
-      limit: null,
       isMember: false,
-      alert: false
+      alert: false,
+      isEditting: false
     };
-  },
-  created() {
-    this.name = this.oneGroup.name;
-    this.intro = this.oneGroup.intro;
-    this.limit = this.oneGroup.limit;
   },
   async fetch({ store, params }) {
     await store.dispatch("groups/oneGroupDetail", {
@@ -114,14 +122,17 @@ export default {
     onPostForm() {
       this.isPostForm = !this.isPostForm;
     },
-    onEditGroupInfo() {
-      this.$store.dispatch("groups/groupEdit", {
-        name: this.name,
-        intro: this.intro,
-        limit: this.limit,
-        groupId: this.oneGroup.id
-      });
+    onEdit() {
+      this.isEditting = !this.isEditting;
     },
+    // onSubmitForm() {
+    //   this.$store.dispatch("groups/groupEdit", {
+    //     name: this.name,
+    //     intro: this.intro,
+    //     limit: this.limit,
+    //     groupId: this.oneGroup.id
+    //   });
+    // },
     onDeleteGroup() {
       this.$store.dispatch("groups/groupDelete", {
         groupId: this.oneGroup.id

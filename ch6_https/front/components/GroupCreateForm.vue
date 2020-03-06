@@ -51,7 +51,7 @@
                   </v-col>
                 </v-row>
               </v-container>
-              <small>*indicates required field</small>
+              <small>*전부 작성해야 되여</small>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>

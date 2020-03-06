@@ -8,7 +8,8 @@ export const state = () => ({
   hasMoreFollower: true,
   other: null,
   loggingInUser: null,
-  imagePaths: ''
+  imagePaths: '',
+  dailyData: []
 });
 
 
@@ -38,6 +39,10 @@ export const mutations = {
   },
   removeImagePath(state, payload) {
     state.imagePaths = ''
+  },
+
+  dailyCheck(state, payload) {
+    state.dailyData = payload
   },
 
   following(state, payload) {
@@ -155,6 +160,7 @@ export const actions = {
 
   logIn({
     commit,
+    state
   }, payload) {
     return this.$axios.post('/user/login', {
         email: payload.email,
@@ -165,6 +171,9 @@ export const actions = {
       .then((res) => {
         commit('setMe', res.data);
         this.$router.push('/');
+        this.$toast.show(`Hello ${state.me.name}~~`, {
+          duration: 3000
+        })
       })
       .catch((err) => {
         console.error('logIn :::', err)
@@ -188,6 +197,7 @@ export const actions = {
   changeNickname({
     commit
   }, payload) {
+    let beforeToast = this.$toast.success("변경 중...");
     return this.$axios.patch('/user/nickname', {
         nickname: payload.nickname
       }, {
@@ -195,15 +205,21 @@ export const actions = {
       })
       .then((res) => {
         commit('changeNickname', res.data)
+        beforeToast.text('변경완료').goAway(3000)
       })
       .catch((err) => {
-        console.error('changeNickname :::', err)
+        // console.error('changeNickname :::', err)
+        this.$toast.clear()
+        this.$toast.error(`${err.respnse.data}`, {
+          duration: 3000
+        })
       })
   },
 
   changeName({
     commit
   }, payload) {
+    let beforeToast = this.$toast.success("변경 중...");
     return this.$axios.patch('/user/name', {
         name: payload.name
       }, {
@@ -211,25 +227,36 @@ export const actions = {
       })
       .then((res) => {
         commit('changeName', res.data)
+        beforeToast.text('변경완료').goAway(3000)
       })
       .catch((err) => {
-        console.error('changename :::', err)
+        // console.error('changename :::', err)
+        this.$toast.clear()
+        this.$toast.error(`${err.respnse.data}`, {
+          duration: 3000
+        })
       })
   },
 
   changePassword({
     commit
   }, payload) {
+    let beforeToast = this.$toast.success("변경 중...");
     return this.$axios.patch('/user/password', {
         password: payload.password
       }, {
         withCredentials: true,
       })
       .then((res) => {
+        beforeToast.text('변경완료').goAway(3000)
         // commit('changePassword', res.data)
       })
       .catch((err) => {
-        console.error('changePassword :::', err)
+        // console.error('changePassword :::', err)
+        this.$toast.clear()
+        this.$toast.error(`${err.respnse.data}`, {
+          duration: 3000
+        })
       })
   },
 
@@ -237,18 +264,38 @@ export const actions = {
   uploadImages({
     commit
   }, payload) {
+    let beforeToast = this.$toast.success("변경 중...");
     return this.$axios.patch('/user/images', payload, {
         withCredentials: true,
       })
-      .then(async (res) => {
-        await commit('pushImagePaths', res.data);
-        alert('프로필이미지 변경이 완료되었어요.')
+      .then((res) => {
+        commit('pushImagePaths', res.data);
+        beforeToast.text('변경완료').goAway(2000)
       })
       .catch((err) => {
-        console.error('uploadImages:::', err)
+        // console.error('uploadImages:::', err)
+        this.$toast.clear()
+        this.$toast.error(`${err.respnse.data}`, {
+          duration: 2000
+        })
       })
   },
 
+  dailyCheck({
+    commit,
+    state
+  }, payload) {
+    return this.$axios.get(`/user/${state.me.id}/daily`, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('dailyCheck', res.data)
+      })
+      .catch((err) => {
+        console.error('dailyCheck', err);
+
+      })
+  },
   // 팔로워, 언팔로워
   follow({
     commit,
