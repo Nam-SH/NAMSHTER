@@ -46,7 +46,7 @@
                           :src="`${srcAddress}/profile/${imagePaths}`"
                         />
                       </div>
-                      <button type="button" @click="onRemoveImage()">삭제</button>
+                      <button type="button" @click.prevent="onRemoveImage()">삭제</button>
                     </v-col>
                     <v-col cols="12" md="2"></v-col>
                   </v-row>

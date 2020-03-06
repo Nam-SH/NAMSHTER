@@ -55,8 +55,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog = false">닫기</v-btn>
-              <v-btn color="blue darken-3" type="submit" @click="dialog = false">만들기</v-btn>
+              <v-btn color="blue darken-1" text @click.prevent="dialog = false">닫기</v-btn>
+              <v-btn color="blue darken-3" type="submit" @click.prevent="dialog = false">만들기</v-btn>
             </v-card-actions>
           </v-card>
         </v-form>

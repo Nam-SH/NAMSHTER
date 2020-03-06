@@ -105,6 +105,7 @@ export const actions = {
     commit,
     state
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.post('/post', {
         content: payload.content,
         image: state.imagePaths
@@ -113,10 +114,17 @@ export const actions = {
       })
       .then((res) => {
         commit('addMainPost', res.data)
-        // this.$router.push(`/post/${state.mainPosts[0].id}`);
+        before.goAway(1500)
+        this.$toast.success('포스트 작성 완료', {
+          duration: 2000
+        })
       })
       .catch((err) => {
-        console.error('add:::', err)
+        // console.error('add:::', err)
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   },
 
@@ -124,21 +132,30 @@ export const actions = {
   remove({
     commit
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.delete(`/post/${payload.postId}`, {
         withCredentials: true
       })
       .then((res) => {
         commit('removeMainPost', res.data)
+        before.goAway(1500)
+        this.$toast.success('글 삭제 완료', {
+          duration: 2000
+        })
       })
       .catch((err) => {
-        console.error('remove:::', err)
-        alert(err.response.data)
+        // console.error('remove:::', err)
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   },
 
   edit({
     commit
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.patch(`/post/${payload.postId}`, {
         content: payload.content
       }, {
@@ -150,16 +167,24 @@ export const actions = {
           content: res.data.content,
           updateTime: res.data.updateTime
         })
+        before.goAway(1500)
+        this.$toast.success('글 수정 완료', {
+          duration: 2000
+        })
       })
       .catch((err) => {
-        console.error('edit :::', err);
-
+        // console.error('edit :::', err);
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   },
 
   addComment({
     commit
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.post(`/post/${payload.postId}/comment`, {
         content: payload.content,
         score: payload.score,
@@ -167,26 +192,43 @@ export const actions = {
         withCredentials: true
       })
       .then((res) => {
+        before.goAway(1500)
+        this.$toast.success('댓글 작성 완료', {
+          duration: 2000
+        })
         commit('addComment', res.data)
       })
       .catch((err) => {
-        console.error('addComment:::', err)
+        // console.error('addComment:::', err)
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   },
   deleteComment({
     commit
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.delete(`/post/${payload.postId}/comment/${payload.commentId}`, {
         withCredentials: true
       })
       .then((res) => {
+        before.goAway(1500)
+        this.$toast.success('댓글 삭제 완료', {
+          duration: 2000
+        })
         commit('deleteComment', {
           postId: payload.postId,
           commentId: res.data
         })
       })
       .catch((err) => {
-        console.error('deleteComment:::', err)
+        // console.error('deleteComment:::', err)
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   },
 
@@ -356,7 +398,6 @@ export const actions = {
         withCredentials: true
       })
       .then((res) => {
-        // res.data에는 userId가 들어있다.
         commit('likePost', {
           userId: res.data.userId,
           postId: payload.postId,
@@ -389,18 +430,23 @@ export const actions = {
   retweet({
     commit
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.post(`/post/${payload.postId}/retweet`, {}, {
         withCredentials: true
       })
       .then((res) => {
-        // res.data에는 리트윗한 나의 User id, nickname
-        // 원본글의 Id와, 글 작성자의 User id, nickname, 글의 image 주소가 들어있다.
         commit('addMainPost', res.data)
+        before.goAway(1500)
+        this.$toast.success('리트윗 완료', {
+          duration: 2000
+        })
       })
       .catch((err) => {
-        console.error('retweet:::', err)
-        // 작성한 에러메시지
-        alert(err.response.data)
+        // console.error('retweet:::', err)
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   }
 }

@@ -1,29 +1,6 @@
 <template>
-  <div>
+  <v-container>
     <post-images :images="post.Images || []" />
-    <v-card-title>
-      <h3>
-        <template v-if="me">
-          <v-tooltip right color="rgba(255, 255, 255, 0)">
-            <template v-slot:activator="{ on }">
-              <nuxt-link :to="/user/ + post.User.id">
-                <span v-if="me.id !== post.User.id" v-on="on">{{ post.User.nickname }}</span>
-                <span v-else v-on="on">{{ post.User.nickname }} (나)</span>
-              </nuxt-link>
-            </template>
-            <v-img
-              :src="`${srcAddress}/profile/${post.User.src}`"
-              min-height="200px"
-              max-height="300px"
-              width="200px"
-            ></v-img>
-          </v-tooltip>
-        </template>
-        <span v-else>{{ post.User.nickname }}</span>
-        <v-btn v-if="canFollow" @click="onFollow">팔로우</v-btn>
-        <v-btn v-if="canUnFollow" @click="onUnFollow">언팔로우</v-btn>
-      </h3>
-    </v-card-title>
     <v-container v-if="!isEditting" class="pb-0">
       <v-container>
         <span v-for="(node, i) in nodes" :key="i">
@@ -37,23 +14,34 @@
       </v-container>
       <v-divider class="mt-5"></v-divider>
       <v-container class="mb-0 pb-0">
-        <div>
-          {{ $moment(post.createdAt).fromNow() }}에 작성됨...
-          <span
-            v-if="post.createdAt !== post.updatedAt"
-          >(수정됨: {{ $moment(post.updatedAt).fromNow() }})</span>
-        </div>
+        <v-row justify="space-between">
+          <div>
+            {{ $moment(post.createdAt).fromNow() }}에 작성됨...
+            <span
+              v-if="post.createdAt !== post.updatedAt"
+            >(수정됨: {{ $moment(post.updatedAt).fromNow() }})</span>
+          </div>
+          <v-btn text color="primary" nuxt-link :to="`/post/${post.id}`">상세보기</v-btn>
+        </v-row>
       </v-container>
     </v-container>
-    <v-card-text v-else>
+    <!-- 수정 -->
+    <v-container v-else>
       <div>
         <v-form ref="form" @submit.prevent="onSubmitForm">
-          <v-textarea v-model="content" outlined auto-grow clearable :hide-details="hideDetails" />
-          <v-btn type="submit" color="blue" absolute right>수정</v-btn>
+          <v-container>
+            <v-textarea v-model="content" outlined auto-grow clearable :hide-details="hideDetails" />
+            <v-container>
+              <v-row justify="end">
+                <v-btn class="mx-1" type="button" color="yellow" @click.prevent="onEditPost">수정 취소</v-btn>
+                <v-btn type="submit" color="green" dark>수정</v-btn>
+              </v-row>
+            </v-container>
+          </v-container>
         </v-form>
       </div>
-    </v-card-text>
-  </div>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
@@ -77,6 +65,10 @@ export default {
     isEditting: {
       type: Boolean,
       required: true
+    },
+    onEditPost: {
+      type: Function,
+      required: true
     }
   },
   created() {
@@ -88,38 +80,9 @@ export default {
     },
     me() {
       return this.$store.state.users.me;
-    },
-    canFollow() {
-      return (
-        this.me &&
-        this.post.User.id !== this.me.id &&
-        !this.me.Followings.find(v => v.id === this.post.User.id)
-      );
-    },
-    canUnFollow() {
-      return (
-        this.me &&
-        this.post.User.id !== this.me.id &&
-        this.me.Followings.find(v => v.id === this.post.User.id)
-      );
-    },
-    srcAddress() {
-      return process.env.NODE_ENV === "production"
-        ? "https://api.namshter.com"
-        : "http://localhost:3085";
     }
   },
   methods: {
-    onFollow() {
-      this.$store.dispatch("users/follow", {
-        userId: this.post.User.id
-      });
-    },
-    onUnFollow() {
-      this.$store.dispatch("users/unfollow", {
-        userId: this.post.User.id
-      });
-    },
     async onSubmitForm() {
       if (!this.content.trim()) {
         alert("게시글 입력해여죠;;");
@@ -135,6 +98,13 @@ export default {
           this.hideDetails = false;
           this.$emit("onEditPost");
         });
+    }
+  },
+  watch: {
+    isEditting(newValue, oldValue) {
+      if (!newValue) {
+        this.content = this.post.content;
+      }
     }
   }
 };

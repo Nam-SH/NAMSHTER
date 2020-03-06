@@ -12,7 +12,7 @@
           </v-card>
           <v-card-actions>
             <!-- 좋아요 -->
-            <v-btn text color="orange" @click="onClickHeart">
+            <v-btn text color="orange" @click.prevent="onClickHeart">
               <v-icon>{{ heartIcon }}</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -30,30 +30,50 @@
           </v-card-actions>
         </v-card>
         <v-divider></v-divider>
-        <v-card color="#F5F5DC">
-          <v-card-text class="pb-0">
-            <span>댓글</span>
-            <v-btn rounded color="yellow" small right absolute @click="testClick">전체 보기</v-btn>
-            <v-divider></v-divider>
-            <div v-for="c in groupPost.GroupPostComments" :key="c.id">
-              <div class="text--primary">{{ c.User.src }}</div>
-              <div class="text--primary">{{ c.User.name }}({{ c.User.nickname }})</div>
-              <div class="text--primary">{{ c.comment }}</div>
-              <v-btn @click="onDeleteComment(c.id)">삭제</v-btn>
-            </div>
-          </v-card-text>
-          <v-container>
-            <v-card-actions class="mt-0 pt-0">
-              <v-form @submit.prevent="onSubmitForm" width="100%">
-                <v-text-field class="mt-0 pt-0" label="댓글" hide-details v-model="comment">
-                  <v-btn type="submit" slot="append" icon small color="primary">
-                    <v-icon dark>mdi-pencil</v-icon>
-                  </v-btn>
-                </v-text-field>
-              </v-form>
-            </v-card-actions>
-          </v-container>
-        </v-card>
+        <v-container>
+          <v-row justify="center">
+            <v-expansion-panels accordion>
+              <v-expansion-panel @click.prevent="onComment">
+                <v-expansion-panel-header>
+                  <span>
+                    <strong>댓글</strong>
+                  </span>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content v-if="isCommentOn">
+                  <v-container>
+                    <v-form @submit.prevent="onSubmitForm" width="100%">
+                      <v-text-field class="mt-0 pt-0" label="댓글" hide-details v-model="comment">
+                        <v-btn type="submit" slot="append" icon small color="primary">
+                          <v-icon dark>mdi-pencil</v-icon>
+                        </v-btn>
+                      </v-text-field>
+                    </v-form>
+                  </v-container>
+                  <div v-for="comm in groupPost.GroupPostComments" :key="comm.id">
+                    <v-row align="center" justify="space-between">
+                      <div>
+                        <v-list-item-avatar class="mr-0" color="grey darken-3">
+                          <v-img
+                            class="elevation-6"
+                            :src="`${srcAddress}/profile/${comm.User.src}`"
+                          ></v-img>
+                        </v-list-item-avatar>
+                        <span>{{ comm.User.name }}({{ comm.User.nickname }})</span>
+                        <span>
+                          <strong>{{ comm.comment }}</strong>
+                        </span>
+                      </div>
+                      <v-btn @click="onDeleteComment(c.id)" icon color="red">
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </v-row>
+                    <v-divider></v-divider>
+                  </div>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-row>
+        </v-container>
       </v-container>
     </v-container>
   </v-row>
@@ -75,7 +95,8 @@ export default {
   data() {
     return {
       isEditting: false,
-      comment: ""
+      comment: "",
+      isCommentOn: false
     };
   },
   computed: {
@@ -90,6 +111,11 @@ export default {
     },
     heartIcon() {
       return this.liked ? "mdi-heart" : "mdi-heart-outline";
+    },
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085";
     }
   },
   methods: {
@@ -105,12 +131,20 @@ export default {
         postId: this.groupPost.id
       });
     },
+    onComment() {
+      this.isCommentOn = !this.isCommentOn;
+      if (this.isCommentOn) {
+        this.testClick();
+      }
+    },
     testClick() {
-      this.$store.dispatch("groups/loadPostComments", {
-        groupId: this.$route.params.id,
-        postId: this.groupPost.id,
-        reset: true
-      });
+      if (this.isCommentOn) {
+        this.$store.dispatch("groups/loadPostComments", {
+          groupId: this.$route.params.id,
+          postId: this.groupPost.id,
+          reset: true
+        });
+      }
     },
     async onSubmitForm() {
       if (!this.comment.trim()) {

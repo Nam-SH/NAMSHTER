@@ -82,13 +82,13 @@
         </v-container>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn text @click="step--">Back</v-btn>
+          <v-btn text @click.prevent="step--">Back</v-btn>
           <v-spacer></v-spacer>
           <v-btn
             :hidden="step === 2"
             :disabled="!valid"
             color="primary"
-            @click="step++;onLoggingInUser()"
+            @click.prevent="step++;onLoggingInUser()"
           >Next</v-btn>
           <v-btn v-if="step === 2" :disabled="!valid" color="yellow" type="submit">로그인</v-btn>
         </v-card-actions>

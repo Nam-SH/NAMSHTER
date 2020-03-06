@@ -148,6 +148,8 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css?family=Nanum+Gothic|Noto+Sans+KR|Open+Sans&display=swap");
+
 a {
   display: inline-block;
   text-decoration: none;

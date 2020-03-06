@@ -22,7 +22,7 @@
           </nuxt-link>
         </v-list-item-content>
         <v-list-item-action>
-          <v-icon @click="remove(user.id)">mdi-minus-circle-outline</v-icon>
+          <v-icon @click.prevent="remove(user.id)">mdi-minus-circle-outline</v-icon>
         </v-list-item-action>
       </v-list-item>
     </v-col>

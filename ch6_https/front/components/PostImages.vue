@@ -12,14 +12,14 @@
       contain
       aspect-ratio="2"
       style="flex: 1"
-      @click="zoomImages"
+      @click.prevent="zoomImages"
     />
     <v-img
       :src="`${srcAddress}/${images[1].src}`"
       contain
       aspect-ratio="2"
       style="flex: 1"
-      @click="zoomImages"
+      @click.prevent="zoomImages"
     />
     <image-zoom v-if="imageZoomed" :close-modal="closeModal" :images="images" />
   </div>
@@ -30,11 +30,11 @@
       contain
       aspect-ratio="2"
       style="flex: 1"
-      @click="zoomImages"
+      @click.prevent="zoomImages"
     />
     <div
       style="flex: 1; align-items: center; justify-content: center; display: flex"
-      @click="zoomImages"
+      @click.prevent="zoomImages"
     >
       <div style="text-align: center">
         <v-icon>mdi-dots-horizontal</v-icon>

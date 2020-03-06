@@ -21,7 +21,7 @@
           <v-btn
             :disabled="oneGroup.MasterId === me.id"
             color="yellow"
-            @click="groupUserInOut"
+            @click.prevent="groupUserInOut"
           >{{ isSignIn }}</v-btn>
         </div>
         <p>
@@ -32,9 +32,6 @@
           <v-btn v-if="oneGroup.MasterId === me.id" @click.prevent="onChangeState">{{ stateName }}</v-btn>
           <div v-if="oneGroup.MasterId === me.id && oneGroup.state !== 2">
             <div>
-              <!--  -->
-              <!--  -->
-              <!--  -->
               <v-btn @click.stop="onEdit" right dark color="blue">수정</v-btn>
               <group-edit-form
                 hidden
@@ -42,16 +39,12 @@
                 :onEdit="onEdit"
                 :isEditting="isEditting"
               />
-              <!--  -->
-              <!--  -->
-              <!--  -->
-              <!--  -->
               <div class="mb-4" style="display:inline-block">
-                <v-btn color="primary" @click="alert = !alert">삭제</v-btn>
+                <v-btn color="primary" @click.prevent="alert = !alert">삭제</v-btn>
               </div>
               <v-alert :value="alert" color="orange" transition="scroll-y-reverse-transition" dark>
                 정말로 삭제하실 생각임??
-                <v-btn @click="onDeleteGroup" dark color="red">삭제</v-btn>
+                <v-btn @click.prevent="onDeleteGroup" dark color="red">삭제</v-btn>
               </v-alert>
             </div>
           </div>
@@ -67,7 +60,7 @@
           :disabled="(oneGroup && oneGroup.state !== 1) || !isMember"
           block
           color="yellow accent-1"
-          @click="onPostForm"
+          @click.prevent="onPostForm"
         >글 쓰기</v-btn>
       </v-card-actions>
     </v-card>

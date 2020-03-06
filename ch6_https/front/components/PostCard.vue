@@ -1,51 +1,58 @@
 <template>
   <div>
-    <v-card style="margin-bottom: 20px">
+    <v-card style="margin-bottom: 20px" shaped>
       <div v-if="post.RetweetId && post.Retweet">
         <v-subheader>{{ post.User.nickname }}님이 리트윗했다.</v-subheader>
+        <post-header :post="post" />
         <v-card style="margin: 0 20px">
-          <post-content :post="post.Retweet" :isEditting="isEditting" />
+          <post-content :post="post.Retweet" :isEditting="isEditting" :onEditPost="onEditPost" />
         </v-card>
+        <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
+      </div>
+      <div v-else>
+        <post-header :post="post" />
+        <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
       </div>
 
-      <post-content v-else :post="post" :isEditting="isEditting" @onEditPost="onEditPost" />
-
-      <v-btn
-        v-if="isInIndex"
-        text
-        color="primary"
-        nuxt-link
-        :to="`/post/${post.id}`"
-        absolute
-        right
-      >상세보기</v-btn>
-
       <v-card-actions>
-        <v-btn text color="orange" @click="onRetweet">
-          <v-icon>mdi-twitter-retweet</v-icon>
-        </v-btn>
-
-        <!-- 좋아요 -->
-        <v-btn text color="orange" @click="onClickHeart">
-          <v-icon>{{ heartIcon }}</v-icon>
-        </v-btn>
-
-        <!-- 댓글 -->
-        <v-btn text color="orange" @click="onComment">
-          <v-icon>mdi-comment-outline</v-icon>
-        </v-btn>
-
-        <v-menu offset-y open-on-hover>
-          <template v-slot:activator="{ on }">
-            <v-btn text color="orange" v-on="on">
-              <v-icon>mdi-dots-horizontal</v-icon>
+        <v-row class="mx-1" justify="space-between">
+          <div>
+            <v-btn text color="orange" @click.prevent="onRetweet">
+              <v-icon>mdi-twitter-retweet</v-icon>
             </v-btn>
-          </template>
-          <div style="background: white">
-            <v-btn cark color="orange" @click="onEditPost">수정</v-btn>
-            <v-btn cark color="red" @click="onRemovePost">삭제</v-btn>
+
+            <!-- 좋아요 -->
+            <v-btn text color="orange" @click.prevent="onClickHeart">
+              <v-icon>{{ heartIcon }}</v-icon>
+            </v-btn>
+
+            <!-- 댓글 -->
+            <v-btn text color="orange" @click.prevent="onComment">
+              <v-icon>mdi-comment-outline</v-icon>
+            </v-btn>
           </div>
-        </v-menu>
+          <div>
+            <div class="text-center">
+              <v-menu open-on-hover top offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    text
+                    color="orange"
+                    v-on="on"
+                    :disabled="!!post.RetweetId && !!post.Retweet"
+                  >
+                    <v-icon>mdi-dots-horizontal</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item v-for="(item, idx) in items" :key="idx" @click="item.func">
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
+          </div>
+        </v-row>
       </v-card-actions>
     </v-card>
 
@@ -77,11 +84,13 @@
 <script>
 import CommentForm from "@/components/CommentForm.vue";
 import PostContent from "@/components/PostContent.vue";
+import PostHeader from "@/components/PostHeader.vue";
 
 export default {
   components: {
     CommentForm,
-    PostContent
+    PostContent,
+    PostHeader
   },
   props: {
     post: {
@@ -95,7 +104,12 @@ export default {
       avgTotal: 0,
       commentList: null,
       isEditting: false,
-      isInIndex: true
+      isInIndex: true,
+
+      items: [
+        { title: "수정", func: this.onEditPost },
+        { title: "삭제", func: this.onRemovePost }
+      ]
     };
   },
   created() {
@@ -117,6 +131,9 @@ export default {
     },
     AvgRank() {
       return this.commentOpened ? this.onAvgRank(this.post.Comments) : pass;
+    },
+    nodes() {
+      return this.post.content.split(/(#[^\s#]+)/);
     }
   },
 

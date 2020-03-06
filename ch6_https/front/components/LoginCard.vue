@@ -23,7 +23,7 @@
           </v-btn>
         </v-row>
         <hr class="my-2" />
-        <v-btn class="mb-3" @click="onLogOut">로그아웃</v-btn>
+        <v-btn class="mb-3" @click.prevent="onLogOut">로그아웃</v-btn>
       </v-container>
     </v-card>
     <v-divider class="my-3"></v-divider>

@@ -24,7 +24,7 @@
           <v-text-field
             label="비밀번호"
             :type="value1 ? 'password' : 'text'"
-            @click:append="() => (value1 = !value1)"
+            @click.prevent:append="() => (value1 = !value1)"
             :append-icon="value1 ? 'mdi-eye' : 'mdi-eye-off'"
             required
             v-model="password"
@@ -33,7 +33,7 @@
           <v-text-field
             label="비밀번호 확인"
             :type="value2 ? 'password' : 'text'"
-            @click:append="() => (value2 = !value2)"
+            @click.prevent:append="() => (value2 = !value2)"
             :append-icon="value2 ? 'mdi-eye' : 'mdi-eye-off'"
             required
             v-model="passwordCheck"

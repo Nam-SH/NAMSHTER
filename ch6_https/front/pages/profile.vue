@@ -12,15 +12,19 @@
         <v-container>
           <div class="main">
             <div class="main2">
-              <div v-for="i in 32" :key="i" class="main3">{{ i == 1 ? '구분' : i - 1 }}</div>
+              <div v-for="i in 32" :key="i" class="main3">
+                <p class="scedule">{{ i == 1 ? '구분' : i - 1 + '일' }}</p>
+              </div>
             </div>
             <div v-for="j in 12" :key="j" class="main2">
               <div
                 v-for="i in 32"
                 :key="i"
                 class="main3"
-                :style="{background: i == 1 ? 'yellow' : dailyData[j][i - 1] == 1 ? 'gray' : 'white'}"
-              >{{ i == 1 ? `${j}월`: '' }}</div>
+                :style="{background: i == 1 ? 'yellow' : i <= dailyData[j].length && dailyData[j][i - 1] == 1 ? '#00FA9A' :  dailyData[j].length && dailyData[j][i - 1] == 0 ? '#DCDCDC' : 'black'}"
+              >
+                <p class="scedule">{{ i == 1 ? j + '월': '' }}</p>
+              </div>
             </div>
           </div>
         </v-container>
@@ -70,7 +74,7 @@
             <v-subheader>팔로잉</v-subheader>
             <follow-list :users="followingList" :remove="removeFollowing" />
             <v-btn
-              @click="loadFollowings"
+              @click.prevent="loadFollowings"
               v-if="hasMoreFollowing"
               color="blue"
               style="width: 100%"
@@ -83,7 +87,7 @@
             <v-subheader>팔로워</v-subheader>
             <follow-list :users="followerList" :remove="removeFollower" />
             <v-btn
-              @click="loadFollowers"
+              @click.prevents="loadFollowers"
               v-if="hasMoreFollower"
               color="blue"
               style="width: 100%"
@@ -213,18 +217,17 @@ export default {
   height: 30px;
   background: yellow;
   text-align: center;
-  font-size: 8px;
 }
 .main3 {
   flex: 1;
   border: 1px solid black;
-  font-size: 8px;
-  /* background: green; */
+  font-size: 13px;
 }
-.main4 {
-  flex: 1;
-  border: 1px solid black;
-  font-size: 8px;
-  /* background: green; */
+.scedule {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Noto Sans KR";
 }
 </style>

@@ -274,7 +274,7 @@ router.post("/:groupId/userInOut", async (req, res, next) => {
     });
 
     if (user.id === targetGroup.MasterId) {
-      return res.send("님은 방장이라 가입/탈퇴 못함;;");
+      return res.status(403).send("님은 방장이라 가입/탈퇴 못함;;");
     }
     const usersInGroup = await targetGroup.getGroupmembers({
       where: {
@@ -283,23 +283,23 @@ router.post("/:groupId/userInOut", async (req, res, next) => {
       attributes: ["id", "createdAt"]
     });
     if (usersInGroup && usersInGroup.length > 0) {
-      // const cDay = usersInGroup[0].createdAt;
-      // const cYear = new Date(cDay).getFullYear();
-      // const cMonth = new Date(cDay).getMonth();
-      // const cDate = new Date(cDay).getDate();
-      // const dayStart = new Date(cYear, cMonth, cDate);
-      // const today = new Date();
-      // const dayEnd = new Date(
-      //   today.getFullYear(),
-      //   today.getMonth(),
-      //   today.getDate()
-      // );
-      // if (dayEnd - dayStart >= 259200000) {
-      await user.removeGroupJoined(req.params.groupId);
-      return res.json(user.id);
-      // } else {
-      //   return res.status(403).send("3일 후 탈퇴 가능함;;");
-      // }
+      const cDay = usersInGroup[0].createdAt;
+      const cYear = new Date(cDay).getFullYear();
+      const cMonth = new Date(cDay).getMonth();
+      const cDate = new Date(cDay).getDate();
+      const dayStart = new Date(cYear, cMonth, cDate);
+      const today = new Date();
+      const dayEnd = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+      if (dayEnd - dayStart >= 259200000) {
+        await user.removeGroupJoined(req.params.groupId);
+        return res.json(user.id);
+      } else {
+        return res.status(403).send("3일 후 탈퇴 가능함;;");
+      }
     } else {
       await user.addGroupJoined(req.params.groupId);
       return res.json(user.id);
@@ -336,16 +336,11 @@ router.get("/:groupId/posts", async (req, res, next) => {
         },
         {
           model: db.GroupPostComment,
-          attributes: ['id', 'comment', 'createdAt'],
-          include: [{
-            model: db.User,
-            attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-          }],
+          attributes: ['id']
         },
       ],
       order: [
         ["createdAt", "DESC"],
-        [db.GroupPostComment, "createdAt", "DESC"]
       ],
       limit: parseInt(req.query.limit, 10) || 10
     });

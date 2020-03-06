@@ -380,6 +380,13 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
           attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
         {
+          model: db.User,
+          as: "Likers",
+          attributes: ["id"]
+        }, {
+          model: db.Comment,
+          attributes: ["id"]
+        }, {
           model: db.Post,
           as: "Retweet",
           include: [{
