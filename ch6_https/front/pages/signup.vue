@@ -24,7 +24,7 @@
           <v-text-field
             label="비밀번호"
             :type="value1 ? 'password' : 'text'"
-            @click.prevent:append="() => (value1 = !value1)"
+            @click:append="() => (value1 = !value1)"
             :append-icon="value1 ? 'mdi-eye' : 'mdi-eye-off'"
             required
             v-model="password"
@@ -33,7 +33,7 @@
           <v-text-field
             label="비밀번호 확인"
             :type="value2 ? 'password' : 'text'"
-            @click.prevent:append="() => (value2 = !value2)"
+            @click:append="() => (value2 = !value2)"
             :append-icon="value2 ? 'mdi-eye' : 'mdi-eye-off'"
             required
             v-model="passwordCheck"
@@ -92,7 +92,6 @@ export default {
       value2: true
     };
   },
-
   computed: {
     me() {
       return this.$store.state.users.me;
@@ -101,20 +100,12 @@ export default {
   methods: {
     onSubmitForm() {
       if (this.$refs.form.validate()) {
-        this.$store
-          .dispatch("users/signUp", {
-            email: this.email,
-            name: this.name,
-            nickname: this.nickname,
-            password: this.password
-          })
-          .then(() => {
-            this.$router.push({ path: "/" });
-          })
-          .catch(err => {
-            console.log("onSubmitForm :::", err);
-            alert("회원가입에 실패했네여;;");
-          });
+        this.$store.dispatch("users/signUp", {
+          email: this.email,
+          name: this.name,
+          nickname: this.nickname,
+          password: this.password
+        });
       }
     }
   },

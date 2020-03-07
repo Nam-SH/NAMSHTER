@@ -52,6 +52,35 @@
                   </v-row>
                 </div>
               </v-form>
+              <!--  -->
+              <v-form v-else-if="tab === 2" @submit.prevent="onSubmitForm">
+                <v-text-field
+                  v-model="inputData"
+                  label="현재 비밀번호"
+                  :type="value1 ? 'password' : 'text'"
+                  @click:append="() => (value1 = !value1)"
+                  :append-icon="value1 ? 'mdi-eye' : 'mdi-eye-off'"
+                />
+                <v-divider></v-divider>
+                <v-text-field
+                  v-model="password"
+                  label="비밀번호"
+                  :error="error"
+                  :hide-details="hideDetails"
+                  :type="value2 ? 'password' : 'text'"
+                  @click:append="() => (value2 = !value2)"
+                  :append-icon="value2 ? 'mdi-eye' : 'mdi-eye-off'"
+                />
+
+                <v-text-field
+                  v-model="passwordCheck"
+                  label="새로운 비밀번호 확인"
+                  :type="value3 ? 'password' : 'text'"
+                  @click:append="() => (value3 = !value3)"
+                  :append-icon="value3 ? 'mdi-eye' : 'mdi-eye-off'"
+                />
+                <v-btn class="mt-5" dark color="blue" type="submit">수정</v-btn>
+              </v-form>
               <!-- 나머지 -->
               <v-form v-else @submit.prevent="onSubmitForm">
                 <v-text-field
@@ -77,15 +106,15 @@ export default {
   data() {
     return {
       inputData: "",
+      password: "",
+      passwordCheck: "",
+      value1: true,
+      value2: true,
+      value3: true,
       error: false,
       hideDetails: true,
       tab: 0,
-      label: [
-        "닉네임 변경하고 싶죠?",
-        "이름 변경하고 싶죠?",
-        "비밀번호 변경하고 싶죠?",
-        "프로필사진 바꾸고 싶죠?"
-      ],
+      label: ["닉네임 변경하고 싶죠?", "이름 변경하고 싶죠?", "", ""],
       editField: ["닉네임", "이름", "비밀번호", "프로필"],
       defaultSrc: null,
 
@@ -131,41 +160,61 @@ export default {
       this.hideDetails = true;
     },
     onSubmitForm() {
-      if ((this.tab === 0 || 1) && this.inputData.length > 20) {
-        alert("최대 20자만 되요;;");
+      if (!this.inputData.trim()) {
+        this.$toast.error("빈 칸은 안 돼요;;", { duration: 2000 });
         return;
-      } else if (this.tab === 2 && this.inputData.length < 7) {
-        alert("비밀번호는 최소 8자에요;;");
+      }
+      if ((this.tab === 0 || 1) && this.inputData.length > 20) {
+        this.$toast.error("최대 20자만 되요;;", { duration: 2000 });
+        return;
+      } else if (this.tab === 2 && this.password.length < 10) {
+        this.$toast.error("비밀번호는 최소 10자에요;;", { duration: 2000 });
         return;
       }
       if (
         (this.tab === 0 && this.inputData === this.me.nickname) ||
         (this.tab === 1 && this.inputData === this.me.name)
       ) {
-        alert("안 바꾼거 아님?;;");
+        this.$toast.error("안 바꾼거 아님?;;", { duration: 2000 });
         return;
       }
-      if (!this.inputData.trim()) {
-        alert("빈 칸은 안 돼요;;");
+      if (this.tab === 2 && this.password !== this.passwordCheck) {
+        this.$toast.error("비밀번호가 다른데여;;", { duration: 2000 });
         return;
       }
+
       if (this.tab == 0) {
-        this.$store.dispatch("users/changeNickname", {
-          nickname: this.inputData
-        });
+        this.$store
+          .dispatch("users/changeNickname", {
+            nickname: this.inputData
+          })
+          .then(res => {
+            this.inputData = "";
+            this.hideDetails = false;
+            this.error = false;
+          });
       } else if (this.tab == 1) {
-        this.$store.dispatch("users/changeName", {
-          name: this.inputData
-        });
+        this.$store
+          .dispatch("users/changeName", {
+            name: this.inputData
+          })
+          .then(res => {
+            this.inputData = "";
+            this.hideDetails = false;
+            this.error = false;
+          });
       } else {
-        this.$store.dispatch("users/changePassword", {
-          password: this.inputData
-        });
+        this.$store
+          .dispatch("users/changePassword", {
+            oldPassword: this.inputData,
+            newPassword: this.password
+          })
+          .then(res => {
+            this.inputData = "";
+            this.hideDetails = false;
+            this.error = false;
+          });
       }
-      this.inputData = "";
-      this.hideDetails = false;
-      this.error = false;
-      return alert("변경이 완료되었습니다.");
     },
     async onChangeImages() {
       try {

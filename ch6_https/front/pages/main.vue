@@ -1,10 +1,5 @@
 <template>
-  <v-container v-if="isLoading">
-    <div class="text-center" style="transition-delay: 3s;">
-      <v-progress-circular :size="70" :width="7" color="purple" indeterminate></v-progress-circular>
-    </div>
-  </v-container>
-  <v-container v-else>
+  <v-container>
     <v-card class="mx-auto" max-width="500px">
       <v-card-title class="title font-weight-regular justify-space-between">
         <span>NAMSHTER</span>
@@ -115,26 +110,15 @@ export default {
       passwordRules: [
         v => !!v || "비밀번호는 필수인데여;;",
         v => (v && v.length >= 10) || "비밀번호는 최소 10자에여;;"
-      ],
-      isLoading: false
+      ]
     };
   },
   methods: {
     onSubmitForm() {
-      this.isLoading = true;
-      this.$store
-        .dispatch("users/logIn", {
-          email: this.email,
-          password: this.password
-        })
-        .then(() => {
-          this.email = "";
-          this.password = "";
-        })
-        .catch(err => {
-          console.error(err);
-          alert("회원가입 실패!!");
-        });
+      this.$store.dispatch("users/logIn", {
+        email: this.email,
+        password: this.password
+      });
     },
     async onLoggingInUser() {
       await this.$store.dispatch("users/loggingInUser", {

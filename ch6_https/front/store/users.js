@@ -100,12 +100,7 @@ export const actions = {
       commit('setMe', res.data)
       return
     } catch (err) {
-      // console.error(err);
-      // if (err.response.status === 401) {
-      //   console.log('로그인해줘요');
-      // } else {
-      //   console.log('loadUser ::: 아몰랑', );
-      // }
+      // console.error('loadUser :::', err.response.data);
     }
   },
 
@@ -113,14 +108,23 @@ export const actions = {
   async loadOther({
     commit
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     try {
       const res = await this.$axios.get(`/user/${payload.userId}`, {
         withCredentials: true
       });
-      return commit('setOther', res.data)
+      commit('setOther', res.data)
+      before.goAway(1500)
+      this.$toast.success('사용자 정보 불러오기 완료', {
+        duration: 2000
+      })
 
     } catch (err) {
-      console.error('loadOther :::', err)
+      // console.error('loadOther :::', err)
+      before.goAway(1500)
+      this.$toast.error(`${ err.response.data }`, {
+        duration: 2000
+      })
     }
   },
 
@@ -142,6 +146,7 @@ export const actions = {
   signUp({
     commit,
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.post('/user', {
         email: payload.email,
         name: payload.name,
@@ -152,9 +157,16 @@ export const actions = {
       })
       .then((res) => {
         commit('setMe', res.data)
+        this.$router.push({
+          path: "/"
+        });
       })
       .catch((err) => {
-        console.error('signUp :::', err);
+        // console.error('signUp :::', err.response.data);
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       });
   },
 
@@ -162,6 +174,7 @@ export const actions = {
     commit,
     state
   }, payload) {
+    let before = this.$toast.show('진행 중...')
     return this.$axios.post('/user/login', {
         email: payload.email,
         password: payload.password
@@ -171,33 +184,45 @@ export const actions = {
       .then((res) => {
         commit('setMe', res.data);
         this.$router.push('/');
+        before.goAway(1500)
         this.$toast.show(`Hello ${state.me.name}~~`, {
           duration: 3000
         })
       })
       .catch((err) => {
-        console.error('logIn :::', err)
+        // console.error('logIn :::', err.response.data)
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   },
 
   logOut({
     commit,
+    state
   }) {
     return this.$axios.post('/user/logout', {}, {
         withCredentials: true,
       })
       .then((res) => {
+        this.$toast.success(`잘 가 ${state.me.nickname}!`, {
+          duration: 2000
+        })
         commit('setMe', null);
       })
       .catch((err) => {
-        console.error('logOut :::', err)
+        // console.error('logOut :::', err)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
       })
   },
 
   changeNickname({
     commit
   }, payload) {
-    let beforeToast = this.$toast.success("변경 중...");
+    let before = this.$toast.show('변경 중...')
     return this.$axios.patch('/user/nickname', {
         nickname: payload.nickname
       }, {
@@ -205,21 +230,23 @@ export const actions = {
       })
       .then((res) => {
         commit('changeNickname', res.data)
-        beforeToast.text('변경완료').goAway(3000)
+        before.goAway(1500)
+        this.$toast.success('닉네임 변경 완료', {
+          duration: 2000
+        })
       })
       .catch((err) => {
         // console.error('changeNickname :::', err)
-        this.$toast.clear()
-        this.$toast.error(`${err.respnse.data}`, {
-          duration: 3000
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
         })
       })
   },
-
   changeName({
     commit
   }, payload) {
-    let beforeToast = this.$toast.success("변경 중...");
+    let before = this.$toast.show('변경 중...')
     return this.$axios.patch('/user/name', {
         name: payload.name
       }, {
@@ -227,35 +254,42 @@ export const actions = {
       })
       .then((res) => {
         commit('changeName', res.data)
-        beforeToast.text('변경완료').goAway(3000)
+        before.goAway(1500)
+        this.$toast.success('이름 변경 완료', {
+          duration: 2000
+        })
       })
       .catch((err) => {
         // console.error('changename :::', err)
-        this.$toast.clear()
-        this.$toast.error(`${err.respnse.data}`, {
-          duration: 3000
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
         })
       })
   },
-
   changePassword({
     commit
   }, payload) {
-    let beforeToast = this.$toast.success("변경 중...");
+    let before = this.$toast.show('변경 중...')
+    console.log('pa', payload);
+
     return this.$axios.patch('/user/password', {
-        password: payload.password
+        oldPassword: payload.oldPassword,
+        newPassword: payload.newPassword
       }, {
         withCredentials: true,
       })
       .then((res) => {
-        beforeToast.text('변경완료').goAway(3000)
-        // commit('changePassword', res.data)
+        before.goAway(1500)
+        this.$toast.success(res.data, {
+          duration: 2000
+        })
       })
       .catch((err) => {
         // console.error('changePassword :::', err)
-        this.$toast.clear()
-        this.$toast.error(`${err.respnse.data}`, {
-          duration: 3000
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
         })
       })
   },
@@ -354,6 +388,7 @@ export const actions = {
     state
   }, payload) {
     try {
+
       if (payload && payload.reset) {
         const res = await this.$axios.get(`/user/${state.me.id}/followers?limit=5`, {
           withCredentials: true
@@ -378,7 +413,7 @@ export const actions = {
         return;
       }
     } catch (err) {
-      console.error('loadFollowers :::', err)
+      // console.error('loadFollowers :::', err)
     }
   }, 1000),
 
@@ -411,7 +446,7 @@ export const actions = {
         return;
       }
     } catch (err) {
-      console.error('loadFollowings :::', err);
+      // console.error('loadFollowings :::', err);
     }
   }, 1000)
 }

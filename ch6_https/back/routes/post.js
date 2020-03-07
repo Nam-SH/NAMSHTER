@@ -180,10 +180,10 @@ router.patch("/:postId", isLoggedIn, async (req, res, next) => {
       }
     });
     if (!post) {
-      return res.status(400).send("포스트가 존재하지 않습니다.");
+      return res.status(404).send("없는 글 인데요;;");
     }
     if (post.UserId !== req.user.id) {
-      return res.status(400).send("님이 작성한 글이 아니에여;;");
+      return res.status(403).send("님이 작성한 글이 아니에여;;");
     }
     await db.Post.update({
       content: req.body.content
@@ -216,10 +216,10 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
       }
     });
     if (!post) {
-      return res.status(400).send("포스트가 존재하지 않습니다.");
+      return res.status(404).send("없는 글 인데요;;");
     }
     if (post.UserId !== req.user.id) {
-      return res.status(400).send("님이 작성한 글이 아니에여;;");
+      return res.status(403).send("님이 작성한 글이 아니에여;;");
     }
     await db.Post.destroy({
       where: {
@@ -243,7 +243,7 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
       }
     });
     if (!post) {
-      return res.status(404).send("포스트가 존재하지 않습니다.");
+      return res.status(404).send("없는 글 인데요;;");
     }
     const newComment = await db.Comment.create({
       // postId, UserId는 associate의 관계 정의로 인해 자동으로 추가되어 있다.
@@ -278,7 +278,7 @@ router.get("/:postId/comments", async (req, res, next) => {
       }
     });
     if (!post) {
-      return res.status(404).send("포스트가 존재하지 않습니다.");
+      return res.status(404).send("없는 글 인데요;;");
     }
     const comments = await db.Comment.findAll({
       where: {
@@ -308,7 +308,7 @@ router.delete('/:postId/comment/:commentId', isLoggedIn, async (req, res, next) 
       }
     });
     if (!targetPost) {
-      return res.status(404).send("포스트가 존재하지 않습니다.");
+      return res.status(404).send("없는 글 인데요;;");
     }
     const targetComment = await db.Comment.findOne({
       where: {
@@ -316,7 +316,7 @@ router.delete('/:postId/comment/:commentId', isLoggedIn, async (req, res, next) 
       }
     });
     if (!targetComment) {
-      return res.status(404).send("포스트가 존재하지 않습니다.");
+      return res.status(404).send("없는 댓글 인데요;;");
     }
     await db.Comment.destroy({
       where: {
@@ -351,7 +351,7 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
       req.user.id === post.UserId ||
       (post.Retweet && post.Retweet.UserId === req.user.id)
     ) {
-      return res.status(403).send("자신의 글을 리트윗할 수 없습니다.");
+      return res.status(403).send("자기 글은 리트윗 못해여;;");
     }
 
     // 리트윗 된 글이 내 글이면 리트윗하면 안 됨
@@ -363,7 +363,7 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
       }
     });
     if (exPost) {
-      return res.status(403).send("이미 리트윗했습니다요");
+      return res.status(403).send("이미 리트윗 한 글인데여;;");
     }
     // 검사 끝~~
     const retweet = await db.Post.create({
@@ -421,7 +421,7 @@ router.post("/:postId/like", isLoggedIn, async (req, res, next) => {
       }
     });
     if (!post) {
-      return res.status(404).send("글이 없는데요;;");
+      return res.status(404).send("없는 글 인데여;;");
     }
     // 글이 있으면
     await post.addLiker(req.user.id);
@@ -443,7 +443,7 @@ router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
       }
     });
     if (!post) {
-      return res.status(404).send("글이 없는데요;;");
+      return res.status(404).send("없는 글 인데여;;");
     }
     // 글이 있으면
     await post.removeLiker(req.user.id);

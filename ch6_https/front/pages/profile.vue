@@ -87,7 +87,7 @@
             <v-subheader>팔로워</v-subheader>
             <follow-list :users="followerList" :remove="removeFollower" />
             <v-btn
-              @click.prevents="loadFollowers"
+              @click.prevent="loadFollowers"
               v-if="hasMoreFollower"
               color="blue"
               style="width: 100%"

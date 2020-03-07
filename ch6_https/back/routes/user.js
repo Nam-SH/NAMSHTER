@@ -64,11 +64,11 @@ router.get("/", isLoggedIn, async (req, res, next) => {
 });
 
 // 다른 사용자정보 가져오기
-router.get("/:id", async (req, res, next) => {
+router.get("/:userId", async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {
-        id: parseInt(req.params.id, 10)
+        id: parseInt(req.params.userId, 10)
       },
       attributes: [
         "id",
@@ -86,7 +86,6 @@ router.get("/:id", async (req, res, next) => {
           attributes: ["id", "createdAt"]
         },
         {
-          // 이 유저가 좋아한다고(Liked) 한 글을 포함시켜라
           model: db.Post,
           as: "Liked",
           attributes: ["id"]
@@ -162,10 +161,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
     });
     if (exUser) {
       // 이미 회원가입되어있으면
-      return res.status(403).json({
-        errorCode: 1,
-        message: "이미 회원가입되어있습니다."
-      });
+      return res.status(403).send("회원가입이 되어 있는 아이디에요.");
     }
     await db.User.create({
       email: req.body.email,
@@ -182,7 +178,6 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
         return res.status(401).send(info.reason);
       }
       return req.login(user, async err => {
-        // 세션에 사용자 정보 저장은 serializeUser
         if (err) {
           console.error("POST-2 / :::", err);
           return next(err);
@@ -270,14 +265,12 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      console.error("POST-1 /login :::", err);
       return next(err);
     }
     if (info) {
       return res.status(401).send(info.reason);
     }
     return req.login(user, async err => {
-      // 세션에다 사용자 정보 저장 (어떻게? serializeUser)
       try {
         if (err) {
           console.error("POST-2 /login :::", err);
@@ -338,8 +331,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
           ]
         });
         // 데일리 체크
-        const today =
-          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
+        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
             createdAt: today
@@ -368,7 +360,7 @@ router.post("/logout", isLoggedIn, async (req, res) => {
   try {
     req.logout();
     req.session.destroy();
-    return res.status(200).send("로그아웃 되었습니다.");
+    return res.status(200).send("로그아웃!!");
   } catch (err) {
     console.error("/logout :::", err);
     next(err);
@@ -410,17 +402,32 @@ router.patch("/name", isLoggedIn, async (req, res, next) => {
 });
 
 // 비밀번호 변경
-router.patch("/password", isLoggedIn, async (req, res, next) => {
-  const hash = await bcrypt.hash(req.body.password, 12);
+router.patch("/password", async (req, res, next) => {
+
+  const me = await db.User.findOne({
+    where: {
+      id: 11
+    }
+  });
+  if (!me) {
+    return res.status(404).send('없는 사용자 인데여;;')
+  }
+
+  const result = await bcrypt.compare(req.body.oldPassword, me.password);
+  if (!result) {
+    return res.status(403).send('현재 비밀번호가 틀린데여;;')
+  }
+
+  hash = await bcrypt.hash(req.body.oldPassword, 12);
   try {
     await db.User.update({
       password: hash
     }, {
       where: {
-        id: req.user.id
+        id: 11
       }
     });
-    res.send("비밀번호 변경 성공~");
+    res.status(200).send("비밀번호 변경 완료");
   } catch (err) {
     console.error("PATCH /nickname :::", err);
     next(err);
@@ -450,17 +457,17 @@ router.patch(
 );
 
 // 팔로우
-router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
+router.post("/:userId/follow", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
         id: req.user.id
       }
     });
-    await me.addFollowing(req.params.id);
+    await me.addFollowing(req.params.userId);
     const user = await db.User.findOne({
       where: {
-        id: req.params.id
+        id: req.params.userId
       },
       attributes: ["id", "nickname", "name"]
     });
@@ -476,15 +483,15 @@ router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
 });
 
 // 언팔로우
-router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
+router.delete("/:userId/follow", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
         id: req.user.id
       }
     });
-    await me.removeFollowing(req.params.id);
-    res.send(req.params.id);
+    await me.removeFollowing(req.params.userId);
+    res.send(req.params.userId);
   } catch (err) {
     console.error("DELETE /:id/follow :::", err);
     next(err);
@@ -492,15 +499,15 @@ router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
 });
 
 // 언팔로워
-router.delete("/:id/follower", isLoggedIn, async (req, res, next) => {
+router.delete("/:userId/follower", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
         id: req.user.id
       }
     });
-    await me.removeFollower(req.params.id);
-    res.send(req.params.id);
+    await me.removeFollower(req.params.userId);
+    res.send(req.params.userId);
   } catch (err) {
     console.error("DELETE /:id/follower :::", err);
     next(err);
@@ -508,11 +515,11 @@ router.delete("/:id/follower", isLoggedIn, async (req, res, next) => {
 });
 
 // 나를 팔로워 전체 목록 불러오기
-router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
+router.get("/:userId/followers", async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
-        id: req.user.id
+        id: 12
       }
     });
     let where = {};
@@ -537,7 +544,6 @@ router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
       followers: followers.slice(0, 4),
       hasMoreFollower: isMore
     });
-    res.json(followers);
   } catch (err) {
     console.error("GET /:id/followers :::", err);
     next(err);
@@ -545,7 +551,7 @@ router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
 });
 
 // 내가 팔로우 전체 목록 불러오기
-router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
+router.get("/:userId/followings", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
@@ -583,6 +589,14 @@ router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
 // 특정 사용자가 작성한 글 불러오기
 router.get("/:userId/posts", async (req, res, next) => {
   try {
+    const user = await db.User.findOne({
+      where: {
+        id: req.params.userId
+      }
+    })
+    if (!user) {
+      return res.status(404).send('없는 사용자 인데요')
+    }
     let where = {
       UserId: parseInt(req.params.userId, 10)
     };
