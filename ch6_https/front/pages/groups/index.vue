@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <!-- {{ userDetail }} -->
     <v-layout style="display: flex">
       <v-container style="flex:1">
         <my-groups :grouplist="grouplistBefore" :isState="false" />
@@ -24,6 +25,7 @@ import MyGroups from "@/components/MyGroups.vue";
 import AllGroups from "@/components/AllGroups.vue";
 
 export default {
+  layout: "group",
   components: {
     MyGroups,
     AllGroups
@@ -47,7 +49,8 @@ export default {
       store.dispatch("groups/grouplistDoing", {
         state: "1"
       }),
-      store.dispatch("groups/loadAllGroups")
+      store.dispatch("groups/loadAllGroups"),
+      store.dispatch("users/userDetail")
     ]);
   },
   computed: {

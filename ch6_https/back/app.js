@@ -39,7 +39,8 @@ if (prod) {
   app.use(morgan("combined"));
   app.use(
     cors({
-      origin: "https://namshter.com",
+      origin: ["https://namshter.com", "https://www.namshter.com"],
+      default: "https://namshter.com",
       credentials: true
     })
   );

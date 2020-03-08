@@ -93,12 +93,12 @@ router.get("/:userId", async (req, res, next) => {
         {
           model: db.User,
           as: "Followings",
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
         {
           model: db.User,
           as: "Followers",
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
         {
           model: db.Comment,
@@ -112,18 +112,27 @@ router.get("/:userId", async (req, res, next) => {
       ],
       order: [
         [{
-          model: db.User,
-          as: 'Followings'
-        }, 'createdAt', 'DESC'],
+            model: db.User,
+            as: "Followings"
+          },
+          "createdAt",
+          "DESC"
+        ],
         [{
-          model: db.User,
-          as: 'Followers'
-        }, 'createdAt', 'DESC'],
-        [db.Post, 'createdAt', 'DESC'],
+            model: db.User,
+            as: "Followers"
+          },
+          "createdAt",
+          "DESC"
+        ],
+        [db.Post, "createdAt", "DESC"],
         [{
-          model: db.Group,
-          as: 'GroupJoined'
-        }, 'createdAt', 'DESC'],
+            model: db.Group,
+            as: "GroupJoined"
+          },
+          "createdAt",
+          "DESC"
+        ]
       ]
     });
     res.json(user);
@@ -140,7 +149,7 @@ router.get("/image/:userEmail", async (req, res, next) => {
       where: {
         email: req.params.userEmail
       },
-      attributes: ["nickname", "src"],
+      attributes: ["nickname", "src"]
     });
     res.json(userSrc);
   } catch (err) {
@@ -203,12 +212,12 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
             {
               model: db.User,
               as: "Followings",
-              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
             },
             {
               model: db.User,
               as: "Followers",
-              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
             },
             {
               model: db.Comment,
@@ -222,22 +231,32 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
           ],
           order: [
             [{
-              model: db.User,
-              as: 'Followings'
-            }, 'createdAt', 'DESC'],
+                model: db.User,
+                as: "Followings"
+              },
+              "createdAt",
+              "DESC"
+            ],
             [{
-              model: db.User,
-              as: 'Followers'
-            }, 'createdAt', 'DESC'],
-            [db.Post, 'createdAt', 'DESC'],
+                model: db.User,
+                as: "Followers"
+              },
+              "createdAt",
+              "DESC"
+            ],
+            [db.Post, "createdAt", "DESC"],
             [{
-              model: db.Group,
-              as: 'GroupJoined'
-            }, 'createdAt', 'DESC'],
+                model: db.Group,
+                as: "GroupJoined"
+              },
+              "createdAt",
+              "DESC"
+            ]
           ]
         });
         // 데일리 체크
-        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
+        const today =
+          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
             createdAt: today
@@ -297,12 +316,12 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
             {
               model: db.User,
               as: "Followings",
-              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
             },
             {
               model: db.User,
               as: "Followers",
-              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
             },
             {
               model: db.Comment,
@@ -316,22 +335,32 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
           ],
           order: [
             [{
-              model: db.User,
-              as: 'Followings'
-            }, 'createdAt', 'DESC'],
+                model: db.User,
+                as: "Followings"
+              },
+              "createdAt",
+              "DESC"
+            ],
             [{
-              model: db.User,
-              as: 'Followers'
-            }, 'createdAt', 'DESC'],
-            [db.Post, 'createdAt', 'DESC'],
+                model: db.User,
+                as: "Followers"
+              },
+              "createdAt",
+              "DESC"
+            ],
+            [db.Post, "createdAt", "DESC"],
             [{
-              model: db.Group,
-              as: 'GroupJoined'
-            }, 'createdAt', 'DESC'],
+                model: db.Group,
+                as: "GroupJoined"
+              },
+              "createdAt",
+              "DESC"
+            ]
           ]
         });
         // 데일리 체크
-        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
+        const today =
+          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
             createdAt: today
@@ -363,6 +392,79 @@ router.post("/logout", isLoggedIn, async (req, res) => {
     return res.status(200).send("로그아웃!!");
   } catch (err) {
     console.error("/logout :::", err);
+    next(err);
+  }
+});
+
+// 유지 디테일
+router.get("/:id/detail", async (req, res, next) => {
+  try {
+    const fullUser = await db.User.findOne({
+      where: {
+        id: req.params.id
+      },
+      attributes: [
+        "id",
+        "nickname",
+        "name",
+        "email",
+        "src",
+        "isAdmin",
+        "snsId",
+        "provider"
+      ],
+      include: [{
+          model: db.Group,
+          as: "GroupJoined",
+          attributes: ["id", "name", "state", "createdAt"]
+        }, {
+          model: db.GroupPost,
+          as: "CreatePost",
+          attributes: ["id", "title", "createdAt"]
+        },
+        {
+          model: db.GroupPost,
+          as: "LikedGroupPost",
+          attributes: ['id', 'title', 'createdAt']
+        },
+        {
+          model: db.GroupPostComment,
+          attributes: ["id", "createdAt"],
+          include: [{
+            model: db.Group,
+            attributes: ['id', 'name']
+          }]
+        }
+      ],
+      order: [
+        [{
+            model: db.Group,
+            as: "GroupJoined"
+          },
+          "createdAt",
+          "DESC"
+        ],
+        [{
+            model: db.GroupPost,
+            as: "CreatePost"
+          },
+          "createdAt",
+          "DESC"
+        ],
+        [{
+            model: db.GroupPost,
+            as: "LikedGroupPost"
+          },
+          "createdAt",
+          "DESC"
+        ],
+
+        [db.GroupPostComment, "createdAt", "DESC"]
+      ]
+    });
+    return res.json(fullUser);
+  } catch (err) {
+    console.error(err);
     next(err);
   }
 });
@@ -402,23 +504,20 @@ router.patch("/name", isLoggedIn, async (req, res, next) => {
 });
 
 // 비밀번호 변경
-router.patch("/password", async (req, res, next) => {
-
+router.patch("/password", isLoggedIn, async (req, res, next) => {
   const me = await db.User.findOne({
     where: {
       id: 11
     }
   });
   if (!me) {
-    return res.status(404).send('없는 사용자 인데여;;')
+    return res.status(404).send("없는 사용자 인데여;;");
   }
-
   const result = await bcrypt.compare(req.body.oldPassword, me.password);
   if (!result) {
-    return res.status(403).send('현재 비밀번호가 틀린데여;;')
+    return res.status(403).send("현재 비밀번호가 틀린데여;;");
   }
-
-  hash = await bcrypt.hash(req.body.oldPassword, 12);
+  hash = await bcrypt.hash(req.body.newPassword, 12);
   try {
     await db.User.update({
       password: hash
@@ -532,7 +631,7 @@ router.get("/:userId/followers", async (req, res, next) => {
     }
     const followers = await me.getFollowers({
       where,
-      attributes: ['id', 'nickname', 'name', 'src', 'email'],
+      attributes: ["id", "nickname", "name", "src", "email"],
       order: [
         ["createdAt", "DESC"],
         ["id", "DESC"]
@@ -568,7 +667,7 @@ router.get("/:userId/followings", isLoggedIn, async (req, res, next) => {
     }
     const followings = await me.getFollowings({
       where,
-      attributes: ['id', 'nickname', 'name', 'src', 'email'],
+      attributes: ["id", "nickname", "name", "src", "email"],
       order: [
         ["createdAt", "DESC"],
         ["id", "DESC"]
@@ -593,9 +692,9 @@ router.get("/:userId/posts", async (req, res, next) => {
       where: {
         id: req.params.userId
       }
-    })
+    });
     if (!user) {
-      return res.status(404).send('없는 사용자 인데요')
+      return res.status(404).send("없는 사용자 인데요");
     }
     let where = {
       UserId: parseInt(req.params.userId, 10)
@@ -611,7 +710,7 @@ router.get("/:userId/posts", async (req, res, next) => {
       where,
       include: [{
           model: db.User,
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+          attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
         },
         {
           model: db.Image
@@ -626,7 +725,7 @@ router.get("/:userId/posts", async (req, res, next) => {
           as: "Retweet",
           include: [{
               model: db.User,
-              attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+              attributes: ["id", "nickname", "name", "src", "email", "isAdmin"]
             },
             {
               model: db.Image
@@ -647,36 +746,36 @@ router.get("/:userId/posts", async (req, res, next) => {
 });
 
 // 출석률 확인
-router.get('/:userId/daily', isLoggedIn, async (req, res, next) => {
+router.get("/:userId/daily", isLoggedIn, async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {
         id: req.params.userId
       }
-    })
+    });
     if (!user) {
-      return res.status(404).send('없는 사용자 인데요')
+      return res.status(404).send("없는 사용자 인데요;;");
     }
-    const rawData = await user.getChecking()
-    const thisYear = new Date(rawData[0].createdAt).getFullYear()
+    const rawData = await user.getChecking();
+
+    const thisYear = new Date(rawData[0].createdAt).getFullYear();
     let allYearCheck = [
       []
-    ]
+    ];
     for (i = 1; i < 13; i++) {
-      let lastDay = new Date(thisYear, i, 0).getDate()
-      allYearCheck.push(new Array(lastDay + 1).fill(0))
+      let lastDay = new Date(thisYear, i, 0).getDate();
+      allYearCheck.push(new Array(lastDay + 1).fill(0));
     }
     for (i = 0; i < rawData.length; i++) {
-      let checkMonth = new Date(rawData[i].createdAt).getMonth() + 1
-      let checkday = new Date(rawData[i].createdAt).getDay() + 1
-      allYearCheck[checkMonth][checkday] = 1
+      let checkMonth = new Date(rawData[i].createdAt).getMonth() + 1;
+      let checkday = new Date(rawData[i].createdAt).getDate();
+      allYearCheck[checkMonth][checkday] = 1;
     }
-    return res.json(allYearCheck)
-
+    return res.json(allYearCheck);
   } catch (err) {
-    console.error('GET /:userId/daily', err);
-    next(err)
+    console.error("GET /:userId/daily", err);
+    next(err);
   }
-})
+});
 
 module.exports = router;

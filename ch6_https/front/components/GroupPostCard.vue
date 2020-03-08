@@ -52,18 +52,20 @@
                   <div v-for="comm in groupPost.GroupPostComments" :key="comm.id">
                     <v-row align="center" justify="space-between">
                       <div>
-                        <v-list-item-avatar class="mr-0" color="grey darken-3">
-                          <v-img
-                            class="elevation-6"
-                            :src="`${srcAddress}/profile/${comm.User.src}`"
-                          ></v-img>
-                        </v-list-item-avatar>
-                        <span>{{ comm.User.name }}({{ comm.User.nickname }})</span>
+                        <div v-if="comm.User" style="display:inline-block">
+                          <v-list-item-avatar class="mr-0" color="grey darken-3">
+                            <v-img
+                              class="elevation-6"
+                              :src="`${srcAddress}/profile/${comm.User['src']}`"
+                            ></v-img>
+                          </v-list-item-avatar>
+                          <span>{{ comm.User['name'] }}({{ comm.User['nickname'] }}) |</span>
+                        </div>
                         <span>
                           <strong>{{ comm.comment }}</strong>
                         </span>
                       </div>
-                      <v-btn @click="onDeleteComment(c.id)" icon color="red">
+                      <v-btn @click="onDeleteComment(comm.id)" icon color="red">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-row>
@@ -131,15 +133,10 @@ export default {
         postId: this.groupPost.id
       });
     },
-    onComment() {
+    async onComment() {
       this.isCommentOn = !this.isCommentOn;
       if (this.isCommentOn) {
-        this.testClick();
-      }
-    },
-    testClick() {
-      if (this.isCommentOn) {
-        this.$store.dispatch("groups/loadPostComments", {
+        await this.$store.dispatch("groups/loadPostComments", {
           groupId: this.$route.params.id,
           postId: this.groupPost.id,
           reset: true

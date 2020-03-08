@@ -58,15 +58,17 @@ module.exports = (sequelize, DataTypes) => {
       as: "Followings",
       foreignKey: "followerId"
     });
-    db.User.belongsToMany(db.Group, {
-      through: "Groupuser",
-      as: "GroupJoined"
-    });
     db.User.belongsToMany(db.DailyTz, {
       through: "DailyUser",
       as: "Checking",
     });
-    db.User.hasMany(db.GroupPost);
+    db.User.belongsToMany(db.Group, {
+      through: "Groupuser",
+      as: "GroupJoined"
+    });
+    db.User.hasMany(db.GroupPost, {
+      as: "CreatePost"
+    });
     db.User.hasMany(db.GroupPostComment);
     db.User.belongsToMany(db.GroupPost, {
       through: "GroupPostLike",

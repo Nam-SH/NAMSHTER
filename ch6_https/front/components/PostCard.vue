@@ -36,12 +36,8 @@
             <div class="text-center">
               <v-menu open-on-hover top offset-y>
                 <template v-slot:activator="{ on }">
-                  <v-btn
-                    text
-                    color="orange"
-                    v-on="on"
-                    :disabled="!!post.RetweetId && !!post.Retweet"
-                  >
+                  <v-btn text color="orange" v-on="on">
+                    <!-- :disabled="!!post.RetweetId && !!post.Retweet" -->
                     <v-icon>mdi-dots-horizontal</v-icon>
                   </v-btn>
                 </template>
@@ -56,7 +52,6 @@
         </v-row>
       </v-card-actions>
     </v-card>
-
     <!-- 댓글 창 클릭시 -->
     <template v-if="commentOpened">
       <comment-form :post-id="post.id" style="margin-bottom: 30px" :change="AvgRank" />

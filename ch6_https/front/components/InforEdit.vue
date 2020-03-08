@@ -64,7 +64,7 @@
                 <v-divider></v-divider>
                 <v-text-field
                   v-model="password"
-                  label="비밀번호"
+                  label="새로운 비밀번호"
                   :error="error"
                   :hide-details="hideDetails"
                   :type="value2 ? 'password' : 'text'"

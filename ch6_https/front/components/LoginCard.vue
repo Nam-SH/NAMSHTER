@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="me">
     <v-card>
       <v-container>
         <v-row class="mx-3">
@@ -70,6 +70,9 @@ export default {
       return process.env.NODE_ENV === "production"
         ? "https://api.namshter.com"
         : "http://localhost:3085";
+    },
+    userDetail() {
+      return this.$store.state.users.userDetail;
     }
   }
 };

@@ -1,14 +1,5 @@
 <template>
-  <!-- <v-app style="background-size: cover; background-image: url('https://images.unsplash.com/photo-1446824505046-e43605ffb17f');"> -->
   <v-app class="hero" style="background-color:black">
-    <!-- <div class="contain">
-      <h1>WELCOME to NAM.S.H.TER</h1>
-      <div v-for="(name, idx) in className" :key="idx">
-        <div :class="`bird-container bird-container--${name}`">
-          <div :class="`bird bird--${name}`"></div>
-        </div>
-      </div>
-    </div>-->
     <div class="snow">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +94,8 @@ export default {
     return {
       className: ["one", "two", "three", "four", "five", "six"]
     };
-  }
+  },
+  middleware: "anonymous"
 };
 </script>
 

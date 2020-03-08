@@ -2,6 +2,7 @@ import throttle from 'lodash.throttle'
 
 export const state = () => ({
   me: null,
+  userDetail: null,
   followerList: [],
   followingList: [],
   hasMoreFollowing: true,
@@ -25,6 +26,10 @@ export const mutations = {
 
   loggingInUser(state, payload) {
     state.loggingInUser = payload
+  },
+
+  userDetail(state, payload) {
+    state.userDetail = payload
   },
 
   changeNickname(state, payload) {
@@ -218,6 +223,20 @@ export const actions = {
         })
       })
   },
+  userDetail({
+    commit
+  }, payload) {
+    return this.$axios.get('/user/11/detail', {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('userDetail', res.data)
+      })
+      .catch(err => {
+        console.error(err);
+
+      })
+  },
 
   changeNickname({
     commit
@@ -271,8 +290,6 @@ export const actions = {
     commit
   }, payload) {
     let before = this.$toast.show('변경 중...')
-    console.log('pa', payload);
-
     return this.$axios.patch('/user/password', {
         oldPassword: payload.oldPassword,
         newPassword: payload.newPassword

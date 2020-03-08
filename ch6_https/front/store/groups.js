@@ -370,24 +370,21 @@ export const actions = {
           postId: payload.postId,
           reset: true
         });
-        return;
       }
+      // if (state.hasMoreGroupPostComment) {
+      //   const lastPost = state.groupPosts[state.mainPosts.length - 1];
+      //   const res = await this.$axios.get(
+      //     `/group/${payload.groupId}/posts?lastId=${lastPost &&
+      //       lastPost.id}&limit=10`, {
+      //       withCredentials: true
+      //     }
+      //   );
 
-      if (state.hasMoreGroupPostComment) {
-        const lastPost = state.groupPosts[state.mainPosts.length - 1];
-        const res = await this.$axios.get(
-          `/group/${payload.groupId}/posts?lastId=${lastPost &&
-            lastPost.id}&limit=10`, {
-            withCredentials: true
-          }
-        );
-
-        commit("loadPostComments", {
-          data: res.data,
-          reset: false
-        });
-        return;
-      }
+      //   commit("loadPostComments", {
+      //     data: res.data,
+      //     reset: false
+      //   });
+      // }
     } catch (err) {
       console.error("loadPosts :::", err);
     }

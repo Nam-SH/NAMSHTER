@@ -17,7 +17,6 @@ export default {
     PostForm
   },
   fetch({ store }) {
-    // this.isLoading = true;
     return store.dispatch("posts/loadPosts", {
       reset: true
     });
