@@ -15,14 +15,11 @@ const db = require("../models");
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, done) {
-      // 실패시 null, 성공시 uploads에 저장
       done(null, "uploads");
     },
     filename(req, file, done) {
-      // ext: 확장자 이름을 뽑아온다.
       const ext = path.extname(file.originalname);
       const basename = path.basename(file.originalname, ext);
-      // 남승현.jpg ==> basename: 남승현, ext: .jpg
       done(null, basename + Date.now() + ext);
     }
   }),
@@ -33,7 +30,6 @@ const upload = multer({
 
 // 이미지업로드(/post/images)
 router.post("/images", isLoggedIn, upload.array("image"), (req, res) => {
-  // console.log(req.files);
   res.json(req.files.map(v => v.filename));
 });
 
@@ -146,7 +142,6 @@ router.post("/", isLoggedIn, async (req, res, next) => {
         id: newPost.id
       },
       include: [{
-          // 요청을 받으면 프론트에 User: { id: 1, nickname: "남승현" } 형식이 추가된다.
           model: db.User,
           attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
         },
@@ -235,7 +230,6 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
 
 // 댓글작성
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
-  // POST /post/:id/comment
   try {
     const post = await db.Post.findOne({
       where: {
@@ -246,13 +240,11 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
       return res.status(404).send("없는 글 인데요;;");
     }
     const newComment = await db.Comment.create({
-      // postId, UserId는 associate의 관계 정의로 인해 자동으로 추가되어 있다.
       PostId: post.id,
       UserId: req.user.id,
       content: req.body.content,
       score: req.body.score
     });
-    // 프론트로 보낼 정보를 만든다.
     const comment = await db.Comment.findOne({
       where: {
         id: newComment.id
@@ -346,15 +338,12 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
     if (!post) {
       return res.status(404).send("글이 없는데요;;");
     }
-    // 글의 유저아이이가 내 id와 같으면 리트윗 하면 안 됨
     if (
       req.user.id === post.UserId ||
       (post.Retweet && post.Retweet.UserId === req.user.id)
     ) {
       return res.status(403).send("자기 글은 리트윗 못해여;;");
     }
-
-    // 리트윗 된 글이 내 글이면 리트윗하면 안 됨
     const retweetTargetId = post.RetweetId || post.id;
     const exPost = await db.Post.findOne({
       where: {
@@ -365,7 +354,6 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
     if (exPost) {
       return res.status(403).send("이미 리트윗 한 글인데여;;");
     }
-    // 검사 끝~~
     const retweet = await db.Post.create({
       content: "retweet이욤~",
       UserId: req.user.id,
@@ -423,7 +411,6 @@ router.post("/:postId/like", isLoggedIn, async (req, res, next) => {
     if (!post) {
       return res.status(404).send("없는 글 인데여;;");
     }
-    // 글이 있으면
     await post.addLiker(req.user.id);
     res.json({
       userId: req.user.id
@@ -445,7 +432,6 @@ router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
     if (!post) {
       return res.status(404).send("없는 글 인데여;;");
     }
-    // 글이 있으면
     await post.removeLiker(req.user.id);
     res.json({
       userId: req.user.id

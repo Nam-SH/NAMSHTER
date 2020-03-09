@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nuxt --open",
+    "dev": "nuxt  --open",
     "build": "nuxt build",
     "generate": "nuxt generate",
     "prestart": "npm run build",

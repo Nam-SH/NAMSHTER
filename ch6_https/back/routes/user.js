@@ -180,7 +180,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
     }); // HTTP STATUS CODE
     passport.authenticate("local", (err, user, info) => {
       if (err) {
-        console.error("POST-1 / :::", err);
+        // console.error("POST-1 / :::", err);
         return next(err);
       }
       if (info) {
@@ -188,7 +188,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
       }
       return req.login(user, async err => {
         if (err) {
-          console.error("POST-2 / :::", err);
+          // console.error("POST-2 / :::", err);
           return next(err);
         }
         const fullUser = await db.User.findOne({
@@ -255,8 +255,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
           ]
         });
         // 데일리 체크
-        const today =
-          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
+        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
             createdAt: today
@@ -275,8 +274,8 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
       });
     })(req, res, next);
   } catch (err) {
-    console.error("POST-3 / :::", err);
-    return next(err);
+    // console.error("POST-3 / :::", err);
+    next(err);
   }
 });
 
@@ -292,7 +291,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
     return req.login(user, async err => {
       try {
         if (err) {
-          console.error("POST-2 /login :::", err);
+          // console.error("POST-2 /login :::", err);
           return next(err);
         }
         const fullUser = await db.User.findOne({
@@ -359,8 +358,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
           ]
         });
         // 데일리 체크
-        const today =
-          moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
+        const today = moment(new Date().toISOString()).format("YYYY-MM-DD") + " 00:00:00Z";
         const checkingDay = await db.DailyTz.findOne({
           where: {
             createdAt: today
@@ -377,8 +375,8 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         }
         return res.json(fullUser);
       } catch (err) {
-        console.error("POST-4 /login :::", err);
-        return next(err);
+        // console.error("POST-4 /login :::", err);
+        next(err);
       }
     });
   })(req, res, next);
@@ -391,12 +389,12 @@ router.post("/logout", isLoggedIn, async (req, res) => {
     req.session.destroy();
     return res.status(200).send("로그아웃!!");
   } catch (err) {
-    console.error("/logout :::", err);
+    // console.error("/logout :::", err);
     next(err);
   }
 });
 
-// 유지 디테일
+// 유저 디테일
 router.get("/:id/detail", async (req, res, next) => {
   try {
     const fullUser = await db.User.findOne({
@@ -464,7 +462,7 @@ router.get("/:id/detail", async (req, res, next) => {
     });
     return res.json(fullUser);
   } catch (err) {
-    console.error(err);
+    // console.error('GET /:id/detail', err);
     next(err);
   }
 });
@@ -481,7 +479,7 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
     });
     res.send(req.body.nickname);
   } catch (err) {
-    console.error("PATCH /nickname :::", err);
+    // console.error("PATCH /nickname :::", err);
     next(err);
   }
 });
@@ -498,7 +496,7 @@ router.patch("/name", isLoggedIn, async (req, res, next) => {
     });
     res.send(req.body.name);
   } catch (err) {
-    console.error("PATCH /name :::", err);
+    // console.error("PATCH /name :::", err);
     next(err);
   }
 });
@@ -528,7 +526,7 @@ router.patch("/password", isLoggedIn, async (req, res, next) => {
     });
     res.status(200).send("비밀번호 변경 완료");
   } catch (err) {
-    console.error("PATCH /nickname :::", err);
+    // console.error("PATCH /nickname :::", err);
     next(err);
   }
 });
@@ -549,7 +547,7 @@ router.patch(
       });
       res.send(req.file.filename);
     } catch (err) {
-      console.error("PATCH /images :::", err);
+      // console.error("PATCH /images :::", err);
       next(err);
     }
   }
@@ -576,7 +574,7 @@ router.post("/:userId/follow", isLoggedIn, async (req, res, next) => {
       name: user.name
     });
   } catch (err) {
-    console.error("POST /:id/follow :::", err);
+    // console.error("POST /:id/follow :::", err);
     next(err);
   }
 });
@@ -592,7 +590,7 @@ router.delete("/:userId/follow", isLoggedIn, async (req, res, next) => {
     await me.removeFollowing(req.params.userId);
     res.send(req.params.userId);
   } catch (err) {
-    console.error("DELETE /:id/follow :::", err);
+    // console.error("DELETE /:id/follow :::", err);
     next(err);
   }
 });
@@ -614,11 +612,11 @@ router.delete("/:userId/follower", isLoggedIn, async (req, res, next) => {
 });
 
 // 나를 팔로워 전체 목록 불러오기
-router.get("/:userId/followers", async (req, res, next) => {
+router.get("/:userId/followers", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
       where: {
-        id: 12
+        id: req.user.id
       }
     });
     let where = {};
@@ -644,7 +642,7 @@ router.get("/:userId/followers", async (req, res, next) => {
       hasMoreFollower: isMore
     });
   } catch (err) {
-    console.error("GET /:id/followers :::", err);
+    // console.error("GET /:id/followers :::", err);
     next(err);
   }
 });
@@ -680,7 +678,7 @@ router.get("/:userId/followings", isLoggedIn, async (req, res, next) => {
       hasMoreFollowing: isMore
     });
   } catch (err) {
-    console.error("GET /:id/followings :::", err);
+    // console.error("GET /:id/followings :::", err);
     next(err);
   }
 });
@@ -740,7 +738,7 @@ router.get("/:userId/posts", async (req, res, next) => {
     });
     res.json(posts);
   } catch (err) {
-    console.error("GET /:id/posts :::", err);
+    // console.error("GET /:id/posts :::", err);
     next(err);
   }
 });
@@ -773,7 +771,7 @@ router.get("/:userId/daily", isLoggedIn, async (req, res, next) => {
     }
     return res.json(allYearCheck);
   } catch (err) {
-    console.error("GET /:userId/daily", err);
+    // console.error("GET /:userId/daily", err);
     next(err);
   }
 });
