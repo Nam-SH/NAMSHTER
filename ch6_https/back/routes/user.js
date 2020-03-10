@@ -416,14 +416,17 @@ router.get("/:id/detail", async (req, res, next) => {
           as: "GroupJoined",
           attributes: ["id", "name", "state", "createdAt"]
         }, {
+          model: db.Group,
+          as: "LikedGroup",
+          attributes: ["name", "state", "createdAt"]
+        }, {
           model: db.GroupPost,
           as: "CreatePost",
           attributes: ["id", "title", "createdAt"]
-        },
-        {
+        }, {
           model: db.GroupPost,
           as: "LikedGroupPost",
-          attributes: ['id', 'title', 'createdAt']
+          attributes: ["title", "createdAt"]
         },
         {
           model: db.GroupPostComment,
@@ -436,12 +439,13 @@ router.get("/:id/detail", async (req, res, next) => {
       ],
       order: [
         [{
-            model: db.Group,
-            as: "GroupJoined"
-          },
-          "createdAt",
-          "DESC"
-        ],
+          model: db.Group,
+          as: "GroupJoined"
+        }, "createdAt", "DESC"],
+        [{
+          model: db.Group,
+          as: "LikedGroup"
+        }, "createdAt", "DESC"],
         [{
             model: db.GroupPost,
             as: "CreatePost"
@@ -456,7 +460,6 @@ router.get("/:id/detail", async (req, res, next) => {
           "createdAt",
           "DESC"
         ],
-
         [db.GroupPostComment, "createdAt", "DESC"]
       ]
     });

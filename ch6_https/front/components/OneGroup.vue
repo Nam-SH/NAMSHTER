@@ -15,12 +15,14 @@
           <li>그룹 인원 {{ group.Groupmembers.length }} / {{ group.limit }}</li>
         </ul>
         <v-row justify="space-between" align="center">
-          <v-list-item-avatar class="ma-2" color="grey darken-3">
-            <img :src="`${srcAddress}/profile/${group.Master.src}`" />
-          </v-list-item-avatar>
+          <div>
+            <v-list-item-avatar class="ma-2" color="grey darken-3">
+              <img :src="`${srcAddress}/profile/${group.Master.src}`" />
+            </v-list-item-avatar>
+          </div>
           <div>
             <v-btn text icon style="float: left;">
-              <v-icon>mdi-heart</v-icon>
+              <v-icon @click.prevent="onLikeGroup">{{ heartIcon }}</v-icon>
             </v-btn>
             <group-intro :group="group" style="float: left;" />
           </div>
@@ -49,6 +51,20 @@ export default {
     tabs: null
   }),
   computed: {
+    me() {
+      return this.$store.state.users.me;
+    },
+    liked() {
+      const target = !!this.group.GroupLiker.find(v => v.id === this.me.id);
+      if (target) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    heartIcon() {
+      return this.liked ? "mdi-heart" : "mdi-heart-outline";
+    },
     activeFab() {
       switch (this.tabs) {
         case "one":
@@ -65,6 +81,19 @@ export default {
       return process.env.NODE_ENV === "production"
         ? "https://api.namshter.com"
         : "http://localhost:3085";
+    }
+  },
+  methods: {
+    onLikeGroup() {
+      if (this.liked) {
+        return this.$store.dispatch("groups/groupUnlike", {
+          groupId: this.group.id
+        });
+      } else {
+        return this.$store.dispatch("groups/groupLike", {
+          groupId: this.group.id
+        });
+      }
     }
   }
 };

@@ -2,11 +2,25 @@
   <v-container>
     <v-card>
       <v-app-bar color="#81F7F3">
-        <v-toolbar-title>진행 중인 그룹...</v-toolbar-title>
+        <v-toolbar-title>
+          <strong>진행 중인 그룹...</strong>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-card-actions>
           <group-create-form v-if="isInGroups" />
-          <v-btn v-else text to="/groups">Go Group</v-btn>
+          <v-btn
+            v-else
+            rounded
+            to="/groups"
+            color="orange"
+            :hidden="onRound"
+            @click="onRound = !onRound"
+          >Go Group</v-btn>
+          <div v-if="onRound">
+            <v-progress-circular :size="30" indeterminate color="red"></v-progress-circular>
+            <v-progress-circular :size="30" indeterminate color="red"></v-progress-circular>
+            <v-progress-circular :size="30" indeterminate color="red"></v-progress-circular>
+          </div>
         </v-card-actions>
       </v-app-bar>
       <v-container v-if="mainGrouplist && mainGrouplist.length > 0">
@@ -61,6 +75,11 @@ import GroupCreateForm from "@/components/GroupCreateForm.vue";
 export default {
   components: {
     GroupCreateForm
+  },
+  data() {
+    return {
+      onRound: false
+    };
   },
   computed: {
     me() {

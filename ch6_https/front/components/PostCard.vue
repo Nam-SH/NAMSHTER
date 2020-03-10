@@ -14,20 +14,15 @@
         <post-header :post="post" />
         <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
       </div>
-
       <v-card-actions>
         <v-row class="mx-1" justify="space-between">
           <div>
             <v-btn text color="orange" @click.prevent="onRetweet">
               <v-icon>mdi-twitter-retweet</v-icon>
             </v-btn>
-
-            <!-- 좋아요 -->
             <v-btn text color="orange" @click.prevent="onClickHeart">
               <v-icon>{{ heartIcon }}</v-icon>
             </v-btn>
-
-            <!-- 댓글 -->
             <v-btn text color="orange" @click.prevent="onComment">
               <v-icon>mdi-comment-outline</v-icon>
             </v-btn>
@@ -101,7 +96,6 @@ export default {
       commentList: null,
       isEditting: false,
       isInIndex: true,
-
       items: [
         { title: "수정", func: this.onEditPost },
         { title: "삭제", func: this.onRemovePost }
@@ -132,7 +126,6 @@ export default {
       return this.post.content.split(/(#[^\s#]+)/);
     }
   },
-
   methods: {
     onRemovePost() {
       this.$store.dispatch("posts/remove", {
@@ -153,7 +146,8 @@ export default {
     // 좋아요
     onClickHeart() {
       if (!this.me) {
-        return alert("로그인이 필요합니다.");
+        this.$toast.error("로그인이 필요해여;;", { duration: 2000 });
+        return;
       }
       if (this.liked) {
         return this.$store.dispatch("posts/unlikePost", {

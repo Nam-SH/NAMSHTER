@@ -1,14 +1,24 @@
 <template>
   <v-container>
-    <!-- {{ userDetail }} -->
-    <v-layout style="display: flex">
-      <v-container style="flex:1">
-        <my-groups :grouplist="grouplistBefore" :isState="false" />
-      </v-container>
-      <v-container style="flex:1">
-        <my-groups :grouplist="grouplistDoing" :isState="true" />
-      </v-container>
-    </v-layout>
+    <v-container>
+      <v-card>
+        <v-container>
+          <group-activity />
+        </v-container>
+      </v-card>
+    </v-container>
+    <v-container>
+      <v-card color="#F5F5F5">
+        <v-layout style="display: flex">
+          <v-container style="flex:1">
+            <my-groups :grouplist="grouplistBefore" :isState="false" />
+          </v-container>
+          <v-container style="flex:1">
+            <my-groups :grouplist="grouplistDoing" :isState="true" />
+          </v-container>
+        </v-layout>
+      </v-card>
+    </v-container>
     <br />
     <v-bottom-navigation v-model="navNum" shift>
       <v-btn v-for="(item, i) in items" :key="i" @click.prevent="onLoadGroup(i)">
@@ -23,12 +33,14 @@
 <script>
 import MyGroups from "@/components/MyGroups.vue";
 import AllGroups from "@/components/AllGroups.vue";
+import GroupActivity from "@/components/GroupActivity.vue";
 
 export default {
   layout: "group",
   components: {
     MyGroups,
-    AllGroups
+    AllGroups,
+    GroupActivity
   },
   data() {
     return {

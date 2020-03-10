@@ -29,6 +29,10 @@ router.get("/", async (req, res, next) => {
         as: "Groupmembers",
         attributes: ['id'],
       }, {
+        model: db.User,
+        as: "GroupLiker",
+        attributes: ['id']
+      }, {
         model: db.GroupPost,
         attributes: ["id"]
       }, {

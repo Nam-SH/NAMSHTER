@@ -40,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
     db.Group.belongsTo(db.User, {
       as: "Master"
     });
+    db.Group.belongsToMany(db.User, {
+      through: "GroupLike",
+      as: "GroupLiker"
+    })
     db.Group.hasMany(db.GroupPost);
     db.Group.hasMany(db.GroupPostComment);
   };

@@ -15,14 +15,11 @@ const path = require("path");
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, done) {
-      // 실패시 null, 성공시 uploads에 저장
       done(null, "grouppostimage");
     },
     filename(req, file, done) {
-      // ext: 확장자 이름을 뽑아온다.
       const ext = path.extname(file.originalname);
       const basename = path.basename(file.originalname, ext);
-      // 남승현.jpg ==> basename: 남승현, ext: .jpg
       done(null, basename + Date.now() + ext);
     }
   }),
@@ -241,7 +238,6 @@ router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
     } else if (group.state === 2) {
       return res.status(400).send("완료 된 그룹인데여;;");
     }
-
     await db.Group.update({
       state: nxtState
     }, {
@@ -259,20 +255,27 @@ router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
 });
 
 // 그룹 가입탈퇴
-router.post("/:groupId/userInOut", async (req, res, next) => {
+router.post("/:groupId/userInOut", isLoggedIn, async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {
-        id: 11
+        id: req.user.id
       }
     });
     const targetGroup = await db.Group.findOne({
       where: {
         id: req.params.groupId
       },
-      attributes: ["id", "MasterId"]
+      attributes: ['id', 'limit', 'MasterId'],
+      include: [{
+        model: db.User,
+        as: "Groupmembers",
+        attributes: ["id"]
+      }]
     });
-
+    if (targetGroup.Groupmembers.length + 1 > targetGroup.limit) {
+      return res.status(403).send("가입 인원 초과함;;");
+    }
     if (user.id === targetGroup.MasterId) {
       return res.status(403).send("님은 방장이라 가입/탈퇴 못함;;");
     }
@@ -309,6 +312,42 @@ router.post("/:groupId/userInOut", async (req, res, next) => {
     next(err);
   }
 });
+
+// 그룹 좋아요
+router.post('/:groupId/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const targetGroup = await db.Group.findOne({
+      where: {
+        id: req.params.groupId
+      }
+    });
+    if (!targetGroup) {
+      return res.status(404).send("그런 그룹이 없는데여;;");
+    }
+    await targetGroup.addGroupLiker(req.user.id)
+    return res.json(req.user.id)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// 그룹 좋아요취소
+router.delete('/:groupId/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const targetGroup = await db.Group.findOne({
+      where: {
+        id: req.params.groupId
+      }
+    });
+    if (!targetGroup) {
+      return res.status(404).send("그런 그룹이 없는데여;;");
+    }
+    await targetGroup.removeGroupLiker(req.user.id)
+    return res.json(req.user.id)
+  } catch (err) {
+    next(err)
+  }
+})
 
 // 글 관련 -------------------------------------------------------------------------------------
 
@@ -542,7 +581,7 @@ router.delete(
 );
 
 // 3댓글 조회
-router.get('/:groupId/post/:postId/comments', async (req, res, next) => {
+router.get('/:groupId/post/:postId/comments', isLoggedIn, async (req, res, next) => {
   try {
     let where = {
       GroupId: req.params.groupId,
@@ -621,7 +660,7 @@ router.post('/:groupId/post/:postId/comment', isLoggedIn, async (req, res, next)
 
 
 // 5댓글 삭제
-router.delete('/:groupId/post/:postId/comment/:commentId', async (req, res, next) => {
+router.delete('/:groupId/post/:postId/comment/:commentId', isLoggedIn, async (req, res, next) => {
   try {
     const group = await db.Group.findOne({
       where: {

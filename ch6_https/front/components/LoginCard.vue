@@ -51,8 +51,8 @@ export default {
   },
   methods: {
     async onLogOut() {
-      await this.$store.dispatch("users/logOut");
       this.$router.push({ path: "/main" });
+      await this.$store.dispatch("users/logOut");
     }
   },
   computed: {

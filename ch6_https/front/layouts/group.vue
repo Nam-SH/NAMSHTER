@@ -1,12 +1,8 @@
 <template>
   <v-app style="background-color:#E5EFF8">
     <default-nav />
-    <!--  -->
     <v-row>
       <v-container>
-        <!--  -->
-        <!--  -->
-        <!--  -->
         <v-container v-if="me">
           <v-card>
             <v-container>
@@ -31,17 +27,7 @@
               <v-btn class="mb-3" @click.prevent="onLogOut">로그아웃</v-btn>
             </v-container>
           </v-card>
-          <v-divider class="my-3"></v-divider>
-          <v-card>
-            <v-container>
-              <group-activity />
-            </v-container>
-          </v-card>
         </v-container>
-
-        <!--  -->
-        <!--  -->
-        <!--  -->
       </v-container>
     </v-row>
     <v-row>

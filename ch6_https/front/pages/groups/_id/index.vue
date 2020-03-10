@@ -9,7 +9,6 @@
         <div style="display: flex;justify-content: space-between">
           <div class="display-1 text--primary" style="display: flex;">
             <p>{{ oneGroup.name }}</p>
-
             <v-chip v-if="oneGroup && oneGroup.state === 0" class="ma-2" label>준비 중</v-chip>
             <v-chip v-else-if="oneGroup && oneGroup.state === 1" class="ma-2" color="red" outlined>
               <v-icon left>mdi-fire</v-icon>진행 중...
@@ -68,7 +67,8 @@
       v-if="oneGroup && oneGroup.state === 1 && isPostForm"
       :onPostForm="onPostForm"
     />
-    <group-all-posts :groupPosts="groupPosts" />
+    <group-all-posts v-if="isMember" :groupPosts="groupPosts" />
+    <div v-else>가나다라마바사</div>
   </v-container>
 </template>
 
@@ -78,6 +78,7 @@ import GroupAllPosts from "@/components/GroupAllPosts.vue";
 import GroupEditForm from "@/components/GroupEditForm.vue";
 
 export default {
+  layout: "group",
   components: {
     GroupPostForm,
     GroupAllPosts,
@@ -110,7 +111,6 @@ export default {
         userId: this.me.id,
         groupId: this.oneGroup.id
       });
-      // this.$router.go(-1);
     },
     onPostForm() {
       this.isPostForm = !this.isPostForm;
@@ -118,14 +118,6 @@ export default {
     onEdit() {
       this.isEditting = !this.isEditting;
     },
-    // onSubmitForm() {
-    //   this.$store.dispatch("groups/groupEdit", {
-    //     name: this.name,
-    //     intro: this.intro,
-    //     limit: this.limit,
-    //     groupId: this.oneGroup.id
-    //   });
-    // },
     onDeleteGroup() {
       this.$store.dispatch("groups/groupDelete", {
         groupId: this.oneGroup.id
@@ -136,7 +128,7 @@ export default {
         window.scrollY + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300
       ) {
-        if (this.hasMorePost) {
+        if (this.hasMoreGroupPost) {
           this.$store.dispatch("groups/loadGroupPosts", { reset: false });
         }
       }
@@ -169,6 +161,10 @@ export default {
       return this.$store.state.groups.hasMoreGroupPost;
     },
     isSignIn() {
+      if (this.oneGroup.Groupmembers.length + 1 > this.oneGroup.limit) {
+        this.$toast.error("가입 인원을 초과했는데여;; 가입 못해여;;");
+        return;
+      }
       if (this.me && this.oneGroup.Groupmembers.find(v => v.id == this.me.id)) {
         this.isMember = true;
         return "탈퇴하기";

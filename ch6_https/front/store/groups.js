@@ -70,16 +70,30 @@ export const mutations = {
       const targetIndex = state.grouplist[targetGroupIndex].Groupmembers.findIndex(v => v.id === payload.userId)
       if (targetIndex !== -1) {
         Vue.delete(state.grouplist[targetGroupIndex].Groupmembers, targetIndex)
+        state.isUserInGroup = false
         this.$router.push('/groups')
         return
       } else {
         state.grouplist[targetGroupIndex].Groupmembers.unshift({
           id: payload.userId
         })
+        state.isUserInGroup = true
         this.$router.push(`/groups/${payload.groupId}`)
         return
       }
     }
+  },
+
+  groupLike(state, payload) {
+    const targetGroup = state.grouplist.findIndex(v => v.id === payload.groupId)
+    state.grouplist[targetGroup].GroupLiker.unshift({
+      id: payload.userId
+    })
+  },
+  groupUnlike(state, payload) {
+    const targetGroup = state.grouplist.findIndex(v => v.id === payload.groupId)
+    const targetUser = state.grouplist[targetGroup].GroupLiker.findIndex(v => v.id === payload.userId)
+    Vue.delete(state.grouplist[targetGroup].GroupLiker, targetUser)
   },
 
   // 글 작성관련
@@ -246,6 +260,43 @@ export const actions = {
         })
       })
   },
+
+  // 그룹 좋아요
+  groupLike({
+    commit
+  }, payload) {
+    return this.$axios.post(`/group/${payload.groupId}/like`, {}, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('groupLike', {
+          groupId: payload.groupId,
+          userId: res.data
+        })
+      })
+      .catch((err) => {
+        console.error('groupLike :::', err);
+      })
+  },
+
+  // 그룹 좋아요취소
+  groupUnlike({
+    commit
+  }, payload) {
+    return this.$axios.delete(`/group/${payload.groupId}/like`, {
+        withCredentials: true
+      })
+      .then((res) => {
+        commit('groupUnlike', {
+          groupId: payload.groupId,
+          userId: res.data
+        })
+      })
+      .catch((err) => {
+        console.error('groupLike :::', err);
+      })
+  },
+
 
   // 그룹 포스트 작성
   postAdd({
