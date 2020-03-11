@@ -10,7 +10,9 @@
         </v-card>
         <v-spacer class="my-3"></v-spacer>
         <ul>
-          <li>그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})</li>
+          <li>
+            그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})
+          </li>
           <li>문의 메일 :: {{ group.Master.email }}</li>
           <li>그룹 인원 {{ group.Groupmembers.length }} / {{ group.limit }}</li>
         </ul>
@@ -55,7 +57,9 @@ export default {
       return this.$store.state.users.me;
     },
     liked() {
-      const target = !!this.group.GroupLiker.find(v => v.id === this.me.id);
+      const target = !!(this.group.GroupLiker || []).find(
+        v => v.id === this.me.id
+      );
       if (target) {
         return true;
       } else {
@@ -91,7 +95,8 @@ export default {
         });
       } else {
         return this.$store.dispatch("groups/groupLike", {
-          groupId: this.group.id
+          groupId: this.group.id,
+          groupName: this.group.name
         });
       }
     }

@@ -6,13 +6,25 @@
         <post-header :post="post" />
         <v-card style="margin: 0 20px">
           <post-header :post="post.Retweet" />
-          <post-content :post="post.Retweet" :isEditting="isEditting" :onEditPost="onEditPost" />
+          <post-content
+            :post="post.Retweet"
+            :isEditting="isEditting"
+            :onEditPost="onEditPost"
+          />
         </v-card>
-        <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
+        <post-content
+          :post="post"
+          :isEditting="isEditting"
+          :onEditPost="onEditPost"
+        />
       </div>
       <div v-else>
         <post-header :post="post" />
-        <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
+        <post-content
+          :post="post"
+          :isEditting="isEditting"
+          :onEditPost="onEditPost"
+        />
       </div>
       <v-card-actions>
         <v-row class="mx-1" justify="space-between">
@@ -32,12 +44,15 @@
               <v-menu open-on-hover top offset-y>
                 <template v-slot:activator="{ on }">
                   <v-btn text color="orange" v-on="on">
-                    <!-- :disabled="!!post.RetweetId && !!post.Retweet" -->
                     <v-icon>mdi-dots-horizontal</v-icon>
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item v-for="(item, idx) in items" :key="idx" @click="item.func">
+                  <v-list-item
+                    v-for="(item, idx) in items"
+                    :key="idx"
+                    @click="item.func"
+                  >
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -49,7 +64,11 @@
     </v-card>
     <!-- 댓글 창 클릭시 -->
     <template v-if="commentOpened">
-      <comment-form :post-id="post.id" style="margin-bottom: 30px" :change="AvgRank" />
+      <comment-form
+        :post-id="post.id"
+        style="margin-bottom: 30px"
+        :change="AvgRank"
+      />
       <v-list style="margin-bottom: 20px">
         <div>댓글 수: {{ post.Comments.length }}개</div>
         <div>평점 평균: {{ avgTotal }}점</div>
@@ -63,7 +82,14 @@
             <v-list-item-title>{{ c.User.nickname }}</v-list-item-title>
             <div>
               <span style="vertical-align: middle">{{ c.content }}</span>
-              <v-btn text @click="onDeleteComment(c.id)" color="red" absolute right>삭제</v-btn>
+              <v-btn
+                text
+                @click="onDeleteComment(c.id)"
+                color="red"
+                absolute
+                right
+                >삭제</v-btn
+              >
             </div>
           </v-list-item-content>
         </v-list-item>

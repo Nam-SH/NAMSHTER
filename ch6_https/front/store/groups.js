@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import throttle from "lodash.throttle";
 
+
 export const state = () => ({
   groupPosts: [],
   imagePaths: [],
@@ -85,15 +86,21 @@ export const mutations = {
   },
 
   groupLike(state, payload) {
+    this.state.users.userDetail.LikedGroup.unshift({
+      id: payload.groupId,
+      groupName: payload.groupName
+    })
     const targetGroup = state.grouplist.findIndex(v => v.id === payload.groupId)
     state.grouplist[targetGroup].GroupLiker.unshift({
       id: payload.userId
     })
   },
   groupUnlike(state, payload) {
-    const targetGroup = state.grouplist.findIndex(v => v.id === payload.groupId)
-    const targetUser = state.grouplist[targetGroup].GroupLiker.findIndex(v => v.id === payload.userId)
-    Vue.delete(state.grouplist[targetGroup].GroupLiker, targetUser)
+    let targetGroupIndex = this.state.users.userDetail.LikedGroup.findIndex(v => v.id === payload.groupId)
+    Vue.delete(this.state.users.userDetail.LikedGroup, targetGroupIndex)
+    targetGroupIndex = state.grouplist.findIndex(v => v.id === payload.groupId)
+    const targetUserIndex = state.grouplist[targetGroupIndex].GroupLiker.findIndex(v => v.id === payload.userId)
+    Vue.delete(state.grouplist[targetGroupIndex].GroupLiker, targetUserIndex)
   },
 
   // 글 작성관련
@@ -126,12 +133,10 @@ export const mutations = {
       state.groupPosts[targetIndex].GroupPostComments = state.groupPosts[targetIndex].GroupPostComments.concat(payload.data);
     }
   },
-
   postCommentAdd(state, payload) {
     const targetPost = state.groupPosts.findIndex(v => v.id === payload.postId)
     state.groupPosts[targetPost].GroupPostComments.unshift(payload.data)
   },
-
   postCommentDelete(state, payload) {
     const targetPost = state.groupPosts.findIndex(v => v.id === payload.postId)
     const targetComment = state.groupPosts[targetPost].GroupPostComments.findIndex(v => v.id === payload.commentId)
@@ -202,7 +207,7 @@ export const actions = {
       .catch(err => {
         // console.error("groupAdd :::", err);
         before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
+        this.$toast.error(`${err.response.data}`, {
           duration: 2000
         })
       });
@@ -233,7 +238,7 @@ export const actions = {
       .catch(err => {
         // console.error('groupDelete :::', err);
         before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
+        this.$toast.error(`${err.response.data}`, {
           duration: 2000
         })
       })
@@ -255,7 +260,7 @@ export const actions = {
       .catch(err => {
         // console.error('groupDelete :::', err);
         before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
+        this.$toast.error(`${err.response.data}`, {
           duration: 2000
         })
       })
@@ -263,7 +268,7 @@ export const actions = {
 
   // 그룹 좋아요
   groupLike({
-    commit
+    commit,
   }, payload) {
     return this.$axios.post(`/group/${payload.groupId}/like`, {}, {
         withCredentials: true
@@ -271,6 +276,7 @@ export const actions = {
       .then((res) => {
         commit('groupLike', {
           groupId: payload.groupId,
+          groupName: payload.groupName,
           userId: res.data
         })
       })
@@ -586,43 +592,38 @@ export const actions = {
     }
   }, 3000),
 
-  // 아래부터는 그룹 가져오는 것들
-  // 쓰로틀링 해야 함
+  // 아래부터는 그룹 가져오는 것들 쓰로틀링 해야 함
   loadAllGroups({
     commit
   }, payload) {
-    return this.$axios
-      .get("/groups", {
-        withCredentials: true
-      })
-      .then(res => {
-        commit("loadGroups", res.data);
-      })
-      .catch(err => {
-        console.error("loadGroups :::", err);
-      });
+    if (payload && payload.state >= 0) {
+      return this.$axios.get(`/groups/?state=${payload.state}`, {
+          withCredentials: true
+        })
+        .then(res => {
+          commit("loadGroups", res.data);
+        })
+        .catch(err => {
+          console.error("loadGroups :::", err);
+        });
+    } else {
+      return this.$axios.get(`/groups`, {
+          withCredentials: true
+        })
+        .then(res => {
+          commit("loadGroups", res.data);
+        })
+        .catch(err => {
+          console.error("loadGroups :::", err);
+        });
+    }
   },
 
-  // 쓰로틀링 해야 함
-  loadGroups({
-    commit
-  }, payload) {
-    return this.$axios
-      .get(`/groups/${payload.state}?limit=${payload.limit || 0}`, {
-        withCredentials: true
-      })
-      .then(res => {
-        commit("loadGroups", res.data);
-      })
-      .catch(err => {
-        console.error("loadGroups :::", err);
-      });
-  },
   loadMainGroups({
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/${payload.state}?limit=${payload.limit}`, {
+      .get(`/groups/?state=${payload.state}`, {
         withCredentials: true
       })
       .then(res => {

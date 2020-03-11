@@ -20,7 +20,16 @@
                       : user.GroupJoined.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번째 - {{ (user.LikedGroup[n - 1].state === 0) ? "[준비 중]" : (user.LikedGroup[n - 1].state === 1) ? "[진행 중]" : "[완료]" }}: {{ user.GroupJoined[n - 1].name }}</li>
+                    <li>
+                      {{ n }}번째 -
+                      {{
+                        user.LikedGroup[n - 1].state === 0
+                          ? "[준비 중]"
+                          : user.LikedGroup[n - 1].state === 1
+                          ? "[진행 중]"
+                          : "[완료]"
+                      }}: {{ user.GroupJoined[n - 1].name }}
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -47,7 +56,11 @@
                       : user.CreatePost.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번째 - {{ user.CreatePost[n - 1].title }}에서 ({{ $moment(user.CreatePost[n - 1].createdAt).fromNow() }}에 작성함...)</li>
+                    <li>
+                      {{ n }}번째 - {{ user.CreatePost[n - 1].title }}에서 ({{
+                        $moment(user.CreatePost[n - 1].createdAt).fromNow()
+                      }}에 작성함...)
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -69,12 +82,20 @@
                 >
                   <ul
                     class="m-0 text-left"
-                    v-for="n of user.GroupPostComments.length > 9 ? 9 : user.GroupPostComments.length"
+                    v-for="n of user.GroupPostComments.length > 9
+                      ? 9
+                      : user.GroupPostComments.length"
                     :key="n - 1"
                   >
-                    <li
-                      v-if="user.GroupPostComments[n - 1].Group"
-                    >{{ n }}번째 - {{ user.GroupPostComments[n - 1].Group.name }}에서 {{ $moment(user.GroupPostComments[n - 1].createdAt).fromNow() }}에 작성함</li>
+                    <li v-if="user.GroupPostComments[n - 1].Group">
+                      {{ n }}번째 -
+                      {{ user.GroupPostComments[n - 1].Group.name }}에서
+                      {{
+                        $moment(
+                          user.GroupPostComments[n - 1].createdAt
+                        ).fromNow()
+                      }}에 작성함
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -101,7 +122,16 @@
                       : user.LikedGroup.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번째 - {{ (user.LikedGroup[n - 1].state === 0) ? "[준비 중]" : (user.LikedGroup[n - 1].state === 1) ? "[진행 중]" : "[완료]" }}: {{ user.LikedGroup[n - 1].name }}</li>
+                    <li>
+                      {{ n }}번째 -
+                      {{
+                        user.LikedGroup[n - 1].state === 0
+                          ? "[준비 중]"
+                          : user.LikedGroup[n - 1].state === 1
+                          ? "[진행 중]"
+                          : "[완료]"
+                      }}: {{ user.LikedGroup[n - 1].name }}
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -114,7 +144,7 @@
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto" color="grey lighten-4" max-width="600">
             <v-card height="250px" class="text-center">
-              {{ user.CreatePost.length }}개의 글을 좋아함...
+              {{ user.LikedGroupPost.length }}개의 글을 좋아함...
               <v-expand-transition>
                 <div
                   v-if="hover"
@@ -123,12 +153,17 @@
                 >
                   <ul
                     class="m-0 text-left"
-                    v-for="n in user.CreatePost.length > 9
+                    v-for="n in user.LikedGroupPost.length > 9
                       ? 9
-                      : user.CreatePost.length"
+                      : user.LikedGroupPost.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}번째 - [{{ user.CreatePost[n - 1].title }}]: ({{ $moment(user.CreatePost[n - 1].createdAt).fromNow() }}에 작성함...)</li>
+                    <li>
+                      {{ n }}번째 - [{{ user.LikedGroupPost[n - 1].title }}]:
+                      ({{
+                        $moment(user.LikedGroupPost[n - 1].createdAt).fromNow()
+                      }}에 작성함...)
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>

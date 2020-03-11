@@ -3,16 +3,16 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _04127dc0 = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
-const _42e3df67 = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
-const _64f0e46b = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
-const _385fc588 = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
-const _1e36f5c6 = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
-const _4d6e675a = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
-const _7cc9a1e6 = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
-const _7e5a5ba6 = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
-const _4c420e5e = () => interopDefault(import('..\\pages\\user\\_id\\index.vue' /* webpackChunkName: "pages_user__id_index" */))
-const _09e62cd8 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
+const _94c513da = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
+const _7450a498 = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
+const _76e556fe = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
+const _79098c49 = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
+const _991f365a = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
+const _7cbeaa32 = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
+const _e240600e = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
+const _59721e73 = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
+const _961288c4 = () => interopDefault(import('..\\pages\\user\\_id\\index.vue' /* webpackChunkName: "pages_user__id_index" */))
+const _52da3632 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 // TODO: remove in Nuxt 3
 const emptyFn = () => {}
@@ -32,43 +32,43 @@ export const routerOptions = {
 
   routes: [{
     path: "/groups",
-    component: _04127dc0,
+    component: _94c513da,
     name: "groups"
   }, {
     path: "/main",
-    component: _42e3df67,
+    component: _7450a498,
     name: "main"
   }, {
     path: "/profile",
-    component: _64f0e46b,
+    component: _76e556fe,
     name: "profile"
   }, {
     path: "/qrcode",
-    component: _385fc588,
+    component: _79098c49,
     name: "qrcode"
   }, {
     path: "/signup",
-    component: _1e36f5c6,
+    component: _991f365a,
     name: "signup"
   }, {
     path: "/groups/:id",
-    component: _4d6e675a,
+    component: _7cbeaa32,
     name: "groups-id"
   }, {
     path: "/hashtag/:id?",
-    component: _7cc9a1e6,
+    component: _e240600e,
     name: "hashtag-id"
   }, {
     path: "/post/:id?",
-    component: _7e5a5ba6,
+    component: _59721e73,
     name: "post-id"
   }, {
     path: "/user/:id?",
-    component: _4c420e5e,
+    component: _961288c4,
     name: "user-id"
   }, {
     path: "/",
-    component: _09e62cd8,
+    component: _52da3632,
     name: "index"
   }],
 

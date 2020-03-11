@@ -21,7 +21,11 @@
     </v-container>
     <br />
     <v-bottom-navigation v-model="navNum" shift>
-      <v-btn v-for="(item, i) in items" :key="i" @click.prevent="onLoadGroup(i)">
+      <v-btn
+        v-for="(item, i) in items"
+        :key="i"
+        @click.prevent="onLoadGroup(i)"
+      >
         <span>{{ item.name }}</span>
         <v-icon>{{ item.icon }}</v-icon>
       </v-btn>
@@ -90,7 +94,9 @@ export default {
         await this.$store.dispatch("groups/loadAllGroups");
         return;
       } else {
-        await this.$store.dispatch("groups/loadGroups", { state: navNum - 1 });
+        await this.$store.dispatch("groups/loadAllGroups", {
+          state: navNum - 1
+        });
         return;
       }
     }

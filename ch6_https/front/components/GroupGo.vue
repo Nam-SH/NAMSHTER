@@ -15,11 +15,14 @@
             color="orange"
             :hidden="onRound"
             @click="onRound = !onRound"
-          >Go Group</v-btn>
+            >Go Group</v-btn
+          >
           <div v-if="onRound">
-            <v-progress-circular :size="30" indeterminate color="red"></v-progress-circular>
-            <v-progress-circular :size="30" indeterminate color="red"></v-progress-circular>
-            <v-progress-circular :size="30" indeterminate color="red"></v-progress-circular>
+            <v-progress-circular
+              :size="30"
+              indeterminate
+              color="red"
+            ></v-progress-circular>
           </div>
         </v-card-actions>
       </v-app-bar>
@@ -30,9 +33,9 @@
             <v-card color="#E6E6E6">
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
-                  <span
-                    class="font-weight-bold ml-3"
-                  >[{{ group.Selectsubject[0].Category.name }}] ||</span>
+                  <span class="font-weight-bold ml-3"
+                    >[{{ group.Selectsubject[0].Category.name }}] ||</span
+                  >
                   <span v-for="sub in group.Selectsubject" :key="sub.id">
                     <span>{{ sub.name }}</span>
                   </span>
@@ -43,7 +46,9 @@
                   <v-img :src="`${srcAddress}/groupimage/${group.src}`"></v-img>
                 </v-avatar>
               </div>
-              <v-btn :to="`/groups/${group.id}`" block color="#CEE3F6">상세히</v-btn>
+              <v-btn :to="`/groups/${group.id}`" block color="#CEE3F6"
+                >상세히</v-btn
+              >
             </v-card>
           </v-col>
         </v-row>
@@ -54,7 +59,9 @@
             <v-card dark>
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
-                  <v-card-title class="headline">그룹이 추가될 예정...</v-card-title>
+                  <v-card-title class="headline"
+                    >그룹이 추가될 예정...</v-card-title
+                  >
                   <v-card-subtitle>조금만 기다려주세요...ㅎ</v-card-subtitle>
                 </div>
                 <v-avatar class="ma-3" size="125" tile>

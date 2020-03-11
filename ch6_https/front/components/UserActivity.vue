@@ -20,7 +20,11 @@
                       : user.Followings.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}: {{ user.Followings[n - 1].nickname }}({{ user.Followings[n - 1].name }})</li>
+                    <li>
+                      {{ n }}: {{ user.Followings[n - 1].nickname }}({{
+                        user.Followings[n - 1].name
+                      }})
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -47,7 +51,11 @@
                       : user.Followers.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}: {{ user.Followers[n - 1].nickname }}({{ user.Followers[n - 1].name }})</li>
+                    <li>
+                      {{ n }}: {{ user.Followers[n - 1].nickname }}({{
+                        user.Followers[n - 1].name
+                      }})
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -74,7 +82,11 @@
                     v-for="n of user.Posts.length > 3 ? 3 : user.Posts.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}: {{ $moment(user.Posts[n - 1].createdAt).fromNow() }}에 작성함</li>
+                    <li>
+                      {{ n }}:
+                      {{ $moment(user.Posts[n - 1].createdAt).fromNow() }}에
+                      작성함
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>

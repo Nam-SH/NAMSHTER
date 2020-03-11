@@ -10,6 +10,11 @@ const {
 router.get("/", async (req, res, next) => {
   try {
     let where = {};
+    if (req.query.state) {
+      where = {
+        state: req.query.state
+      }
+    }
     if (parseInt(req.query.lastId, 10)) {
       where = {
         id: {
@@ -56,58 +61,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// 전체의 전, 진행, 완료된 그룹 구분해서 가져오는 것
-router.get("/:state", async (req, res, next) => {
-  try {
-    let where = {
-      state: req.params.state
-    };
-    if (parseInt(req.query.lastId, 10)) {
-      where = {
-        id: {
-          [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10)
-        }
-      };
-    }
-    const groups = await db.Group.findAll({
-      where,
-      attributes: ['id', 'name', 'intro', 'limit', 'state', 'createdAt', "src"],
-      include: [{
-          model: db.User,
-          as: "Master",
-          attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
-        },
-        {
-          model: db.User,
-          as: "Groupmembers",
-          attributes: ["id"]
-        }, {
-          model: db.GroupPost,
-          attributes: ["id"]
-        },
-        {
-          model: db.Subject,
-          as: "Selectsubject",
-          attributes: ['id', 'name'],
-          include: [{
-            model: db.Category,
-            attributes: ['id', 'name']
-          }]
-        }
-      ],
-      order: [
-        ["createdAt", "DESC"]
-      ],
-      limit: parseInt(req.query.limit, 10) || 10
-    });
-    res.json(groups);
-  } catch (err) {
-    console.error("GET /:state", err);
-    next(err);
-  }
-});
-
-
 // 나의 전, 진행, 완료된 리스트 불러오기
 router.get("/my/:state", isLoggedIn, async (req, res, next) => {
   try {
@@ -150,7 +103,7 @@ router.get("/my/:state", isLoggedIn, async (req, res, next) => {
 });
 
 // 다른 유저의 전, 진행, 완료된 리스트 불러오기
-router.get("/user/:userId/:state", isLoggedIn, async (req, res, next) => {
+router.get("/user/:userId/:state", async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {

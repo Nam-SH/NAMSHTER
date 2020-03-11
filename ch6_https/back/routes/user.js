@@ -418,7 +418,7 @@ router.get("/:id/detail", async (req, res, next) => {
         }, {
           model: db.Group,
           as: "LikedGroup",
-          attributes: ["name", "state", "createdAt"]
+          attributes: ['id', "name", "state", "createdAt"]
         }, {
           model: db.GroupPost,
           as: "CreatePost",
@@ -426,7 +426,7 @@ router.get("/:id/detail", async (req, res, next) => {
         }, {
           model: db.GroupPost,
           as: "LikedGroupPost",
-          attributes: ["title", "createdAt"]
+          attributes: ['id', "title", "createdAt"]
         },
         {
           model: db.GroupPostComment,

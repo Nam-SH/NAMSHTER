@@ -10,12 +10,19 @@ export const state = () => ({
 
 export const mutations = {
   addMainPost(state, payload) {
+    this.state.users.me.Posts.unshift({
+      id: payload.id,
+      createdAt: payload.createdAt
+    })
+
     state.mainPosts.unshift(payload);
     state.imagePaths = [];
   },
 
   removeMainPost(state, payload) {
-    const targetIndex = state.mainPosts.findIndex(v => v.id === payload);
+    let targetIndex = this.state.users.me.Posts.findIndex(v => v.id == payload)
+    Vue.delete(this.state.users.me.Posts, targetIndex)
+    targetIndex = state.mainPosts.findIndex(v => v.id === payload);
     state.mainPosts.splice(targetIndex, 1);
   },
 
@@ -113,6 +120,8 @@ export const actions = {
         withCredentials: true
       })
       .then((res) => {
+        console.log(' res.data', res.data);
+
         commit('addMainPost', res.data)
         before.goAway(1500)
         this.$toast.success('포스트 작성 완료', {

@@ -224,9 +224,10 @@ export const actions = {
       })
   },
   userDetail({
-    commit
+    commit,
+    state
   }, payload) {
-    return this.$axios.get('/user/11/detail', {
+    return this.$axios.get(`/user/${state.me.id}/detail`, {
         withCredentials: true
       })
       .then((res) => {
