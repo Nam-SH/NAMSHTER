@@ -3,8 +3,8 @@
     <!-- 1. 내 정보 수정하기 -->
     <infor-edit />
 
-    <!-- 2. 내 출첵 히트맵 보여주기 -->
-    <v-container>
+    <!-- 2. 내 출첵 보여주기 -->
+    <v-container class="calendar">
       <v-card color="basil">
         <v-card-title class="text-center justify-center py-6">
           <h1 class="font-weight-bold display-1 basil--text">출석률</h1>
@@ -32,7 +32,7 @@
     </v-container>
 
     <!-- 3. 그래프 보여주기 -->
-    <v-container>
+    <v-container class="graph">
       <v-card color="basil">
         <v-card-title class="text-center justify-center py-6">
           <h1 class="font-weight-bold display-1 basil--text">글쓰기 상태</h1>
@@ -114,7 +114,6 @@ export default {
       // 내가 작성한 이번 주 작성한 글
       gradient: ["blue", "red", "pink", "skyblue"],
       labels: new Array(30),
-
       fakeLabels: new Array(30),
       fakeCalcPost: new Array(30),
       isMyPostCalc: false
@@ -221,7 +220,7 @@ export default {
 .main3 {
   flex: 1;
   border: 1px solid black;
-  font-size: 13px;
+  font-size: 0.7em;
 }
 .scedule {
   position: relative;
@@ -229,5 +228,14 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: "Noto Sans KR";
+}
+
+@media screen and (max-width: 900px) {
+  .graph {
+    display: none;
+  }
+  .calendar {
+    display: none;
+  }
 }
 </style>

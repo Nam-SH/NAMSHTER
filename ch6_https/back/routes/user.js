@@ -151,7 +151,10 @@ router.get("/image/:userEmail", async (req, res, next) => {
       },
       attributes: ["nickname", "src"]
     });
-    res.json(userSrc);
+    if (!userSrc) {
+      return res.status(404).send('가입한 거 맞음?;;')
+    }
+    return res.json(userSrc);
   } catch (err) {
     console.error("GET /image/:userEmail :::", err);
     next(err);

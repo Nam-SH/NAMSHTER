@@ -1,65 +1,68 @@
 <template>
-  <nav>
-    <v-toolbar dark src="https://source.unsplash.com/random" shrink-on-scroll prominent>
-      <v-toolbar-title>
-        <nuxt-link to="/" style="color: black">
-          <v-tooltip top>
+  <div>
+    <nav>
+      <v-toolbar dark src="https://source.unsplash.com/random" shrink-on-scroll prominent>
+        <v-toolbar-title>
+          <nuxt-link to="/" style="color: black">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="hidden_under_900 font-weight-black font-weight-bold"
+                  rounded
+                  color="blue"
+                  x-large
+                  v-on="on"
+                >NAMSHTER</v-btn>
+              </template>
+              <span>메인으로</span>
+            </v-tooltip>
+          </nuxt-link>
+        </v-toolbar-title>
+        <v-spacer />
+        <v-tooltip right color="white">
+          <template v-slot:activator="{ on }">
+            <div class="my-auto ml-5" id="clock" v-on="on">
+              <span class="time hidden_upper_900">{{ time2 }}</span>
+              <span class="time hidden_under_900">{{ time }}</span>
+            </div>
+          </template>
+          <span class="time" style="color:black">{{ date }}</span>
+        </v-tooltip>
+        <v-spacer />
+        <v-toolbar-items mt-5>
+          <v-form @submit.prevent="onSearchHashtag">
+            <div :style="{ display: 'flex', height: '100%', alignItems: 'center' }">
+              <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
+            </div>
+          </v-form>
+          <v-tooltip top v-if="me">
             <template v-slot:activator="{ on }">
               <v-btn
-                class="font-weight-black font-weight-bold"
-                rounded
-                color="blue"
-                x-large
+                text
+                to="/profile"
+                :style="{ display: 'flex', alignItems: 'center' }"
                 v-on="on"
-              >NAMSHTER</v-btn>
+              >
+                <div>마이룸</div>
+              </v-btn>
             </template>
-            <span>메인으로</span>
+            <span>내 정보 보기</span>
           </v-tooltip>
-        </nuxt-link>
-      </v-toolbar-title>
-      <v-spacer />
-      <v-tooltip right color="white">
-        <template v-slot:activator="{ on }">
-          <div class="my-auto ml-5" id="clock" v-on="on">
-            <span class="time">{{ time }}</span>
-          </div>
-        </template>
-        <span class="time" style="color:black">{{ date }}</span>
-      </v-tooltip>
-      <v-spacer />
-      <v-toolbar-items mt-5>
-        <v-form @submit.prevent="onSearchHashtag">
-          <div :style="{ display: 'flex', height: '100%', alignItems: 'center' }">
-            <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
-          </div>
-        </v-form>
-        <v-tooltip top v-if="!me">
-          <template v-slot:activator="{ on }">
-            <v-btn text to="/signup" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
-              <div>회원가입</div>
-            </v-btn>
-          </template>
-          <span>회원가입해요</span>
-        </v-tooltip>
-        <v-tooltip top v-if="me">
-          <template v-slot:activator="{ on }">
-            <v-btn text to="/profile" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
-              <div>프로필</div>
-            </v-btn>
-          </template>
-          <span>프로필보기</span>
-        </v-tooltip>
-        <v-tooltip top v-if="me">
-          <template v-slot:activator="{ on }">
-            <v-btn text to="/groups" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
-              <div>그룹</div>
-            </v-btn>
-          </template>
-          <span>놀러가요</span>
-        </v-tooltip>
-      </v-toolbar-items>
-    </v-toolbar>
-  </nav>
+          <v-tooltip top v-if="me">
+            <template v-slot:activator="{ on }">
+              <v-btn text to="/groups" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
+                <div>그룹</div>
+              </v-btn>
+            </template>
+            <span>놀러가요</span>
+          </v-tooltip>
+        </v-toolbar-items>
+        <!--  -->
+        <!--  -->
+        <!--  -->
+      </v-toolbar>
+    </nav>
+  </div>
 </template>
 
 <script>
@@ -68,6 +71,7 @@ export default {
     return {
       hashtag: "",
       time: "",
+      time2: "",
       date: ""
     };
   },
@@ -99,6 +103,11 @@ export default {
         ":" +
         this.zeroPadding(cd.getSeconds(), 2) +
         (this.zeroPadding(cd.getHours(), 2) < 12 ? " am" : " pm");
+
+      this.time2 =
+        this.zeroPadding(cd.getHours(), 2) +
+        ":" +
+        this.zeroPadding(cd.getMinutes(), 2);
 
       this.date =
         this.zeroPadding(cd.getFullYear(), 4) +
@@ -136,5 +145,15 @@ a {
 .time {
   letter-spacing: 0.05em;
   font-size: 30px;
+}
+@media screen and (min-width: 901px) {
+  .hidden_upper_900 {
+    display: none;
+  }
+}
+@media screen and (max-width: 900px) {
+  .hidden_under_900 {
+    display: none;
+  }
 }
 </style>

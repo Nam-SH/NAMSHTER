@@ -73,7 +73,7 @@ router.get("/my/:state", isLoggedIn, async (req, res, next) => {
       where: {
         state: req.params.state,
       },
-      attributes: ['id', 'name', 'intro', 'limit', 'state', "src"],
+      attributes: ["id", "name", "limit", "state", 'createdAt', "src"],
       include: [{
         model: db.User,
         as: "Master",
@@ -114,7 +114,7 @@ router.get("/user/:userId/:state", async (req, res, next) => {
       where: {
         state: req.params.state,
       },
-      attributes: ['id', 'name', 'intro', 'limit', 'state', "src"],
+      attributes: ["id", "name", "limit", "state", 'createdAt', "src"],
       include: [{
         model: db.User,
         as: "Master",
