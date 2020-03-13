@@ -94,8 +94,8 @@ export default {
       }
       this.$router.push({
         path: `/hashtag/${encodeURIComponent(this.hashtag)}`
-      }),
-        (this.hashtag = "");
+      });
+      this.hashtag = "";
     },
     updateTime() {
       const cd = new Date();

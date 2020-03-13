@@ -7,7 +7,7 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
-                  class="hidden_under_900 font-weight-black font-weight-bold"
+                  class="font-weight-black font-weight-bold"
                   rounded
                   color="blue"
                   x-large
@@ -19,11 +19,10 @@
           </nuxt-link>
         </v-toolbar-title>
         <v-spacer />
-        <v-tooltip right color="white">
+        <v-tooltip right color="rgba(255, 255, 255, 0.4)">
           <template v-slot:activator="{ on }">
             <div class="my-auto ml-5" id="clock" v-on="on">
-              <span class="time hidden_upper_900">{{ time2 }}</span>
-              <span class="time hidden_under_900">{{ time }}</span>
+              <span class="time">{{ time }}</span>
             </div>
           </template>
           <span class="time" style="color:black">{{ date }}</span>
@@ -144,16 +143,6 @@ a {
 }
 .time {
   letter-spacing: 0.05em;
-  font-size: 30px;
-}
-@media screen and (min-width: 901px) {
-  .hidden_upper_900 {
-    display: none;
-  }
-}
-@media screen and (max-width: 900px) {
-  .hidden_under_900 {
-    display: none;
-  }
+  font-size: 2em;
 }
 </style>

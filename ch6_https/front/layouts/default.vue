@@ -4,11 +4,11 @@
     <default-nav class="hidden_under_960" />
     <!-- 오른쪽 화면 -->
     <v-row no-gutters>
-      <v-col cols="12" md="4">
+      <v-col cols="12" lg="4">
         <login-card />
         <group-go />
       </v-col>
-      <v-col cols="12" md="8">
+      <v-col cols="12" lg="8">
         <nuxt />
       </v-col>
     </v-row>
