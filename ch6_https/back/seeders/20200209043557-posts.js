@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     const contents = [
-      "사랑은 무엇보다도 자신을 위한 선물이다 - 장 아누이s",
+      "사랑은 무엇보다도 자신을 위한 선물이다 - 장 아누이",
       "한글은 세계 어떤 나라의 문자에서도 볼 수 없는 가장 과학적인 표기체계이다.",
       "한글은 인류의 가장 위대한 지적 성취 가운데 하나임은 이론의 여지가 없다.",
       "A man has to have a code, a way of life to live by.",
@@ -16,14 +16,16 @@ module.exports = {
     ]
 
     let datas = []
-    for (let i = 1; i < 10; i++) {
-      let temp = {
-        content: contents[i],
-        UserId: i,
-        createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-        updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+    for (let n = 0; n < 10; n++) {
+      for (let i = 0; i < 10; i++) {
+        let temp = {
+          content: contents[(n + i) % 10],
+          UserId: i + 1,
+          createdAt: new Date(`2020-02-${n + 1} ${n + i + 1}:${n + i + 11}`).toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+          updatedAt: new Date(`2020-02-${n + 1} ${n + i + 1}:${n + i + 11}`).toISOString().replace(/T/, ' ').replace(/\..+/, '')
+        }
+        datas.push(temp)
       }
-      datas.push(temp)
     }
     // return queryInterface.bulkInsert('posts', datas, {});
     return queryInterface.bulkInsert("Posts", datas, {});

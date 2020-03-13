@@ -12,6 +12,8 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
+import nuxt_plugin_workbox_736d71af from 'nuxt_plugin_workbox_736d71af' // Source: .\\workbox.js (mode: 'client')
+import nuxt_plugin_nuxticons_436f7fd5 from 'nuxt_plugin_nuxticons_436f7fd5' // Source: .\\nuxt-icons.js (mode: 'all')
 import nuxt_plugin_plugin_48ee80c4 from 'nuxt_plugin_plugin_48ee80c4' // Source: .\\vuetify\\plugin.js (mode: 'all')
 import nuxt_plugin_toast_e80d5bfc from 'nuxt_plugin_toast_e80d5bfc' // Source: .\\toast.js (mode: 'client')
 import nuxt_plugin_editorclient_685b821e from 'nuxt_plugin_editorclient_685b821e' // Source: .\\tui\\editor.client.js (mode: 'client')
@@ -172,6 +174,14 @@ async function createApp (ssrContext) {
   }
 
   // Plugin execution
+
+  if (process.client && typeof nuxt_plugin_workbox_736d71af === 'function') {
+    await nuxt_plugin_workbox_736d71af(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_nuxticons_436f7fd5 === 'function') {
+    await nuxt_plugin_nuxticons_436f7fd5(app.context, inject)
+  }
 
   if (typeof nuxt_plugin_plugin_48ee80c4 === 'function') {
     await nuxt_plugin_plugin_48ee80c4(app.context, inject)

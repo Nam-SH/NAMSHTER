@@ -24,7 +24,7 @@
           </v-btn>
         </v-row>
       </v-sheet>
-      <v-navigation-drawer v-model="drawer" absolute temporary>
+      <v-navigation-drawer v-model="drawer" absolute temporary right>
         <v-list-item>
           <v-list-item-avatar>
             <v-img :src="`${srcAddress}/profile/${me.src}`"></v-img>
@@ -37,8 +37,19 @@
         <v-list dense>
           <v-container>
             <v-form @submit.prevent="onSearchHashtag">
-              <div :style="{ display: 'flex', height: '100%', alignItems: 'center' }">
-                <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
+              <div
+                :style="{
+                  display: 'flex',
+                  height: '100%',
+                  alignItems: 'center'
+                }"
+              >
+                <v-text-field
+                  v-model="hashtag"
+                  label="검색"
+                  hide-details
+                  prepend-icon="mdi-magnify"
+                />
               </div>
             </v-form>
           </v-container>

@@ -125,7 +125,7 @@ export const actions = {
       })
 
     } catch (err) {
-      // console.error('loadOther :::', err)
+      console.error('loadOther :::', err)
       before.goAway(1500)
       this.$toast.error(`${ err.response.data }`, {
         duration: 2000
