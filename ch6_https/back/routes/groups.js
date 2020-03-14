@@ -24,7 +24,7 @@ router.get("/", async (req, res, next) => {
     }
     const groups = await db.Group.findAll({
       where,
-      attributes: ["id", "name", "intro", "limit", "state", 'createdAt', "src"],
+      attributes: ["id", "name", "intro", "limit", "state", "src", 'startDate', 'endDate'],
       include: [{
         model: db.User,
         as: "Master",
@@ -73,17 +73,14 @@ router.get("/my/:state", isLoggedIn, async (req, res, next) => {
       where: {
         state: req.params.state,
       },
-      attributes: ["id", "name", "limit", "state", 'createdAt', "src"],
+      attributes: ["id", "name", "intro", "limit", "state", "src", 'startDate', 'endDate'],
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name'],
       }, {
         model: db.User,
         as: "Groupmembers",
-        attributes: ["id"]
-      }, {
-        model: db.GroupPost,
         attributes: ["id"]
       }, {
         model: db.Subject,
@@ -114,18 +111,15 @@ router.get("/user/:userId/:state", async (req, res, next) => {
       where: {
         state: req.params.state,
       },
-      attributes: ["id", "name", "limit", "state", 'createdAt', "src"],
+      attributes: ["id", "name", "intro", "limit", "state", "src", 'startDate', 'endDate'],
       include: [{
         model: db.User,
         as: "Master",
-        attributes: ['id', 'nickname', 'name', 'src', 'email', 'isAdmin'],
+        attributes: ['id', 'nickname', 'name'],
       }, {
         model: db.User,
         as: "Groupmembers",
         attributes: ['id']
-      }, {
-        model: db.GroupPost,
-        attributes: ["id"]
       }, {
         model: db.Subject,
         as: "Selectsubject",

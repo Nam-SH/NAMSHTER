@@ -4,6 +4,7 @@
       <v-chip :color="isState ? 'primary' : 'red'" text-color="white" label>{{ stateName }}</v-chip>
     </v-row>
     <br />
+    {{ grouplist }}
     <v-carousel
       v-if="grouplist && grouplist.length > 0"
       cycle
@@ -18,9 +19,15 @@
             <v-container>
               <div>
                 <v-card-title>
-                  <p class="title">
-                    <v-badge color="pink" dot>{{ group.name }}</v-badge>
-                  </p>
+                  <span>
+                    <v-badge color="pink" dot>
+                      <strong>{{ group.name }}</strong>
+                    </v-badge>
+                  </span>
+                  <v-spacer></v-spacer>
+                  <span style="color:yellow">
+                    <i>({{ group.startDate }} ~ {{ group.endDate }})</i>
+                  </span>
                 </v-card-title>
                 <v-container>
                   <div>
@@ -30,13 +37,15 @@
               </div>
               <v-container>
                 <div>
-                  <span>그룹 제한:: {{ group.limit }}</span>
+                  <span>그룹 인원:: {{ group.Groupmembers.length }}명 / {{ group.limit }}명</span>
                   <v-btn
                     aria-label="go"
                     :groupId="group.id"
                     :to="`/groups/${group.id}`"
                     absolute
                     right
+                    color="white"
+                    style="color:black"
                   >들어가기</v-btn>
                 </div>
               </v-container>

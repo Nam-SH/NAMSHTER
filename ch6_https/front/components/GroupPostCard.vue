@@ -1,91 +1,114 @@
 <template>
-  <v-row no-gutters>
-    <v-container>
-      <v-container style="border: 2px solid black; border-radius: 10px;">
-        <v-card>
-          <v-card>
-            <group-post-content
-              :groupPost="groupPost"
-              :isEditting="isEditting"
-              :onEditting="onEditting"
-            />
-          </v-card>
-          <v-card-actions>
-            <!-- 좋아요 -->
-            <v-btn aria-label="like" text color="orange" @click.prevent="onClickHeart">
-              <v-icon>{{ heartIcon }}</v-icon>
+  <div style="border: 2px solid black; border-radius: 10px; height:400px">
+    <v-card style="display:flex;flex-direction:column;height:100%;border-radius: 10px">
+      <v-card style="flex:10">
+        <div style="display:flex;flex-direction:column;height:100%">
+          <div class="mx-3" style="flex:2">
+            <div>{{ groupPost.User.nickname }}</div>
+            <div>
+              <h3>{{ groupPost.title }}</h3>
+            </div>
+            <hr />
+          </div>
+          <div class="mx-3" style="flex:5">
+            <p class="target">{{ groupPost.content }}</p>
+          </div>
+
+          <div style="flex:1">
+            <hr />
+            <div
+              class="mx-3"
+              style="font-size:12px;"
+            >{{ $moment(groupPost.createdAt).fromNow() }}에 작성함...</div>
+          </div>
+        </div>
+      </v-card>
+      <v-card-actions style="flex:1">
+        <!-- 좋아요 -->
+        <v-btn aria-label="like" text color="orange" @click.prevent="onClickHeart">
+          <v-icon>{{ heartIcon }}</v-icon>
+        </v-btn>
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!-- <v-spacer></v-spacer>
+        <v-menu offset-y open-on-hover>
+          <template v-slot:activator="{ on }">
+            <v-btn aria-label="menu" text color="orange" v-on="on">
+              <v-icon>mdi-dots-horizontal</v-icon>
             </v-btn>
-            <v-spacer></v-spacer>
-            <v-menu offset-y open-on-hover>
-              <template v-slot:activator="{ on }">
-                <v-btn aria-label="menu" text color="orange" v-on="on">
-                  <v-icon>mdi-dots-horizontal</v-icon>
-                </v-btn>
-              </template>
-              <div style="background: white">
-                <v-btn aria-label="mod" cark color="orange" @click.prevent="onEditting">수정</v-btn>
-                <v-btn aria-label="del" cark color="red" @click.prevent="onDelete">삭제</v-btn>
-              </div>
-            </v-menu>
-          </v-card-actions>
-        </v-card>
-        <v-divider></v-divider>
-        <v-container>
-          <v-row justify="center">
-            <v-expansion-panels accordion>
-              <v-expansion-panel @click.prevent="onComment">
-                <v-expansion-panel-header>
-                  <span>
-                    <strong>댓글</strong>
-                  </span>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content v-if="isCommentOn">
-                  <v-container>
-                    <v-form @submit.prevent="onSubmitForm" width="100%">
-                      <v-text-field class="mt-0 pt-0" label="댓글" hide-details v-model="comment">
-                        <v-btn
-                          aria-label="comment"
-                          type="submit"
-                          slot="append"
-                          icon
-                          small
-                          color="primary"
-                        >
-                          <v-icon dark>mdi-pencil</v-icon>
-                        </v-btn>
-                      </v-text-field>
-                    </v-form>
-                  </v-container>
-                  <div v-for="comm in groupPost.GroupPostComments" :key="comm.id">
-                    <v-row align="center" justify="space-between">
-                      <div>
-                        <div v-if="comm.User" style="display:inline-block">
-                          <v-list-item-avatar class="mr-0" color="grey darken-3">
-                            <v-img
-                              class="elevation-6"
-                              :src="`${srcAddress}/profile/${comm.User['src']}`"
-                            ></v-img>
-                          </v-list-item-avatar>
-                          <span>{{ comm.User['name'] }}({{ comm.User['nickname'] }}) |</span>
-                        </div>
-                        <span>
-                          <strong>{{ comm.comment }}</strong>
-                        </span>
-                      </div>
-                      <v-btn aria-label="del" @click="onDeleteComment(comm.id)" icon color="red">
-                        <v-icon>mdi-delete</v-icon>
-                      </v-btn>
-                    </v-row>
-                    <v-divider></v-divider>
+          </template>
+          <div style="background: white">
+            <v-btn aria-label="mod" cark color="orange" @click.prevent="onEditting">수정</v-btn>
+            <v-btn aria-label="del" cark color="red" @click.prevent="onDelete">삭제</v-btn>
+          </div>
+        </v-menu>-->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+      </v-card-actions>
+    </v-card>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!-- 댓글 -->
+    <!-- <v-container>
+      <v-row justify="center">
+        <v-expansion-panels accordion>
+          <v-expansion-panel @click.prevent="onComment">
+            <v-expansion-panel-header>
+              <span>
+                <strong>댓글</strong>
+              </span>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content v-if="isCommentOn">
+              <v-container>
+                <v-form @submit.prevent="onSubmitForm" width="100%">
+                  <v-text-field class="mt-0 pt-0" label="댓글" hide-details v-model="comment">
+                    <v-btn
+                      aria-label="comment"
+                      type="submit"
+                      slot="append"
+                      icon
+                      small
+                      color="primary"
+                    >
+                      <v-icon dark>mdi-pencil</v-icon>
+                    </v-btn>
+                  </v-text-field>
+                </v-form>
+              </v-container>
+              <div v-for="comm in groupPost.GroupPostComments" :key="comm.id">
+                <v-row align="center" justify="space-between">
+                  <div>
+                    <div v-if="comm.User" style="display:inline-block">
+                      <v-list-item-avatar class="mr-0" color="grey darken-3">
+                        <v-img
+                          class="elevation-6"
+                          :src="`${srcAddress}/profile/${comm.User['src']}`"
+                        ></v-img>
+                      </v-list-item-avatar>
+                      <span>{{ comm.User['name'] }}({{ comm.User['nickname'] }}) |</span>
+                    </div>
+                    <span>
+                      <strong>{{ comm.comment }}</strong>
+                    </span>
                   </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </v-row>
-        </v-container>
-      </v-container>
-    </v-container>
-  </v-row>
+                  <v-btn aria-label="del" @click="onDeleteComment(comm.id)" icon color="red">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </v-row>
+                <v-divider></v-divider>
+              </div>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-row>
+    </v-container>-->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+  </div>
 </template>
 
 <script>
@@ -180,5 +203,15 @@ export default {
 a {
   color: black;
   text-decoration: none;
+}
+p.target {
+  font-family: sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  max-height: 12.8em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
 }
 </style>

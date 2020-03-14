@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 모달형식 -->
     <v-card-title>
       <h3>
         <v-tooltip right color="rgba(255, 255, 255, 0)">

@@ -120,7 +120,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       where: {
         id: newGroup.id
       },
-      attributes: ["id", "name", "intro", "limit", "state", "src"],
+      attributes: ["id", "name", "intro", "limit", "state", "src", 'startDate', 'endDate'],
       include: [{
           model: db.User,
           as: "Master",

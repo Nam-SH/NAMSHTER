@@ -20,15 +20,15 @@
       </v-card>
     </v-container>
     <br />
+    <group-create-form />
     <v-bottom-navigation v-model="navNum" shift>
       <v-btn aria-label="nav" v-for="(item, i) in items" :key="i">
         <span>{{ item.name }}</span>
         <v-icon>{{ item.icon }}</v-icon>
       </v-btn>
     </v-bottom-navigation>
-    <all-groups
-      :grouplist="navNum==0 ? allGroups : navNum == 1 ? beforeGroups : navNum == 2 ? doingGroups : doneGroups"
-    />
+
+    <all-groups :grouplist="navData" />
   </v-container>
 </template>
 
@@ -36,13 +36,15 @@
 import MyGroups from "@/components/MyGroups.vue";
 import AllGroups from "@/components/AllGroups.vue";
 import GroupActivity from "@/components/GroupActivity.vue";
+import GroupCreateForm from "@/components/GroupCreateForm.vue";
 
 export default {
   layout: "group",
   components: {
     MyGroups,
     AllGroups,
-    GroupActivity
+    GroupActivity,
+    GroupCreateForm
   },
   data() {
     return {
@@ -88,6 +90,22 @@ export default {
     },
     myGrouplistDoing() {
       return this.$store.state.groups.myGrouplistDoing;
+    },
+    navData() {
+      switch (this.navNum) {
+        case 0:
+          return this.allGroups;
+          break;
+        case 1:
+          return this.beforeGroups;
+          break;
+        case 2:
+          return this.doingGroups;
+          break;
+        case 3:
+          return this.doneGroups;
+          break;
+      }
     }
   },
   watch: {

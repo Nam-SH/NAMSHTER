@@ -1,78 +1,69 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <template v-slot:activator="{ on }">
-          <v-btn aria-label="makegroup" color="pink" dark v-on="on">
-            <strong>그룹 만들기</strong>
-          </v-btn>
-        </template>
-        <v-form ref="form" @submit.prevent="onSubmitForm">
-          <v-card>
-            <v-card-title>
-              <span class="headline">그룹 정보</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="groupCategory"
-                      :items="['컴퓨터공부', '취업', '운동', '음악', '기타']"
-                      label="분류"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-autocomplete v-model="groupSubject" :items="items" label="주제"></v-autocomplete>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="groupLimit"
-                      :items="['4', '5', '6', '7', '8', '9', '10', '11', '12']"
-                      label="제한인원"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field v-model="groupName" label="그룹 이름" required></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field v-if="me" label="그룹 방장" readonly :placeholder="this.me.name "></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-textarea
-                      v-model="groupIntro"
-                      clearable
-                      clear-icon="x"
-                      label="그룹 소개"
-                      counter="300"
-                    ></v-textarea>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <small>*전부 작성해야 되여</small>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                aria-label="cancle"
-                color="blue darken-1"
-                text
-                @click.prevent="dialog = false"
-              >닫기</v-btn>
-              <v-btn
-                aria-label="make"
-                color="blue darken-3"
-                type="submit"
-                @click.prevent="dialog = false"
-              >만들기</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-form>
-      </v-dialog>
-    </v-row>
-  </v-container>
+  <v-dialog v-model="dialog" persistent max-width="600px">
+    <template v-slot:activator="{ on }">
+      <v-btn aria-label="makegroup" color="pink" dark v-on="on">
+        <strong>그룹 만들기</strong>
+      </v-btn>
+    </template>
+    <v-form ref="form" @submit.prevent="onSubmitForm">
+      <v-card>
+        <v-card-title>
+          <span class="headline">그룹 정보</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-select
+                  v-model="groupCategory"
+                  :items="['컴퓨터공부', '취업', '운동', '음악', '기타']"
+                  label="분류"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-autocomplete v-model="groupSubject" :items="items" label="주제"></v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-select
+                  v-model="groupLimit"
+                  :items="['4', '5', '6', '7', '8', '9', '10', '11', '12']"
+                  label="제한인원"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="groupName" label="그룹 이름" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-if="me" label="그룹 방장" readonly :placeholder="this.me.name "></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="groupIntro"
+                  clearable
+                  clear-icon="x"
+                  label="그룹 소개"
+                  counter="300"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*전부 작성해야 되여</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn aria-label="cancle" color="blue darken-1" text @click.prevent="dialog = false">닫기</v-btn>
+          <v-btn
+            aria-label="make"
+            color="blue darken-3"
+            type="submit"
+            @click.prevent="dialog = false"
+          >만들기</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-form>
+  </v-dialog>
 </template>
 
 <script>

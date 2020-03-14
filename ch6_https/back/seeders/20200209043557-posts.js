@@ -27,7 +27,6 @@ module.exports = {
         datas.push(temp)
       }
     }
-    // return queryInterface.bulkInsert('posts', datas, {});
     return queryInterface.bulkInsert("Posts", datas, {});
   },
 
