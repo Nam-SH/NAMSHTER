@@ -76,15 +76,14 @@
         </g>
       </svg>
     </div>
-
     <div class="hero__content">
-      <v-container class="mb-5">
-        <h1>NAM.S.H.TER</h1>
+      <v-container style="font-size:50px">
+        <p class="text">NAM.S.H.TER</p>
       </v-container>
-      <v-row>
-        <nuxt />
-      </v-row>
     </div>
+    <v-row>
+      <nuxt />
+    </v-row>
   </v-app>
 </template>
 
@@ -103,10 +102,10 @@ export default {
 <style lang="scss" scoped>
 @import url("https://fonts.googleapis.com/css?family=Corben:700");
 
-h1 {
+.text {
   font-family: "Corben", cursive;
-  font-size: 6rem;
-  color: white;
+  font-size: 1em;
+  color: rgb(133, 228, 245);
   letter-spacing: 0.1rem;
   text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.66);
 }

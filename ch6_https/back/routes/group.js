@@ -226,27 +226,36 @@ router.post("/:groupId/changestate", isLoggedIn, async (req, res, next) => {
     if (!group) {
       return res.status(404).send("그런 그룹이 없는데여;;");
     }
-    // 3. 그룹이 있으면 해당 그룹의 마수터와 요청한 자의 id 비교하기
-    // 방장이 아니면 400에러 보내기
+    // 3. 완료된 그룹이면?
+    if (group.state === 2) {
+      return res.status(403).send("완료 된 그룹인데여;;");
+    }
+    // 4. 그룹이 있으면 해당 그룹의 마수터와 요청한 자의 id 비교하기
     if (group.MasterId !== req.user.id) {
       return res.status(403).send("님은 상태를 변경할 권한이 없는데여;;");
     }
-    // 4. 방장이라면 바꿔주기
-    let nxtState = 1;
-    if (group.state === 1) {
-      nxtState = 2;
-    } else if (group.state === 2) {
-      return res.status(400).send("완료 된 그룹인데여;;");
+    // 4. 완료되지 않았고 방장이라면 바꿔주기
+    if (group.state === 0) {
+      await db.Group.update({
+        state: group.state + 1,
+        startDate: new Date()
+      }, {
+        where: {
+          id: parseInt(req.params.groupId, 10)
+        }
+      });
+    } else {
+      await db.Group.update({
+        state: group.state + 1,
+        endDate: new Date()
+      }, {
+        where: {
+          id: parseInt(req.params.groupId, 10)
+        }
+      });
     }
-    await db.Group.update({
-      state: nxtState
-    }, {
-      where: {
-        id: parseInt(req.params.groupId, 10)
-      }
-    });
     return res.json({
-      next: nxtState
+      next: group.state + 1,
     });
   } catch (err) {
     console.error("POST /changestate :::", err);

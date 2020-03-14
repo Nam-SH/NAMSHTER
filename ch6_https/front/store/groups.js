@@ -7,14 +7,20 @@ export const state = () => ({
   imagePaths: [],
   hasMoreGroupPost: true,
 
-  grouplistBefore: [],
-  grouplistDoing: [],
-  grouplistDone: [],
+  myGrouplistBefore: [],
+  myGrouplistDoing: [],
+  myGrouplistDone: [],
+
   otherGrouplistBefore: [],
   otherGrouplistDoing: [],
   otherGrouplistDone: [],
 
-  grouplist: [],
+  allGroups: [],
+  beforeGroups: [],
+  doingGroups: [],
+  doneGroups: [],
+
+
   oneGroup: null,
   isUserInGroup: false,
 
@@ -23,8 +29,8 @@ export const state = () => ({
 
 export const mutations = {
   groupAdd(state, payload) {
-    // state.loadGroups.unshift(payload)
-    state.grouplistBefore.unshift(payload);
+    // state.allGroups.unshift(payload)
+    state.myGrouplistBefore.unshift(payload);
   },
   groupEdit(state, payload) {
     state.oneGroup.name = payload.name
@@ -38,10 +44,10 @@ export const mutations = {
   // 그룹 상태 변경 
   changeState(state, payload) {
     if (payload.nextState === 1) {
-      let targetIndex = state.grouplistBefore.findIndex(
+      let targetIndex = state.myGrouplistBefore.findIndex(
         v => v.id === payload.groupId
       );
-      state.mainGrouplist.unshift(state.grouplistBefore[targetIndex]);
+      state.mainGrouplist.unshift(state.myGrouplistBefore[targetIndex]);
       state.oneGroup.state = payload.nextState
     } else {
       state.oneGroup.state = payload.nextState
@@ -67,15 +73,15 @@ export const mutations = {
       }
       return
     } else {
-      const targetGroupIndex = state.grouplist.findIndex(v => v.id === payload.groupId);
-      const targetIndex = state.grouplist[targetGroupIndex].Groupmembers.findIndex(v => v.id === payload.userId)
+      const targetGroupIndex = state.allGroups.findIndex(v => v.id === payload.groupId);
+      const targetIndex = state.allGroups[targetGroupIndex].Groupmembers.findIndex(v => v.id === payload.userId)
       if (targetIndex !== -1) {
-        Vue.delete(state.grouplist[targetGroupIndex].Groupmembers, targetIndex)
+        Vue.delete(state.allGroups[targetGroupIndex].Groupmembers, targetIndex)
         state.isUserInGroup = false
         this.$router.push('/groups')
         return
       } else {
-        state.grouplist[targetGroupIndex].Groupmembers.unshift({
+        state.allGroups[targetGroupIndex].Groupmembers.unshift({
           id: payload.userId
         })
         state.isUserInGroup = true
@@ -90,17 +96,51 @@ export const mutations = {
       id: payload.groupId,
       groupName: payload.groupName
     })
-    const targetGroup = state.grouplist.findIndex(v => v.id === payload.groupId)
-    state.grouplist[targetGroup].GroupLiker.unshift({
+    // 전체
+    let targetGroup = state.allGroups.findIndex(v => v.id === payload.groupId)
+    state.allGroups[targetGroup].GroupLiker.unshift({
       id: payload.userId
     })
+    // 전 ? 진행 ? 완료?
+    if (payload.groupState === 0) {
+      targetGroup = state.beforeGroups.findIndex(v => v.id === payload.groupId)
+      state.beforeGroups[targetGroup].GroupLiker.unshift({
+        id: payload.userId
+      })
+    } else if (payload.groupState === 1) {
+      targetGroup = state.doingGroups.findIndex(v => v.id === payload.groupId)
+      state.doingGroups[targetGroup].GroupLiker.unshift({
+        id: payload.userId
+      })
+    } else {
+      targetGroup = state.doneGroups.findIndex(v => v.id === payload.groupId)
+      state.doneGroups[targetGroup].GroupLiker.unshift({
+        id: payload.userId
+      })
+    }
   },
   groupUnlike(state, payload) {
     let targetGroupIndex = this.state.users.userDetail.LikedGroup.findIndex(v => v.id === payload.groupId)
     Vue.delete(this.state.users.userDetail.LikedGroup, targetGroupIndex)
-    targetGroupIndex = state.grouplist.findIndex(v => v.id === payload.groupId)
-    const targetUserIndex = state.grouplist[targetGroupIndex].GroupLiker.findIndex(v => v.id === payload.userId)
-    Vue.delete(state.grouplist[targetGroupIndex].GroupLiker, targetUserIndex)
+
+    // 전체
+    targetGroupIndex = state.allGroups.findIndex(v => v.id === payload.groupId)
+    const targetUserIndex = state.allGroups[targetGroupIndex].GroupLiker.findIndex(v => v.id === payload.userId)
+    Vue.delete(state.allGroups[targetGroupIndex].GroupLiker, targetUserIndex)
+    // 전 ? 진행 ? 완료
+    if (payload.groupState === 0) {
+      targetGroupIndex = state.beforeGroups.findIndex(v => v.id === payload.groupId)
+      const targetUserIndex = state.beforeGroups[targetGroupIndex].GroupLiker.findIndex(v => v.id === payload.userId)
+      Vue.delete(state.beforeGroups[targetGroupIndex].GroupLiker, targetUserIndex)
+    } else if (payload.groupState === 1) {
+      targetGroupIndex = state.doingGroups.findIndex(v => v.id === payload.groupId)
+      const targetUserIndex = state.doingGroups[targetGroupIndex].GroupLiker.findIndex(v => v.id === payload.userId)
+      Vue.delete(state.doingGroups[targetGroupIndex].GroupLiker, targetUserIndex)
+    } else {
+      targetGroupIndex = state.doneGroups.findIndex(v => v.id === payload.groupId)
+      const targetUserIndex = state.doneGroups[targetGroupIndex].GroupLiker.findIndex(v => v.id === payload.userId)
+      Vue.delete(state.doneGroups[targetGroupIndex].GroupLiker, targetUserIndex)
+    }
   },
 
   // 글 작성관련
@@ -153,10 +193,18 @@ export const mutations = {
   },
 
   // 그룹 불러오기 관련
-  loadGroups(state, payload) {
-    state.grouplist = payload;
+  loadAllGroups(state, payload) {
+    state.allGroups = payload;
   },
-
+  loadBeforeGroups(state, payload) {
+    state.beforeGroups = payload
+  },
+  loadDoingGroups(state, payload) {
+    state.doingGroups = payload
+  },
+  loadDoneGroups(state, payload) {
+    state.doneGroups = payload
+  },
   loadMainGroups(state, payload) {
     state.mainGrouplist = payload;
   },
@@ -165,11 +213,14 @@ export const mutations = {
     state.oneGroup = payload;
   },
 
-  grouplistBefore(state, payload) {
-    state.grouplistBefore = payload;
+  myGrouplistBefore(state, payload) {
+    state.myGrouplistBefore = payload;
   },
-  grouplistDoing(state, payload) {
-    state.grouplistDoing = payload;
+  myGrouplistDoing(state, payload) {
+    state.myGrouplistDoing = payload;
+  },
+  myGrouplistDone(state, payload) {
+    state.myGrouplistDone = payload;
   },
 
   otherGrouplistBefore(state, payload) {
@@ -277,6 +328,7 @@ export const actions = {
         commit('groupLike', {
           groupId: payload.groupId,
           groupName: payload.groupName,
+          groupState: payload.groupState,
           userId: res.data
         })
       })
@@ -295,6 +347,7 @@ export const actions = {
       .then((res) => {
         commit('groupUnlike', {
           groupId: payload.groupId,
+          groupState: payload.groupState,
           userId: res.data
         })
       })
@@ -596,27 +649,57 @@ export const actions = {
   loadAllGroups({
     commit
   }, payload) {
-    if (payload && payload.state >= 0) {
-      return this.$axios.get(`/groups/?state=${payload.state}`, {
-          withCredentials: true
-        })
-        .then(res => {
-          commit("loadGroups", res.data);
-        })
-        .catch(err => {
-          console.error("loadGroups :::", err);
-        });
-    } else {
-      return this.$axios.get(`/groups`, {
-          withCredentials: true
-        })
-        .then(res => {
-          commit("loadGroups", res.data);
-        })
-        .catch(err => {
-          console.error("loadGroups :::", err);
-        });
-    }
+    return this.$axios.get(`/groups`, {
+        withCredentials: true
+      })
+      .then(res => {
+        commit("loadAllGroups", res.data);
+      })
+      .catch(err => {
+        console.error("loadAllGroups :::", err);
+      });
+  },
+  // 준비 중인 전체 그룹
+  loadBeforeGroups({
+    commit
+  }, payload) {
+    return this.$axios.get('/groups/?state=0', {
+        withCredentials: true
+      })
+      .then(res => {
+        commit("loadBeforeGroups", res.data);
+      })
+      .catch(err => {
+        console.error("loadBeforeGroups :::", err);
+      });
+  },
+  // 진행 중인 전체 그룹
+  loadDoingGroups({
+    commit
+  }, payload) {
+    return this.$axios.get('/groups/?state=1', {
+        withCredentials: true
+      })
+      .then(res => {
+        commit("loadDoingGroups", res.data);
+      })
+      .catch(err => {
+        console.error("loadDoingGroups :::", err);
+      });
+  },
+  // 완료된 전체 그룹 
+  loadDoneGroups({
+    commit
+  }, payload) {
+    return this.$axios.get('/groups/?state=2', {
+        withCredentials: true
+      })
+      .then(res => {
+        commit("loadDoneGroups", res.data);
+      })
+      .catch(err => {
+        console.error("loadDoneGroups :::", err);
+      });
   },
 
   loadMainGroups({
@@ -647,34 +730,50 @@ export const actions = {
         console.error("oneGroupDetail :::", err);
       });
   },
-  grouplistBefore({
+
+  myGrouplistBefore({
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/my/${payload.state}?limit=${payload.limit}`, {
+      .get('/groups/my/0', {
         withCredentials: true
       })
       .then(res => {
-        commit("grouplistBefore", res.data);
+        commit("myGrouplistBefore", res.data);
       })
       .catch(err => {
-        console.error("grouplistBefore :::", err);
+        console.error("myGrouplistBefore :::", err);
       });
   },
-  grouplistDoing({
+  myGrouplistDoing({
     commit
   }, payload) {
     return this.$axios
-      .get(`/groups/my/${payload.state}?limit=${payload.limit}`, {
+      .get('/groups/my/1', {
         withCredentials: true
       })
       .then(res => {
-        commit("grouplistDoing", res.data);
+        commit("myGrouplistDoing", res.data);
       })
       .catch(err => {
-        console.error("grouplistDoing :::", err);
+        console.error("myGrouplistDoing :::", err);
       });
   },
+  myGrouplistDone({
+    commit
+  }, payload) {
+    return this.$axios
+      .get('/groups/my/2', {
+        withCredentials: true
+      })
+      .then(res => {
+        commit("myGrouplistDone", res.data);
+      })
+      .catch(err => {
+        console.error("myGrouplistDone :::", err);
+      });
+  },
+
   otherGrouplistBefore({
     commit
   }, payload) {

@@ -39,6 +39,7 @@
         </v-card-title>
         <v-container>
           <v-btn
+            aria-label="graph"
             v-model="isMyPostCalc"
             @click.prevent="onGetMyPost"
             :text="isMyPostCalc"
@@ -74,12 +75,13 @@
             <v-subheader>팔로잉</v-subheader>
             <follow-list :users="followingList" :remove="removeFollowing" />
             <v-btn
+              aria-label="plus"
               @click.prevent="loadFollowings"
               v-if="hasMoreFollowing"
               color="blue"
               style="width: 100%"
             >더 보기</v-btn>
-            <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
+            <v-btn aria-label="notplus" v-else disabled style="width: 100%">더 보기</v-btn>
           </v-container>
         </v-card>
         <v-card>
@@ -87,12 +89,13 @@
             <v-subheader>팔로워</v-subheader>
             <follow-list :users="followerList" :remove="removeFollower" />
             <v-btn
+              aria-label="plus"
               @click.prevent="loadFollowers"
               v-if="hasMoreFollower"
               color="blue"
               style="width: 100%"
             >더 보기</v-btn>
-            <v-btn v-else disabled style="width: 100%">더 보기</v-btn>
+            <v-btn aria-label="notplus" v-else disabled style="width: 100%">더 보기</v-btn>
           </v-container>
         </v-card>
       </v-card>

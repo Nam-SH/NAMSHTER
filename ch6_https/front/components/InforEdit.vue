@@ -79,7 +79,7 @@
                   @click:append="() => (value3 = !value3)"
                   :append-icon="value3 ? 'mdi-eye' : 'mdi-eye-off'"
                 />
-                <v-btn class="mt-5" dark color="blue" type="submit">수정</v-btn>
+                <v-btn class="mt-5" aria-label="mod" dark color="blue" type="submit">수정</v-btn>
               </v-form>
               <!-- 나머지 -->
               <v-form v-else @submit.prevent="onSubmitForm">
@@ -91,7 +91,7 @@
                   :hide-details="hideDetails"
                   @input="onChangeTextarea"
                 />
-                <v-btn class="mt-5" dark color="blue" type="submit">수정</v-btn>
+                <v-btn class="mt-5" aria-label="mod" dark color="blue" type="submit">수정</v-btn>
               </v-form>
             </v-container>
           </v-card>

@@ -52,7 +52,7 @@ router.get("/", async (req, res, next) => {
       order: [
         ["createdAt", "DESC"]
       ],
-      limit: parseInt(req.query.limit, 10) || 10
+      // limit: parseInt(req.query.limit, 10) || 10
     });
     res.json(groups);
   } catch (err) {

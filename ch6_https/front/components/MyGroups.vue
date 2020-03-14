@@ -31,7 +31,13 @@
               <v-container>
                 <div>
                   <span>그룹 제한:: {{ group.limit }}</span>
-                  <v-btn :groupId="group.id" :to="`/groups/${group.id}`" absolute right>들어가기</v-btn>
+                  <v-btn
+                    aria-label="go"
+                    :groupId="group.id"
+                    :to="`/groups/${group.id}`"
+                    absolute
+                    right
+                  >들어가기</v-btn>
                 </div>
               </v-container>
             </v-container>

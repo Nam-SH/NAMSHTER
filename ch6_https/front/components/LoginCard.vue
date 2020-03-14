@@ -18,12 +18,12 @@
               width="200px"
             ></v-img>
           </v-tooltip>로그인이 되었습니다.
-          <v-btn to="/qrcode" absolute right text>
+          <v-btn aria-label="to" to="/qrcode" absolute right text>
             <i class="fas fa-camera ml-auto"></i>
           </v-btn>
         </v-row>
         <hr class="my-2" />
-        <v-btn class="mb-3" @click.prevent="onLogOut">로그아웃</v-btn>
+        <v-btn class="mb-3" aria-label="logout" @click.prevent="onLogOut">로그아웃</v-btn>
       </v-container>
     </v-card>
     <v-divider class="my-3"></v-divider>

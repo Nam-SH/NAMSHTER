@@ -18,6 +18,7 @@
             </v-chip>
           </div>
           <v-btn
+            aria-label="sign"
             :disabled="oneGroup.MasterId === me.id"
             color="yellow"
             @click.prevent="groupUserInOut"
@@ -28,10 +29,14 @@
           {{ oneGroup.Master.email }}
         </p>
         <v-row class="mx-1" justify="space-between">
-          <v-btn v-if="oneGroup.MasterId === me.id" @click.prevent="onChangeState">{{ stateName }}</v-btn>
+          <v-btn
+            v-if="oneGroup.MasterId === me.id"
+            aria-label="name"
+            @click.prevent="onChangeState"
+          >{{ stateName }}</v-btn>
           <div v-if="oneGroup.MasterId === me.id && oneGroup.state !== 2">
             <div>
-              <v-btn @click.stop="onEdit" right dark color="blue">수정</v-btn>
+              <v-btn aria-label="mod" @click.stop="onEdit" right dark color="blue">수정</v-btn>
               <group-edit-form
                 hidden
                 :oneGroup="oneGroup"
@@ -39,11 +44,11 @@
                 :isEditting="isEditting"
               />
               <div class="mb-4" style="display:inline-block">
-                <v-btn color="primary" @click.prevent="alert = !alert">삭제</v-btn>
+                <v-btn aria-label="del" color="primary" @click.prevent="alert = !alert">삭제</v-btn>
               </div>
               <v-alert :value="alert" color="orange" transition="scroll-y-reverse-transition" dark>
                 정말로 삭제하실 생각임??
-                <v-btn @click.prevent="onDeleteGroup" dark color="red">삭제</v-btn>
+                <v-btn aria-label="del" @click.prevent="onDeleteGroup" dark color="red">삭제</v-btn>
               </v-alert>
             </div>
           </div>
@@ -56,6 +61,7 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
+          aria-label="post"
           :disabled="(oneGroup && oneGroup.state !== 1) || !isMember"
           block
           color="yellow accent-1"

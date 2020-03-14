@@ -22,6 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(200),
         defaultValue: "group.jpg",
       },
+      startDate: {
+        type: DataTypes.DATEONLY,
+      },
+      endDate: {
+        type: DataTypes.DATEONLY,
+      }
     }, {
       charset: "utf8mb4",
       collate: "utf8mb4_general_ci"

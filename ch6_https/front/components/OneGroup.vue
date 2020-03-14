@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    {{ group }}
     <v-card color="#F5DA81" height="350px">
       <v-container class="pb-0">
         <h3>{{ group.name }}</h3>
@@ -10,9 +11,7 @@
         </v-card>
         <v-spacer class="my-3"></v-spacer>
         <ul>
-          <li>
-            그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})
-          </li>
+          <li>그룹 방장 :: {{ group.Master.name }} ({{ group.Master.nickname }})</li>
           <li>문의 메일 :: {{ group.Master.email }}</li>
           <li>그룹 인원 {{ group.Groupmembers.length }} / {{ group.limit }}</li>
         </ul>
@@ -23,8 +22,8 @@
             </v-list-item-avatar>
           </div>
           <div>
-            <v-btn text icon style="float: left;">
-              <v-icon @click.prevent="onLikeGroup">{{ heartIcon }}</v-icon>
+            <v-btn aria-label="like" text icon style="float: left;" @click.prevent="onLikeGroup">
+              <v-icon>{{ heartIcon }}</v-icon>
             </v-btn>
             <group-intro :group="group" style="float: left;" />
           </div>
@@ -47,11 +46,6 @@ export default {
       required: true
     }
   },
-  data: () => ({
-    fab: false,
-    fling: false,
-    tabs: null
-  }),
   computed: {
     me() {
       return this.$store.state.users.me;
@@ -69,18 +63,6 @@ export default {
     heartIcon() {
       return this.liked ? "mdi-heart" : "mdi-heart-outline";
     },
-    activeFab() {
-      switch (this.tabs) {
-        case "one":
-          return { class: "purple", icon: "account_circle" };
-        case "two":
-          return { class: "red", icon: "edit" };
-        case "three":
-          return { class: "green", icon: "keyboard_arrow_up" };
-        default:
-          return {};
-      }
-    },
     srcAddress() {
       return process.env.NODE_ENV === "production"
         ? "https://api.namshter.com"
@@ -91,12 +73,14 @@ export default {
     onLikeGroup() {
       if (this.liked) {
         return this.$store.dispatch("groups/groupUnlike", {
-          groupId: this.group.id
+          groupId: this.group.id,
+          groupState: this.group.state
         });
       } else {
         return this.$store.dispatch("groups/groupLike", {
           groupId: this.group.id,
-          groupName: this.group.name
+          groupName: this.group.name,
+          groupState: this.group.state
         });
       }
     }

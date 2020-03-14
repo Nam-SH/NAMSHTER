@@ -18,11 +18,11 @@
           <div class="mt-3">
             <div style="float: left;">
               <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
-              <v-btn type="button" @click.prevent="onClickImageUpload">이미지 업로드</v-btn>
+              <v-btn aria-label="image" type="button" @click.prevent="onClickImageUpload">이미지 업로드</v-btn>
             </div>
             <div style="float: right;">
-              <v-btn class="mx-2" @click.prevent="clear">내용 클리어</v-btn>
-              <v-btn type="submit" color="blue" dark>제출</v-btn>
+              <v-btn aria-label="clear" class="mx-2" @click.prevent="clear">내용 클리어</v-btn>
+              <v-btn aria-label="submit" type="submit" color="blue" dark>제출</v-btn>
             </div>
           </div>
           <br />
@@ -30,7 +30,7 @@
             <div>
               <img :src="`${srcAddress}/postimage/${p}`" :alt="p" style="width: 200px" />
             </div>
-            <v-btn text type="button" @click.prevent="onRemoveImage(i)">
+            <v-btn aria-label="del" text type="button" @click.prevent="onRemoveImage(i)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </div>

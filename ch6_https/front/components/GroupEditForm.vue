@@ -15,8 +15,8 @@
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click.prevent="onEdit">취소</v-btn>
-            <v-btn type="submit" color="green darken-1" text>수정</v-btn>
+            <v-btn aria-label="cancle" color="green darken-1" text @click.prevent="onEdit">취소</v-btn>
+            <v-btn aria-label="mod" type="submit" color="green darken-1" text>수정</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>

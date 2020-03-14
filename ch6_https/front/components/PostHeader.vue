@@ -19,8 +19,8 @@
           </v-tooltip>
         </template>
         <span v-else>{{ post.User.nickname }}</span>
-        <v-btn v-if="canFollow" @click.prevent="onFollow">팔로우</v-btn>
-        <v-btn v-if="canUnFollow" @click.prevent="onUnFollow">언팔로우</v-btn>
+        <v-btn v-if="canFollow" aria-label="follow" @click.prevent="onFollow">팔로우</v-btn>
+        <v-btn v-if="canUnFollow" aria-label="unfollow" @click.prevent="onUnFollow">언팔로우</v-btn>
       </h3>
     </v-card-title>
   </v-container>

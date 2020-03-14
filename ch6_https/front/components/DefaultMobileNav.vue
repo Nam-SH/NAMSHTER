@@ -19,7 +19,7 @@
       <v-spacer />
       <v-sheet class="my-auto overflow-hidden" style="position: relative;">
         <v-row>
-          <v-btn color="rgba(0, 0, 0, 1)" dark @click.stop="drawer = !drawer">
+          <v-btn aria-label="drawer" color="rgba(0, 0, 0, 1)" dark @click.stop="drawer = !drawer">
             <i class="fas fa-bars"></i>
           </v-btn>
         </v-row>
@@ -44,28 +44,23 @@
                   alignItems: 'center'
                 }"
               >
-                <v-text-field
-                  v-model="hashtag"
-                  label="검색"
-                  hide-details
-                  prepend-icon="mdi-magnify"
-                />
+                <v-text-field v-model="hashtag" label="검색" hide-details prepend-icon="mdi-magnify" />
               </div>
             </v-form>
           </v-container>
           <v-container>
-            <v-btn text block color="blue">
+            <v-btn aria-label="home" text block color="blue">
               <i class="fas fa-home"></i>
               <span>NAMSHTER</span>
             </v-btn>
           </v-container>
           <v-container>
-            <v-btn text to="/profile" block>
+            <v-btn aria-label="myroom" text to="/profile" block>
               <div>마이룸</div>
             </v-btn>
           </v-container>
           <v-container>
-            <v-btn text to="/groups" block>
+            <v-btn aria-label="group" text to="/groups" block>
               <div>그룹</div>
             </v-btn>
           </v-container>

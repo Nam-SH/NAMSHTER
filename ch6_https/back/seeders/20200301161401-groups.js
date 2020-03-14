@@ -33,8 +33,10 @@ module.exports = {
         intro: intros[i],
         limit: limits[i],
         state: states[i],
-        createdAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-        updatedAt: new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+        startDate: states[i] === 0 ? null : new Date(`2020-01-${i + 1} ${i + 2}:${i + 21}`).toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+        endDate: states[i] === 2 ? new Date(`2020-03-${i + 1} ${i + 2}:${i + 21}`).toISOString().replace(/T/, ' ').replace(/\..+/, '') : null,
+        createdAt: new Date(`2020-01-${i + 1} ${i + 2}:${i + 21}`).toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+        updatedAt: new Date(`2020-01-${i + 1} ${i + 2}:${i + 21}`).toISOString().replace(/T/, ' ').replace(/\..+/, ''),
 
         MasterId: i == 10 ? 4 : i == 11 ? 7 : i + 1
       }

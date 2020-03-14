@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row justify="center">
-      <v-btn class="mx-3" @click.prevent="dialog = true" text icon>
+      <v-btn class="mx-3" aria-label="plus" @click.prevent="dialog = true" text icon>
         <v-icon>mdi-plus</v-icon>
       </v-btn>
 
@@ -11,6 +11,7 @@
             <v-card-title class="ml-5">{{ group.name }}</v-card-title>
             <v-btn
               v-if="!isMaster"
+              aria-label="sign"
               class="mr-3"
               color="blue darken-3"
               text
@@ -31,8 +32,8 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="red darken-3" text @click.prevent="dialog = false">취소</v-btn>
-            <v-btn color="blue darken-3" text :to="`/groups/${group.id}`">들어가기</v-btn>
+            <v-btn aria-label="cancle" color="red darken-3" text @click.prevent="dialog = false">취소</v-btn>
+            <v-btn aria-label="go" color="blue darken-3" text :to="`/groups/${group.id}`">들어가기</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

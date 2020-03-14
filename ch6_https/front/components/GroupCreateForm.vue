@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="600px">
         <template v-slot:activator="{ on }">
-          <v-btn color="pink" dark v-on="on">
+          <v-btn aria-label="makegroup" color="pink" dark v-on="on">
             <strong>그룹 만들기</strong>
           </v-btn>
         </template>
@@ -55,8 +55,18 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click.prevent="dialog = false">닫기</v-btn>
-              <v-btn color="blue darken-3" type="submit" @click.prevent="dialog = false">만들기</v-btn>
+              <v-btn
+                aria-label="cancle"
+                color="blue darken-1"
+                text
+                @click.prevent="dialog = false"
+              >닫기</v-btn>
+              <v-btn
+                aria-label="make"
+                color="blue darken-3"
+                type="submit"
+                @click.prevent="dialog = false"
+              >만들기</v-btn>
             </v-card-actions>
           </v-card>
         </v-form>

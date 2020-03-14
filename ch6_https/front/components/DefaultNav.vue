@@ -8,6 +8,7 @@
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="font-weight-black font-weight-bold"
+                  aria-label="home"
                   rounded
                   color="blue"
                   x-large
@@ -37,6 +38,7 @@
           <v-tooltip top v-if="me">
             <template v-slot:activator="{ on }">
               <v-btn
+                aria-label="myroom"
                 text
                 to="/profile"
                 :style="{ display: 'flex', alignItems: 'center' }"

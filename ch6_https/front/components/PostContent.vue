@@ -22,8 +22,14 @@
             <v-textarea v-model="content" outlined clearable :hide-details="hideDetails" />
             <v-container>
               <v-row justify="end">
-                <v-btn class="mx-1" type="button" color="yellow" @click.prevent="onEditPost">수정 취소</v-btn>
-                <v-btn type="submit" color="green" dark>수정</v-btn>
+                <v-btn
+                  class="mx-1"
+                  aria-label="cancle"
+                  type="button"
+                  color="yellow"
+                  @click.prevent="onEditPost"
+                >수정 취소</v-btn>
+                <v-btn aria-label="mod" type="submit" color="green" dark>수정</v-btn>
               </v-row>
             </v-container>
           </v-container>
@@ -40,7 +46,7 @@
             v-if="post.createdAt !== post.updatedAt"
           >(수정됨: {{ $moment(post.updatedAt).fromNow() }})</span>
         </div>
-        <v-btn text color="primary" nuxt-link :to="`/post/${post.id}`">상세보기</v-btn>
+        <v-btn aria-label="detail" text color="primary" nuxt-link :to="`/post/${post.id}`">상세보기</v-btn>
       </v-row>
     </v-container>
   </v-container>

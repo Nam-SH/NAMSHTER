@@ -24,30 +24,16 @@
           dismissible
         />
         <br />
-        <v-btn type="submit" color="blue" absolute right>제출</v-btn>
+        <v-btn aria-label="submit" type="submit" color="blue" absolute right>제출</v-btn>
         <!-- 이미지데이터 추가 -->
-        <input
-          ref="imageInput"
-          type="file"
-          multiple
-          hidden
-          @change="onChangeImages"
-        />
-        <v-btn type="button" @click.prevent="onClickImageUpload"
-          >이미지 업로드</v-btn
-        >
+        <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
+        <v-btn aria-label="image" type="button" @click.prevent="onClickImageUpload">이미지 업로드</v-btn>
 
         <div>
-          <div
-            v-for="(p, i) in imagePaths"
-            :key="p"
-            style="display: inline-block"
-          >
+          <div v-for="(p, i) in imagePaths" :key="p" style="display: inline-block">
             <img :src="`${srcAddress}/${p}`" :alt="p" style="width: 200px" />
             <div>
-              <button type="button" @click.prevent="onRemoveImage(i)">
-                삭제
-              </button>
+              <button type="button" @click.prevent="onRemoveImage(i)">삭제</button>
             </div>
           </div>
         </div>

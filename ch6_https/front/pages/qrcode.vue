@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-btn class="ml-auto" @click.stop="dialog = true">
+    <v-btn class="ml-auto" aria-label="camera" @click.stop="dialog = true">
       <i class="fas fa-camera"></i>
     </v-btn>
     <v-dialog v-model="dialog" max-width="600">
@@ -10,22 +10,14 @@
           <p class="decode-result">
             <b>{{ result }}</b>
           </p>
-          <qrcode-stream
-            style="width:100px;height:100px"
-            @decode="onDecode"
-            @init="onInit"
-          />
+          <qrcode-stream style="width:100px;height:100px" @decode="onDecode" @init="onInit" />
           <qrcode-drop-zone></qrcode-drop-zone>
         </div>
       </v-card>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="white darken-1" text @click="dialog = false">
-          보러가기
-        </v-btn>
-        <v-btn color="white darken-1" text @click="dialog = false">
-          닫기
-        </v-btn>
+        <v-btn aria-label="go" color="white darken-1" text @click="dialog = false">보러가기</v-btn>
+        <v-btn aria-label="cancle" color="white darken-1" text @click="dialog = false">닫기</v-btn>
       </v-card-actions>
     </v-dialog>
   </v-row>

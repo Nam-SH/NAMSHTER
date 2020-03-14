@@ -45,9 +45,9 @@
             v-model="terms"
             :rules="[v => !!v || 'You must agree to continue!']"
           />
-          <v-btn color="blue" type="submit" :disabled="!valid" dark>가입완료</v-btn>
-          <v-btn to="/main" absolute right text>
-            <span style="text-decoration:underline;color:red">아이디가 있다구요?</span>
+          <v-btn aria-label="signup" color="blue" type="submit" :disabled="!valid" dark>가입완료</v-btn>
+          <v-btn aria-label="login" to="/main" absolute right text>
+            <span style="text-decoration:underline;color:red">아이디가 있음?</span>
           </v-btn>
         </v-form>
       </v-container>

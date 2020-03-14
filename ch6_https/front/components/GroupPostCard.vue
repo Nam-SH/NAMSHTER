@@ -12,19 +12,19 @@
           </v-card>
           <v-card-actions>
             <!-- 좋아요 -->
-            <v-btn text color="orange" @click.prevent="onClickHeart">
+            <v-btn aria-label="like" text color="orange" @click.prevent="onClickHeart">
               <v-icon>{{ heartIcon }}</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-menu offset-y open-on-hover>
               <template v-slot:activator="{ on }">
-                <v-btn text color="orange" v-on="on">
+                <v-btn aria-label="menu" text color="orange" v-on="on">
                   <v-icon>mdi-dots-horizontal</v-icon>
                 </v-btn>
               </template>
               <div style="background: white">
-                <v-btn cark color="orange" @click.prevent="onEditting">수정</v-btn>
-                <v-btn cark color="red" @click.prevent="onDelete">삭제</v-btn>
+                <v-btn aria-label="mod" cark color="orange" @click.prevent="onEditting">수정</v-btn>
+                <v-btn aria-label="del" cark color="red" @click.prevent="onDelete">삭제</v-btn>
               </div>
             </v-menu>
           </v-card-actions>
@@ -43,7 +43,14 @@
                   <v-container>
                     <v-form @submit.prevent="onSubmitForm" width="100%">
                       <v-text-field class="mt-0 pt-0" label="댓글" hide-details v-model="comment">
-                        <v-btn type="submit" slot="append" icon small color="primary">
+                        <v-btn
+                          aria-label="comment"
+                          type="submit"
+                          slot="append"
+                          icon
+                          small
+                          color="primary"
+                        >
                           <v-icon dark>mdi-pencil</v-icon>
                         </v-btn>
                       </v-text-field>
@@ -65,7 +72,7 @@
                           <strong>{{ comm.comment }}</strong>
                         </span>
                       </div>
-                      <v-btn @click="onDeleteComment(comm.id)" icon color="red">
+                      <v-btn aria-label="del" @click="onDeleteComment(comm.id)" icon color="red">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-row>

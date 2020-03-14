@@ -46,8 +46,20 @@
       <div style="display: flex;justify-content: space-between;">
         <div class="my-auto">{{ $moment(groupPost.createdAt).fromNow() }}에 작성함...</div>
         <div>
-          <v-btn v-if="isEditting" color="red" dark @click.prevent="onEditting">취소</v-btn>
-          <v-btn v-if="isEditting" color="blue" dark @click.prevent="onSubmitForm">수정</v-btn>
+          <v-btn
+            aria-label="cancle"
+            v-if="isEditting"
+            color="red"
+            dark
+            @click.prevent="onEditting"
+          >취소</v-btn>
+          <v-btn
+            v-if="isEditting"
+            aria-label="mod"
+            color="blue"
+            dark
+            @click.prevent="onSubmitForm"
+          >수정</v-btn>
         </div>
       </div>
     </v-card-text>
