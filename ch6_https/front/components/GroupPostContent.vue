@@ -1,97 +1,134 @@
 <template>
-  <div>
-    <!-- 모달형식 -->
-    <v-card-title>
-      <h3>
-        <v-tooltip right color="rgba(255, 255, 255, 0)">
-          <template v-slot:activator="{ on }">
-            <nuxt-link :to="/user/ + groupPost.User.id">
-              <span v-if="me.id !== groupPost.User.id" v-on="on">{{ groupPost.User.nickname }}</span>
-              <span v-else v-on="on">{{ groupPost.User.nickname }} (나)</span>
-            </nuxt-link>
-          </template>
-          <v-img
-            :src="`${srcAddress}/profile/${groupPost.User.src}`"
-            min-height="200px"
-            max-height="300px"
-            width="200px"
-          ></v-img>
-        </v-tooltip>
-      </h3>
-    </v-card-title>
-    <group-post-images :images="groupPost.GroupPostImages || []" />
-    <v-card-text>
-      <h3 v-if="!isEditting">{{ groupPost.title }}</h3>
-      <v-text-field
-        v-else
-        v-model="title"
-        :counter="20"
-        color="teal"
-        label="제목"
-        dense
-        autofocus
-        outlined
-      ></v-text-field>
-      <hr />
-      <client-only>
-        <TuiEditorViewer v-if="!isEditting" :value="groupPost.content" height="500px" />
-        <TuiEditor
-          v-else
-          mode="markdown"
-          v-model="content"
-          preview-style="vertical"
-          height="300px"
-        />
-      </client-only>
-      <br />
-      <div style="display: flex;justify-content: space-between;">
-        <div class="my-auto">{{ $moment(groupPost.createdAt).fromNow() }}에 작성함...</div>
-        <div>
-          <v-btn
-            aria-label="cancle"
-            v-if="isEditting"
-            color="red"
-            dark
-            @click.prevent="onEditting"
-          >취소</v-btn>
-          <v-btn
-            v-if="isEditting"
-            aria-label="mod"
-            color="blue"
-            dark
-            @click.prevent="onSubmitForm"
-          >수정</v-btn>
-        </div>
-      </div>
-    </v-card-text>
+  <div class="text-center">
+    <v-dialog v-model="dialog" width="1000">
+      <template v-slot:activator="{ on }">
+        <v-btn color="red lighten-2" dark v-on="on" @click="onComment">Click Me</v-btn>
+      </template>
+      <v-row no-gutters>
+        <v-col cols="12" md="8">
+          <v-card height="40em" style="display:flex;flex-direction:column">
+            <v-card-title style="flex:1">
+              <h3>
+                <v-tooltip right color="rgba(255, 255, 255, 0)">
+                  <template v-slot:activator="{ on }">
+                    <nuxt-link :to="/user/ + groupPost.User.id">
+                      <span
+                        v-if="me.id !== groupPost.User.id"
+                        v-on="on"
+                      >{{ groupPost.User.nickname }}</span>
+                      <span v-else v-on="on">{{ groupPost.User.nickname }} (나)</span>
+                    </nuxt-link>
+                  </template>
+                  <v-img
+                    :src="`${srcAddress}/profile/${groupPost.User.src}`"
+                    min-height="200px"
+                    max-height="300px"
+                    width="200px"
+                  ></v-img>
+                </v-tooltip>
+              </h3>
+            </v-card-title>
+            <group-post-images :images="groupPost.GroupPostImages || []" />
+            <v-card-text style="flex:8">
+              <div v-if="!isEditting">
+                <h3>{{ groupPost.title }}</h3>
+                <client-only>
+                  <TuiEditorViewer :value="groupPost.content" height="500px" />
+                </client-only>
+              </div>
+              <div v-else>
+                <v-text-field
+                  v-model="title"
+                  :counter="20"
+                  color="teal"
+                  label="제목"
+                  dense
+                  autofocus
+                  outlined
+                ></v-text-field>
+                <hr />
+                <client-only>
+                  <TuiEditor
+                    mode="markdown"
+                    v-model="content"
+                    preview-style="vertical"
+                    height="300px"
+                  />
+                </client-only>
+              </div>
+              <br />
+              <div style="display: flex;justify-content: space-between;">
+                <div>
+                  <v-btn
+                    aria-label="cancle"
+                    v-if="isEditting"
+                    color="red"
+                    dark
+                    @click.prevent="onEditting"
+                  >취소</v-btn>
+                  <v-btn
+                    v-if="isEditting"
+                    aria-label="mod"
+                    color="blue"
+                    dark
+                    @click.prevent="onSubmitForm"
+                  >수정</v-btn>
+                </div>
+              </div>
+            </v-card-text>
+
+            <v-container
+              class="my-auto"
+              style="flex:1"
+            >{{ $moment(groupPost.createdAt).fromNow() }}에 작성함...</v-container>
+            <v-card-actions style="flex:1">
+              <v-menu offset-x open-on-hover>
+                <template v-slot:activator="{ on }">
+                  <v-btn right aria-label="menu" text color="orange" v-on="on">
+                    <v-icon>mdi-dots-horizontal</v-icon>
+                  </v-btn>
+                </template>
+                <div style="background: white">
+                  <v-btn aria-label="mod" cark color="orange" @click.prevent="onEditting">수정</v-btn>
+                  <v-btn aria-label="del" cark color="red" @click.prevent="onDelete">삭제</v-btn>
+                </div>
+              </v-menu>
+              <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <!-- 댓글 -->
+        <v-col cols="12" md="4">
+          <v-card height="40em" style="background-color: white">
+            <group-post-comment :groupPost="groupPost" />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import GroupPostImages from "@/components/GroupPostImages.vue";
+import GroupPostComment from "@/components/GroupPostComment.vue";
 
 export default {
   components: {
-    GroupPostImages
+    GroupPostImages,
+    GroupPostComment
   },
   props: {
     groupPost: {
       type: Object,
-      required: true
-    },
-    isEditting: {
-      type: Boolean,
-      required: true
-    },
-    onEditting: {
-      type: Function,
       required: true
     }
   },
   data() {
     return {
       title: "",
-      content: ""
+      content: "",
+      isEditting: false,
+      dialog: false
     };
   },
   created() {
@@ -124,6 +161,22 @@ export default {
           this.title = "";
           this.content = "";
         });
+    },
+    onEditting() {
+      this.isEditting = !this.isEditting;
+    },
+    onDelete() {
+      this.$store.dispatch("groups/postDelete", {
+        groupId: this.$route.params.id,
+        postId: this.groupPost.id
+      });
+    },
+    async onComment() {
+      await this.$store.dispatch("groups/loadPostComments", {
+        groupId: this.$route.params.id,
+        postId: this.groupPost.id,
+        reset: true
+      });
     }
   },
   computed: {

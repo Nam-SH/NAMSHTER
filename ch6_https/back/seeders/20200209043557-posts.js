@@ -3,13 +3,13 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
 
-    // const first = [{
-    //   content: '시간을 지배할 줄 아는 사람은 인생을 지배할 줄 아는 사람이다. -에센 바흐-',
-    //   UserId: 1,
-    //   createdAt: new Date('2020-01-30').toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-    //   updatedAt: new Date('2020-01-30').toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-    // }]
-    // return queryInterface.bulkInsert("Posts", first, {});
+    const first = [{
+      content: '시간을 지배할 줄 아는 사람은 인생을 지배할 줄 아는 사람이다. -에센 바흐-',
+      UserId: 1,
+      createdAt: new Date('2020-01-30').toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+      updatedAt: new Date('2020-01-30').toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+    }]
+    return queryInterface.bulkInsert("Posts", first, {});
 
 
     let datas = []
