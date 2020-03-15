@@ -4,7 +4,6 @@
       <v-chip :color="isState ? 'primary' : 'red'" text-color="white" label>{{ stateName }}</v-chip>
     </v-row>
     <br />
-    {{ grouplist }}
     <v-carousel
       v-if="grouplist && grouplist.length > 0"
       cycle
@@ -26,7 +25,8 @@
                   </span>
                   <v-spacer></v-spacer>
                   <span style="color:yellow">
-                    <i>({{ group.startDate }} ~ {{ group.endDate }})</i>
+                    <i v-if="group.startDate ">({{ group.startDate }} ~ {{ group.endDate }})</i>
+                    <i v-else>(시작 전...)</i>
                   </span>
                 </v-card-title>
                 <v-container>

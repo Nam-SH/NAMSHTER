@@ -5,6 +5,7 @@ import throttle from "lodash.throttle";
 export const state = () => ({
   groupPosts: [],
   imagePaths: [],
+  imageGroupPath: '',
   hasMoreGroupPost: true,
 
   myGrouplistBefore: [],
@@ -158,11 +159,11 @@ export const mutations = {
     Vue.delete(state.groupPosts, targetIndex)
   },
 
-  concatImagePaths(state, payload) {
-    state.imagePaths = state.imagePaths.concat(payload);
+  pushImagePaths(state, payload) {
+    state.imageGroupPath = payload;
   },
   removeImagePath(state, payload) {
-    state.imagePaths.splice(payload, 1);
+    state.imageGroupPath = ''
   },
 
   loadPostComments(state, payload) {
@@ -461,6 +462,21 @@ export const actions = {
       })
       .catch(err => {
         console.error("uploadImages:::", err);
+      });
+  },
+
+  uploadGroupImages({
+    commit
+  }, payload) {
+    return this.$axios
+      .post("/group/profileimages", payload, {
+        withCredentials: true
+      })
+      .then(res => {
+        commit("pushImagePaths", res.data);
+      })
+      .catch(err => {
+        console.error("uploadGroupImages:::", err);
       });
   },
 

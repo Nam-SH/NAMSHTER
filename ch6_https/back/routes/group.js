@@ -12,6 +12,7 @@ const AWS = require("aws-sdk");
 const multerS3 = require("multer-s3");
 const path = require("path");
 
+
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, done) {
@@ -27,8 +28,28 @@ const upload = multer({
     fileSize: 1000 * 1024 * 1024
   }
 });
-// 이미지업로드(/post/images)
+// 그룹 포스트 이미지업로드(/post/images)
 router.post("/images", isLoggedIn, upload.array("image"), (req, res) => {
+  res.json(req.files.map(v => v.filename));
+});
+
+const uploadGroup = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "groupprofileimage");
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      done(null, basename + Date.now() + ext);
+    }
+  }),
+  limit: {
+    fileSize: 1000 * 1024 * 1024
+  }
+});
+// 그룹 포스트 이미지업로드(/post/images)
+router.post("/profileimages", isLoggedIn, uploadGroup.array("image"), (req, res) => {
   res.json(req.files.map(v => v.filename));
 });
 

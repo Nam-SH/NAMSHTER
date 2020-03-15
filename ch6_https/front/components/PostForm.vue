@@ -99,7 +99,6 @@ export default {
       const imageFormData = new FormData();
       [].forEach.call(e.target.files, f => {
         imageFormData.append("image", f);
-        // { image: [file1, file2 ...] } 의 모양이 만들어진다.
       });
       this.$store.dispatch("posts/uploadImages", imageFormData);
     },

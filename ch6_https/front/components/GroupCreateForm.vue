@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="600px">
+  <v-dialog v-model="dialog" persistent max-width="1000px">
     <template v-slot:activator="{ on }">
       <v-btn aria-label="makegroup" color="pink" dark v-on="on">
         <strong>그룹 만들기</strong>
@@ -32,39 +32,68 @@
                   required
                 ></v-select>
               </v-col>
-              <v-col cols="12">
+              <v-container>
                 <v-text-field v-model="groupName" label="그룹 이름" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-if="me" label="그룹 방장" readonly :placeholder="this.me.name "></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  v-model="groupIntro"
-                  clearable
-                  clear-icon="x"
-                  label="그룹 소개"
-                  counter="300"
-                ></v-textarea>
-              </v-col>
+              </v-container>
+              <v-container>
+                <v-text-field
+                  v-if="me"
+                  label="그룹 방장"
+                  hide-details
+                  readonly
+                  :placeholder="this.me.name "
+                ></v-text-field>
+              </v-container>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" md="8">
+                    <v-textarea
+                      v-model="groupIntro"
+                      clearable
+                      clear-icon="x"
+                      label="그룹 소개"
+                      counter="300"
+                      rows="14"
+                    ></v-textarea>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-file-input
+                      v-model="files"
+                      show-size
+                      :loading="imageGroupPath ? false : true"
+                      hide-details
+                      label="File input"
+                      prepend-icon="mdi-camera"
+                      @change="onChangeImages"
+                    ></v-file-input>
+                    <br />그룹이미지
+                    <v-card
+                      style="position: relative; padding-top: 100%; /* 1:1 ratio */ overflow: hidden;"
+                    >
+                      <img
+                        v-if="imageGroupPath"
+                        :src="`${srcAddress}/groupimage/${imageGroupPath}`"
+                        style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; height: auto;"
+                      />
+                    </v-card>
+                    <button style="height:10%" type="button" @click="onRemoveImage()">삭제</button>
+                  </v-col>
+                </v-row>
+              </v-container>
             </v-row>
           </v-container>
           <small>*전부 작성해야 되여</small>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn aria-label="cancle" color="blue darken-1" text @click.prevent="dialog = false">닫기</v-btn>
-          <v-btn
-            aria-label="make"
-            color="blue darken-3"
-            type="submit"
-            @click.prevent="dialog = false"
-          >만들기</v-btn>
+          <v-btn aria-label="cancle" color="blue darken-1" text @click.prevent="reset">닫기</v-btn>
+          <v-btn aria-label="make" color="blue darken-3" type="submit" @click="dialog = false">만들기</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
   </v-dialog>
 </template>
+
 
 <script>
 export default {
@@ -75,12 +104,16 @@ export default {
       groupSubject: null,
       groupLimit: null,
       groupName: null,
-      groupIntro: "다같이 힘내서 해요."
+      groupIntro: "다같이 힘내서 해요.",
+      files: []
     };
   },
   computed: {
     me() {
       return this.$store.state.users.me;
+    },
+    imageGroupPath() {
+      return this.$store.state.groups.imageGroupPath;
     },
     items() {
       return this.groupCategory === "컴퓨터공부"
@@ -114,6 +147,11 @@ export default {
         : this.groupCategory === "음악"
         ? ["성악", "바이올린", "기타", "첼로", "사물놀이", "드럼", "댄스"]
         : ["기타"];
+    },
+    srcAddress() {
+      return process.env.NODE_ENV === "production"
+        ? "https://api.namshter.com"
+        : "http://localhost:3085";
     }
   },
   methods: {
@@ -143,8 +181,33 @@ export default {
             this.groupName = null;
             this.groupIntro = null;
             this.groupLimit = null;
+            this.files = [];
           });
       }
+    },
+    async onChangeImages() {
+      try {
+        console.log("files", this.files);
+
+        const imageFormData = new FormData();
+        imageFormData.append("image", this.files);
+        await this.$store.dispatch("groups/uploadGroupImages", imageFormData);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    onRemoveImage() {
+      this.$store.commit("groups/removeImagePath", {});
+      this.files = [];
+    },
+    reset() {
+      this.files = [];
+      this.dialog = false;
+      this.groupCategory = null;
+      this.groupSubject = null;
+      this.groupLimit = null;
+      this.groupName = null;
+      this.groupIntro = "다같이 힘내서 해요.";
     }
   }
 };
