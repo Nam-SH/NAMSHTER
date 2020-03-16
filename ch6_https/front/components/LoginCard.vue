@@ -11,12 +11,12 @@
               </v-avatar>
               <span v-on="on">{{ me.nickname }}({{ me.name }})</span>
             </template>
-            <v-img
+            <!-- <v-img
               :src="`${srcAddress}/profile/${me.src}`"
               min-height="200px"
               max-height="300px"
               width="200px"
-            ></v-img>
+            ></v-img>-->
           </v-tooltip>로그인이 되었습니다.
           <v-btn aria-label="to" to="/qrcode" absolute right text>
             <i class="fas fa-camera ml-auto"></i>
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     async onLogOut() {
-      this.$router.push({ path: "/main" });
+      // this.$router.push({ path: "/main" });
       await this.$store.dispatch("users/logOut");
     }
   },

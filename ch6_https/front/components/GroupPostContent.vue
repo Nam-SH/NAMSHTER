@@ -56,51 +56,44 @@
                   />
                 </client-only>
               </div>
-              <br />
-              <div style="display: flex;justify-content: space-between;">
-                <div>
-                  <v-btn
-                    aria-label="cancle"
-                    v-if="isEditting"
-                    color="red"
-                    dark
-                    @click.prevent="onEditting"
-                  >취소</v-btn>
-                  <v-btn
-                    v-if="isEditting"
-                    aria-label="mod"
-                    color="blue"
-                    dark
-                    @click.prevent="onSubmitForm"
-                  >수정</v-btn>
-                </div>
-              </div>
             </v-card-text>
-
             <v-container
               class="my-auto"
               style="flex:1"
             >{{ $moment(groupPost.createdAt).fromNow() }}에 작성함...</v-container>
-            <v-card-actions style="flex:1">
-              <v-menu offset-x open-on-hover>
-                <template v-slot:activator="{ on }">
-                  <v-btn right aria-label="menu" text color="orange" v-on="on">
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                  </v-btn>
-                </template>
-                <div style="background: white">
-                  <v-btn aria-label="mod" cark color="orange" @click.prevent="onEditting">수정</v-btn>
-                  <v-btn aria-label="del" cark color="red" @click.prevent="onDelete">삭제</v-btn>
-                </div>
-              </v-menu>
-              <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+            <v-card-actions justyfy="space-around">
+              <div style="background: white" v-if="groupPost.UserId === me.id && !isEditting">
+                <v-btn aria-label="mod" cark @click.prevent="onEditting">수정</v-btn>
+                <v-btn aria-label="del" cark @click.prevent="onDelete">삭제</v-btn>
+              </div>
+              <div v-else-if="groupPost.UserId === me.id && isEditting">
+                <v-btn
+                  aria-label="cancle"
+                  v-if="isEditting"
+                  color="red"
+                  dark
+                  @click.prevent="onEditting"
+                >취소</v-btn>
+                <v-btn
+                  v-if="isEditting"
+                  aria-label="mod"
+                  color="blue"
+                  dark
+                  @click.prevent="onSubmitForm"
+                >수정</v-btn>
+              </div>
+              <v-btn class="ml-auto" color="blue darken-1" text @click="dialog = false">닫기</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
         <!-- 댓글 -->
         <v-col cols="12" md="4">
-          <v-card height="40em" style="background-color: white">
-            <group-post-comment :groupPost="groupPost" />
+          <v-card height="40em" style="background-color: white;">
+            <group-post-comment
+              :groupPostComments="groupPost.GroupPostComments"
+              :groupPostId="groupPost.id"
+              style="height:100%;overflow: auto;"
+            />
           </v-card>
         </v-col>
       </v-row>

@@ -49,8 +49,8 @@ const uploadGroup = multer({
   }
 });
 // 그룹 포스트 이미지업로드(/post/images)
-router.post("/profileimages", isLoggedIn, uploadGroup.array("image"), (req, res) => {
-  res.json(req.files.map(v => v.filename));
+router.post("/profileimages", isLoggedIn, uploadGroup.single("image"), (req, res) => {
+  res.json(req.file.filename);
 });
 
 // 배포용
@@ -127,6 +127,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       name: req.body.name,
       intro: req.body.intro,
       limit: req.body.limit,
+      src: req.body.image,
       MasterId: req.user.id
     });
     const targetSubject = await db.Subject.findOne({

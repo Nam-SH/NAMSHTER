@@ -14,9 +14,11 @@
             <v-container>
               <p class="target">{{ group.intro }}</p>
             </v-container>
-            <v-avatar class="ma-3 my-auto" size="125" tile>
-              <v-img :src="`${srcAddress}/groupimage/${group.src}`"></v-img>
-            </v-avatar>
+            <div>
+              <v-avatar class="ma-3" size="125" tile>
+                <v-img :src="`${srcAddress}/groupimage/${group.src}`"></v-img>
+              </v-avatar>
+            </div>
           </div>
         </v-card>
         <v-spacer class="my-3"></v-spacer>

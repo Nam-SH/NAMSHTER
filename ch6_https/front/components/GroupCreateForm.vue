@@ -13,7 +13,7 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" md="4">
                 <v-select
                   v-model="groupCategory"
                   :items="['컴퓨터공부', '취업', '운동', '음악', '기타']"
@@ -21,10 +21,10 @@
                   required
                 ></v-select>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" md="4">
                 <v-autocomplete v-model="groupSubject" :items="items" label="주제"></v-autocomplete>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" md="4">
                 <v-select
                   v-model="groupLimit"
                   :items="['4', '5', '6', '7', '8', '9', '10', '11', '12']"
@@ -53,7 +53,7 @@
                       clear-icon="x"
                       label="그룹 소개"
                       counter="300"
-                      rows="14"
+                      rows="10"
                     ></v-textarea>
                   </v-col>
                   <v-col cols="12" md="4">
@@ -66,17 +66,28 @@
                       prepend-icon="mdi-camera"
                       @change="onChangeImages"
                     ></v-file-input>
-                    <br />그룹이미지
-                    <v-card
-                      style="position: relative; padding-top: 100%; /* 1:1 ratio */ overflow: hidden;"
-                    >
-                      <img
-                        v-if="imageGroupPath"
-                        :src="`${srcAddress}/groupimage/${imageGroupPath}`"
-                        style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; height: auto;"
-                      />
-                    </v-card>
-                    <button style="height:10%" type="button" @click="onRemoveImage()">삭제</button>
+                    <br />
+                    <strong>그룹이미지</strong>
+                    <v-container>
+                      <div class="mx-auto" style="width: 180px; height: 180px; overflow: hidden">
+                        <img
+                          v-if="imageGroupPath"
+                          :src="`${srcAddress}/groupimage/${imageGroupPath}`"
+                          style="width: 180px; height: auto;"
+                        />
+                        <v-card v-else height="180px" width="180px">
+                          <v-row class="fill-height" align="center" justify="center">
+                            <v-icon color="black" size="48" v-text="'mdi-close-circle-outline'"></v-icon>no image...
+                          </v-row>
+                        </v-card>
+                      </div>
+                    </v-container>
+                    <button
+                      v-if="imageGroupPath"
+                      style="height:10%"
+                      type="button"
+                      @click="onRemoveImage()"
+                    >삭제</button>
                   </v-col>
                 </v-row>
               </v-container>
@@ -86,8 +97,14 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn aria-label="cancle" color="blue darken-1" text @click.prevent="reset">닫기</v-btn>
-          <v-btn aria-label="make" color="blue darken-3" type="submit" @click="dialog = false">만들기</v-btn>
+          <v-btn
+            aria-label="cancle"
+            color="blue darken-1"
+            type="button"
+            text
+            @click.prevent="reset"
+          >닫기</v-btn>
+          <v-btn aria-label="make" color="blue lighten-3" type="submit" @click="dialog = false">만들기</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
@@ -185,16 +202,10 @@ export default {
           });
       }
     },
-    async onChangeImages() {
-      try {
-        console.log("files", this.files);
-
-        const imageFormData = new FormData();
-        imageFormData.append("image", this.files);
-        await this.$store.dispatch("groups/uploadGroupImages", imageFormData);
-      } catch (err) {
-        console.error(err);
-      }
+    onChangeImages() {
+      const imageFormData = new FormData();
+      imageFormData.append("image", this.files);
+      this.$store.dispatch("groups/uploadGroupImages", imageFormData);
     },
     onRemoveImage() {
       this.$store.commit("groups/removeImagePath", {});

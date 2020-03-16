@@ -211,6 +211,9 @@ export const actions = {
         withCredentials: true,
       })
       .then((res) => {
+        this.$router.push({
+          path: "/main"
+        });
         this.$toast.success(`잘 가 ${state.me.nickname}!`, {
           duration: 2000
         })

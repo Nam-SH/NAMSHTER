@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="border-style: inset">
     <v-container>
       <v-form @submit.prevent="onSubmitCommentForm" width="100%">
         <v-text-field class="mt-0 pt-0" label="댓글" hide-details v-model="comment">
@@ -10,7 +10,7 @@
       </v-form>
     </v-container>
     <v-container>
-      <div v-for="comm in groupPost.GroupPostComments" :key="comm.id">
+      <div v-for="comm in groupPostComments" :key="comm.id">
         <v-row align="center" justify="space-between">
           <div>
             <div v-if="comm.User" style="display:inline-block">
@@ -36,8 +36,12 @@
 <script>
 export default {
   props: {
-    groupPost: {
-      type: Object,
+    groupPostComments: {
+      type: Array,
+      required: true
+    },
+    groupPostId: {
+      type: Number,
       required: true
     }
   },
@@ -64,7 +68,7 @@ export default {
         .dispatch("groups/postCommentAdd", {
           comment: this.comment,
           groupId: this.$route.params.id,
-          postId: this.groupPost.id
+          postId: this.groupPostId
         })
         .then(async () => {
           this.comment = "";
@@ -73,7 +77,7 @@ export default {
     onDeleteComment(i) {
       return this.$store.dispatch("groups/postCommentDelete", {
         groupId: this.$route.params.id,
-        postId: this.groupPost.id,
+        postId: this.groupPostId,
         commentId: i
       });
     }

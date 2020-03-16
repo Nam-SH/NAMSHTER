@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-if="me"
     style="background-color:black;background-image: url('https://source.unsplash.com/randoms');height:60px"
   >
     <v-row class="mx-3">

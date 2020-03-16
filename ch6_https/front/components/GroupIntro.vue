@@ -5,7 +5,7 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
 
-      <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog v-model="dialog" max-width="550px">
         <v-card>
           <v-row justify="space-between">
             <v-card-title class="ml-5">{{ group.name }}</v-card-title>
@@ -21,14 +21,18 @@
           <v-card-text>
             현재인원/최대인원: {{ group.Groupmembers.length }}/{{ group.limit }}
             <hr />
-            <strong>그룹소개</strong>
-            <p>{{ group.intro }}</p>
+            <div>
+              <strong>방장 한마디</strong>
+              <p>
+                안녕하세요 {{ group.Master.name }}입니다.
+                <br />같은 목표를 이룹시다!
+              </p>
+            </div>
             <hr />
-            <strong>방장 한마디</strong>
-            <p>
-              안녕하세요 {{ group.Master.name }}입니다.
-              <br />같은 목표를 이룹시다!
-            </p>
+            <div>
+              <strong>그룹소개</strong>
+              <p>{{ group.intro }}</p>
+            </div>
           </v-card-text>
 
           <v-card-actions>

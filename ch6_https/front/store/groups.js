@@ -234,7 +234,8 @@ export const mutations = {
 
 export const actions = {
   groupAdd({
-    commit
+    commit,
+    state
   }, payload) {
     let before = this.$toast.show('진행 중...')
     return this.$axios
@@ -243,7 +244,8 @@ export const actions = {
           name: payload.name,
           intro: payload.intro,
           limit: payload.limit,
-          subjectName: payload.subjectName
+          subjectName: payload.subjectName,
+          image: state.imageGroupPath
         }, {
           withCredentials: true
         }
