@@ -35,12 +35,12 @@
                   <v-row rows="12" md="10">
                     <v-col cols="12" md="2"></v-col>
                     <v-col cols="12" md="5">
-                      <div class="box4">
+                      <div class="box">
                         <img :src="`${srcAddress}/profile/${defaultSrc}`" />
                       </div>
                     </v-col>
                     <v-col cols="12" md="5">
-                      <div class="box4">
+                      <div class="box">
                         <img
                           v-if="imagePaths && imagePaths.length > 0"
                           :src="`${srcAddress}/profile/${imagePaths}`"
@@ -231,7 +231,7 @@ export default {
 </script>
 
 <style scoped>
-div.box4 {
+div.box {
   width: 250px;
   height: 250px;
   display: flex;
@@ -239,7 +239,7 @@ div.box4 {
   align-items: center;
   outline-style: groove;
 }
-div.box4 > img {
+div.box > img {
   max-width: 90%;
   max-height: 90%;
 }

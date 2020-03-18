@@ -18,16 +18,16 @@
             <v-container>
               <div>
                 <v-card-title>
-                  <span>
+                  <v-row>
                     <v-badge color="pink" dot>
-                      <strong>{{ group.name }}</strong>
+                      <p class="line">{{ group.name }}</p>
                     </v-badge>
-                  </span>
-                  <v-spacer></v-spacer>
-                  <span style="color:yellow">
-                    <i v-if="group.startDate ">({{ group.startDate }} ~ {{ group.endDate }})</i>
-                    <i v-else>(시작 전...)</i>
-                  </span>
+                    <v-spacer></v-spacer>
+                    <div style="color:yellow;font-size:0.7em">
+                      <i v-if="group.startDate ">({{ group.startDate }} ~ {{ group.endDate }})</i>
+                      <i v-else>(시작 전...)</i>
+                    </div>
+                  </v-row>
                 </v-card-title>
                 <v-container>
                   <div>
@@ -55,7 +55,6 @@
         <v-divider></v-divider>
       </v-carousel-item>
     </v-carousel>
-
     <v-card v-else cycle height="300" progress progress-color="blue">
       <v-container>
         <div>
@@ -101,5 +100,12 @@ export default {
   white-space: normal;
   line-height: 1.8;
   height: 3.6em;
+}
+.line {
+  width: 12em;
+  word-wrap: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

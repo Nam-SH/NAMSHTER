@@ -5,18 +5,17 @@
         <v-row class="mx-3">
           <v-tooltip right color="rgba(255, 255, 255, 0)">
             <template v-slot:activator="{ on }">
-              <i v-if="me.isAdmin" class="fas fa-user-lock" v-on="on"></i>
-              <v-avatar v-if="social" :color="socialColor" size="25" v-on="on">
-                <span class="black--text" style="font-size:20px">{{ socialName }}</span>
-              </v-avatar>
+              <div v-on="on">
+                <v-icon v-if="me.isAdmin">mdi-account-cog</v-icon>
+                <v-avatar v-if="social" :color="socialColor" size="25">
+                  <span class="black--text" style="font-size:20px">{{ socialName }}</span>
+                </v-avatar>
+              </div>
               <span v-on="on">{{ me.nickname }}({{ me.name }})</span>
             </template>
-            <!-- <v-img
-              :src="`${srcAddress}/profile/${me.src}`"
-              min-height="200px"
-              max-height="300px"
-              width="200px"
-            ></v-img>-->
+            <div class="box">
+              <img :src="`${srcAddress}/profile/${me.src}`" />
+            </div>
           </v-tooltip>로그인이 되었습니다.
           <v-btn aria-label="to" to="/qrcode" absolute right text>
             <i class="fas fa-camera ml-auto"></i>
@@ -78,4 +77,17 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+div.box {
+  width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline-style: groove;
+}
+div.box > img {
+  max-width: 90%;
+  max-height: 90%;
+}
+</style>

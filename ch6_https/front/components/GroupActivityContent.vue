@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <!-- 그룹 관련  -->
-      <v-col v-if="order && n == 1 || !order" cols="12" md="4">
+      <v-col v-if="order && n == 1 || !order" cols="12" :md="!order && 4">
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto" color="grey lighten-4" max-width="600">
             <v-card height="15em" class="text-center">
@@ -27,7 +27,7 @@
         </v-hover>
       </v-col>
       <!-- 그룹 포스트 관련 -->
-      <v-col v-if="order && n == 2 || !order" cols="12" md="4">
+      <v-col v-if="order && n == 2 || !order" cols="12" :md="!order && 4">
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto" color="grey lighten-4" max-width="600">
             <v-card height="15em" class="text-center">
@@ -52,7 +52,7 @@
         </v-hover>
       </v-col>
       <!-- 댓글 관련 -->
-      <v-col v-if="(order && n == 3) || !order" cols="12" md="4">
+      <v-col v-if="(order && n == 3) || !order" cols="12" :md="!order && 4">
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto" color="grey lighten-4" max-width="600">
             <v-card height="15em" class="text-center">
@@ -81,7 +81,7 @@
       <!-- 그룹 좋아요 관련 -->
     </v-row>
     <v-row>
-      <v-col v-if="order && n == 4 || !order" cols="12" md="6">
+      <v-col v-if="order && n == 4 || !order" cols="12" :md="!order && 6">
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto" color="grey lighten-4" max-width="600">
             <v-card height="15em" class="text-center">
@@ -106,7 +106,7 @@
         </v-hover>
       </v-col>
       <!-- 그룹 포스트 좋아요 관련 -->
-      <v-col v-if="order && n == 5 || !order" cols="12" md="6">
+      <v-col v-if="order && n == 5 || !order" cols="12" :md="!order && 6">
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto" color="grey lighten-4" max-width="600">
             <v-card height="15em" class="text-center">

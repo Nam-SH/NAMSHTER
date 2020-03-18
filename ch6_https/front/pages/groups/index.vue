@@ -50,10 +50,10 @@ export default {
     return {
       navNum: 0,
       items: [
-        { name: "All", icon: "mdi-television-play" },
-        { name: "before", icon: "mdi-heart" },
-        { name: "doing...", icon: "mdi-book" },
-        { name: "done", icon: "mdi-image" }
+        { name: "All", icon: "mdi-view-parallel" },
+        { name: "before", icon: "mdi-account-tie " },
+        { name: "doing...", icon: "mdi-account-tie-voice" },
+        { name: "done", icon: "mdi-account-tie-voice-off " }
       ]
     };
   },

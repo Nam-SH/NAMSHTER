@@ -50,6 +50,9 @@ module.exports = {
     link: [{
       rel: "shortcut icon",
       href: "/donut.png"
+    }, {
+      rel: "stylesheet",
+      href: "//cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css"
     }]
   },
   modules: ["@nuxtjs/axios", "@tui-nuxt/editor", "@nuxtjs/toast", "@nuxtjs/pwa"],

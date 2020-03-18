@@ -22,7 +22,7 @@
                   >
                     <li>
                       {{ n }}: {{ user.Followings[n - 1].nickname }}({{
-                        user.Followings[n - 1].name
+                      user.Followings[n - 1].name
                       }})
                     </li>
                   </ul>
@@ -53,7 +53,7 @@
                   >
                     <li>
                       {{ n }}: {{ user.Followers[n - 1].nickname }}({{
-                        user.Followers[n - 1].name
+                      user.Followers[n - 1].name
                       }})
                     </li>
                   </ul>
@@ -82,11 +82,7 @@
                     v-for="n of user.Posts.length > 3 ? 3 : user.Posts.length"
                     :key="n - 1"
                   >
-                    <li>
-                      {{ n }}:
-                      {{ $moment(user.Posts[n - 1].createdAt).fromNow() }}에
-                      작성함
-                    </li>
+                    <li>{{ $moment(user.Posts[n - 1].createdAt).fromNow() }}</li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -113,7 +109,9 @@
                       : user.GroupJoined.length"
                     :key="n - 1"
                   >
-                    <li>{{ n }}: {{ user.GroupJoined[n - 1].name }}</li>
+                    <li>
+                      <div class="line">{{ n }}: {{ user.GroupJoined[n - 1].name }}</div>
+                    </li>
                   </ul>
                 </div>
               </v-expand-transition>
@@ -154,5 +152,12 @@ export default {
   word-wrap: break-word;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.line {
+  width: 20em;
+  word-wrap: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

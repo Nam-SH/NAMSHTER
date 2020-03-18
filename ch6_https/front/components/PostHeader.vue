@@ -10,12 +10,9 @@
                 <span v-else v-on="on">{{ post.User.nickname }} (나)</span>
               </nuxt-link>
             </template>
-            <v-img
-              :src="`${srcAddress}/profile/${post.User.src}`"
-              min-height="200px"
-              max-height="300px"
-              width="200px"
-            ></v-img>
+            <div class="box">
+              <img :src="`${srcAddress}/profile/${post.User.src}`" />
+            </div>
           </v-tooltip>
         </template>
         <span v-else>{{ post.User.nickname }}</span>
@@ -77,5 +74,17 @@ export default {
 a {
   color: black;
   text-decoration: none;
+}
+div.box {
+  width: 10em;
+  height: 10em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+div.box > img {
+  max-width: 90%;
+  max-height: 90%;
+  opacity: 0.8;
 }
 </style>
