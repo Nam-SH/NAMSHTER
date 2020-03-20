@@ -237,7 +237,7 @@ export const actions = {
     commit,
     state
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios
       .post(
         "/group", {
@@ -253,23 +253,27 @@ export const actions = {
       .then((res) => {
         commit("groupAdd", res.data)
         this.$router.push(`/groups/${res.data.id}`)
-        before.goAway(1500)
-        this.$toast.success('그룹 생성 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('그룹 생성 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch(err => {
         // console.error("groupAdd :::", err);
-        before.goAway(1500)
-        this.$toast.error(`${err.response.data}`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${err.response.data}`, {
+            duration: 2000
+          })
+        }
       });
   },
   groupEdit({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.put(`/group/${payload.groupId}`, {
         name: payload.name,
         intro: payload.intro,
@@ -284,39 +288,47 @@ export const actions = {
           limit: payload.limit,
           groupId: res.data
         })
-        before.goAway(1500)
-        this.$toast.success('그룹 정보 수정 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('그룹 정보 수정 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch(err => {
         // console.error('groupDelete :::', err);
-        before.goAway(1500)
-        this.$toast.error(`${err.response.data}`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${err.response.data}`, {
+            duration: 2000
+          })
+        }
       })
   },
   groupDelete({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.delete(`/group/${payload.groupId}`, {
         withCredentials: true
       })
       .then((res) => {
         commit('groupDelete', res.data)
-        before.goAway(1500)
-        this.$toast.success('삭제 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('삭제 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch(err => {
         // console.error('groupDelete :::', err);
-        before.goAway(1500)
-        this.$toast.error(`${err.response.data}`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${err.response.data}`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -334,9 +346,21 @@ export const actions = {
           groupState: payload.groupState,
           userId: res.data
         })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success(`${payload.groupName} 좋아요!`, {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
-        console.error('groupLike :::', err);
+        // console.error('groupLike :::', err);
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${err.response.data}`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -353,9 +377,21 @@ export const actions = {
           groupState: payload.groupState,
           userId: res.data
         })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('좋아요 취소;;', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
-        console.error('groupLike :::', err);
+        // console.error('groupLike :::', err);
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${err.response.data}`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -365,7 +401,7 @@ export const actions = {
     commit,
     state
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios
       .post(
         `/group/${payload.groupId}/post`, {
@@ -378,17 +414,21 @@ export const actions = {
       )
       .then(res => {
         commit("addGroupPost", res.data);
-        before.goAway(1500)
-        this.$toast.success('글 작성 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('글 작성 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch(err => {
         // console.error("addGroupPost:::", err);
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       });
   },
   // 글 수정
@@ -396,7 +436,7 @@ export const actions = {
     commit,
     state
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios
       .put(
         `/group/${payload.groupId}/post/${payload.postId}`, {
@@ -412,24 +452,28 @@ export const actions = {
           content: res.data.content,
           postId: payload.postId
         });
-        before.goAway(1500)
-        this.$toast.success('글 수정 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('글 수정 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch(err => {
         // console.error("postEdit :::", err);
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       });
   },
   // 포스트 삭제
   postDelete({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.delete(`/group/${payload.groupId}/post/${payload.postId}`, {
         withCredentials: true
       })
@@ -437,17 +481,21 @@ export const actions = {
         commit('deleteGroupPost', {
           postId: payload.postId
         })
-        before.goAway(1500)
-        this.$toast.success('글 삭제 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('글 삭제 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch(err => {
         // console.error("postDelete :::", err);
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -560,7 +608,7 @@ export const actions = {
     commit,
     state
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     this.$axios
       .post(
         `/group/${payload.groupId}/userInOut`, {
@@ -574,16 +622,18 @@ export const actions = {
           groupId: payload.groupId,
           userId: res.data
         });
-        if (state.isUserInGroup) {
+        if (state.isUserInGroup && this.$toast) {
           before.goAway(1500)
           this.$toast.success("가입완료", {
             duration: 2000
           })
         } else {
-          before.goAway(1500)
-          this.$toast.success("탈퇴완료", {
-            duration: 2000
-          })
+          if (this.$toast) {
+            before.goAway(1500)
+            this.$toast.success("탈퇴완료", {
+              duration: 2000
+            })
+          }
         }
       })
       .catch(err => {
@@ -598,7 +648,7 @@ export const actions = {
   changeState({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios
       .post(
         `group/${payload.groupId}/changestate`, {
@@ -612,17 +662,21 @@ export const actions = {
           groupId: payload.groupId,
           nextState: res.data.next
         });
-        before.goAway(1500)
-        this.$toast.success('그룹 상태 변경 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('그룹 상태 변경 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch(err => {
         // console.error("changeState :::", err);
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       });
   },
 
@@ -791,7 +845,12 @@ export const actions = {
         console.error("myGrouplistDone :::", err);
       });
   },
-
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
   otherGrouplistBefore({
     commit
   }, payload) {

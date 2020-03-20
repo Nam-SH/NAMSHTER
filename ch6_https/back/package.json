@@ -10,9 +10,9 @@
   "author": "NAM-SH",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.626.0",
+    "aws-sdk": "^2.642.0",
     "bcrypt": "^3.0.8",
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
@@ -36,6 +36,7 @@
     "sequelize": "^5.21.4"
   },
   "devDependencies": {
+    "@nuxt/typescript-build": "^0.6.0",
     "nodemon": "^2.0.2",
     "sequelize-cli": "^5.5.1"
   }

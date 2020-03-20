@@ -48,14 +48,21 @@ module.exports = {
       crossorigin: "anonymous"
     }],
     link: [{
-      rel: "shortcut icon",
-      href: "/donut.png"
-    }, {
-      rel: "stylesheet",
-      href: "//cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css"
-    }]
+        rel: "shortcut icon",
+        href: "/donut.png"
+      },
+      {
+        rel: "stylesheet",
+        href: "//cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css"
+      }
+    ]
   },
-  modules: ["@nuxtjs/axios", "@tui-nuxt/editor", "@nuxtjs/toast", "@nuxtjs/pwa"],
+  modules: [
+    "@nuxtjs/axios",
+    "@tui-nuxt/editor",
+    "@nuxtjs/toast",
+    "@nuxtjs/pwa"
+  ],
   tui: {
     editor: {}
   },
@@ -75,11 +82,11 @@ module.exports = {
     ]
   },
   manifest: {
-    name: 'NAM.SH.TER',
-    short_name: 'namshter',
-    start_url: '/main',
-    display: 'standalone',
-    background_color: '#000',
+    name: "NAM.S.H.TER",
+    short_name: "namshter",
+    start_url: "/main",
+    display: "standalone",
+    background_color: "#000",
     icon: "icon.png"
   },
   buildModules: ["@nuxtjs/vuetify", "@nuxtjs/moment"],
@@ -100,15 +107,15 @@ module.exports = {
         }
       }
     },
-    analyze: false,
+    analyze: true,
     extend(config, {
       isServer,
       isClient,
       isDev
     }) {
-      // console.log('webpack :::', config, isServer, isClient);
       if (isServer && !isDev) {
-        config.devtool = "hidden-source-map";
+        config.devtool = "nosources-source-map";
+        // config.devtool = "hidden-source-map";
       }
     }
   },

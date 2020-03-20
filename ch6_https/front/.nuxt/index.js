@@ -65,6 +65,8 @@ async function createApp (ssrContext) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
+    head: {"title":"Namshter","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover"},{"http-equiv":"X-UA-Compatible","content":"IE=edge"},{"hid":"desc","name":"description","content":"Namshter"},{"hid":"ogtitle","name":"og:title","content":"Namshter"},{"hid":"ogdesc","name":"og:description","content":"nam의 Namshter"},{"hid":"ogtype","property":"og:type","content":"website"},{"hid":"ogimage","property":"og:image","content":"http:\u002F\u002Fimg.favpng.com\u002F22\u002F12\u002F5\u002Fdonuts-homer-simpson-coffee-and-doughnuts-sprinkles-frosting-icing-png-favpng-DFWeBHKEQ11Nx79gYhNsK12SU.jpg"},{"hid":"ogurl","property":"og:url","content":"https:\u002F\u002Fnamshter.com"},{"hid":"mobile-web-app-capable","name":"mobile-web-app-capable","content":"yes"},{"hid":"apple-mobile-web-app-title","name":"apple-mobile-web-app-title","content":"NAM.S.H.TER"},{"hid":"author","name":"author","content":"NAM-SH"},{"hid":"theme-color","name":"theme-color","content":"black"},{"hid":"og:site_name","name":"og:site_name","property":"og:site_name","content":"NAM.S.H.TER"}],"script":[{"src":"https:\u002F\u002Fkit.fontawesome.com\u002F4ddf7507f2.js","crossorigin":"anonymous"}],"link":[{"rel":"shortcut icon","href":"\u002Fdonut.png"},{"rel":"stylesheet","href":"\u002F\u002Fcdn.materialdesignicons.com\u002F5.0.45\u002Fcss\u002Fmaterialdesignicons.min.css"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"},{"rel":"manifest","href":"\u002F_nuxt\u002Fmanifest.7bf4d2ea.json"},{"rel":"apple-touch-icon","href":"\u002F_nuxt\u002Ficons\u002Ficon_512.323ec9.png","sizes":"512x512"}],"style":[],"htmlAttrs":{"lang":"en"}},
+
     store,
     router,
     nuxt: {
@@ -94,7 +96,10 @@ async function createApp (ssrContext) {
         err = err || null
         app.context._errored = Boolean(err)
         err = err ? normalizeError(err) : null
-        const nuxt = this.nuxt || this.$options.nuxt
+        let nuxt = app.nuxt // to work with @vue/composition-api, see https://github.com/nuxt/nuxt.js/issues/6517#issuecomment-573280207
+        if (this) {
+          nuxt = this.nuxt || this.$options.nuxt
+        }
         nuxt.dateErr = Date.now()
         nuxt.err = err
         // Used in src/server.js
@@ -138,7 +143,7 @@ async function createApp (ssrContext) {
       throw new Error('inject(key, value) has no key provided')
     }
     if (value === undefined) {
-      throw new Error('inject(key, value) has no value provided')
+      throw new Error(`inject('${key}', value) has no value provided`)
     }
 
     key = '$' + key

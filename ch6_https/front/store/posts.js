@@ -112,7 +112,7 @@ export const actions = {
     commit,
     state
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.post('/post', {
         content: payload.content,
         image: state.imagePaths
@@ -120,20 +120,22 @@ export const actions = {
         withCredentials: true
       })
       .then((res) => {
-        console.log(' res.data', res.data);
-
         commit('addMainPost', res.data)
-        before.goAway(1500)
-        this.$toast.success('포스트 작성 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('포스트 작성 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
         // console.error('add:::', err)
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -141,30 +143,34 @@ export const actions = {
   remove({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.delete(`/post/${payload.postId}`, {
         withCredentials: true
       })
       .then((res) => {
         commit('removeMainPost', res.data)
-        before.goAway(1500)
-        this.$toast.success('글 삭제 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('글 삭제 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
         // console.error('remove:::', err)
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
 
   edit({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.patch(`/post/${payload.postId}`, {
         content: payload.content
       }, {
@@ -176,24 +182,28 @@ export const actions = {
           content: res.data.content,
           updateTime: res.data.updateTime
         })
-        before.goAway(1500)
-        this.$toast.success('글 수정 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('글 수정 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
         // console.error('edit :::', err);
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
 
   addComment({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.post(`/post/${payload.postId}/comment`, {
         content: payload.content,
         score: payload.score,
@@ -201,43 +211,51 @@ export const actions = {
         withCredentials: true
       })
       .then((res) => {
-        before.goAway(1500)
-        this.$toast.success('댓글 작성 완료', {
-          duration: 2000
-        })
         commit('addComment', res.data)
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('댓글 작성 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
         // console.error('addComment:::', err)
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
   deleteComment({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.delete(`/post/${payload.postId}/comment/${payload.commentId}`, {
         withCredentials: true
       })
       .then((res) => {
-        before.goAway(1500)
-        this.$toast.success('댓글 삭제 완료', {
-          duration: 2000
-        })
         commit('deleteComment', {
           postId: payload.postId,
           commentId: res.data
         })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('댓글 삭제 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
         // console.error('deleteComment:::', err)
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -245,13 +263,26 @@ export const actions = {
   async loadPost({
     commit
   }, payload) {
+    let before = this.$toast && this.$toast.show('진행 중...')
     try {
       const res = await this.$axios.get(`/post/${payload}`, {
         withCredentials: true
       })
       commit('loadPost', res.data)
+      if (this.$toast) {
+        before.goAway(1500)
+        this.$toast.success('글 불러오기 완료', {
+          duration: 2000
+        })
+      }
     } catch (err) {
-      console.error('loadPost :::', err)
+      // console.error('loadPost :::', err)
+      if (this.$toast) {
+        before.goAway(1500)
+        this.$toast.error(`${ err.response.data }`, {
+          duration: 2000
+        })
+      }
     }
   },
 
@@ -403,6 +434,7 @@ export const actions = {
   likePost({
     commit
   }, payload) {
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.post(`/post/${payload.postId}/like`, {}, {
         withCredentials: true
       })
@@ -411,9 +443,21 @@ export const actions = {
           userId: res.data.userId,
           postId: payload.postId,
         })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('글 좋아요', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
-        console.error('likePost:::', err)
+        // console.error('likePost:::', err)
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -421,6 +465,7 @@ export const actions = {
   unlikePost({
     commit
   }, payload) {
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.delete(`/post/${payload.postId}/like`, {
         withCredentials: true
       })
@@ -429,9 +474,21 @@ export const actions = {
           userId: res.data.userId,
           postId: payload.postId,
         })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('글 좋아요', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
-        console.error('unlikePost:::', err)
+        // console.error('unlikePost:::', err)
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   },
 
@@ -439,23 +496,27 @@ export const actions = {
   retweet({
     commit
   }, payload) {
-    let before = this.$toast.show('진행 중...')
+    let before = this.$toast && this.$toast.show('진행 중...')
     return this.$axios.post(`/post/${payload.postId}/retweet`, {}, {
         withCredentials: true
       })
       .then((res) => {
         commit('addMainPost', res.data)
-        before.goAway(1500)
-        this.$toast.success('리트윗 완료', {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.success('리트윗 완료', {
+            duration: 2000
+          })
+        }
       })
       .catch((err) => {
         // console.error('retweet:::', err)
-        before.goAway(1500)
-        this.$toast.error(`${ err.response.data }`, {
-          duration: 2000
-        })
+        if (this.$toast) {
+          before.goAway(1500)
+          this.$toast.error(`${ err.response.data }`, {
+            duration: 2000
+          })
+        }
       })
   }
 }
