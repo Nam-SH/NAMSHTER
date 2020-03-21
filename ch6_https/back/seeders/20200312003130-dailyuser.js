@@ -40,7 +40,7 @@ module.exports = {
       ]
     };
     const mar = {
-      id: [61, 63, 64, 65, 68, 69, 70, 71],
+      id: [61, 63, 64, 65, 68, 69, 70, 71, 72, 73, 75, 79, 80],
       date: [
         "2020-03-01",
         "2020-03-03",
@@ -49,24 +49,31 @@ module.exports = {
         "2020-03-08",
         "2020-03-09",
         "2020-03-10",
-        "2020-03-11"
+        "2020-03-11",
+        "2020-03-12",
+        "2020-03-13",
+        "2020-03-15",
+        "2020-03-19",
+        "2020-03-20",
       ]
     };
     let datas = [];
-    for (let i = 1; i < 11; i++) {
-      for (let one of [jan, feb, mar]) {
-        for (let j = 0; j < one.id.length; j++) {
+    for (let month of [jan, feb, mar]) {
+      for (let idx = 0; idx < month.id.length; idx++) {
+        for (let person = 1; person < 11; person++) {
           let temp = {
-            createdAt: new Date(one.date[j])
+            createdAt: new Date(`${month.date[idx]}
+                ${person + 2}:${(person + 35) % 60}`)
               .toISOString()
               .replace(/T/, " ")
               .replace(/\..+/, ""),
-            updatedAt: new Date(one.date[j])
+            updatedAt: new Date(`${month.date[idx]}
+            ${person + 2}:${(person + 35) % 60}`)
               .toISOString()
               .replace(/T/, " ")
               .replace(/\..+/, ""),
-            UserId: i,
-            DailyTzId: one.id[j]
+            UserId: person,
+            DailyTzId: month.id[idx]
           };
           datas.push(temp);
         }
@@ -87,8 +94,8 @@ module.exports = {
       'date': ['2020-02-01', '2020-02-04', '2020-02-07', '2020-02-08', '2020-02-12', '2020-02-13', '2020-02-14', '2020-02-15', '2020-02-19', '2020-02-20', '2020-02-22', '2020-02-25', '2020-02-28', '2020-02-29']
     }
     const mar = {
-      'id': [61, 63, 64, 65, 68, 69, 70, 71],
-      'date': ['2020-03-01', '2020-03-03', '2020-03-04', '2020-03-05', '2020-03-08', '2020-03-09', '2020-03-10', '2020-03-11']
+      'id': [61, 63, 64, 65, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80],
+      'date': ['2020-03-01', '2020-03-03', '2020-03-04', '2020-03-05', '2020-03-08', '2020-03-09', '2020-03-10', '2020-03-11', '2020-03-12', '2020-03-13', '2020-03-14', '2020-03-15', '2020-03-16', '2020-03-17', '2020-03-18', '2020-03-19', '2020-03-20']
     }
     let datas = []
     for (let one of [jan, feb, mar]) {

@@ -386,7 +386,7 @@ export const actions = {
           name: res.data.name,
         })
         if (this.$toast) {
-          this.$toast.success(`${res.data.nickname} 팔로우 성공!}`, {
+          this.$toast.success(`${res.data.nickname}님 팔로우 성공!`, {
             duration: 2000
           })
         }

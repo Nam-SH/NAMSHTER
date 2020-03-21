@@ -107,7 +107,7 @@ module.exports = {
         }
       }
     },
-    analyze: true,
+    analyze: false,
     extend(config, {
       isServer,
       isClient,
