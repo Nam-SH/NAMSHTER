@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
-const {
-  isLoggedIn,
-  isNotLoggedIn
-} = require('./middlewares')
 
-// lastId 방식으로 불러오기
+
+// 포스트 관련  lastId 방식으로 불러오기
 router.get('/', async (req, res, next) => {
   try {
     let where = {};

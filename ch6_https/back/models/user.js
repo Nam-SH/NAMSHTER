@@ -78,6 +78,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "LikedGroupPost"
     });
     db.User.hasMany(db.GroupPostComment);
+    db.User.hasMany(db.Notice)
   };
   return User;
 };

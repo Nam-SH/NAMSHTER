@@ -20,6 +20,9 @@ db.GroupPostImage = require('./grouppostimage')(sequelize, Sequelize);
 db.GroupPostComment = require('./grouppostcomment')(sequelize, Sequelize);
 db.DailyTz = require('./dailytz')(sequelize, Sequelize);
 
+db.Notice = require('./notice')(sequelize, Sequelize);
+db.NoticeComment = require('./noticecomment')(sequelize, Sequelize);
+
 // db.Grouimage = require('./groupimage')(sequelize, Sequelize);
 // db.Groupcomment = require('./groupcomment')(sequelize, Sequelize);
 

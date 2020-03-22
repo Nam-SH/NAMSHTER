@@ -100,6 +100,8 @@ router.get("/:postId", async (req, res, next) => {
   }
 });
 
+// 포스트 관련
+
 // 글 작성(POST /post)
 router.post("/", isLoggedIn, async (req, res, next) => {
   try {
