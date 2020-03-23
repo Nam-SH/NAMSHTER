@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       src: {
-        type: DataTypes.STRING(200),
+        type: DataTypes.TEXT,
         defaultValue: "profile.png",
       },
       isAdmin: {
@@ -79,6 +79,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     db.User.hasMany(db.GroupPostComment);
     db.User.hasMany(db.Notice)
+    db.User.hasMany(db.NoticeComment)
   };
   return User;
 };

@@ -4,7 +4,11 @@ module.exports = (sequelize, DataTypes) => {
       content: {
         type: DataTypes.TEXT,
         allowNull: false
-      }
+      },
+      src: {
+        type: DataTypes.TEXT,
+        defaultValue: "profile.png",
+      },
     }, {
       charset: "utf8",
       collate: "utf8_general_ci"

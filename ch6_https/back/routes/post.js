@@ -230,6 +230,7 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
   }
 });
 
+
 // 댓글작성
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   try {

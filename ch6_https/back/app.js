@@ -27,10 +27,10 @@ const noticesRouter = require("./routes/notices");
 
 const app = express();
 
-db.sequelize.sync({
-  force: true
-});
-// db.sequelize.sync();
+// db.sequelize.sync({
+//   force: true
+// });
+db.sequelize.sync();
 
 dotenv.config();
 passportConfig();
@@ -96,8 +96,8 @@ app.use("/hashtag", hashtagRouter);
 app.use("/group", groupRouter);
 app.use("/groups", groupsRouter);
 
-// app.use("/notice", noticeRouter);
-// app.use("/notices", noticesRouter);
+app.use("/notice", noticeRouter);
+app.use("/notices", noticesRouter);
 
 if (prod) {
   const lex = require("greenlock-express").create({
