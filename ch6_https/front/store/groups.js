@@ -347,7 +347,6 @@ export const actions = {
           userId: res.data
         })
         if (this.$toast) {
-          before.goAway(1500)
           this.$toast.success(`${payload.groupName} 좋아요!`, {
             duration: 2000
           })
@@ -356,7 +355,6 @@ export const actions = {
       .catch((err) => {
         // console.error('groupLike :::', err);
         if (this.$toast) {
-          before.goAway(1500)
           this.$toast.error(`${err.response.data}`, {
             duration: 2000
           })
@@ -378,7 +376,6 @@ export const actions = {
           userId: res.data
         })
         if (this.$toast) {
-          before.goAway(1500)
           this.$toast.success('좋아요 취소;;', {
             duration: 2000
           })
@@ -387,7 +384,6 @@ export const actions = {
       .catch((err) => {
         // console.error('groupLike :::', err);
         if (this.$toast) {
-          before.goAway(1500)
           this.$toast.error(`${err.response.data}`, {
             duration: 2000
           })

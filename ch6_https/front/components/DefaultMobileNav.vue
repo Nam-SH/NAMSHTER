@@ -61,6 +61,11 @@
             </v-btn>
           </v-container>
           <v-container>
+            <v-btn aria-label="blog" text to="/blog" block>
+              <div>블로그</div>
+            </v-btn>
+          </v-container>
+          <v-container>
             <v-btn aria-label="group" text to="/groups" block>
               <div>그룹</div>
             </v-btn>

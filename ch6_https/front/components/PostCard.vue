@@ -13,6 +13,15 @@
       <div v-else>
         <post-header :post="post" />
         <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!-- <client-only>
+          <TuiEditorViewer :value="post.content" height="500px" />
+        </client-only>-->
+        <!--  -->
+        <!--  -->
+        <!--  -->
       </div>
       <v-card-actions>
         <v-row class="mx-1" justify="space-between">

@@ -20,12 +20,10 @@ module.exports = {
         datas.push(temp)
       }
     }
-    // return queryInterface.bulkInsert('dailytzs', datas, {});
     return queryInterface.bulkInsert("DailyTzs", datas, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    // return queryInterface.bulkInsert('dailytzs', null, {});
     return queryInterface.bulkInsert("DailyTzs", null, {});
   }
 };

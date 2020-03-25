@@ -98,6 +98,10 @@ module.exports = {
       {
         date: '2020-03-23',
         content: '공지사항 댓글 관련 db, route 생성'
+      },
+      {
+        date: '2020-03-25',
+        content: '일상글, 블로그 구분'
       }
     ]
     let datas = []

@@ -22,10 +22,7 @@ db.DailyTz = require('./dailytz')(sequelize, Sequelize);
 
 db.Notice = require('./notice')(sequelize, Sequelize);
 db.NoticeComment = require('./noticecomment')(sequelize, Sequelize);
-
-// db.Grouimage = require('./groupimage')(sequelize, Sequelize);
-// db.Groupcomment = require('./groupcomment')(sequelize, Sequelize);
-
+db.Blog = require('./blog')(sequelize, Sequelize);
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

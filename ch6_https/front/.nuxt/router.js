@@ -3,11 +3,13 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
+const _2f3c5662 = () => interopDefault(import('..\\pages\\blog\\index.vue' /* webpackChunkName: "pages_blog_index" */))
 const _26b8bcc6 = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
 const _3fea7eea = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
 const _4aad7208 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
 const _8ca63002 = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
 const _17d87eee = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
+const _51b621ab = () => interopDefault(import('..\\pages\\blog\\_id\\index.vue' /* webpackChunkName: "pages_blog__id_index" */))
 const _4a3a259d = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
 const _1975ac03 = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
 const _df1262ae = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
@@ -31,6 +33,10 @@ export const routerOptions = {
   scrollBehavior,
 
   routes: [{
+    path: "/blog",
+    component: _2f3c5662,
+    name: "blog"
+  }, {
     path: "/groups",
     component: _26b8bcc6,
     name: "groups"
@@ -50,6 +56,10 @@ export const routerOptions = {
     path: "/signup",
     component: _17d87eee,
     name: "signup"
+  }, {
+    path: "/blog/:id",
+    component: _51b621ab,
+    name: "blog-id"
   }, {
     path: "/groups/:id",
     component: _4a3a259d,

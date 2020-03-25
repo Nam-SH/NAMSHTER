@@ -23,12 +23,10 @@ module.exports = {
       }
       datas.push(temp)
     }
-    // return queryInterface.bulkInsert("users", datas, {});
     return queryInterface.bulkInsert("Users", datas, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    // return queryInterface.bulkDelete("users", null, {});
     return queryInterface.bulkDelete("Users", null, {});
   }
 };

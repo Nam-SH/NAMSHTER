@@ -24,6 +24,7 @@ const groupsRouter = require("./routes/groups");
 
 const noticeRouter = require("./routes/notice");
 const noticesRouter = require("./routes/notices");
+const blogRouter = require("./routes/blog");
 
 const app = express();
 
@@ -98,6 +99,7 @@ app.use("/groups", groupsRouter);
 
 app.use("/notice", noticeRouter);
 app.use("/notices", noticesRouter);
+app.use("/blog", blogRouter);
 
 if (prod) {
   const lex = require("greenlock-express").create({

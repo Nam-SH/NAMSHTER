@@ -51,7 +51,27 @@
           </v-tooltip>
           <v-tooltip top v-if="me">
             <template v-slot:activator="{ on }">
-              <v-btn text to="/groups" :style="{ display: 'flex', alignItems: 'center' }" v-on="on">
+              <v-btn
+                aria-label="blog"
+                text
+                to="/blog"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
+                <div>블로그</div>
+              </v-btn>
+            </template>
+            <span>블로그 가기</span>
+          </v-tooltip>
+          <v-tooltip top v-if="me">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                aria-label="group"
+                text
+                to="/groups"
+                :style="{ display: 'flex', alignItems: 'center' }"
+                v-on="on"
+              >
                 <div>그룹</div>
               </v-btn>
             </template>
