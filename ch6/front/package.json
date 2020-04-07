@@ -14,20 +14,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@nuxtjs/axios": "^5.9.5",
+    "@nuxtjs/axios": "^5.9.7",
     "@nuxtjs/moment": "^1.6.0",
-    "@nuxtjs/vuetify": "^1.10.3",
+    "@nuxtjs/vuetify": "^1.11.0",
     "axios": "^0.19.2",
     "cross-env": "^6.0.3",
     "express": "^4.17.1",
     "lodash.throttle": "^4.1.1",
-    "nuxt": "^2.11.0",
+    "nuxt": "^2.12.2",
     "pm2": "^4.2.3",
     "vue": "^2.6.11",
-    "vuetify": "^2.2.12"
+    "vuetify": "^2.2.20"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^6.2.0"
+    "eslint-plugin-vue": "^6.2.2"
   }
 }
