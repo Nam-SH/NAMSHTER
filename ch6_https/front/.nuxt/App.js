@@ -4,7 +4,8 @@ import {
   getMatchedComponentsInstances,
   getChildrenComponentInstancesUsingFetch,
   promisify,
-  globalHandleError
+  globalHandleError,
+  sanitizeComponent
 } from './utils'
 
 import NuxtError from '..\\layouts\\error.vue'
@@ -27,7 +28,7 @@ import _6f6c098b from '..\\layouts\\default.vue'
 import _77617449 from '..\\layouts\\group.vue'
 import _2d26a6af from '..\\layouts\\main.vue'
 
-const layouts = { "_default": _6f6c098b,"_group": _77617449,"_main": _2d26a6af }
+const layouts = { "_default": sanitizeComponent(_6f6c098b),"_group": sanitizeComponent(_77617449),"_main": sanitizeComponent(_2d26a6af) }
 
 export default {
   render (h, props) {

@@ -94,6 +94,9 @@ module.exports = {
     locales: ["ko"]
   },
   build: {
+    // babel: {
+    //   configFile: "./babel.config.js"
+    // },
     extractCSS: true,
     optimization: {
       splitChunks: {

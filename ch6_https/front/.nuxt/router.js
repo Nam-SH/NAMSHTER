@@ -3,18 +3,18 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _188b9a25 = () => interopDefault(import('..\\pages\\blog\\index.vue' /* webpackChunkName: "pages_blog_index" */))
-const _8d1d2d1a = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
-const _57fb2358 = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
-const _180b525e = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
-const _b0f2b62e = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
-const _3c25051a = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
-const _debf7bd6 = () => interopDefault(import('..\\pages\\blog\\_id\\index.vue' /* webpackChunkName: "pages_blog__id_index" */))
-const _771dd387 = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
-const _edf0894e = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
-const _613e21da = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
-const _2ae58c3e = () => interopDefault(import('..\\pages\\user\\_id\\index.vue' /* webpackChunkName: "pages_user__id_index" */))
-const _e47f8f72 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
+const _2cb293df = () => interopDefault(import('..\\pages\\blog\\index.vue' /* webpackChunkName: "pages_blog_index" */))
+const _5fc0dcad = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
+const _16bb91da = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
+const _824f8dd0 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
+const _2084feef = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
+const _5aebd779 = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
+const _48524c9b = () => interopDefault(import('..\\pages\\blog\\_id\\index.vue' /* webpackChunkName: "pages_blog__id_index" */))
+const _0a77548d = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
+const _60de5b13 = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
+const _f1da0cce = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
+const _3ad0d278 = () => interopDefault(import('..\\pages\\user\\_id\\index.vue' /* webpackChunkName: "pages_user__id_index" */))
+const _bba8f4fe = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 // TODO: remove in Nuxt 3
 const emptyFn = () => {}
@@ -34,51 +34,51 @@ export const routerOptions = {
 
   routes: [{
     path: "/blog",
-    component: _188b9a25,
+    component: _2cb293df,
     name: "blog"
   }, {
     path: "/groups",
-    component: _8d1d2d1a,
+    component: _5fc0dcad,
     name: "groups"
   }, {
     path: "/main",
-    component: _57fb2358,
+    component: _16bb91da,
     name: "main"
   }, {
     path: "/profile",
-    component: _180b525e,
+    component: _824f8dd0,
     name: "profile"
   }, {
     path: "/qrcode",
-    component: _b0f2b62e,
+    component: _2084feef,
     name: "qrcode"
   }, {
     path: "/signup",
-    component: _3c25051a,
+    component: _5aebd779,
     name: "signup"
   }, {
     path: "/blog/:id",
-    component: _debf7bd6,
+    component: _48524c9b,
     name: "blog-id"
   }, {
     path: "/groups/:id",
-    component: _771dd387,
+    component: _0a77548d,
     name: "groups-id"
   }, {
     path: "/hashtag/:id?",
-    component: _edf0894e,
+    component: _60de5b13,
     name: "hashtag-id"
   }, {
     path: "/post/:id?",
-    component: _613e21da,
+    component: _f1da0cce,
     name: "post-id"
   }, {
     path: "/user/:id?",
-    component: _2ae58c3e,
+    component: _3ad0d278,
     name: "user-id"
   }, {
     path: "/",
-    component: _e47f8f72,
+    component: _bba8f4fe,
     name: "index"
   }],
 
