@@ -3,18 +3,20 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _2cb293df = () => interopDefault(import('..\\pages\\blog\\index.vue' /* webpackChunkName: "pages_blog_index" */))
-const _5fc0dcad = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
-const _16bb91da = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
-const _824f8dd0 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
-const _2084feef = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
-const _5aebd779 = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
-const _48524c9b = () => interopDefault(import('..\\pages\\blog\\_id\\index.vue' /* webpackChunkName: "pages_blog__id_index" */))
-const _0a77548d = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
-const _60de5b13 = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
-const _f1da0cce = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
-const _3ad0d278 = () => interopDefault(import('..\\pages\\user\\_id\\index.vue' /* webpackChunkName: "pages_user__id_index" */))
-const _bba8f4fe = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
+const _7d08472b = () => interopDefault(import('..\\pages\\blog\\index.vue' /* webpackChunkName: "pages_blog_index" */))
+const _a6b198ee = () => interopDefault(import('..\\pages\\chart\\index.vue' /* webpackChunkName: "pages_chart_index" */))
+const _1d12260e = () => interopDefault(import('..\\pages\\groups\\index.vue' /* webpackChunkName: "pages_groups_index" */))
+const _060087e4 = () => interopDefault(import('..\\pages\\main.vue' /* webpackChunkName: "pages_main" */))
+const _15437264 = () => interopDefault(import('..\\pages\\profile.vue' /* webpackChunkName: "pages_profile" */))
+const _f33127ba = () => interopDefault(import('..\\pages\\qrcode.vue' /* webpackChunkName: "pages_qrcode" */))
+const _7e6376a6 = () => interopDefault(import('..\\pages\\signup.vue' /* webpackChunkName: "pages_signup" */))
+const _4de8178d = () => interopDefault(import('..\\pages\\chart\\line.vue' /* webpackChunkName: "pages_chart_line" */))
+const _4b766e62 = () => interopDefault(import('..\\pages\\blog\\_id\\index.vue' /* webpackChunkName: "pages_blog__id_index" */))
+const _2c88d87e = () => interopDefault(import('..\\pages\\groups\\_id\\index.vue' /* webpackChunkName: "pages_groups__id_index" */))
+const _6a22025f = () => interopDefault(import('..\\pages\\hashtag\\_id\\index.vue' /* webpackChunkName: "pages_hashtag__id_index" */))
+const _190575cd = () => interopDefault(import('..\\pages\\post\\_id\\index.vue' /* webpackChunkName: "pages_post__id_index" */))
+const _748a12f8 = () => interopDefault(import('..\\pages\\user\\_id\\index.vue' /* webpackChunkName: "pages_user__id_index" */))
+const _f726bc66 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 // TODO: remove in Nuxt 3
 const emptyFn = () => {}
@@ -34,51 +36,59 @@ export const routerOptions = {
 
   routes: [{
     path: "/blog",
-    component: _2cb293df,
+    component: _7d08472b,
     name: "blog"
   }, {
+    path: "/chart",
+    component: _a6b198ee,
+    name: "chart"
+  }, {
     path: "/groups",
-    component: _5fc0dcad,
+    component: _1d12260e,
     name: "groups"
   }, {
     path: "/main",
-    component: _16bb91da,
+    component: _060087e4,
     name: "main"
   }, {
     path: "/profile",
-    component: _824f8dd0,
+    component: _15437264,
     name: "profile"
   }, {
     path: "/qrcode",
-    component: _2084feef,
+    component: _f33127ba,
     name: "qrcode"
   }, {
     path: "/signup",
-    component: _5aebd779,
+    component: _7e6376a6,
     name: "signup"
   }, {
+    path: "/chart/line",
+    component: _4de8178d,
+    name: "chart-line"
+  }, {
     path: "/blog/:id",
-    component: _48524c9b,
+    component: _4b766e62,
     name: "blog-id"
   }, {
     path: "/groups/:id",
-    component: _0a77548d,
+    component: _2c88d87e,
     name: "groups-id"
   }, {
     path: "/hashtag/:id?",
-    component: _60de5b13,
+    component: _6a22025f,
     name: "hashtag-id"
   }, {
     path: "/post/:id?",
-    component: _f1da0cce,
+    component: _190575cd,
     name: "post-id"
   }, {
     path: "/user/:id?",
-    component: _3ad0d278,
+    component: _748a12f8,
     name: "user-id"
   }, {
     path: "/",
-    component: _bba8f4fe,
+    component: _f726bc66,
     name: "index"
   }],
 

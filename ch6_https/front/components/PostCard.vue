@@ -13,15 +13,6 @@
       <div v-else>
         <post-header :post="post" />
         <post-content :post="post" :isEditting="isEditting" :onEditPost="onEditPost" />
-        <!--  -->
-        <!--  -->
-        <!--  -->
-        <!-- <client-only>
-          <TuiEditorViewer :value="post.content" height="500px" />
-        </client-only>-->
-        <!--  -->
-        <!--  -->
-        <!--  -->
       </div>
       <v-card-actions>
         <v-row class="mx-1" justify="space-between">
@@ -55,7 +46,7 @@
         </v-row>
       </v-card-actions>
     </v-card>
-    <!-- 댓글 창 클릭시 -->
+
     <template v-if="commentOpened">
       <comment-form :post-id="post.id" style="margin-bottom: 30px" :change="AvgRank" />
       <v-list style="margin-bottom: 20px">

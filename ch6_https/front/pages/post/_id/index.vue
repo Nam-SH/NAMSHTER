@@ -1,4 +1,5 @@
 <template>
+  <!-- <div v-if="$fetchState.pending">Fetching post #{{$route.params.id}}...</div> -->
   <v-container v-if="post">
     <post-card :post="post" />
   </v-container>
@@ -34,6 +35,10 @@ export default {
       }
     }
   },
+  // async fetch() {
+  //   this.post = await this.$http.$get(`http://localhost:3081/post/${this.$route.params.id}`)
+  // },
+  // fetchOnServer: false,
   head() {
     return {
       title: `${this.post.User.nickname}님의 게시글`,

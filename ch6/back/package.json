@@ -10,15 +10,15 @@
   "author": "NAM-SH",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.654.0",
+    "aws-sdk": "^2.715.0",
     "bcrypt": "^3.0.8",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.0",
-    "helmet": "^3.22.0",
+    "express-session": "^1.17.1",
+    "helmet": "^3.23.3",
     "hpp": "^0.2.3",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
@@ -27,11 +27,11 @@
     "passport": "^0.4.1",
     "passport-kakao": "^1.0.0",
     "passport-local": "^1.0.0",
-    "pm2": "^4.2.3",
-    "sequelize": "^5.21.6"
+    "pm2": "^4.4.0",
+    "sequelize": "^5.22.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2",
+    "nodemon": "^2.0.4",
     "sequelize-cli": "^5.5.1"
   }
 }

@@ -104,8 +104,8 @@ export default {
         .then(() => {
           this.$store.dispatch("users/loadUser");
           this.hideDetails = false;
-          this.$emit("onEditPost");
-        });
+          this.onEditPost()
+          });
     }
   },
   watch: {

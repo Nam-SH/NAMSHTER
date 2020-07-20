@@ -94,9 +94,19 @@ module.exports = {
     locales: ["ko"]
   },
   build: {
-    // babel: {
-    //   configFile: "./babel.config.js"
-    // },
+    babel: {
+      presets({ isServer }) {
+        return [
+          [
+            require.resolve('@nuxt/babel-preset-app'),
+            {
+              buildTarget: isServer ? 'server' : 'client',
+              corejs: { version: 3 }
+            }
+          ]
+        ]
+      }
+    },
     extractCSS: true,
     optimization: {
       splitChunks: {
