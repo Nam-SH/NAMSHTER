@@ -1,0 +1,44 @@
+[
+  {
+    "name": "profile",
+    "path": "/profile",
+    "component": "C:\\\\github\\\\Mine\\\\NAMSHTER\\\\ch5_my\\\\front\\\\pages\\\\profile.vue",
+    "chunkName": "pages/profile",
+    "_name": "_c23e16d4"
+  },
+  {
+    "name": "signup",
+    "path": "/signup",
+    "component": "C:\\\\github\\\\Mine\\\\NAMSHTER\\\\ch5_my\\\\front\\\\pages\\\\signup.vue",
+    "chunkName": "pages/signup",
+    "_name": "_7582978a"
+  },
+  {
+    "name": "hashtag-id",
+    "path": "/hashtag/:id",
+    "component": "C:\\\\github\\\\Mine\\\\NAMSHTER\\\\ch5_my\\\\front\\\\pages\\\\hashtag\\\\_id\\\\index.vue",
+    "chunkName": "pages/hashtag/_id/index",
+    "_name": "_e1b86cde"
+  },
+  {
+    "name": "post-id",
+    "path": "/post/:id",
+    "component": "C:\\\\github\\\\Mine\\\\NAMSHTER\\\\ch5_my\\\\front\\\\pages\\\\post\\\\_id\\\\index.vue",
+    "chunkName": "pages/post/_id/index",
+    "_name": "_11d24bdb"
+  },
+  {
+    "name": "user-id",
+    "path": "/user/:id",
+    "component": "C:\\\\github\\\\Mine\\\\NAMSHTER\\\\ch5_my\\\\front\\\\pages\\\\user\\\\_id\\\\index.vue",
+    "chunkName": "pages/user/_id/index",
+    "_name": "_6d56e906"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "C:\\\\github\\\\Mine\\\\NAMSHTER\\\\ch5_my\\\\front\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_6389087f"
+  }
+]
