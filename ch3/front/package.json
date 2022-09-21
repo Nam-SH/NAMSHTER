@@ -16,7 +16,7 @@
     "axios": "^0.21.1",
     "nuxt": "^2.15.4",
     "vue": "^2.6.12",
-    "vuetify": "^2.4.11"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "eslint": "^7.25.0",
