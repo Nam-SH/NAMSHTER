@@ -17,7 +17,7 @@
     "lodash.throttle": "^4.1.1",
     "nuxt": "^2.13.3",
     "vue": "^2.6.11",
-    "vuetify": "^2.3.4"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
